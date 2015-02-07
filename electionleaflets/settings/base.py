@@ -118,6 +118,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
 )
 
+THUMBNAIL_FORMAT = 'PNG'
+THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
 
 TEMPLATE_DIRS = (
     root('templates'),
