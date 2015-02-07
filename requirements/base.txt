@@ -29,4 +29,4 @@ six==1.8.0
 sorl-thumbnail==12.2
 sure==1.2.9
 boto
-git+git@github.com:DemocracyClub/django-uk-political-parties.git
+git+https://github.com/DemocracyClub/django-uk-political-parties.git#egg=django-uk-political-parties
