@@ -1,7 +1,7 @@
 # Electionleaflets
 
 [![Build Status](https://travis-ci.org/DemocracyClub/electionleaflets.svg?branch=django_1_7)](https://travis-ci.org/DemocracyClub/electionleaflets)
-
+[![Coverage Status](https://coveralls.io/repos/DemocracyClub/electionleaflets/badge.svg?branch=django_1_7)](https://coveralls.io/r/DemocracyClub/electionleaflets?branch=django_1_7)
 
 ## Notes from version 1.0
 
