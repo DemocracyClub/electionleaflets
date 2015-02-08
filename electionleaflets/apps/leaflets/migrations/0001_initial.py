@@ -12,6 +12,7 @@ class Migration(migrations.Migration):
         ('constituencies', '0003_auto_20150111_1441'),
         ('categories', '__first__'),
         ('tags', '__first__'),
+        ('uk_political_parties', '__first__'),
     ]
 
     operations = [
