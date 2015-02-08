@@ -5,3 +5,5 @@ install: pip install -r requirements/dev.txt
 script: coverage run --source=electionleaflets manage.py test
 after_success:
   - coveralls
+notifications:
+  slack: democracyclub:xPS8z1f2rT5iv25aeXtF6Ikl
