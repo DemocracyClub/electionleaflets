@@ -143,6 +143,9 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         leaflet = Leaflet()
         leaflet.save()
 
+        import ipdb
+        # ipdb.set_trace()
+
         for form in form_list:
             if form.prefix.split('-')[0] in ['front', 'back', 'inside']:
                 # Dealing with an image form
