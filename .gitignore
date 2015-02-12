@@ -31,3 +31,5 @@ gulptmp
 electionleaflets/settings/local.py
 electionleaflets/static
 electionleaflets/media/images/leaflets_tmp/
+.coveralls.yml
+.coverage
