@@ -8,3 +8,6 @@ after_success:
   - coveralls
 notifications:
   slack: democracyclub:xPS8z1f2rT5iv25aeXtF6Ikl
+cache:
+  directories:
+    - /home/travis/virtualenv/python2.7/lib/python2.7/site-packages
