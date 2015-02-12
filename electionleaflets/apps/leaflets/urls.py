@@ -1,20 +1,26 @@
 from django.conf.urls import patterns, url
 
 from leaflets.views import (ImageView, LatestLeaflets,
-    view_all_full_images, LeafletView, LeafletUploadWizzard)
+    view_all_full_images, LeafletView, LeafletUploadWizzard,
+    skip_inside_allowed, skip_back_allowed)
 
 from .forms import  (FrontPageImageForm, BackPageImageForm,
     InsidePageImageForm, PostcodeForm)
 
 named_form_list = [
     ('front', FrontPageImageForm),
+    ('back', BackPageImageForm),
+    ('inside', InsidePageImageForm),
     ('postcode', PostcodeForm),
-    # ('back', BackPageImageForm),
-    # ('inside', InsidePageImageForm),
 ]
 
 upload_form_wizzard = LeafletUploadWizzard.as_view(named_form_list,
-    url_name='upload_step', done_step_name='finished')
+    url_name='upload_step', done_step_name='finished',
+    condition_dict={
+        'back': skip_back_allowed,
+        'inside': skip_inside_allowed,
+    }
+)
 
 urlpatterns = patterns(
     '',
@@ -27,14 +33,5 @@ urlpatterns = patterns(
 
     url(r'^/(?P<pk>\d+)/$', LeafletView.as_view(), name='leaflet'),
     url(r'^/$',      LatestLeaflets.as_view(), name='leaflets'),
-
-    # url(r'^/add/(?P<upload_session_key>.+)/$',  add_leaflet_info, name='add_leaflet_info'),
-    # url(
-    #     r'^/add/$',
-    #     LeafletUploadWizzard.as_view(),
-    #     name='add_leaflet'),
-
-    # url(r'^/rotate/(?P<direction>(left|right))/(?P<image_key>.+)/$',  rotate_image, name='rotate_image'),
-
 )
 
