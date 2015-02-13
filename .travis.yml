@@ -1,6 +1,8 @@
 language: python
 python:
   - "2.7"
+before_install:
+  - sudo aptitude install -y gdal-bin libgdal1-dev libxml2 python-lxml python-libxml2 libproj0 libproj-dev libgeos-dev libgeos++-dev python-gdal libsqlite3-dev libgeos-dev
 install: pip install -r requirements/dev.txt
 script: coverage run --source=electionleaflets manage.py test
 script: coverage run -a --source=electionleaflets manage.py harvest -a leaflets
