@@ -30,7 +30,7 @@ class Leaflet(geo_model.Model):
     constituency = models.ForeignKey(Constituency, blank=True, null=True)
     imprint = models.TextField(blank=True, null=True)
     postcode = models.CharField(max_length=150, blank=True)
-    location = geo_model.PointField(null=True)
+    location = geo_model.PointField(null=True, blank=True)
     name = models.CharField(blank=True, max_length=300)
     email = models.CharField(blank=True, max_length=300)
     date_uploaded = models.DateTimeField(auto_now_add=True)

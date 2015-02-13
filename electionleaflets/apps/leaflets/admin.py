@@ -1,14 +1,16 @@
-from django.contrib     import admin
+from django.contrib import admin
+from django.contrib.gis import admin
 from leaflets.models import Leaflet, LeafletImage
 
 from sorl.thumbnail.admin import AdminImageMixin
 from sorl.thumbnail import get_thumbnail
 
+
 class LeafletImageInline(AdminImageMixin, admin.TabularInline):
     model = LeafletImage
 
 
-class LeafletOptions(admin.ModelAdmin):
+class LeafletAdmin(admin.OSMGeoAdmin):
     list_display = ['id', 'title', 'publisher_party', 'postcode',
                     'name', 'email', 'get_description', 'status']
     list_filter = ['status', ]
@@ -41,4 +43,4 @@ class LeafletImageOptions(AdminImageMixin, admin.ModelAdmin):
     thumbnail.allow_tags = True
 
 admin.site.register(LeafletImage, LeafletImageOptions)
-admin.site.register(Leaflet, LeafletOptions)
+admin.site.register(Leaflet, LeafletAdmin)

@@ -1,9 +1,11 @@
 language: python
+env: RUNNER=travis
 python:
   - "2.7"
-before_install:
-  - sudo aptitude install -y gdal-bin libgdal1-dev libxml2 python-lxml python-libxml2 libproj0 libproj-dev libgeos-dev libgeos++-dev python-gdal libsqlite3-dev libgeos-dev
-install: pip install -r requirements/dev.txt
+install: pip install -r requirements/dev.txt --download-cache $HOME/.pip-cache
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
+  - psql -U postgres -d travis_ci_test -c "create extension postgis"
 script: coverage run --source=electionleaflets manage.py test
 script: coverage run -a --source=electionleaflets manage.py harvest -a leaflets
 after_success:
@@ -12,4 +14,7 @@ notifications:
   slack: democracyclub:xPS8z1f2rT5iv25aeXtF6Ikl
 cache:
   directories:
-    - /home/travis/virtualenv/python2.7/lib/python2.7/site-packages
+    - /home/travis/virtualenv/python2.7.9/lib/python2.7/site-packages
+    - $HOME/.pip-cache/
+addons:
+  postgresql: "9.3"

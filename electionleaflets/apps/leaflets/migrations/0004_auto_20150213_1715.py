@@ -76,7 +76,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='leaflet',
             name='location',
-            field=django.contrib.gis.db.models.fields.PointField(default='', srid=4326, null=True),
+            field=django.contrib.gis.db.models.fields.PointField(srid=4326, null=True),
             preserve_default=False,
         ),
         migrations.AlterField(

@@ -1,3 +1,5 @@
+import os
+
 from .base import *
 
 LETTUCE_USE_TEST_DATABASE = True
@@ -16,3 +18,12 @@ DATABASES = {
         'NAME': '/tmp/electionleaflets.db',
     }
 }
+
+if os.environ.get('RUNNER') == "travis":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': 'travis_ci_test',
+            'USER': 'postgres',
+        }
+    }
