@@ -102,6 +102,28 @@ class LeafletImage(models.Model):
         file_content = ContentFile(new_file.getvalue())
         self.image.save(self.image.name, file_content, save=False)
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('full_image', (), {'pk': self.pk})
+
+    @property
+    def dimensions(self):
+        im = Image.open(self.image.path)
+        return im.size
+
+    def crop(self, x=None, y=None, x2=None, y2=None):
+        if not all((x, y, x2, y2)):
+            raise ValueError('All points are required')
+        print (x, y, x2, y2)
+        file_name = self.image.name
+        im = Image.open(self.image.file)
+        cropped = im.copy()
+        cropped = cropped.crop((x,y,x2,y2))
+        new_file = StringIO()
+        cropped.save(new_file, 'jpeg')
+        file_content = ContentFile(new_file.getvalue())
+        self.image.save(file_name, file_content)
+
 
     def ocr(self):
         if not self.image:
