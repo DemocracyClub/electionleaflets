@@ -35,4 +35,3 @@ class TestImageCrop(TestCase):
                 full_path = os.path.join(settings.MEDIA_ROOT, path)
                 if os.path.exists(full_path):
                     shutil.rmtree(full_path)
-    

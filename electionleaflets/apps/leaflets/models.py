@@ -82,10 +82,10 @@ class LeafletImage(models.Model):
         This is so we don't destroy images, by cropping them too small
         for example.
         """
+        super(LeafletImage, self).save(*args, **kwargs)
         if not self.raw_image:
             self.raw_image.save(self.image.name, self.image.file)
         self._clean_image()
-        super(LeafletImage, self).save(*args, **kwargs)
 
 
     def _clean_image(self):
@@ -114,7 +114,6 @@ class LeafletImage(models.Model):
     def crop(self, x=None, y=None, x2=None, y2=None):
         if not all((x, y, x2, y2)):
             raise ValueError('All points are required')
-        print (x, y, x2, y2)
         file_name = self.image.name
         im = Image.open(self.image.file)
         cropped = im.copy()
