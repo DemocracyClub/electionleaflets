@@ -1,16 +1,8 @@
 from django.contrib     import admin
-from leaflets.models import Leaflet, LeafletTag, LeafletCategory, LeafletImage
+from leaflets.models import Leaflet, LeafletImage
 
 from sorl.thumbnail.admin import AdminImageMixin
 from sorl.thumbnail import get_thumbnail
-
-
-class LeafletTagInline(admin.TabularInline):
-    model = LeafletTag
-
-
-class LeafletCategoryInline(admin.TabularInline):
-    model = LeafletCategory
 
 class LeafletImageInline(AdminImageMixin, admin.TabularInline):
     model = LeafletImage
@@ -22,7 +14,7 @@ class LeafletOptions(admin.ModelAdmin):
     list_filter = ['status', ]
     search_fields = ['title', 'postcode']
     ordering = ['title']
-    inlines = [LeafletCategoryInline, LeafletImageInline]
+    inlines = [LeafletImageInline, ]
 
     def get_description(self, obj):
         if obj.description:

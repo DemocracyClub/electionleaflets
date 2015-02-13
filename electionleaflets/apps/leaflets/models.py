@@ -20,11 +20,6 @@ class Leaflet(models.Model):
     description = models.TextField(blank=True, null=True)
     publisher_party = models.ForeignKey(Party, blank=True, null=True)
     constituency = models.ForeignKey(Constituency, blank=True, null=True)
-
-    attacks = models.ManyToManyField(Party, related_name='attacks',
-        null=True, blank=True)
-    tags = models.ManyToManyField(Tag, through='LeafletTag')
-    categories = models.ManyToManyField(Category, through='LeafletCategory')
     imprint = models.TextField(blank=True, null=True)
     postcode = models.CharField(max_length=150, blank=True)
     lng = models.FloatField(blank=True, null=True)
@@ -136,53 +131,3 @@ class LeafletImage(models.Model):
         self.save()
         os.remove(image_path)
         return text
-
-
-class LeafletCategory(models.Model):
-    leaflet = models.ForeignKey(Leaflet)
-    category = models.ForeignKey(Category)
-
-
-class LeafletTag(models.Model):
-    leaflet = models.ForeignKey(Leaflet)
-    tag = models.ForeignKey(Tag)
-
-    def __unicode__(self):
-        return u'tagged %s' % (self.tag.tag,)
-
-
-class Promise(models.Model):
-    promise_id = models.IntegerField(primary_key=True)
-    leaflet_id = models.IntegerField()
-    detail = models.TextField()
-
-
-class RateInteresting(models.Model):
-    rate_interesting_id = models.IntegerField(primary_key=True)
-    leaflet_id = models.IntegerField()
-    description = models.TextField()
-    user_name = models.CharField(max_length=765)
-    user_email = models.CharField(max_length=765)
-
-
-class RateInterestingSeq(models.Model):
-    sequence = models.IntegerField(primary_key=True)
-
-
-class RateType(models.Model):
-    rate_type_id = models.IntegerField(primary_key=True)
-    left_label = models.CharField(max_length=150)
-    right_label = models.CharField(max_length=150, blank=True)
-
-
-class RateValue(models.Model):
-    rate_value_id = models.IntegerField(primary_key=True)
-    leaflet_id = models.IntegerField()
-    user_name = models.CharField(max_length=300)
-    user_email = models.CharField(max_length=300)
-    rate_type_id = models.IntegerField()
-    value = models.IntegerField()
-
-
-class RateValueSeq(models.Model):
-    sequence = models.IntegerField(primary_key=True)
