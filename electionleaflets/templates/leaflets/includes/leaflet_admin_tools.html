@@ -1,0 +1,5 @@
+{% if request.user.is_staff %}
+<section>
+<a href="{% url "crop" image.id %}">Crop</a>
+</section>
+{% endif %}

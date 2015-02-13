@@ -41,5 +41,9 @@
         {# // </script> #}
         <script src="{% static "javascript/electionleaflets.main.min.js" %}"></script>
         {% block extra_scripts %}{% endblock %}
+        {% if request.user.is_staff %}
+        <script src="{% static "javascript/admin.js" %}"></script>
+        {% endif %}
+        
     </body>
 </html>

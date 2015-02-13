@@ -10,12 +10,15 @@
     images: [],
     scripts: {},
     styles: [],
+    standalone: [],
   };
   
   paths.styles.push(paths.src + 'stylesheets/**/*.scss');
   paths.styles.push(paths.src + 'stylesheets/**/*.css');
   paths.styles.push(paths.src + 'vendor/**/*.scss');
   paths.styles.push(paths.src + 'vendor/**/*.css');
+
+  paths.standalone.push(paths.src + 'vendor/Jcrop/css/jquery.Jcrop.min.css');
   
   // images
   paths.images.push(paths.src + 'images/**/*');
@@ -31,19 +34,13 @@
       paths.src + 'vendor/jquery/jquery.js',
       paths.src + 'vendor/masonry/index.js',
       paths.src + 'vendor/leaflet/index.js',
-      // paths.src + 'vendor/handlebars/handlebars.js',
-      // paths.src + 'vendor/ember/ember.js',
-      // paths.src + 'vendor/ember-data/ember-data.js',
     ],
     app: [
         paths.src + 'javascript/app/app.js',
-        // paths.src + 'javascript/app/routes.js',
-        // paths.src + 'javascript/app/helpers/**/*.js',
-        // paths.src + 'javascript/app/models/*.js',
-        // paths.src + 'javascript/app/components/**/*.js',
-        // paths.src + 'javascript/app/controllers/**/*.js',
-        // paths.src + 'javascript/app/views/**/*.js',
-        // paths.tmp + 'javascript/templates.js',
+    ],
+    standalone: [
+        paths.src + 'javascript/admin.js',
+        paths.src + 'vendor/Jcrop/js/jquery.Jcrop.min.js',
     ]
   };
   
@@ -113,19 +110,12 @@
   });
 
 
+  gulp.task('standalone_css', function() {
+    gulp
+      .src(paths.standalone)
+      .pipe(gulp.dest(paths.dest + 'stylesheets/'));
+  });
 
-
-  // gulp.task('templates', function() {
-  //   gulp.src([paths.src + 'javascript/app/templates/**/*.hbs'])
-  //     .pipe(handlebars())
-  //     .pipe(wrap('Handlebars.template(<%= contents %>)'))
-  //     .pipe(declare({
-  //        namespace: 'templates'
-  //        // noRedeclare: true, // Avoid duplicate declarations
-  //      }))
-  //     .pipe(concat('templates.js'))
-  //     .pipe(gulp.dest(paths.tmp + 'javascript/'));
-  // });
   gulp.task('templates', function () {
     gulp.src(paths.src + 'javascript/app/templates/**/*.hbs')
       .pipe(templateCompiler())
@@ -133,19 +123,19 @@
       .pipe(gulp.dest(paths.tmp + 'javascript/'));
   });
 
-
-  // gulp.task('source_maps', function() {
-  //   gulp.src([paths.src + '/**/*.js.map'])
-  //     .pipe(gulp.dest(paths.dest + 'javascript/'));
-  // });
-  
   gulp.task('scripts', ['templates',], function() {
     var all_scripts = paths.scripts.vendor.concat(paths.scripts.app);
-    console.log(all_scripts);
     
     return gulp.src(all_scripts)
       // .pipe(uglify({ mangle: true }))
       .pipe(concat('electionleaflets.main.min.js'))
+      .pipe(gulp.dest(paths.dest + 'javascript/'));
+  });
+
+  gulp.task('standalone_scripts', function() {
+    return gulp.src(paths.scripts.standalone)
+      // .pipe(uglify({ mangle: true }))
+      // .pipe(concat('electionleaflets.main.min.js'))
       .pipe(gulp.dest(paths.dest + 'javascript/'));
   });
   
@@ -157,11 +147,19 @@
     gulp.watch(paths.src + 'javascript/app/templates/**/*.hbs', ['templates', 'scripts']);
    
     //watches JavaScript files for changes
-    gulp.watch(paths.src + '**/*.js', ['templates', 'scripts']);
+    gulp.watch(paths.src + '**/*.js', ['templates', 'scripts', 'standalone_scripts']);
     gulp.watch(paths.tmp + '**/*.js', ['scripts']);
   });
   
   gulp.task('build', ['clean-pre', 'css', 'scripts']);
-  gulp.task('default', ['images', 'copy-fonts', 'css', 'scripts', 'watch']);
+  gulp.task('default', [
+    'images',
+    'copy-fonts',
+    'css',
+    'scripts',
+    'standalone_scripts',
+    'standalone_css',
+    'watch'
+  ]);
 
 })();
