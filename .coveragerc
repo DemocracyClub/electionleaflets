@@ -1,2 +1,2 @@
 [run]
-omit = ../*migrations*,electionleaflets/third_party/*
+omit = ../*migrations*,electionleaflets/third_party/*,test_*
