@@ -1,12 +1,12 @@
-import logging
 import os
+from cStringIO import StringIO
 
 from sorl.thumbnail import ImageField
 import pytesser
 from PIL import Image
-from PIL import ImageEnhance
 
 from django.db import models
+from django.core.files.base import ContentFile
 
 from tags.models import Tag
 from categories.models import Category
@@ -75,25 +75,39 @@ class LeafletImage(models.Model):
     class Meta:
         ordering = ['image_type']
 
+    def save(self, *args, **kwargs):
+        """
+        Save a copy of the raw_image as soon as possible.
+
+        This is so we don't destroy images, by cropping them too small
+        for example.
+        """
+        if not self.raw_image:
+            self.raw_image.save(self.image.name, self.image.file)
+        self._clean_image()
+        super(LeafletImage, self).save(*args, **kwargs)
+
+
+    def _clean_image(self):
+        from sorl.thumbnail.engines.pil_engine import Engine
+        from sorl.thumbnail.images import ImageFile
+
+        file_name = self.image.name
+        e = Engine()
+        f = ImageFile(self.image.file)
+        tmp_image = e.get_image(f)
+        tmp_image = e._orientation(tmp_image)
+        new_file = StringIO()
+        tmp_image.save(new_file, 'jpeg')
+        file_content = ContentFile(new_file.getvalue())
+        self.image.save(self.image.name, file_content, save=False)
+
+
     def ocr(self):
         if not self.image:
             return ""
 
-        from PIL import ImageFilter
-
         image_path = self.image.path
-        tmp_image_path = "/tmp/leaflet_image-%s.jpg" % self.legacy_image_key
-        # image_file = Image.open(image_path) # open colour image
-        # image_file = image_file.filter(ImageFilter.EDGE_ENHANCE)
-        # image_file = image_file.filter(ImageFilter.SMOOTH_MORE)
-        # image_file = image_file.filter(ImageFilter.FIND_EDGES)
-        # image_file = image_file.filter(ImageFilter.DETAIL)
-        # image_file = image_file.filter(ImageFilter.MinFilter(3))
-        # image_file = image_file.convert('L') # convert image to black and white
-        # image_file = ImageEnhance.Contrast(image_file)
-        # image_file = image_file.enhance(1.5)
-
-        # image_file.save(tmp_image_path, dpi=(300,300))
 
         text = pytesser.image_to_string(image_path)
         text = os.linesep.join([s for s in text.splitlines() if s])
