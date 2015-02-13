@@ -9,7 +9,6 @@ def get_test_image():
     return os.path.join(
         settings.MEDIA_ROOT,'test_images/front_test.jpg')
 
-
 def create_dummy_leaflets(number=1):
     for i in range(number):
         l = Leaflet()
