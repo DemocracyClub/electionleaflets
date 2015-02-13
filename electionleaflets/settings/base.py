@@ -125,8 +125,6 @@ TEMPLATE_DIRS = (
     root('templates'),
 )
 
-TEST_RUNNER = 'django.test.runner.DiscoverRunner'
-
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
