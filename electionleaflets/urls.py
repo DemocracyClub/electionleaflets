@@ -20,7 +20,6 @@ urlpatterns = patterns(
     url(r'^analysis',   include('analysis.urls')),
     url(r'^tags',       include('tags.urls')),
     url(r'^categories', include('categories.urls')),
-    url(r'^map/', include('boundaries.urls')),
     url(r'^api/', include('api.urls')),
 
     # Feeds

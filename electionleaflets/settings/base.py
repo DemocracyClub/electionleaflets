@@ -82,7 +82,6 @@ LEAFLET_APPS = [
     'analysis',
     'categories',
     'tags',
-    'boundaries',
     'content',
     # Temporarily removing elections code
     #'elections',
