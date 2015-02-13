@@ -1,3 +1,4 @@
+sudo: false
 language: python
 env: RUNNER=travis
 python:
