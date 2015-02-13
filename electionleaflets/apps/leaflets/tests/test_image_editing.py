@@ -21,7 +21,7 @@ class TestImageCrop(TestCase):
         y = 7
         x2 = 100
         y2 = 100
-        print self.image_model.crop(x,y,x2,y2)
+        self.image_model.crop(x,y,x2,y2)
         self.assertEqual(self.image_model.dimensions, (88, 93))
 
 
