@@ -6,9 +6,15 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 MEDIA_ROOT = MEDIA_ROOT = root('test_media', )
 
+SPATIALITE_LIBRARY_PATH='/usr/local/lib/mod_spatialite.dylib'
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
+        'NAME': '/tmp/electionleaflets.db',
+    },
+    'test': {
+        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
         'NAME': '/tmp/electionleaflets.db',
     }
 }

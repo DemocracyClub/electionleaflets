@@ -15,7 +15,7 @@ class LeafletTestCase(TestCase):
         self.assertEqual(leaflet._initial,
             {'status': None, 'publisher_party': None, 'description': None,
             'title': u'', 'email': u'', 'imprint': None, 'postcode': u'',
-            'lng': None, 'date_delivered': None, 'lat': None,
+            'location': None, 'date_delivered': None,
             'constituency': None, u'id': None, 'name': u''})
 
         leaflet.status = "draft"
@@ -36,6 +36,8 @@ class LeafletTestCase(TestCase):
         l = Leaflet()
         l.geocode('SE228DJ')
         self.assertEqual(l.constituency.name, 'Camberwell and Peckham')
+        self.assertEqual(l.location.x, -0.0824797738988752)
+        self.assertEqual(l.location.y, 51.4599323104553)
 
 class LeafletImageTestCase(TestCase):
     def test_raw_image_field(self):

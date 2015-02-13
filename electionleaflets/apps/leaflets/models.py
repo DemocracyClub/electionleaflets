@@ -7,6 +7,8 @@ import pytesser
 from PIL import Image
 
 from django.db import models
+from django.contrib.gis.db import models as geo_model
+from django.contrib.gis.geos import Point
 from django.core.files.base import ContentFile
 from django.forms.models import model_to_dict
 
@@ -15,7 +17,8 @@ from uk_political_parties.models import Party
 
 import constants
 
-class Leaflet(models.Model):
+
+class Leaflet(geo_model.Model):
     def __init__(self, *args, **kwargs):
         super(Leaflet, self).__init__(*args, **kwargs)
         self._initial = model_to_dict(self, fields=[field.name for field in
@@ -27,14 +30,15 @@ class Leaflet(models.Model):
     constituency = models.ForeignKey(Constituency, blank=True, null=True)
     imprint = models.TextField(blank=True, null=True)
     postcode = models.CharField(max_length=150, blank=True)
-    lng = models.FloatField(blank=True, null=True)
-    lat = models.FloatField(blank=True, null=True)
+    location = geo_model.PointField(null=True)
     name = models.CharField(blank=True, max_length=300)
     email = models.CharField(blank=True, max_length=300)
     date_uploaded = models.DateTimeField(auto_now_add=True)
     date_delivered = models.DateTimeField(blank=True, null=True)
     status = models.CharField(choices=constants.LEAFLET_STATUSES,
         null=True, blank=True, max_length=255)
+
+    objects = geo_model.GeoManager()
 
     def __unicode__(self):
         return self.title
@@ -62,7 +66,6 @@ class Leaflet(models.Model):
         else:
             "Untitled leaflet"
 
-
     def geocode(self, postcode):
         """
         Use MaPit to convert the postcode to a location and constituency
@@ -71,20 +74,25 @@ class Leaflet(models.Model):
         res_json = res.json()
         self.constituency = Constituency.objects.get(
             constituency_id=str(res_json['shortcuts']['WMC']))
+        self.location = Point(
+            res_json['wgs84_lon'],
+            res_json['wgs84_lat'],
+        )
 
     def save(self, *args, **kwargs):
         if self.postcode:
             if self.postcode != self._initial['postcode']:
-                self.geocode(postcode)
+                self.geocode(self.postcode)
 
         super(Leaflet, self).save(*args, **kwargs)
+
 
 class LeafletImage(models.Model):
     leaflet = models.ForeignKey(Leaflet, related_name='images')
     image = ImageField(upload_to="leaflets")
     raw_image = ImageField(upload_to="raw_leaflets", blank=True)
     legacy_image_key = models.CharField(max_length=255, blank=True)
-    image_type =  models.CharField(choices=constants.IMAGE_TYPES,
+    image_type = models.CharField(choices=constants.IMAGE_TYPES,
         null=True, blank=True, max_length=255)
     image_text = models.TextField(blank=True)
 
@@ -102,7 +110,6 @@ class LeafletImage(models.Model):
         if not self.raw_image:
             self.raw_image.save(self.image.name, self.image.file)
         self._clean_image()
-
 
     def _clean_image(self):
         from sorl.thumbnail.engines.pil_engine import Engine
@@ -132,12 +139,11 @@ class LeafletImage(models.Model):
         file_name = self.image.name
         im = Image.open(self.image.file)
         cropped = im.copy()
-        cropped = cropped.crop((x,y,x2,y2))
+        cropped = cropped.crop((x, y, x2, y2))
         new_file = StringIO()
         cropped.save(new_file, 'jpeg')
         file_content = ContentFile(new_file.getvalue())
         self.image.save(file_name, file_content)
-
 
     def ocr(self):
         if not self.image:
