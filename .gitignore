@@ -33,3 +33,7 @@ electionleaflets/static
 electionleaflets/media/images/leaflets_tmp/
 .coveralls.yml
 .coverage
+electionleaflets/media/raw_leaflets/
+electionleaflets/test_media/leaflets/
+electionleaflets/test_media/raw_leaflets/
+electionleaflets/test_media/cache/
