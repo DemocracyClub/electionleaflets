@@ -55,11 +55,12 @@
                         {% if image.image_type == "1_front" %}
                             <span id="page-{{image.id}}">Leaflet Front</span>
                         {% endif %}
+                        {% include "leaflets/includes/leaflet_admin_tools.html" %}
                         <a href="{% url "full_image"  image.pk %}">view larger image</a>
                     </figcaption>
                 </figure>
             {% endfor%}
-            <a href="{% url "full_images"  object.id %}">view all images</a>
+            {# <a href="{% url "full_images"  object.id %}">view all images</a> #}
         </section>
 
         <section class="leaflet_map">

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block body_class %}class="cropper"{% endblock %}
+{% block extra_scripts %}
+<link rel="stylesheet" media="all" type="text/css" href="{% static "stylesheets/jquery.Jcrop.min.css" %}" />
+<script src="{% static "javascript/jquery.Jcrop.min.js" %}"></script>
+{% endblock %}
+
+{% block body %}
+    <a href="{% url "leaflet" object.leaflet.pk %}">&larr; back to details of <em>{{ object.leaflet.get_title }}</em></a>
+    <figure>
+        <img src="{{ object.raw_image.url }}" />
+    </figure>
+
+
+<form method=post>    
+    <input type="hidden" name="x" value="">
+    <input type="hidden" name="y" value="">
+    <input type="hidden" name="x2" value="">
+    <input type="hidden" name="y2" value="">
+    <button type=submit>Crop</button>
+</form>
+{% endblock %}
+

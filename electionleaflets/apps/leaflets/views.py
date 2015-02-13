@@ -7,8 +7,10 @@ from django.http import HttpResponseRedirect
 from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, DetailView
 from django.core.files.storage import FileSystemStorage
+
+from braces.views import StaffuserRequiredMixin
 
 from .models import Leaflet, LeafletImage
 from .forms import InsidePageImageForm
@@ -16,7 +18,20 @@ from .forms import InsidePageImageForm
 class ImageView(DetailView):
     model = LeafletImage
     template_name = 'leaflets/full.html'
-    pk_url_kwarg = 'image_key'
+
+class ImageCropView(StaffuserRequiredMixin, DetailView):
+    model = LeafletImage
+    template_name = 'leaflets/image_crop.html'
+
+    def post(self, request, *args, **kwargs):
+        image_model = self.get_object()
+        x =  int(request.POST.get('x'))
+        y =  int(request.POST.get('y'))
+        x2 = int(request.POST.get('x2'))
+        y2 = int(request.POST.get('y2'))
+
+        image_model.crop(x,y,x2,y2)
+        return HttpResponseRedirect(image_model.get_absolute_url())
 
 def view_all_full_images(request, leafletid):
     from leaflets.models import Leaflet, LeafletImage
@@ -41,7 +56,6 @@ class LatestLeaflets(ListView):
 class LeafletView(DetailView):
     template_name = 'leaflets/leaflet.html'
     queryset = Leaflet.objects.all()
-
 
 def _skip_step_allowed_condition(wizard, step_name):
     extra_data = wizard.storage.extra_data
@@ -142,9 +156,6 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         #Create a new leaflet
         leaflet = Leaflet()
         leaflet.save()
-
-        import ipdb
-        # ipdb.set_trace()
 
         for form in form_list:
             if form.prefix.split('-')[0] in ['front', 'back', 'inside']:

@@ -30,3 +30,4 @@ sorl-thumbnail==12.2
 sure==1.2.9
 boto
 git+https://github.com/DemocracyClub/django-uk-political-parties.git#egg=django-uk-political-parties
+git+https://github.com/brack3t/django-braces.git

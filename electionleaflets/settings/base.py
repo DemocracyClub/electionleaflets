@@ -51,6 +51,7 @@ TEMPLATE_LOADERS = (
 SITE_ID=1
 USE_I18N = False
 USE_L10N = True
+LOGIN_URL = "/"
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
