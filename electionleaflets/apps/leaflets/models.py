@@ -66,7 +66,8 @@ class Leaflet(models.Model):
 class LeafletImage(models.Model):
     leaflet = models.ForeignKey(Leaflet, related_name='images')
     image = ImageField(upload_to="leaflets")
-    legacy_image_key = models.CharField(max_length=255)
+    raw_image = ImageField(upload_to="raw_leaflets", blank=True)
+    legacy_image_key = models.CharField(max_length=255, blank=True)
     image_type =  models.CharField(choices=constants.IMAGE_TYPES,
         null=True, blank=True, max_length=255)
     image_text = models.TextField(blank=True)
