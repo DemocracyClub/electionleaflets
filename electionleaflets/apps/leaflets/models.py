@@ -1,21 +1,26 @@
 import os
 from cStringIO import StringIO
 
+import requests
 from sorl.thumbnail import ImageField
 import pytesser
 from PIL import Image
 
 from django.db import models
 from django.core.files.base import ContentFile
+from django.forms.models import model_to_dict
 
-from tags.models import Tag
-from categories.models import Category
 from constituencies.models import Constituency
 from uk_political_parties.models import Party
 
 import constants
 
 class Leaflet(models.Model):
+    def __init__(self, *args, **kwargs):
+        super(Leaflet, self).__init__(*args, **kwargs)
+        self._initial = model_to_dict(self, fields=[field.name for field in
+                             self._meta.fields])
+
     title = models.CharField(blank=True, max_length=765)
     description = models.TextField(blank=True, null=True)
     publisher_party = models.ForeignKey(Party, blank=True, null=True)
@@ -58,6 +63,22 @@ class Leaflet(models.Model):
             "Untitled leaflet"
 
 
+    def geocode(self, postcode):
+        """
+        Use MaPit to convert the postcode to a location and constituency
+        """
+        res = requests.get("%s/postcode/%s" % (constants.MAPIT_URL, postcode))
+        res_json = res.json()
+        self.constituency = Constituency.objects.get(
+            constituency_id=str(res_json['shortcuts']['WMC']))
+
+    def save(self, *args, **kwargs):
+        if self.postcode:
+            if self.postcode != self._initial['postcode']:
+                self.geocode(postcode)
+
+        super(Leaflet, self).save(*args, **kwargs)
+
 class LeafletImage(models.Model):
     leaflet = models.ForeignKey(Leaflet, related_name='images')
     image = ImageField(upload_to="leaflets")
@@ -87,7 +108,6 @@ class LeafletImage(models.Model):
         from sorl.thumbnail.engines.pil_engine import Engine
         from sorl.thumbnail.images import ImageFile
 
-        file_name = self.image.name
         e = Engine()
         f = ImageFile(self.image.file)
         tmp_image = e.get_image(f)
