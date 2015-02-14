@@ -2,9 +2,34 @@
 {% load thumbnail %}
 {% load markdown_deux_tags %}
 
-{% block extra_head %}
+{% block og_tags %}
+        <meta property="og:site_name" content="ElectionLeaflets.org" />
+        <meta property="og:title" content="{{ object.get_title }}" />
+        <meta property="og:type" content="electon_leaflet:image" />
+        <meta property="og:url" content="{{ leaflet.get_absolute_url }}" />
+        <meta name="og:discription" content="{{ object.description }}">
+        
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@electionspotter">
+        <meta name="twitter:creator" content="@electionspotter">
+        <meta name="twitter:title" content="{{ object.get_title }}">
+        <meta name="twitter:description" content="{{ object.description|markdown|striptags|truncatechars:"200" }}">
+        
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@electionspotter">
+        <meta name="twitter:creator" content="@electionspotter">
+        <meta name="twitter:title" content="{{ object.get_title }}">
+        <meta name="twitter:description" content="{{ object.description|markdown|striptags|truncatechars:"200" }}">
+    
+        {% for image in object.images.all %}
+        {% thumbnail object.images.all.0.image "600" crop="center" as im %}
+        {% if forloop.first %}<meta property="og:image" content="{{ im.url }}" />{% endif %}
+        <meta name="twitter:image{{forloop.counter0}}" content="{{ im.url }}">
+        {% endthumbnail %}
+        {% endfor %}
+{% endblock og_tags %}
 
-{% endblock %}
+{% block extra_head %}{% endblock %}
 {% block body_class %}class="leaflet_page"{% endblock %}
 
 {% block body %}

@@ -10,6 +10,7 @@
         <title>{% block title %}Real-time #ElectionLeaflet monitoring{% endblock %}  | ElectionLeaflets.org</title> 
         <link rel="stylesheet" media="all" type="text/css" href="{% static "stylesheets/main.min.css" %}" />
         <link rel="Shortcut Icon" href="/favicon.ico" type="image/x-icon" />
+        {% block og_tags %}{% endblock og_tags %}
         {% block extra_head %}{% endblock %}
     </head>
 
