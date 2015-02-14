@@ -20,7 +20,12 @@
         <meta name="twitter:creator" content="@electionspotter">
         <meta name="twitter:title" content="{{ object.get_title }}">
         <meta name="twitter:description" content="{{ object.description|markdown|striptags|truncatechars:"200" }}">
-    
+        {% if object.location %}
+        <meta property="place:location:latitude"  content="{{ object.location.1 }}" /> 
+        <meta property="place:location:longitude" content="{{ object.location.0 }}" />
+        <meta property="og:latitude"  content="{{ object.location.1 }}" /> 
+        <meta property="og:longitude" content="{{ object.location.0 }}" />
+        {% endif %}
         {% for image in object.images.all %}
         {% thumbnail object.images.all.0.image "600" crop="center" as im %}
         {% if forloop.first %}<meta property="og:image" content="{{ im.url }}" />{% endif %}
