@@ -127,7 +127,7 @@
 {% endblock %}
 {% block extra_scripts %}
 <script type="text/javascript">
-var point = [{{leaflet.lat}},{{leaflet.lng}}];
+var point = [{{leaflet.location.1}},{{leaflet.location.0}}];
 var constituency_id = "{{object.constituency.constituency_id}}";
 create_leaflet_map(point, constituency_id);
 </script>
