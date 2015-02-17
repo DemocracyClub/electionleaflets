@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load content_tags %}
 
-{% block body %}
+{% block content %}
  {% if request.user.is_staff %}
                 <a class='staff_link' href='/admin/content/contentblock/2/'>Edit ContentBlock</a>
                 {% endif%}

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block body %}
+{% block content %}
     <a href="{% url "leaflet" object.leaflet.pk %}">&larr; back to details of <em>{{ object.leaflet.get_title }}</em></a>
     <figure>
         <img src="{{ object.image.url }}" />

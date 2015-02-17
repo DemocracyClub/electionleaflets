@@ -7,7 +7,7 @@
 <script src="{% static "javascript/jquery.Jcrop.min.js" %}"></script>
 {% endblock %}
 
-{% block body %}
+{% block content %}
     <a href="{% url "leaflet" object.leaflet.pk %}">&larr; back to details of <em>{{ object.leaflet.get_title }}</em></a>
     <figure>
         <img src="{{ object.raw_image.url }}" />
