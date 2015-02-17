@@ -13,7 +13,7 @@ router.register(r'constituency', views.ConstituencyViewSet)
 
 urlpatterns = patterns(
     '',
-    url(r'^', include(router.urls)),
+    url(r'^', include(router.urls, namespace='api')),
     # url(r'^/$', TemplateView.as_view(
     #     template_name='api/index.html'), name='api_index'),
     url(r'latest.(?P<format>(xml|json))$', views.latest, name='api_latest'),

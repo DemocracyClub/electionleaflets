@@ -5,11 +5,14 @@ from uk_political_parties.models import Party
 from rest_framework import serializers
 
 
-class ConstituencySerializer(serializers.HyperlinkedModelSerializer):
+class ConstituencySerializer(serializers.ModelSerializer):
     class Meta:
         model = Constituency
         fields = (
+            'pk',
             'name',
+            'country_name',
+            'slug',
         )
 
 
@@ -28,16 +31,16 @@ class LeafletImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = LeafletImage
         fields = (
-            'leaflet',
             'image',
+            'image_text',
         )
     image = serializers.ImageField()
 
 
 class LeafletSerializer(serializers.HyperlinkedModelSerializer):
-    # images = LeafletImageSerializer(many=True, required=False)
-    # constituency = ConstituencySerializer(many=True, required=False)
-    # publisher_party = PartySerializer(required=False)
+    images = LeafletImageSerializer(many=True, required=False)
+    constituency = ConstituencySerializer(required=False)
+    publisher_party = PartySerializer(required=False)
 
     def validate(self, data):
         if not data.get('status') or not data.get('images'):

@@ -108,6 +108,12 @@
             {% endif %}
         </section>
         
+        
+        <section id="Data">
+            <h3>Use this data!</h3>
+            <p>Open data JSON API:</p>
+            <p><input type="text" value="http://{{ request.META.HTTP_HOST }}{% url "api:leaflet-detail" object.pk%}?format=json" onclick="this.select();"></p>
+        </section>
         <section id="ReportAbuse">
             <h3>Something wrong with this page?</h3>
             <p>If someone has uploaded something other than an election leaflet <a href="{% url "report_abuse"  object.id %}"> please report it here</a>.</p>
