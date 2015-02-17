@@ -44,7 +44,7 @@ class Leaflet(geo_model.Model):
         return self.title
 
     class Meta:
-        ordering = ('date_uploaded',)
+        ordering = ('-date_uploaded',)
 
     def get_absolute_url(self):
         from django.contrib.sites.models import Site
