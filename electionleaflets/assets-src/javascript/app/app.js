@@ -9,7 +9,7 @@
     fr.readAsDataURL(file);
     function receivedImage() {
       $('.file_input_preview *').remove();
-      el.find('.action').text('edit')
+      el.find('.action').text('change')
       var img = $('<img class="uploaded_image">');
       img.attr('src', this.result);
       $('.file_input_preview').append(img);
