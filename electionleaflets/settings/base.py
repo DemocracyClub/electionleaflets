@@ -104,6 +104,13 @@ INSTALLED_APPS = [
     'storages',
     'uk_political_parties',
     'markdown_deux',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.twitter',
+
 ] + LEAFLET_APPS
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -115,6 +122,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "django.contrib.auth.context_processors.auth",
+    "allauth.account.context_processors.account",
+    "allauth.socialaccount.context_processors.socialaccount",
+
 )
 
 THUMBNAIL_FORMAT = 'PNG'
@@ -131,6 +141,29 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny'
     ]
 }
+
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+    # `allauth` specific authentication methods, such as login by e-mail
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {'SCOPE': ['https://www.googleapis.com/auth/userinfo.profile'],
+               'AUTH_PARAMS': {'access_type': 'online'}},
+    'facebook': {'SCOPE': ['email',]},
+}
+
+LOGIN_REDIRECT_URL = '/'
+
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = True
+SOCIALACCOUNT_AUTO_SIGNUP = True
+
+
 
 # .local.py overrides all the common settings.
 try:

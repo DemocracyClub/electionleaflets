@@ -37,5 +37,5 @@ urlpatterns = patterns(
 
     # Administration URLS
     (r'^admin/', include(admin.site.urls)),
-    (r'^accounts/login/$', 'django.contrib.auth.views.login'),
+    url(r'^accounts/', include('allauth.urls')),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

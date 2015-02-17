@@ -9,8 +9,16 @@
       <li>
           <a href="{% url "leaflets" %}">Latest</a>
       </li>
-      {# <li> #}
-      {#     <a href="http://blog.electionleaflets.org/">Blog</a> #}
-      {# </li> #}
+      
+      {% if request.user.is_authenticated %}
+      <li>
+          <a>{{ request.user }} Logged in</a>
+      </li>
+      <li>
+          <a href="{% url "account_logout" %}">Log out</a>
+      </li>
+      {% else %}
+      <li><a href="{% url "account_login" %}">Log in</a></li>
+      {% endif %}
     </ul>
 </nav>
