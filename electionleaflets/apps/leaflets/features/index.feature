@@ -13,6 +13,7 @@ Feature: Leaflet uploader
           | postcode  | SE22 8DJ          |  submit |
         Then I should see the url "/leaflets/1/"
         and I should see 1 leaflet images
+        in the constituency "Camberwell and Peckham"
 
     Scenario: Upload front and back
         Given I access the url "/leaflets/add/front/"

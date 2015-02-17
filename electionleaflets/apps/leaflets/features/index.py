@@ -4,14 +4,22 @@ import json
 
 from lxml import html
 
-from lettuce import *
-from lettuce.django import django_url
 from django.test.client import Client
 from django.core.urlresolvers import reverse
+from django.core.management import call_command
+
+from lettuce import *
+from lettuce.django import django_url
+
+
 
 @before.all
 def set_browser():
     world.browser = Client()
+
+@before.all
+def load_fixtures():
+    call_command('loaddata', 'fixtures', 'constituencies')
 
 @step(r'I access the url "(.*)"')
 def access_url(step, url):
@@ -77,3 +85,10 @@ def fill_journey(step):
 def count_images(step, number):
     world.dom = html.fromstring(world.response.content)
     assert len(world.dom.cssselect('.leaflet_images figure')) == int(number)
+
+@step(r'in the constituency "(.*)"')
+def find_constituency(step, constituency_name):
+    world.dom = html.fromstring(world.response.content)
+    text = world.dom.cssselect('.leaflet_map')[0].text_content()
+    search = "Delivered in %s on" % constituency_name
+    assert search in text

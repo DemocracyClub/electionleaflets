@@ -156,9 +156,9 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         #Create a new leaflet
         leaflet = Leaflet()
         leaflet.save()
-
         for form in form_list:
-            if form.prefix.split('-')[0] in ['front', 'back', 'inside']:
+            form_prefix = form.prefix.split('-')[0]
+            if form_prefix in ['front', 'back', 'inside']:
                 # Dealing with an image form
                 image_type = None
                 if form.prefix == "front":
@@ -171,6 +171,10 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                 image.image = form.cleaned_data['image']
                 image.save()
 
-        # Front
+            if form_prefix == "postcode":
+                leaflet.postcode = form.cleaned_data['postcode']
+
+
+        leaflet.save()
 
         return  redirect(reverse('leaflet', kwargs={'pk': leaflet.pk}))
