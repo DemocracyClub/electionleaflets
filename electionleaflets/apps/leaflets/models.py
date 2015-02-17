@@ -62,7 +62,7 @@ class Leaflet(geo_model.Model):
         if self.title and len(self.title):
             return self.title
         elif self.publisher_party:
-            return '%s leaflet' % self.party.name
+            return '%s leaflet' % self.publisher_party.party_name
         else:
             "Untitled leaflet"
 
