@@ -3,6 +3,7 @@ from cStringIO import StringIO
 
 import requests
 from sorl.thumbnail import ImageField
+from sorl.thumbnail import delete
 import pytesser
 from PIL import Image
 
@@ -144,6 +145,7 @@ class LeafletImage(models.Model):
         cropped.save(new_file, 'jpeg')
         file_content = ContentFile(new_file.getvalue())
         self.image.save(file_name, file_content)
+        delete(self.image, delete_file=False)
 
     def ocr(self):
         if not self.image:
