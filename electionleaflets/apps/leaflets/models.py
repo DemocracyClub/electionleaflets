@@ -137,8 +137,8 @@ class LeafletImage(models.Model):
     def crop(self, x=None, y=None, x2=None, y2=None):
         if not all((x, y, x2, y2)):
             raise ValueError('All points are required')
-        file_name = self.image.name
-        im = Image.open(self.image.file)
+        file_name = self.raw_image.name
+        im = Image.open(self.raw_image.file)
         cropped = im.copy()
         cropped = cropped.crop((x, y, x2, y2))
         new_file = StringIO()
