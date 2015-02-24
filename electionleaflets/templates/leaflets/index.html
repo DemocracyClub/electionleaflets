@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load pagination_tags %}
 {% load category_tags %}
-{% load party_tags %}
 {% load thumbnail %}
 
 
@@ -24,9 +23,9 @@
                     <a href="{% url "leaflet" leaflet.id %}">{{ leaflet.title }}</a>
                 </figcaption>
             </figure>
-            
 
-            
+
+
         </li>
     {% endfor %}
 </ul>
@@ -51,20 +50,5 @@
 <i class="fa fa-rss"></i> RSS
 </a>
 
-<aside>    
-    <div class="infobox">  
-        <h3>Parties</h3>
-        <ul class="parties">
-            {% party_list_by_count %}
-        </ul>
-    </div>
-
-    <div class="infobox">
-        <h3>Categories</h3>
-        <ul>
-            {% category_list %}
-        </ul>
-    </div>
-</aside>        
 
 {% endblock %}

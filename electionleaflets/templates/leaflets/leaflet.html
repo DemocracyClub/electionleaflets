@@ -111,13 +111,21 @@
             <div id="leaflet_map"></div>
     </article>
     <aside>
+        <section class="share">
+            <ul>
+                <li><a href="https://twitter.com/intent/tweet?url={{ leaflet.get_absolute_url }}&hashtags=electionlealfet&via=electionspotter">Tweet this leaflet</p></li>
+                <li><a href="https://www.facebook.com/sharer/sharer.php?u={{ leaflet.get_absolute_url }}&ref=responsive">Share on Facebook</p></li>
+            </ul>
+        </section>
+
+        {% if object.publisher_party %}
         <section class="party">
             <img src="http://openelectoralcommission.org.uk/party_images/{{ object.publisher_party.emblems.all.0.emblem_url }}">
             {% if object.publisher_party and object.publisher_party.slug %}
             <p>Published by <a href="{% url "party-view" object.publisher_party.slug%}">{{object.publisher_party.party_name}}</a></p>
             {% endif %}
         </section>
-
+        {% endif %}
 
         <section id="Data">
             <h3>Use this data!</h3>
