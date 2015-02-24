@@ -1,12 +1,12 @@
-from django.conf.urls import patterns, include, handler500, url
-from django.conf import settings
+from django.conf.urls import patterns, url
 
-from parties.views import view_party, view_attacking_party, view_parties
+from parties.views import PartyList, PartyView
 
 urlpatterns = patterns(
     '',
-    url(r'^/$',      view_parties, name='parties'),
-    url(r'^/(?P<slug>[\w_\-\.]+)/$',  view_party,name='party'),
-    url(r'^/(?P<slug>[\w_\-\.]+)/attacking/$',  view_attacking_party,name='attacking_party'),
+    url(r'^/$',      PartyList.as_view(), name='parties'),
+    # url(r'^/(?P<slug>[\w_\-\.]+)/$',  Party.as_view(), name='party'),
+    url(r'^/(?P<pk>[^/]+)(?:/(?P<ignored_slug>.*))?$',
+            PartyView.as_view(),
+            name='party-view'),
 )
-

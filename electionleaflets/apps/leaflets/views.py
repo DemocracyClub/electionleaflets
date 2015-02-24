@@ -11,6 +11,8 @@ from django.core.files.storage import FileSystemStorage
 
 from braces.views import StaffuserRequiredMixin
 
+
+
 from .models import Leaflet, LeafletImage
 from .forms import InsidePageImageForm, LeafletDetailsFrom
 

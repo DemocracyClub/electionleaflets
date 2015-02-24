@@ -25,6 +25,7 @@ upload_form_wizzard = LeafletUploadWizzard.as_view(named_form_list,
 
 urlpatterns = patterns(
     '',
+
     url(r'/add/(?P<step>.+)/$', upload_form_wizzard, name='upload_step'),
     url(r'/add/', upload_form_wizzard, name='upload_leaflet'),
 

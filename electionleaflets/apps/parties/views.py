@@ -1,64 +1,34 @@
-from django.template  import RequestContext
-from django.shortcuts import render_to_response, get_object_or_404
+from django.views.generic import DetailView, ListView
+from django.db.models import Count
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from uk_political_parties.models import Party
+from leaflets.models import Leaflet
+
+class PartyList(ListView):
+    queryset = Party.objects.exclude(leaflet=None)\
+               .annotate(num_leaflets=Count('leaflet'))\
+               .order_by('-num_leaflets')
+    template_name = "parties/party_list.html"
 
 
-def view_parties(request):
-    from parties.models import Party
-    return render_to_response('parties/index.html', 
-                            {
-                                'parties': Party.objects.all().order_by('name'),
-                            },
-                            context_instance=RequestContext(request) )
-    
-    
-def view_party(request, slug):
-    from parties.models import Party
-    from leaflets.models import Leaflet
-    import math
-        
-    party = get_object_or_404(Party, slug=slug)
-    
-    qs = Leaflet.objects.filter(publisher_party=party).order_by('-id')
-    
-    total = qs.count()
-    
-    currentPage = request.GET.get('page', 1)
-    totalPages = int(math.ceil(float(total)/12))
-    
-    
-    return render_to_response('parties/party.html', 
-                            {
-                                'party': party,
-                                'qs': qs,
-                                'total': total,
-                                'currentPage': currentPage,
-                                'totalPages': totalPages,
-                                'request': request,
-                            },
-                            context_instance=RequestContext(request) )
-                            
-def view_attacking_party(request, slug):
-    from parties.models import Party
-    from leaflets.models import Leaflet
-    import math
-        
-    party = get_object_or_404(Party, slug=slug)
-    
-    qs = Leaflet.objects.filter(attacks__id=party.id)
-    
-    total = qs.count()
-    
-    currentPage = request.GET.get('page', 1)
-    totalPages = int(math.ceil(float(total)/12))
-    
-    
-    return render_to_response('parties/attacking_party.html', 
-                            {
-                                'party': party,
-                                'qs': qs,
-                                'total': total,
-                                'currentPage': currentPage,
-                                'totalPages': totalPages,
-                                'request': request,
-                            },
-                            context_instance=RequestContext(request) )                            
+class PartyView(DetailView):
+    model = Party
+    def get_context_data(self, **kwargs):
+        context = super(PartyView, self).get_context_data(**kwargs)
+        qs = Leaflet.objects.filter(publisher_party=self.kwargs['pk'])
+
+        paginator = Paginator(qs, 60)
+        page = self.request.GET.get('page')
+        try:
+            context['party_leaflets'] = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            context['party_leaflets'] = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            context['party_leaflets'] = paginator.page(paginator.num_pages)
+
+        return context
+    template_name = "parties/party_detail.html"
+

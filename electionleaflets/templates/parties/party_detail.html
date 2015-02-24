@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block content %}
+
+<h1>Election leaflets from {{ object.party_name }}</h1>
+
+<ul class="leaflet_list">
+{% for leaflet in party_leaflets %}
+    <li>
+        <figure>
+            <a href="{{ leaflet.get_absolute_url }}">
+                {% thumbnail leaflet.images.all.0.image "150x150" crop="noop" upscale=False as im %}
+                <img src="{{ im.url }}" aria-labelledby="page-{{image.id}}">
+                {% endthumbnail %}
+                <figcaption>
+                    <a href="{% url "leaflet" leaflet.id %}">{{ leaflet.title }}</a>
+                </figcaption>
+            </a>
+        </figure>
+    </li>
+{% endfor %}
+</ul>
+
+<span class="page-current">
+    Page {{ party_leaflets.number }} of {{ party_leaflets.paginator.num_pages }}.
+</span>
+<nav role="menu" aria-label="Pagination">
+   <ul class="pagination">
+    {% if party_leaflets.has_previous %}
+        <li><a href="?page={{ party_leaflets.previous_page_number }}">previous</a></li>
+    {% endif %}
+    {% if party_leaflets.has_next %}
+        <li><a href="?page={{ party_leaflets.next_page_number }}">next</a></li>
+    {% endif %}
+   </ul>
+</nav>
+
+
+{# TODO RSS link #}
+
+{% endblock %}
+
+
