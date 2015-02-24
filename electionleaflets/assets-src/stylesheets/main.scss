@@ -20,7 +20,7 @@ body > header {
     background-image:url('../images/clouds.png');
     margin:0 auto;
     text-align:right;
-    
+
     padding-top:0.5em;
     height:60px;
     @media screen and (min-width: $mobile-break) {
@@ -52,7 +52,7 @@ body > header {
             float: none;
             position:relative;
             top:-0.6em;
-            
+
           }
     }
     h2 {
@@ -96,7 +96,12 @@ main {
     max-width:900px;
     margin:1em auto;
     padding:0.5em;
-    
+
+}
+
+.full_width main {
+    max-width:100%;
+    width:100%;
 }
 
 body > footer {
@@ -197,7 +202,7 @@ ul.leaflet_list {
                 max-width:600px;
                 float:left;
               }
-            
+
             text-align:justify;
             figure {
                 img {
@@ -205,13 +210,13 @@ ul.leaflet_list {
                 }
             }
         }
-    
+
         aside {
             @media screen and (min-width: $mobile-break+9) {
                 float:right;
                 width:28%;
               }
-            
+
             > section {
                 background-color:#fdf2d5;
                 border-radius:2px;
@@ -225,7 +230,7 @@ ul.leaflet_list {
                     }
                 }
             }
-            
+
         }
     }
 }

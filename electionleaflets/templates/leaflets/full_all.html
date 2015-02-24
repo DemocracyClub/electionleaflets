@@ -1,21 +1,26 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load staticfiles %}
+
+{% block extra_scripts %}
+<link rel="stylesheet" media="all" type="text/css" href="{% static "stylesheets/jquery.Jcrop.min.css" %}" />
+<script src="{% static "javascript/jquery.Jcrop.min.js" %}"></script>
+{% endblock %}
+
+
+{% block body_class %}class="full_width" {% if request.user.is_staff %}id="editor"{% endif %}{% endblock %}
 
 {% block content %}
-<div id="divContent">
-    <div id="divFullImage" class="contentfull">
-        <a href="{% url "leaflet" leaflet.id%}">&larr; back to details of <em>{{ leaflet.title }}</em></a>
-        <ul>
-        {% for image in images %}
-            <li id="image-{{ image.pk }}">
-                {% thumbnail image.image "1000" crop="noop" upscale=False as im %}
-                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class='shadowed'>
-                {# <img src="{{MEDIA_URL}}{{ image.image }}" /> #}
-                {% endthumbnail %}
-            </li>
-        {% endfor %}
-        </ul>
-        <a href="{% url "leaflet" leaflet.id%}">&larr; back to details of <em>{{ leaflet.title }}</em></a>
-    </div>
-</div>
+    {% include "leaflets/includes/leaflet_admin_markup_tools.html" %}
+    <a href="{% url "leaflet" leaflet.id%}">&larr; back to details of <em>{{ leaflet.title }}</em></a>
+
+    {% for image in leaflet.images.all %}
+        <figure id="image-{{ image.pk }}">
+            {% thumbnail image.image "1000" crop="noop" upscale=False as im %}
+            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class='shadowed'>
+            {# <img src="{{MEDIA_URL}}{{ image.image }}" /> #}
+            {% endthumbnail %}
+        </figure>
+    {% endfor %}
+
 {% endblock %}

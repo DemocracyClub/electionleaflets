@@ -1,23 +1,30 @@
 import os
 from collections import OrderedDict
 
-from django.template  import RequestContext
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.views.generic import DetailView, ListView, DetailView
+from django.views.generic import DetailView, ListView, UpdateView
 from django.core.files.storage import FileSystemStorage
 
 from braces.views import StaffuserRequiredMixin
 
 from .models import Leaflet, LeafletImage
-from .forms import InsidePageImageForm
+from .forms import InsidePageImageForm, LeafletDetailsFrom
+
 
 class ImageView(DetailView):
     model = LeafletImage
     template_name = 'leaflets/full.html'
+
+
+class AllImageView(UpdateView):
+    model = Leaflet
+    form_class = LeafletDetailsFrom
+    template_name = 'leaflets/full_all.html'
+
 
 class ImageCropView(StaffuserRequiredMixin, DetailView):
     model = LeafletImage
@@ -25,26 +32,13 @@ class ImageCropView(StaffuserRequiredMixin, DetailView):
 
     def post(self, request, *args, **kwargs):
         image_model = self.get_object()
-        x =  int(request.POST.get('x'))
-        y =  int(request.POST.get('y'))
+        x = int(request.POST.get('x'))
+        y = int(request.POST.get('y'))
         x2 = int(request.POST.get('x2'))
         y2 = int(request.POST.get('y2'))
 
-        image_model.crop(x,y,x2,y2)
+        image_model.crop(x, y, x2, y2)
         return HttpResponseRedirect(image_model.get_absolute_url())
-
-def view_all_full_images(request, leafletid):
-    from leaflets.models import Leaflet, LeafletImage
-
-    leaflet = get_object_or_404(Leaflet, pk=leafletid)
-    images = LeafletImage.objects.filter(leaflet=leaflet)
-
-    return render_to_response('leaflets/full_all.html',
-                            {
-                                'images': images,
-                                'leaflet': leaflet,
-                            },
-                            context_instance=RequestContext(request), )
 
 
 class LatestLeaflets(ListView):
@@ -56,6 +50,7 @@ class LatestLeaflets(ListView):
 class LeafletView(DetailView):
     template_name = 'leaflets/leaflet.html'
     queryset = Leaflet.objects.all()
+
 
 def _skip_step_allowed_condition(wizard, step_name):
     extra_data = wizard.storage.extra_data
@@ -73,11 +68,14 @@ def _skip_step_allowed_condition(wizard, step_name):
         return must_use
     return True
 
+
 def skip_back_allowed(wizard):
     return _skip_step_allowed_condition(wizard, 'back')
 
+
 def skip_inside_allowed(wizard):
     return _skip_step_allowed_condition(wizard, 'inside')
+
 
 class LeafletUploadWizzard(NamedUrlSessionWizardView):
     extra_added = False
@@ -122,7 +120,8 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         self._insert_extra_inside_forms()
 
         if self.request.POST.get('add_extra_inside', None):
-            form = self.get_form(data=self.request.POST, files=self.request.FILES)
+            form = self.get_form(
+                data=self.request.POST, files=self.request.FILES)
             if form.is_valid():
                 self.add_extra_inside_forms()
                 self._insert_extra_inside_forms(force=True)
@@ -137,9 +136,9 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             return self.form_list
         if self.extra_added and not force:
             return self.form_list
-        form_list = [(k,v) for k,v in self.form_list.items()]
+        form_list = [(k, v) for k, v in self.form_list.items()]
         form_list.reverse()
-        for index, (name,form) in enumerate(form_list):
+        for index, (name, form) in enumerate(form_list):
             if name.startswith('inside'):
                 for step in range(self.extra_inside_forms):
                     new_name = "inside-%s" % step
@@ -147,7 +146,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                 break
         form_list.reverse()
         self.form_list = OrderedDict()
-        for k,v in form_list:
+        for k, v in form_list:
             self.form_list[k] = v
         self.extra_added = True
         return self.form_list
@@ -173,7 +172,6 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
 
             if form_prefix == "postcode":
                 leaflet.postcode = form.cleaned_data['postcode']
-
 
         leaflet.save()
 
