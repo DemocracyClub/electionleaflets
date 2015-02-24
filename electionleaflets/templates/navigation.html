@@ -9,7 +9,13 @@
       <li>
           <a href="{% url "leaflets" %}">Latest</a>
       </li>
-      
+      <li>
+          <a href="{% url "parties" %}">By Party</a>
+      </li>
+      <li>
+          <a href="{% url "constituencies" %}">By Constituency</a>
+      </li>
+
       {% if request.user.is_authenticated %}
       <li>
           <a>{{ request.user }} Logged in</a>
