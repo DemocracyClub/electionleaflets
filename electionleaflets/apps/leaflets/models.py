@@ -38,6 +38,7 @@ class Leaflet(geo_model.Model):
     date_delivered = models.DateTimeField(blank=True, null=True)
     status = models.CharField(choices=constants.LEAFLET_STATUSES,
         null=True, blank=True, max_length=255)
+    reviewed = models.BooleanField(default=False)
 
     objects = geo_model.GeoManager()
 
