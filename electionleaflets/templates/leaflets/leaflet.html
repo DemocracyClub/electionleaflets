@@ -39,7 +39,17 @@
 
 {% block content %}
     {% if request.user.is_staff %}
-        <a class='staff_link' href='/admin/leaflets/leaflet/{{ object.id }}/'>Edit leaflet</a>
+    <section class="admin_tools">
+        <ul>
+            <li><a class='staff_link' href='/admin/leaflets/leaflet/{{ object.id }}/'>Edit leaflet</a></li>
+            <li>
+                <form method="post">{{ form }}
+                    <button type="submit" name="submit">Save</button>
+                    <button type="submit" name="submit_and_next">Save & review next</button>
+                </form>
+            </li>
+        </ul>
+    </section>
     {% endif%}
 
     <article>

@@ -14,7 +14,7 @@ from braces.views import StaffuserRequiredMixin
 
 
 from .models import Leaflet, LeafletImage
-from .forms import InsidePageImageForm, LeafletDetailsFrom
+from .forms import InsidePageImageForm, LeafletDetailsFrom, LeafletReviewFrom
 
 
 class ImageView(DetailView):
@@ -49,10 +49,20 @@ class LatestLeaflets(ListView):
     paginate_by = 60
 
 
-class LeafletView(DetailView):
+class LeafletView(UpdateView):
     template_name = 'leaflets/leaflet.html'
-    queryset = Leaflet.objects.all()
+    model = Leaflet
+    form_class = LeafletReviewFrom
 
+    def get_success_url(self):
+        if 'submit_and_next' in self.request.POST:
+            next_models = Leaflet.objects.filter(reviewed=False)\
+                                .order_by('-date_uploaded')
+            if next_models:
+                return next_models[0].get_absolute_url()
+            else:
+                return '/'
+        return super(LeafletView, self).get_success_url()
 
 def _skip_step_allowed_condition(wizard, step_name):
     extra_data = wizard.storage.extra_data

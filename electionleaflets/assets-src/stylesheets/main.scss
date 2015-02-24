@@ -234,3 +234,23 @@ ul.leaflet_list {
         }
     }
 }
+
+
+.admin_tools {
+    display:block;
+    padding:1em;
+    margin:0.5em;
+    border:2px solid #999;
+    border-radius:2px;
+    background: repeating-linear-gradient(
+        -55deg,
+        #222,
+        #222 10px,
+        #333 10px,
+        #333 20px);
+    color:#FFF;
+    a {
+        color:#FFF;
+        font-weight:bold;
+    }
+}

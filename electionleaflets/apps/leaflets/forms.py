@@ -29,3 +29,8 @@ class PostcodeForm(forms.Form):
 class LeafletDetailsFrom(forms.ModelForm):
     class Meta:
         model = Leaflet
+
+class LeafletReviewFrom(forms.ModelForm):
+    class Meta:
+        model = Leaflet
+        fields = ('reviewed', )
