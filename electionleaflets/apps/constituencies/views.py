@@ -1,78 +1,34 @@
-import json
+from django.views.generic import DetailView, ListView
+from django.db.models import Count
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from django.template  import RequestContext
-from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
-from django.core.urlresolvers import reverse
-from django.conf import settings
+from leaflets.models import Leaflet
 
-
-def view_not_spots(request):
-    from constituencies.models import Constituency
-    constituencies = Constituency.objects.filter(count=0).order_by('name').all()
-    return render_to_response('constituencies/notspots.html',
-                            {
-                                'constituencies': constituencies,
-                            },
-                            context_instance=RequestContext(request) )
+from .models import Constituency
 
 
-def view_constituencies(request):
-    """
-    Provides a form to lookup constituencies either by name or by
-    postcode.
-    """
-    from constituencies.models import Constituency
-    from constituencies.forms import ConstituencyLookupForm
-    from leaflets.models import Leaflet
+class ConstituencyView(DetailView):
+    model = Constituency
 
-    constituencies = Constituency.objects.order_by('name').all()
+    def get_context_data(self, **kwargs):
+        context = super(ConstituencyView, self).get_context_data(**kwargs)
+        qs = Leaflet.objects.filter(constituency_id=self.kwargs['pk'])
 
-    form = ConstituencyLookupForm(request.POST or None)
-    cons = None
+        paginator = Paginator(qs, 60)
+        page = self.request.GET.get('page')
+        try:
+            context['constituency_leaflets'] = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            context['constituency_leaflets'] = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            context['constituency_leaflets'] = paginator.page(paginator.num_pages)
 
-    if request.method == 'POST':
-        if form.is_valid():
-            postcode = form.cleaned_data['search']
-            if postcode:
-                c = constituency_by_postcode(postcode)
-                if c:
-                    cons = Constituency.objects.get(name=c)
-            else:
-                cons = form.cleaned_data['constituency']
+        return context
 
-            if cons:
-                return HttpResponseRedirect(reverse('constituency', kwargs={'slug': cons.slug}) )
+class ConstituencyList(ListView):
+    queryset = Constituency.objects.all()\
+               .annotate(num_leaflets=Count('leaflet'))\
+               .order_by('-num_leaflets')
 
-
-    return render_to_response('constituencies/index.html',
-                            {
-                                'constituencies': constituencies,
-                            },
-                            context_instance=RequestContext(request) )
-
-
-def view_constituency(request, slug):
-    from constituencies.models import Constituency
-    from leaflets.models import Leaflet
-    import math
-
-    const = get_object_or_404(Constituency, slug=slug)
-
-    qs = Leaflet.objects.filter(constituency=const.pk).order_by('-pk')
-
-    total = qs.count()
-    currentPage = request.GET.get('page', 1)
-    totalPages = int(math.ceil(float(total)/12))
-
-
-    return render_to_response('constituencies/constituency.html',
-                            {
-                                'constituency': const,
-                                'qs': qs,
-                                'total': total,
-                                'currentPage': currentPage,
-                                'totalPages': totalPages,
-                                'request': request
-                            },
-                            context_instance=RequestContext(request) )

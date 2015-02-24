@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Constituencies</h1>
+<ul>
+{% for c in object_list %}
+    <li>
+        <a href="{% url "constituency-view" c.pk c.slug %}">{{ c.name }} ({{ c.leaflet_set.count }} leaflets)</a>
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}

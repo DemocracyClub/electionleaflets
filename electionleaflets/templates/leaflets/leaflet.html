@@ -93,7 +93,7 @@
         </section>
 
         <section class="leaflet_map">
-            <p>Delivered in {% if object.constituency %}<a href="{% url "constituency"  object.constituency.slug %}">{{ object.constituency.name }}</a>{% else %}unknown location{% endif %} on {{ object.date_delivered|date:"l, d M, Y" }} (approximate). Uploaded on {{ object.date_uploaded|date:"l, d M, Y" }} at {{ object.date_uploaded|date:"H:i" }}.</p>
+            <p>Delivered in {% if object.constituency %}<a href="{% url "constituency-view"  object.constituency.pk object.constituency.slug %}">{{ object.constituency.name }}</a>{% else %}unknown location{% endif %} on {{ object.date_delivered|date:"l, d M, Y" }} (approximate). Uploaded on {{ object.date_uploaded|date:"l, d M, Y" }} at {{ object.date_uploaded|date:"H:i" }}.</p>
             {% if object.constituency %}
 
             {% endif %}
@@ -104,7 +104,7 @@
         <section class="party">
             <img src="http://openelectoralcommission.org.uk/party_images/{{ object.publisher_party.emblems.all.0.emblem_url }}">
             {% if object.publisher_party and object.publisher_party.slug %}
-            <p>Published by <a href="{% url "party" object.publisher_party.slug%}">{{object.publisher_party.party_name}}</a></p>
+            <p>Published by <a href="{% url "party-view" object.publisher_party.slug%}">{{object.publisher_party.party_name}}</a></p>
             {% endif %}
         </section>
 

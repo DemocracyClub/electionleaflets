@@ -1,12 +1,14 @@
 from django.conf.urls import patterns, include, handler500, url
 from django.conf import settings
 
-from constituencies.views import view_constituency, view_constituencies, view_not_spots
+from constituencies.views import ConstituencyList, ConstituencyView
 
 urlpatterns = patterns(
     '',
-    url(r'^/$',      view_constituencies, name='constituencies'),
-    url(r'^/notspots/', view_not_spots, name='constituency_notspots'),
-    url(r'^/(?P<slug>[\w_\-\.]+)/$',  view_constituency, name='constituency'),
+    url(r'^/$',  ConstituencyList.as_view(), name='constituencies'),
+    # url(r'^/notspots/', view_not_spots, name='constituency_notspots'),
+    url(r'^/(?P<pk>[^/]+)(?:/(?P<ignored_slug>.*))?$',
+            ConstituencyView.as_view(),
+            name='constituency-view'),
 )
 
