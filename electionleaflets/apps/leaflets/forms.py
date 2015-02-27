@@ -2,7 +2,8 @@ from django import forms
 
 from localflavor.gb.forms import GBPostcodeField
 
-from .models import Leaflet
+from .models import Leaflet, LeafletImage
+import constants
 
 
 class ImageForm(forms.Form):

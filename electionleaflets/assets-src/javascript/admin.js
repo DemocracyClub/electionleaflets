@@ -102,6 +102,17 @@
 
 
 
+  var im = $('.roate_image')
+  var rotate = 0;
+  im.delegate(im, "click", function() {
+    im.removeClass('rotate'+rotate);
+    rotate = (rotate+90)%360;
+    im.addClass('rotate'+rotate);
+    $('input[name=rotate]').val(rotate)
+    im.parent('figure').css({'min-height': im[0].getBoundingClientRect().height})
+    im.parent('figure').css({'margin-top': im[0].getBoundingClientRect().height/4})
+    console.debug()
+  })
 
 
 

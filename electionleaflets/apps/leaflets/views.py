@@ -6,7 +6,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.views.generic import DetailView, ListView, UpdateView
+from django.views.generic import DetailView, ListView, UpdateView, FormView
+from django.views.generic.detail import BaseDetailView, SingleObjectMixin
 from django.core.files.storage import FileSystemStorage
 
 from braces.views import StaffuserRequiredMixin
@@ -14,7 +15,8 @@ from braces.views import StaffuserRequiredMixin
 
 
 from .models import Leaflet, LeafletImage
-from .forms import InsidePageImageForm, LeafletDetailsFrom, LeafletReviewFrom
+from .forms import (InsidePageImageForm, LeafletDetailsFrom,
+    LeafletReviewFrom)
 
 
 class ImageView(DetailView):
@@ -26,6 +28,19 @@ class AllImageView(UpdateView):
     model = Leaflet
     form_class = LeafletDetailsFrom
     template_name = 'leaflets/full_all.html'
+
+
+class ImageRotateView(StaffuserRequiredMixin, DetailView):
+    model = LeafletImage
+    template_name = 'leaflets/image_rotate.html'
+    def post(self, request, *args, **kwargs):
+        image_model = self.get_object()
+        rotation = request.POST.get('rotate')
+        print rotation
+        image_model.rotate(int(rotation))
+        return HttpResponseRedirect(image_model.get_absolute_url())
+
+
 
 
 class ImageCropView(StaffuserRequiredMixin, DetailView):

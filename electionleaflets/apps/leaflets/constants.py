@@ -10,3 +10,9 @@ IMAGE_TYPES = (
     ('3_inside', 'Inside'),
     ('4_inprint', 'Inprint'),
 )
+
+ROTATIONS = (
+    ('90', 90),
+    ('180', 180),
+    ('270', 270),
+)

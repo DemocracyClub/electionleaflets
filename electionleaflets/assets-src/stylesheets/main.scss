@@ -254,3 +254,40 @@ ul.leaflet_list {
         font-weight:bold;
     }
 }
+
+figure:after {
+        content:"";
+        display:block;
+        clear:both;
+    }
+
+.roate_image {
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    -o-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    float:left;
+    clear:both;
+
+    &.rotate0 {
+        transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+    }
+
+    &.rotate90 {
+        transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+    }
+    &.rotate180 {
+        transform: rotate(180deg);
+        -webkit-transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+    }
+    &.rotate270 {
+        transform: rotate(270deg);
+        -webkit-transform: rotate(270deg);
+        -ms-transform: rotate(270deg);
+    }
+}

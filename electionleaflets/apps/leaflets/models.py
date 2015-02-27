@@ -144,6 +144,27 @@ class LeafletImage(models.Model):
         self.image.save(file_name, file_content)
         delete(self.image, delete_file=False)
 
+    def rotate(self, rotate_angle):
+        """
+        Make sure we rotate both images.
+        """
+        if not self.raw_image:
+            self.raw_image = self.image
+            self.raw_image.save()
+        for image_field in (
+            # self.raw_image,
+            self.image,
+            ):
+            file_name = image_field.name
+            im = Image.open(image_field.file)
+            rotated = im.copy()
+            rotated = rotated.rotate(rotate_angle)
+            new_file = StringIO()
+            rotated.save(new_file, 'jpeg')
+            file_content = ContentFile(new_file.getvalue())
+            image_field.save(file_name, file_content)
+            delete(self.image, delete_file=False)
+
     def ocr(self):
         if not self.image:
             return ""

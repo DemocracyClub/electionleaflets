@@ -3,7 +3,7 @@ from django.conf.urls import patterns, url
 from leaflets.views import (ImageView, LatestLeaflets,
     LeafletView, LeafletUploadWizzard,
     skip_inside_allowed, skip_back_allowed, ImageCropView,
-    AllImageView)
+    AllImageView, ImageRotateView)
 
 from .forms import  (FrontPageImageForm, BackPageImageForm,
     InsidePageImageForm, PostcodeForm)
@@ -20,7 +20,7 @@ upload_form_wizzard = LeafletUploadWizzard.as_view(named_form_list,
     condition_dict={
         'back': skip_back_allowed,
         'inside': skip_inside_allowed,
-    }
+    },
 )
 
 urlpatterns = patterns(
@@ -32,8 +32,8 @@ urlpatterns = patterns(
     url(r'^/full/(?P<pk>.+)/$',  ImageView.as_view(), name='full_image'),
     url(r'^/(?P<pk>\d+)/images/$',  AllImageView.as_view(), name='all_images'),
     url(r'^/crop/(?P<pk>.+)/$',  ImageCropView.as_view(), name='crop'),
+    url(r'^/rotate/(?P<pk>.+)/$',  ImageRotateView.as_view(), name='rotate'),
 
     url(r'^/(?P<pk>\d+)/$', LeafletView.as_view(), name='leaflet'),
     url(r'^/$',      LatestLeaflets.as_view(), name='leaflets'),
 )
-
