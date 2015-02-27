@@ -1,10 +1,24 @@
 {% load staticfiles %}
 <footer>
-    <p>Election Leaflets is run by a group of volunteers. It is currently being supported by <a href="http://unlockdemocracy.org.uk">Unlock Democracy</a>, the campaign for democracy, rights and freedoms. Both Election Leaflets and Unlock Democracy are independent and not affiliated to any political party</p>
-    <ul class="inline">
-        <li><a href="{% url "home"  %}">Home</a></li>
-        <li><a href="{% url "about"  %}">About</a></li>                
-        <li><a href="{% url "about"  %}#contact">Contact</a></li>                
-    </ul>
-    <a href="http://unlockdemocracy.org.uk/"><img src="{% static "images/ud11.png" %}" height="80px"></a>
+    <div>
+        <p>Election Leaflets is run by a group of volunteers.
+            It is currently being supported by
+            <a href="http://unlockdemocracy.org.uk">Unlock Democracy</a>, the
+            campaign for democracy, rights and freedoms and
+            <a href="https://democracyclub.org.uk/">Democracy Club</a>.
+            Election Leaflets, Unlock Democracy and Democracy Club
+            are independent and not affiliated to any political party</p>
+        <nav>
+            <ul>
+                <li><a href="{% url "home"  %}">Home</a></li>
+                <li><a href="{% url "about"  %}">About</a></li>
+                <li><a href="{% url "about"  %}#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="footer_logos">
+            <a href="http://unlockdemocracy.org.uk/"><img src="{% static "images/ud11.png" %}" height="80px"></a>
+            <a href="https://democracyclub.org.uk/"><img src="{% static "images/dc.png" %}" height="80px"></a>
+
+        </div>
+    </div>
 </footer>

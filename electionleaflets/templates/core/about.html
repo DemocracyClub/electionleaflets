@@ -2,20 +2,42 @@
 {% load content_tags %}
 
 {% block content %}
- {% if request.user.is_staff %}
-                <a class='staff_link' href='/admin/content/contentblock/2/'>Edit ContentBlock</a>
-                {% endif%}
-
     <h1>About ElectionLeaflets.org</h1>
-{% content_block "about" %}
 
+<p>Electioneering is a high-stakes game. We, at ElectionLeaflets.org, believe
+that it’s time for that game to become a spectator sport.</p>
 
-		<a name='contact'></a>
-		<h2>Contact details</h2>
-{% if request.user.is_staff %}
-<a class='staff_link' href='/admin/content/contentblock/3/'>Edit ContentBlock</a>
-                {% endif%}
+<p>ElectionLeaflets.org is a real-time election leaflet project. Our ambition
+is to create a live visualization of the flood of party political leaflets as
+they are delivered across the country during an election campaign.</p>
 
-{% content_block "contact" %}
+<p>If you have recently received any election leaflets through your door you
+can help by photographing or scanning them and uploading the images to our
+server.</p>
 
+<p>The idea was conjured up in December 2008 at a weekend in Derbyshire, and
+finally acted upon in Francis's front living room in Cambridge at the end of
+April 2009.</p>
+
+<p>The original name of the website was "The Straight Choice", derived from a
+leaflet in the controversial by-election in Bermondsey in 1983 which has become
+the type specimen of accusations of dodgy campaigning. We renamed the site
+"ElectionLeaflets.org" in August 2010. It is currently being supported by
+Unlock Democracy, the campaign for democracy, rights and freedoms, and
+Democracy Club. Election Leaflets, Unlock Democracy and Democracy Club are
+independent and not affiliated to any political party</p>
+
+<h2>Contact details</h2>
+
+<p>You can contact the ElectionLeaflets.org team at <a
+href="mailto:team@electionleaflets.org">team@electionleaflets.org</a> or you can
+contact Emily at <a href="tel:07834185266">07834 185 266</a> or </p>
+
+<p>
+    Elections Leaflet<br>
+    C/O Unlock Democracy<br>
+    37 Gray’s Inn Road<br>
+    London<br>
+    WC1X 8PQ
+</p>
 {% endblock %}

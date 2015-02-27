@@ -108,11 +108,23 @@ body > footer {
     background-color:#353B38;
     color:#FFF;
     padding:0.5em;
+    overflow:auto;
+    > div {
+        max-width:900px;
+        margin:auto;
+    }
+    nav {
+        float:left;
+        max-width:50%;
+    }
+    .footer_logos {
+        float:right;
+        width:50%;
+    }
     a {
         color:#FFF;
     }
 }
-
 .upload {
     font-weight:bold;
     font-size:$typl8-font-base * 1.2 + px;
