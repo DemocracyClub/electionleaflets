@@ -70,6 +70,7 @@ class Leaflet(geo_model.Model):
 
     def geocode(self, postcode):
         data = geocode(postcode)
+        self.constituency = data['constituency']
         self.location = Point(
             data['wgs84_lon'],
             data['wgs84_lat'],

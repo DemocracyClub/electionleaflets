@@ -15,7 +15,7 @@ class LeafletTestCase(TestCase):
         self.assertEqual(leaflet._initial,
             {'status': None, 'publisher_party': None, 'description': None,
             'title': u'', 'email': u'', 'imprint': None, 'postcode': u'',
-            'location': None, 'date_delivered': None,
+            'location': None, 'date_delivered': None, 'reviewed': False,
             'constituency': None, u'id': None, 'name': u''})
 
         leaflet.status = "draft"
