@@ -1,5 +1,3 @@
-MAPIT_URL = "http://mapit.mysociety.org"
-
 LEAFLET_STATUSES = (
     ('live', 'Live'),
     ('draft', 'Draft'),

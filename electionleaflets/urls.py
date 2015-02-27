@@ -8,12 +8,12 @@ admin.autodiscover()
 
 from leaflets.feeds import *
 
-from core.views import home
+from core.views import HomeView
 
 urlpatterns = patterns(
     '',
 
-    url(r'^$',          home, name='home'),
+    url(r'^$',          HomeView.as_view(), name='home'),
     url(r'^leaflets',   include('leaflets.urls')),
     url(r'^parties',    include('parties.urls')),
     url(r'^constituencies',    include('constituencies.urls')),

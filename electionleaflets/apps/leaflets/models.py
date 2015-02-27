@@ -1,7 +1,6 @@
 import os
 from cStringIO import StringIO
 
-import requests
 from sorl.thumbnail import ImageField
 from sorl.thumbnail import delete
 import pytesser
@@ -13,6 +12,7 @@ from django.contrib.gis.geos import Point
 from django.core.files.base import ContentFile
 from django.forms.models import model_to_dict
 
+from core.helpers import geocode
 from constituencies.models import Constituency
 from uk_political_parties.models import Party
 
@@ -69,17 +69,13 @@ class Leaflet(geo_model.Model):
             "Untitled leaflet"
 
     def geocode(self, postcode):
-        """
-        Use MaPit to convert the postcode to a location and constituency
-        """
-        res = requests.get("%s/postcode/%s" % (constants.MAPIT_URL, postcode))
-        res_json = res.json()
-        self.constituency = Constituency.objects.get(
-            constituency_id=str(res_json['shortcuts']['WMC']))
+        data = geocode(postcode)
         self.location = Point(
-            res_json['wgs84_lon'],
-            res_json['wgs84_lat'],
+            data['wgs84_lon'],
+            data['wgs84_lat'],
         )
+
+
 
     def save(self, *args, **kwargs):
         if self.postcode:

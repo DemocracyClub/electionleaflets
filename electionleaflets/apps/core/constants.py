@@ -1,0 +1,1 @@
+MAPIT_URL = "http://mapit.mysociety.org"

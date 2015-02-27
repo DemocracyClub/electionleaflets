@@ -1,22 +1,24 @@
 from django.template  import RequestContext
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
+from django.views.generic import FormView
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.contrib.sites.models import Site
 
+from constituencies.forms import ConstituencyLookupForm
+from core.helpers import geocode
 
-def home(request):
-    from constituencies.forms import ConstituencyLookupForm
+class HomeView(FormView):
+    form_class = ConstituencyLookupForm
+    template_name = "core/home.html"
 
-    form = ConstituencyLookupForm(request.POST or None)
-
-    return render_to_response('core/home.html',
-        {'form': form,},
-        context_instance=RequestContext(request) )
-
+    def form_valid(self, form):
+        location = geocode(form.cleaned_data['postcode'])
+        self.success_url = location['constituency'].get_absolute_url()
+        return super(HomeView, self).form_valid(form)
 
 def report_abuse(request, id):
     from core.forms import ReportAbuseForm
