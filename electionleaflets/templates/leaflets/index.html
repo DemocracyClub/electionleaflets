@@ -7,10 +7,7 @@
 {% block title %}Latest leaflets{% endblock %}
 
 {% block content %}
-  <div class="row">
-    <div class="columns large-12">
-      <h1>Latest leaflets</h1>
-      <ul class="small-block-grid-2 leaflet_list">
+<ul class="small-block-grid-2 leaflet_list">
         {% for leaflet in leaflet_list %}
           <li>
             <figure>
@@ -32,6 +29,11 @@
           </li>
         {% endfor %}
       </ul>
+      
+  <div class="row">
+    <div class="columns large-12">
+      <h1>Latest leaflets</h1>
+      
 
 {% if is_paginated %}
 <span class="page-current">
