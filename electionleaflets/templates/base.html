@@ -35,18 +35,17 @@
               <li>
                 <ul>
                   <li>
-                      <a href="{% url "upload_leaflet" %}">Add a leaflet</a>
+                      <a href="{% url "upload_leaflet" %}">
+                        <i class="fa fa-camera"></i>  
+                        Add a leaflet
+                      </a>
                   </li>
                   <li>
-                      <a href="{% url "leaflets" %}">Latest</a>
+                      <a href="{% url "leaflets" %}">
+                        <i class="fa fa-line-chart"></i>
+                        Latest
+                      </a>
                   </li>
-                  <li>
-                      <a href="{% url "parties" %}">Parties</a>
-                  </li>
-                  <li>
-                      <a href="{% url "constituencies" %}">Constituencies</a>
-                  </li>
-
                   {% if request.user.is_authenticated %}
                   <li>
                       <a>{{ request.user }} Logged in</a>

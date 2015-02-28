@@ -9,25 +9,24 @@
     <div class="large-12 columns">
       <h2>Got Election leaflets? Photo them. Upload them.</h2>
 
-      <p><a href="{% url "upload_leaflet" %}" class="upload">Upload a leaflet</a></p>
+      <p><a href="{% url "upload_leaflet" %}" class="upload">Add a leaflet</a></p>
 
       <p>Even in the internet age, leaflets are a time honoured way for political parties to get their message across. We want to keep track of how politicians are trying to get your vote, and where they are campaigning.</p>
 
       <p>Sending us your leaflets is incredibly simple: take a high resolution colour photograph (or better yet, use a scanner if you have one) and submit it to us by clicking on the button below.</p>
 
-      <h2>What's being delivered near you?</h2>
-      <form method="post">
-        {{ form.postcode.label }}
-        <div class="row collapse">
-          <div class="small-10 columns">
-            {{ form.postcode }}
-          </div>
-          <div class="small-2 columns">
-            <a href="#" class="button postfix">Go</a>
-          </div>
-        </div>
-      </form>
-
+      <h2>Browse the latest leaflets from the campaign</h2>
+      <ul class="side-nav">
+        <li>
+          <a href="{% url "leaflets" %}">All</a>
+        </li>
+        <li>
+          <a href="{% url "parties" %}">Parties</a>
+        </li>
+        <li>
+          <a href="{% url "constituencies" %}">Constituencies</a>
+        </li>
+      </ul>
     </div>
   </div>
 {% endblock %}

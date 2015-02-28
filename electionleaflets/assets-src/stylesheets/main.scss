@@ -54,12 +54,23 @@ footer {
     color:#fff;
     a, a:hover {
         color:#fff;
+        font-weight:bold;
     }
     .supporter {
-        display:block;
-        float:left;
-        padding-right:15px;
-        padding-top:5px;
+        display:inline-block;
+        padding:0 20px 10px 0;
+        img {
+            height:50px
+        }
+    }
+    @media only screen and (min-width: 40.063em) {
+        .supporter {
+            display:inline-block;
+            padding:10px 0;
+            img {
+                height:80px
+            }
+        }
     }
 }
 
@@ -119,10 +130,6 @@ ul.side-nav li > a:after {
             width:70%;
         }
     }
-}
-
-.leaflets {
-    
 }
 
 #leaflet_map {
