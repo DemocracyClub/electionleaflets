@@ -12,3 +12,12 @@ DATABASES = {
 }
 
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'el_cache',
+    }
+}
+
+#THUMBNAIL_DEBUG = True
+THUMBNAIL_KVSTORE ='sorl.thumbnail.kvstores.cached_db_kvstore.KVStore'

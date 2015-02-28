@@ -19,6 +19,8 @@
   paths.styles.push(paths.src + 'vendor/**/*.css');
 
   paths.standalone.push(paths.src + 'vendor/Jcrop/css/jquery.Jcrop.min.css');
+  paths.standalone.push(paths.src + 'vendor/foundation/css/foundation.css');
+  paths.standalone.push(paths.src + 'vendor/foundation/css/foundation.css.map');
   
   // images
   paths.images.push(paths.src + 'images/**/*');
@@ -27,11 +29,11 @@
   paths.fonts.push(paths.tmp + 'fonts/*.{otf,eot,svg,ttf,woff,woff2}');
   paths.fonts.push(paths.src + 'vendor/**/*.{otf,eot,svg,ttf,woff,woff2}');
   paths.fonts.push(paths.tmp + 'vendor/**/*.{otf,eot,svg,ttf,woff,woff2}');
-  
+
   // scripts
   paths.scripts = {
     vendor: [
-      paths.src + 'vendor/jquery/jquery.js',
+      paths.src + 'vendor/jquery/dist/jquery.js',
       paths.src + 'vendor/masonry/index.js',
       paths.src + 'vendor/leaflet/index.js',
     ],
@@ -41,6 +43,9 @@
     standalone: [
         paths.src + 'javascript/admin.js',
         paths.src + 'vendor/Jcrop/js/jquery.Jcrop.min.js',
+        paths.src + 'vendor/foundation/js/foundation.js',
+        paths.src + 'vendor/modernizr/modernizr.js',
+        paths.src + 'vendor/jquery/dist/jquery.js',
     ]
   };
   

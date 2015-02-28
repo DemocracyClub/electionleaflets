@@ -7,28 +7,31 @@
 {% block title %}Latest leaflets{% endblock %}
 
 {% block content %}
-
-<h1>Latest leaflets</h1>
-
-<ul class="leaflet_list">
-    {% for leaflet in leaflet_list %}
-        <li>
+  <div class="row">
+    <div class="columns large-12">
+      <h1>Latest leaflets</h1>
+      <ul class="small-block-grid-2 leaflets">
+        {% for leaflet in leaflet_list %}
+          <li>
             <figure>
-                <a href="{% url "leaflet"  leaflet.id %}">
-                    {% thumbnail leaflet.get_first_image.image "150" as im %}
-                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-                    {% endthumbnail %}
+            <a href="{% url "leaflet"  leaflet.id %}">
+            {% thumbnail leaflet.get_first_image.image "350" as im %}
+            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+            {% endthumbnail %}
+            </a>
+              <figcaption>
+                <a href="{% url "leaflet" leaflet.id %}">
+                  {% if leaflet.title %}
+                    {{ leaflet.title }}
+                  {% else %}
+                    Leaflet #{{ leaflet.id }}
+                  {% endif %}
                 </a>
-                <figcaption>
-                    <a href="{% url "leaflet" leaflet.id %}">{{ leaflet.title }}</a>
-                </figcaption>
+              </figcaption>
             </figure>
-
-
-
-        </li>
-    {% endfor %}
-</ul>
+          </li>
+        {% endfor %}
+      </ul>
 
 {% if is_paginated %}
 <span class="page-current">

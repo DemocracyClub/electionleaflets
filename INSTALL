@@ -31,10 +31,11 @@ cp electionleaflets/settings/local.py.example  electionleaflets/settings/local.p
 ```
 Create a database and a user in Postgres, then edit the local.py file and add details of your database.
 
-Then run database migration
+Then run database migration & setup cach tables
 
 ```
 python manage.py migrate
+python manage.py createcachetable
 ```
 
 4) Install css, javascript packages and setup sass stuff

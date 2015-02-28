@@ -6,8 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
         <meta name="keywords" lang="en" content="election leaflets" />
         <meta name="description" lang="en" content="Real-time election leaflet monitoring" />
-        
+
         <title>{% block title %}Real-time #ElectionLeaflet monitoring{% endblock %}  | ElectionLeaflets.org</title> 
+        <link rel="stylesheet" media="all" type="text/css" href="{% static "stylesheets/foundation.css" %}" />
         <link rel="stylesheet" media="all" type="text/css" href="{% static "stylesheets/main.min.css" %}" />
         <link rel="Shortcut Icon" href="/favicon.ico" type="image/x-icon" />
         {% block og_tags %}{% endblock og_tags %}
@@ -15,18 +16,58 @@
     </head>
 
     <body {% block body_class %}{% endblock %}>
-        <header>
-            <a href="{% url "home" %}"></a>
-            <img src="{% static "images/logo.png" %}">
-            <h1>ElectionLeaflets.org</h1>
-            <h2>Real-time #ElectionLeaflet monitoring</h2>
-        </header>
-        {% include "navigation.html" %}
 
-        <main>
-            {% block content %}
-            {% endblock %}
-        </main>
+      <header>
+        <nav  class="top-bar" data-topbar role="navigation">
+          <ul class="title-area">
+            <li class="name">
+              <h1>
+                <a href="/">ElectionLeaflets.org</a>
+              </h1>
+            </li>
+            <li class="toggle-topbar menu-icon">
+              <a href="#"><span>Menu</span></a>
+            </li>
+          </ul>
+
+          <section class="top-bar-section">
+            <ul class="right">
+              <li>
+                <ul>
+                  <li>
+                      <a href="{% url "upload_leaflet" %}">Add a leaflet</a>
+                  </li>
+                  <li>
+                      <a href="{% url "leaflets" %}">Latest</a>
+                  </li>
+                  <li>
+                      <a href="{% url "parties" %}">Parties</a>
+                  </li>
+                  <li>
+                      <a href="{% url "constituencies" %}">Constituencies</a>
+                  </li>
+
+                  {% if request.user.is_authenticated %}
+                  <li>
+                      <a>{{ request.user }} Logged in</a>
+                  </li>
+                  <li>
+                      <a href="{% url "account_logout" %}">Sign out</a>
+                  </li>
+                  {% else %}
+                  <li><a href="{% url "account_login" %}">Sign in</a></li>
+                  {% endif %}
+                </ul>
+              </li>
+            </ul>
+          </section>
+        </nav>
+      </header>
+
+      <main>
+          {% block content %}
+          {% endblock %}
+      </main>
 
         {% include "footer.html" %}
         
@@ -40,11 +81,19 @@
         {# //     pageTracker._trackPageview(); #}
         {# //     } catch(err) {} #}
         {# // </script> #}
+
+        <script src="{% static "javascript/jquery.js" %}"></script>
+        <script src="{% static "javascript/modernizr.js" %}"></script>
+        <script src="{% static "javascript/foundation.js" %}"></script>
+        <script> $(document).foundation(); </script> <!--this is bad, but doesnt work when added to app.js-->
         <script src="{% static "javascript/electionleaflets.main.min.js" %}"></script>
+
         {% block extra_scripts %}{% endblock %}
+
         {% if request.user.is_staff %}
-        <script src="{% static "javascript/admin.js" %}"></script>
+          <script src="{% static "javascript/admin.js" %}"></script>
         {% endif %}
+        
         
     </body>
 </html>

@@ -5,33 +5,29 @@
 {% load content_tags %}
 
 {% block content %}
+  <div class="row">
+    <div class="large-12 columns">
+      <h2>Got Election leaflets? Photo them. Upload them.</h2>
 
+      <p><a href="{% url "upload_leaflet" %}" class="upload">Upload a leaflet</a></p>
 
-<h2>Got Election leaflets? Photo them. Upload them.</h2>
+      <p>Even in the internet age, leaflets are a time honoured way for political parties to get their message across. We want to keep track of how politicians are trying to get your vote, and where they are campaigning.</p>
 
-<p><a href="{% url "upload_leaflet" %}" class="upload">Upload a leaflet</a></p>
+      <p>Sending us your leaflets is incredibly simple: take a high resolution colour photograph (or better yet, use a scanner if you have one) and submit it to us by clicking on the button below.</p>
 
-<p>Even in the internet age, leaflets are a time honoured way for political parties to get their message across. We want to keep track of how politicians are trying to get your vote, and where they are campaigning.</p>
+      <h2>What's being delivered near you?</h2>
+      <form method="post">
+        {{ form.postcode.label }}
+        <div class="row collapse">
+          <div class="small-10 columns">
+            {{ form.postcode }}
+          </div>
+          <div class="small-2 columns">
+            <a href="#" class="button postfix">Go</a>
+          </div>
+        </div>
+      </form>
 
-<p>Sending us your leaflets is incredibly simple: take a high resolution colour photograph (or better yet, use a scanner if you have one) and submit it to us by clicking on the button below.</p>
-
-
-<h3>Find Leaflets in your area</h3>
-<form method="post">{{ form.as_p }}<button>Show Leaflets</button></form>
-
-{# <h3>Taking a decent photo</h3> #}
-{#  #}
-{# <p>We recommend putting the leaflet on a flat surface like a table in a well lit room and taking a photograph of it from directly above. You might want to turn off the flash.</p> #}
-{# <p>Don’t forget to take a photograph of all the sides of the leaflet (not just the front), and to ensure that the text is legible.</p> #}
-{#  #}
-{# <h3>I can’t take a photo or scan</h3> #}
-{#  #}
-{# <p>No problem, just post the leaflet to Elections Leaflet, &#8453; Unlock Democracy, 37 Gray’s Inn Road, London WC1X 8PQ and don't forget to include your postcode.</p> #}
-
-
-
-
-{# <h2>Latest leaflets</h2> #}
-{# {% leaflet_carousel %} #}
-{# <p><a href="{% url "leaflets" %}">Browse leaflets by party or category &raquo;</a></p> #}
+    </div>
+  </div>
 {% endblock %}
