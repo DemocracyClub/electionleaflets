@@ -3,11 +3,52 @@ Installation Instructions
 
 Short version - until I can write something more useful
 
+1) Create virtual environment
 ```
 virtualenv . --no-site-packages
 . bin/activate
-pip install -r requirements.txt
-cp electionleaflets/settings/local.py{.example,}
+```
+
+2) Install python requirements
+
+Dev:
+
+```
+pip install -r requirements/dev.txt
+```
+
+Production:
+```
+pip install -r requirements/production.txt
+```
+
+
+3) Settings and database
+```
+cp electionleaflets/settings/local.py.example  electionleaflets/settings/local.py
 # create a postgres db, and update settings in local.py
+
+```
+Create a database and a user in Postgres, then edit the local.py file and add details of your database.
+
+Then run database migration
+
+```
+python manage.py migrate
+```
+
+4) Install css, javascript packages and setup sass stuff
+
+```
+npm install && bower install
+```
+
+5) Run Gulp (for development only)
+```
+bundle exec gulp
+```
+
+6) Run django
+```
 python manage.py runserver
 ```

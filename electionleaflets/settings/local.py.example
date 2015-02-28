@@ -5,8 +5,10 @@ template_DEBUG = DEBUG
 THEYWORKFORYOU_API_KEY = 'THEYWORKFORYOU API KEY'
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'DB NAME GOES HERE',
         'USER': 'DB USER GOES HERE',
     }
 }
+
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
