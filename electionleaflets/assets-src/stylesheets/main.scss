@@ -16,6 +16,9 @@ header {
         .name a {
             font-weight:500;
         }
+        .top-bar-section li a{
+            font-size:1rem;
+        }
     }
 }
 
@@ -43,7 +46,19 @@ aside {
     }
 }
 
-.button {
+h1 {
+    font-size:1.5rem;
+}
+
+h2 {
+    font-size:1.4rem;
+}
+
+h3 {
+    font-size:1.3rem;
+}
+
+button, .button {
     width:100%;
 }
 
@@ -142,6 +157,12 @@ ul.side-nav li > a:after {
     border-radius: 50%;
     height:2px;
     width:2px;
+}
+
+.leaflet_list {
+    list-style-type:none;
+    padding:0;
+    margin:0;
 }
 
 .leaflet_page {

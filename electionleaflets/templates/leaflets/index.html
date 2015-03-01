@@ -3,11 +3,13 @@
 {% load category_tags %}
 {% load thumbnail %}
 
-
 {% block title %}Latest leaflets{% endblock %}
 
 {% block content %}
-<ul class="small-block-grid-2 leaflet_list">
+  <div class="row">
+    <div class="columns large-12">
+      <h1>Latest leaflets</h1>
+      <ul class="leaflet_list">
         {% for leaflet in leaflet_list %}
           <li>
             <figure>
@@ -30,30 +32,26 @@
         {% endfor %}
       </ul>
       
-  <div class="row">
-    <div class="columns large-12">
-      <h1>Latest leaflets</h1>
-      
-
-{% if is_paginated %}
-<span class="page-current">
-    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-</span>
-<nav role="menu" aria-label="Pagination">
-   <ul class="pagination">
-    {% if page_obj.has_previous %}
-        <li><a href="{% url "leaflets" %}?page={{ page_obj.previous_page_number }}">previous</a></li>
+    {% if is_paginated %}
+      <span class="page-current">
+          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+      </span>
+      <nav role="menu" aria-label="Pagination">
+         <ul class="pagination">
+          {% if page_obj.has_previous %}
+              <li><a href="{% url "leaflets" %}?page={{ page_obj.previous_page_number }}">previous</a></li>
+          {% endif %}
+          {% if page_obj.has_next %}
+              <li><a href="{% url "leaflets" %}?page={{ page_obj.next_page_number }}">next</a></li>
+          {% endif %}
+         </ul>
+      </nav>
     {% endif %}
-    {% if page_obj.has_next %}
-        <li><a href="{% url "leaflets" %}?page={{ page_obj.next_page_number }}">next</a></li>
-    {% endif %}
-   </ul>
-</nav>
-{% endif %}
 
-<a href="{% url "latest_feed"  %}">
-<i class="fa fa-rss"></i> RSS
-</a>
-
+    <a href="{% url "latest_feed"  %}">
+      <i class="fa fa-rss"></i> RSS
+    </a>
+  </div>
+</div>
 
 {% endblock %}

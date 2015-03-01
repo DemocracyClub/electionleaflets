@@ -15,7 +15,6 @@
     }
   })  
   
-  
   $('.leaflet_list').masonry({
     // options
     // isFitWidth: true,
