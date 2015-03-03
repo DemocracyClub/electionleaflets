@@ -5,7 +5,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.views.generic import DetailView, ListView, UpdateView, FormView
+from django.views.generic import (DetailView, ListView, UpdateView, FormView,
+                                    RedirectView)
 from django.views.generic.detail import BaseDetailView, SingleObjectMixin
 from django.core.files.storage import FileSystemStorage
 from braces.views import StaffuserRequiredMixin
@@ -18,6 +19,16 @@ class ImageView(DetailView):
     model = LeafletImage
     template_name = 'leaflets/full.html'
 
+class LegacyImageView(SingleObjectMixin, RedirectView):
+    model = LeafletImage
+    permanent = True
+
+    def get_object(self, queryset=None):
+        key = self.kwargs.get(self.pk_url_kwarg, None)
+        return LeafletImage.objects.get(legacy_image_key=key)
+
+    def get_redirect_url(self, *args, **kwargs):
+        return self.get_object().get_absolute_url()
 
 class AllImageView(UpdateView):
     model = Leaflet
