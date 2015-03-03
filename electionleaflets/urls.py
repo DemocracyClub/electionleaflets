@@ -9,8 +9,8 @@ admin.autodiscover()
 from leaflets.feeds import *
 
 from core.views import HomeView, MaintenanceView
-
-if getattr(settings, 'MAINTENANCE_MODE', None):
+MAINTENANCE_MODE = getattr(settings, 'MAINTENANCE_MODE', False)
+if MAINTENANCE_MODE:
     urlpatterns = patterns(
         '',
         url(r'.*', MaintenanceView.as_view(), name='maintenance_view'),
