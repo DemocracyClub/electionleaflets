@@ -1,0 +1,59 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
+        <meta name="keywords" lang="en" content="election leaflets" />
+        <meta name="description" lang="en" content="Real-time election leaflet monitoring" />
+
+        <title>{% block title %}Real-time #ElectionLeaflet monitoring{% endblock %}  | ElectionLeaflets.org</title>
+        <link rel="stylesheet" media="all" type="text/css" href="{% static "stylesheets/foundation.css" %}" />
+        <link rel="stylesheet" media="all" type="text/css" href="{% static "stylesheets/main.min.css" %}" />
+        <link rel="Shortcut Icon" href="/favicon.ico" type="image/x-icon" />
+    </head>
+
+    <body {% block body_class %}{% endblock %}>
+
+      <header>
+        <nav  class="top-bar" data-topbar role="navigation">
+          <ul class="title-area">
+            <li class="name">
+              <h1>
+                <a href="/">ElectionLeaflets.org</a>
+              </h1>
+            </li>
+            <li class="toggle-topbar menu-icon">
+              <a href="#"><span>Menu</span></a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+    <main>
+        <div class="row">
+            <h1>We'll be back soon</h1>
+            <p>In the meantime you can email your leaflets to
+                leaflets@electionleaflets.org</p>
+                <p>Or tweet them on
+            <a href="https://twitter.com/search?q=%23electionleaflet&src=typd">#electionleaflet</a></p>
+        </div>
+    </main>
+
+        {% include "footer.html" %}
+
+        <script src="{% static "javascript/jquery.js" %}"></script>
+        <script src="{% static "javascript/modernizr.js" %}"></script>
+        <script src="{% static "javascript/foundation.js" %}"></script>
+        <script> $(document).foundation(); </script> <!--this is bad, but doesnt work when added to app.js-->
+        <script src="{% static "javascript/electionleaflets.main.min.js" %}"></script>
+
+        {% block extra_scripts %}{% endblock %}
+
+        {% if request.user.is_staff %}
+          <script src="{% static "javascript/admin.js" %}"></script>
+        {% endif %}
+
+
+    </body>
+</html>
