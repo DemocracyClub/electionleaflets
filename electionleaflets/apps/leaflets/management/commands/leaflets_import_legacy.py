@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import re
 
 from django.core.management.base import BaseCommand
 from django.conf import settings
@@ -18,6 +19,8 @@ class Command(BaseCommand):
         del data['publisher_party_id']
         del data['_publisher_party_cache']
         del data['_state']
+        del data['lng']
+        del data['lat']
         data['publisher_party'] = party
         data['constituency'] = constituency
         if data.get('live'):
@@ -69,6 +72,27 @@ class Command(BaseCommand):
             con = Constituency.objects.get(name=con_name)
         return con
 
+    def clean_postcode(self, postcode):
+        try:
+            postcode = postcode.encode("utf-8")
+            postcode = postcode.upper()
+            postcode = postcode.replace('!', "1")
+            postcode = postcode.replace('@', "2")
+            postcode = postcode.replace('"', "2")
+            postcode = postcode.replace('£', "3")
+            postcode = postcode.replace('$', "4")
+            postcode = postcode.replace('%', "5")
+            postcode = postcode.replace('^', "6")
+            postcode = postcode.replace('&', "7")
+            postcode = postcode.replace('*', "8")
+            postcode = postcode.replace('(', "9")
+            postcode = postcode.replace(')', "0")
+            postcode = re.sub(r'[^\x00-\x7F]+',' ', postcode)
+            postcode = re.sub('^[A-Z0-9\s]', '', postcode)
+            postcode = postcode.strip()
+        except:
+            import ipdb; ipdb.set_trace()
+        return postcode
 
     def handle(self, **options):
         for legacy_leaflet in legacyLeaflet.objects.all():
@@ -89,8 +113,8 @@ class Command(BaseCommand):
                         con = cons[0]
                         con = self.clean_constituency(con)
 
-                    # import ipdb
-                    # ipdb.set_trace()
+                    legacy_leaflet.postcode = self.clean_postcode(
+                        legacy_leaflet.postcode)
                     new_leaflet, created = Leaflet.objects.update_or_create(
                         pk=legacy_leaflet.pk,
                         defaults=self.clean_legacy_leaflet(
@@ -98,9 +122,13 @@ class Command(BaseCommand):
                             party,
                             constituency=con
                             ))
-
-                    for legacy_image in legacy_leaflet.images.all():
-                        new_image, created = LeafletImage.objects.update_or_create(
-                        leaflet=new_leaflet,
-                        legacy_image_key=legacy_image.image_key,
-                        defaults=self.clean_legacy_leaflet_image(legacy_image))
+                    print new_leaflet.pk,
+                    if not new_leaflet.images.all():
+                        print "Adding images"
+                        for legacy_image in legacy_leaflet.images.all():
+                            new_image, created = LeafletImage.objects.update_or_create(
+                            leaflet=new_leaflet,
+                            legacy_image_key=legacy_image.image_key,
+                            defaults=self.clean_legacy_leaflet_image(legacy_image))
+                    else:
+                        print ""
