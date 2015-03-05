@@ -2,7 +2,7 @@
   "name": "election_leaflets",
   "version": "0.0.1",
   "dependencies": {
-    "jquery" : "1.10",
+    "jquery" : "2.1.0",
     "normalize": "https://raw.githubusercontent.com/kristerkari/normalize.scss/master/_normalize.scss",
     "masonry": "http://masonry.desandro.com/masonry.pkgd.min.js",
     "leaflet": "http://cdn.leafletjs.com/leaflet-0.7/leaflet-src.js",
@@ -11,6 +11,7 @@
     "ember": "1.9.1",
     "ember-data": "1.0.0-beta.12",
     "Font-Awesome": "v4.3.0",
-    "Jcrop": "0.9.12"
+    "Jcrop": "0.9.12",
+    "foundation": "5.5.1"
   }
 }

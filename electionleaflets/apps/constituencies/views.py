@@ -1,10 +1,10 @@
 from django.views.generic import DetailView, ListView
 from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
 from leaflets.models import Leaflet
-
+from .forms import ConstituencyLookupForm
 from .models import Constituency
+from core.helpers import geocode
 
 
 class ConstituencyView(DetailView):
@@ -28,7 +28,12 @@ class ConstituencyView(DetailView):
         return context
 
 class ConstituencyList(ListView):
+    form_class = ConstituencyLookupForm
     queryset = Constituency.objects.all()\
                .annotate(num_leaflets=Count('leaflet'))\
                .order_by('-num_leaflets')
-
+    
+    def form_valid(self, form):
+        location = geocode(form.cleaned_data['postcode'])
+        self.success_url = location['constituency'].get_absolute_url()
+        return super(HomeView, self).form_valid(form)

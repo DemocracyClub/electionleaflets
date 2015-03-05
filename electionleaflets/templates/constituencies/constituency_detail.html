@@ -2,41 +2,47 @@
 {% load thumbnail %}
 
 {% block content %}
-
-<h1>Election leaflets delivered in {{ object.name }}</h1>
-
-
-<ul class="leaflet_list">
-{% for leaflet in constituency_leaflets %}
-    <li>
-        <figure>
-            <a href="{{ leaflet.get_absolute_url }}">
-                {% thumbnail leaflet.images.all.0.image "150x150" crop="noop" upscale=False as im %}
-                <img src="{{ im.url }}" aria-labelledby="page-{{image.id}}">
+  <div class="row">
+    <div class="columns large-12">
+      <h1>Election leaflets delivered in {{ object.name }}</h1>
+      <ul class="leaflet_list">
+        {% for leaflet in constituency_leaflets %}
+          <li>
+            <figure>
+              <a href="{% url "leaflet"  leaflet.id %}">
+                {% thumbnail leaflet.get_first_image.image "350" as im %}
+                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
                 {% endthumbnail %}
+              </a>
                 <figcaption>
-                    <a href="{% url "leaflet" leaflet.id %}">{{ leaflet.title }}</a>
+                  <a href="{% url "leaflet" leaflet.id %}">
+                    {% if leaflet.title %}
+                      {{ leaflet.title }}
+                    {% else %}
+                      Leaflet #{{ leaflet.id }}
+                    {% endif %}
+                  </a>
                 </figcaption>
-            </a>
-        </figure>
-    </li>
-{% endfor %}
-</ul>
+              </figure>
+            </li>
+          {% endfor %}
+        </ul>
 
-<span class="page-current">
-    Page {{ constituency_leaflets.number }} of {{ constituency_leaflets.paginator.num_pages }}.
-</span>
-<nav role="menu" aria-label="Pagination">
-   <ul class="pagination">
-    {% if constituency_leaflets.has_previous %}
-        <li><a href="?page={{ constituency_leaflets.previous_page_number }}">previous</a></li>
-    {% endif %}
-    {% if constituency_leaflets.has_next %}
-        <li><a href="?page={{ constituency_leaflets.next_page_number }}">next</a></li>
-    {% endif %}
-   </ul>
-</nav>
-
+      <span class="page-current">
+          Page {{ constituency_leaflets.number }} of {{ constituency_leaflets.paginator.num_pages }}.
+      </span>
+      <nav role="menu" aria-label="Pagination">
+         <ul class="pagination">
+          {% if constituency_leaflets.has_previous %}
+              <li><a href="?page={{ constituency_leaflets.previous_page_number }}">previous</a></li>
+          {% endif %}
+          {% if constituency_leaflets.has_next %}
+              <li><a href="?page={{ constituency_leaflets.next_page_number }}">next</a></li>
+          {% endif %}
+         </ul>
+      </nav>
+    </div>
+  </div>
 
 {% endblock %}
 

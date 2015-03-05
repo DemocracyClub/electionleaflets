@@ -5,26 +5,30 @@
 {# {% block body_class %}class="leaflet_app"{% endblock %} #}
 
 {% block content %}
-{% block heading %}{% endblock heading %}
-<section class="upload_form">
-    <header>
-        <form action="" method="post" enctype="multipart/form-data"></form>
-    </header>
-    <form action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ wizard.management_form }}
+  <div class="row">
+    <div class="columns large-12">
+      {% block heading %}{% endblock heading %}
+      <section class="upload_form">
+          <header>
+              <form action="" method="post" enctype="multipart/form-data"></form>
+          </header>
+          <form action="" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              {{ wizard.management_form }}
 
-        {% block form %}
-        {% endblock form %}
+              {% block form %}
+              {% endblock form %}
 
-        <input type="submit" value="Submit"/>
-        {% if wizard.steps.current != "postcode" and wizard.steps.current != "front" %}
-        <input type="submit" name="skip" value="Skip"/>
-        {% endif %}
-        {% if "inside" in wizard.steps.current %}
-        <input type="submit" name="add_extra_inside" value="Add another page"/>
-        {% endif %}
-        <input type="submit" name="cancel_upload" value="Cancel"/>
-    </form>
-</section>
+              <button type="submit" class="expand" value="Submit">Submit</button>
+              {% if wizard.steps.current != "postcode" and wizard.steps.current != "front" %}
+              {% if "inside" in wizard.steps.current %}
+              <button type="submit" class="expand" name="add_extra_inside" value="Add another page">Submit and add another</button>
+              {% endif %}
+              <button type="submit" class="secondary expand" name="skip" value="Skip">Skip</button>
+              {% endif %}
+              <button type="submit" class="expand secondary" name="cancel_upload" value="Cancel">Cancel</button>
+          </form>
+      </section>
+    </div>
+  </div>
 {% endblock %}

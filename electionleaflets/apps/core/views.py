@@ -1,7 +1,7 @@
 from django.template  import RequestContext
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
-from django.views.generic import FormView
+from django.views.generic import FormView, TemplateView
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
@@ -19,6 +19,9 @@ class HomeView(FormView):
         location = geocode(form.cleaned_data['postcode'])
         self.success_url = location['constituency'].get_absolute_url()
         return super(HomeView, self).form_valid(form)
+
+class MaintenanceView(TemplateView):
+    template_name = "core/maintenance.html"
 
 def report_abuse(request, id):
     from core.forms import ReportAbuseForm

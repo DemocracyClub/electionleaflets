@@ -5,8 +5,19 @@ template_DEBUG = DEBUG
 THEYWORKFORYOU_API_KEY = 'THEYWORKFORYOU API KEY'
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'DB NAME GOES HERE',
         'USER': 'DB USER GOES HERE',
     }
 }
+
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'el_cache',
+    }
+}
+
+#THUMBNAIL_DEBUG = True
+THUMBNAIL_KVSTORE ='sorl.thumbnail.kvstores.cached_db_kvstore.KVStore'

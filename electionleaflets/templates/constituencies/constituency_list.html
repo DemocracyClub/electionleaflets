@@ -1,12 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Constituencies</h1>
-<ul>
-{% for c in object_list %}
-    <li>
-        <a href="{% url "constituency-view" c.pk c.slug %}">{{ c.name }} ({{ c.leaflet_set.count }} leaflets)</a>
-    </li>
-{% endfor %}
-</ul>
+  <div class="row">
+    <div class="columns large-12">
+      <h1>Constituencies</h1>
+      <form method="post">
+        {{ form.postcode.label }}
+        <div class="row collapse">
+          <div class="small-10 columns">
+            {{ form.postcode }}
+          </div>
+          <div class="small-2 columns">
+            <button type="submit" class="button postfix">Go</button>
+          </div>
+        </div>
+      </form>
+
+      <ul class="side-nav">
+      {% for c in object_list %}
+          <li>
+              <a href="{% url "constituency-view" c.pk c.slug %}">{{ c.name }} ({{ c.leaflet_set.count }} leaflets)</a>
+          </li>
+      {% endfor %}
+      </ul>
+    </div>
 {% endblock %}

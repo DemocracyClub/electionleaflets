@@ -3,43 +3,45 @@
 {% load markdown_deux_tags %}
 
 {% block og_tags %}
-        <meta property="og:site_name" content="ElectionLeaflets.org" />
-        <meta property="og:title" content="{{ object.get_title }}" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="{{ leaflet.get_absolute_url }}" />
-        <meta name="og:description" content="{{ object.description }}">
+  <meta property="og:site_name" content="ElectionLeaflets.org" />
+  <meta property="og:title" content="{{ object.get_title }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ leaflet.get_absolute_url }}" />
+  <meta name="og:description" content="{{ object.description }}">
 
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:site" content="@electionspotter">
-        <meta name="twitter:creator" content="@electionspotter">
-        <meta name="twitter:title" content="{{ object.get_title }}">
-        <meta name="twitter:description" content="{{ object.description|markdown|striptags|truncatechars:"200" }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@electionspotter">
+  <meta name="twitter:creator" content="@electionspotter">
+  <meta name="twitter:title" content="{{ object.get_title }}">
+  <meta name="twitter:description" content="{{ object.description|markdown|striptags|truncatechars:"200" }}">
 
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:site" content="@electionspotter">
-        <meta name="twitter:creator" content="@electionspotter">
-        <meta name="twitter:title" content="{{ object.get_title }}">
-        <meta name="twitter:description" content="{{ object.description|markdown|striptags|truncatechars:"200" }}">
-        {% if object.location %}
-        <meta property="place:location:latitude"  content="{{ object.location.1 }}" />
-        <meta property="place:location:longitude" content="{{ object.location.0 }}" />
-        <meta property="og:latitude"  content="{{ object.location.1 }}" />
-        <meta property="og:longitude" content="{{ object.location.0 }}" />
-        {% endif %}
-        {% for image in object.images.all %}
-        {% thumbnail object.images.all.0.image "600" crop="center" as im %}
-        {% if forloop.first %}<meta property="og:image" content="{{ im.url }}" />{% endif %}
-        <meta name="twitter:image{{forloop.counter0}}" content="{{ im.url }}">
-        {% endthumbnail %}
-        {% endfor %}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@electionspotter">
+  <meta name="twitter:creator" content="@electionspotter">
+  <meta name="twitter:title" content="{{ object.get_title }}">
+  <meta name="twitter:description" content="{{ object.description|markdown|striptags|truncatechars:"200" }}">
+  {% if object.location %}
+    <meta property="place:location:latitude"  content="{{ object.location.1 }}" />
+    <meta property="place:location:longitude" content="{{ object.location.0 }}" />
+    <meta property="og:latitude"  content="{{ object.location.1 }}" />
+    <meta property="og:longitude" content="{{ object.location.0 }}" />
+  {% endif %}
+  {% for image in object.images.all %}
+    {% thumbnail object.images.all.0.image "600" crop="center" as im %}
+      {% if forloop.first %}
+        <meta property="og:image" content="{{ im.url }}" />
+      {% endif %}
+      <meta name="twitter:image{{forloop.counter0}}" content="{{ im.url }}">
+    {% endthumbnail %}
+  {% endfor %}
 {% endblock og_tags %}
 
 {% block extra_head %}{% endblock %}
-{% block body_class %}class="leaflet_page"{% endblock %}
 
 {% block content %}
+  <div class="row">
     {% if request.user.is_staff %}
-    <section class="admin_tools">
+      <section class="admin_tools columns large-12">
         <ul>
             <li><a class='staff_link' href='/admin/leaflets/leaflet/{{ object.id }}/'>Edit leaflet</a></li>
             <li>
@@ -49,101 +51,113 @@
                 </form>
             </li>
         </ul>
-    </section>
-    {% endif%}
-
-    <article>
-        <h1>{{ object.get_title }}</h1>
-        <section class="leaflet_information">
-            <div id="leaflet_description">
-            {% if object.description %}
-                {{ object.description|markdown }}
-            {% endif %}
-            </div>
-
-
-            {% if object.imprint %}
-            <div id="leaflet_imprint">
-            <h4>Promoter and Publisher details</h4>
-            <p>{{ object.imprint }}</p>
-            </div>
-            {% endif %}
-
-            {% if object.tags.all %}
-            <h4>Tags</h4>
-            <ul>
-                {% for t in object.tags.all %}
-                    {% if t.slug %}
-                        <li><a href="{% url "tag"  t.slug %}">{{t.tag}}</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </section>
+      </section>
+    {% endif %}
+    <article class="columns large-8">
+      <h1>
+        {% if object.get_title %}
+          {{ object.get_title }}
+        {% else %}
+          Leaflet #{{object.id}}
+        {% endif %}
+      </h1>
+      <section class="leaflet_information">
+        <div id="leaflet_description">
+        {% if object.description %}
+            {{ object.description|markdown }}
+        {% endif %}
+        </div>
 
 
-        <section class="leaflet_images" aria-describedby=leaflet_description>
-            {% for image in object.images.all %}
-                <figure>
-                    <a href="{% url "full_image"  image.id %}">
-                        {% thumbnail image.image "600" crop="center" as im %}
-                        <img src="{{ im.url }}" aria-labelledby="page-{{image.id}}">
-                        {% endthumbnail %}
-                    </a>
-                    <figcaption>
-                        {% if image.image_type == "1_front" %}
-                            <span id="page-{{image.id}}">Leaflet Front</span>
-                        {% endif %}
-                        {% include "leaflets/includes/leaflet_admin_links.html" %}
-                        <a href="{% url "full_image"  image.pk %}">view larger image</a>
-                    </figcaption>
-                </figure>
-            {% endfor%}
-            <a href="{% url "all_images"  object.id %}">view all images</a>
-        </section>
-
-        <section class="leaflet_map">
-            <p>Delivered in {% if object.constituency %}<a href="{% url "constituency-view"  object.constituency.pk object.constituency.slug %}">{{ object.constituency.name }}</a>{% else %}unknown location{% endif %} on {{ object.date_delivered|date:"l, d M, Y" }} (approximate). Uploaded on {{ object.date_uploaded|date:"l, d M, Y" }} at {{ object.date_uploaded|date:"H:i" }}.</p>
-            {% if object.constituency %}
-
-            {% endif %}
-        </section>
-            <div id="leaflet_map"></div>
-    </article>
-    <aside>
-        <section class="share">
-            <ul>
-                <li><a href="https://twitter.com/intent/tweet?url={{ leaflet.get_absolute_url }}&hashtags=electionlealfet&via=electionspotter">Tweet this leaflet</p></li>
-                <li><a href="https://www.facebook.com/sharer/sharer.php?u={{ leaflet.get_absolute_url }}&ref=responsive">Share on Facebook</p></li>
-            </ul>
-        </section>
-
-        {% if object.publisher_party %}
-        <section class="party">
-            <img src="http://openelectoralcommission.org.uk/party_images/{{ object.publisher_party.emblems.all.0.emblem_url }}">
-            {% if object.publisher_party and object.publisher_party.slug %}
-            <p>Published by <a href="{% url "party-view" object.publisher_party.slug%}">{{object.publisher_party.party_name}}</a></p>
-            {% endif %}
-        </section>
+        {% if object.imprint %}
+        <div id="leaflet_imprint">
+        <h4>Promoter and Publisher details</h4>
+        <p>{{ object.imprint }}</p>
+        </div>
         {% endif %}
 
-        <section id="Data">
-            <h3>Use this data!</h3>
-            <p>Open data JSON API:</p>
-            <p><input type="text" value="http://{{ request.META.HTTP_HOST }}{% url "api:leaflet-detail" object.pk%}?format=json" onclick="this.select();"></p>
-        </section>
-        <section id="ReportAbuse">
-            <h3>Something wrong with this page?</h3>
-            <p>If someone has uploaded something other than an election leaflet <a href="{% url "report_abuse"  object.id %}"> please report it here</a>.</p>
+        {% if object.tags.all %}
+        <h4>Tags</h4>
+        <ul>
+            {% for t in object.tags.all %}
+                {% if t.slug %}
+                    <li><a href="{% url "tag"  t.slug %}">{{t.tag}}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+      </section>
 
-            {% if request.user.is_staff %}
-                <hr/>
-                <a class='staff_link' href='/admin/leaflets/leaflet/{{ object.id }}/'>Edit leaflet</a>
-            {% endif%}
-        </section>
+      <section class="leaflet_images" aria-describedby=leaflet_description>
+        {% for image in object.images.all %}
+          <figure>
+            <a href="{% url "full_image"  image.id %}">
+              {% thumbnail image.image "600" crop="center" as im %}
+              <img src="{{ im.url }}" aria-labelledby="page-{{image.id}}">
+              {% endthumbnail %}
+            </a>
+            <figcaption>
+              {% if image.image_type == "1_front" %}
+                  <span id="page-{{image.id}}">Leaflet Front</span>
+              {% endif %}
+              {% include "leaflets/includes/leaflet_admin_links.html" %}
+              <a href="{% url "full_image"  image.pk %}">view larger image</a>
+            </figcaption>
+          </figure>
+        {% endfor%}
+        <a href="{% url "all_images"  object.id %}">view all images</a>
+      </section>
 
+      <section class="leaflet_map">
+        <p>Delivered in {% if object.constituency %}<a href="{% url "constituency-view"  object.constituency.pk object.constituency.slug %}">{{ object.constituency.name }}</a>{% else %}unknown location{% endif %} on {{ object.date_delivered|date:"l, d M, Y" }} (approximate). Uploaded on {{ object.date_uploaded|date:"l, d M, Y" }} at {{ object.date_uploaded|date:"H:i" }}.</p>
+        {% if object.constituency %}
 
-    </aside>
+        {% endif %}
+      </section>
+      <div id="leaflet_map"></div>
+    </article>
+
+    <aside class="columns large-4">
+      <section class="share ">
+        <h3>Something interesting, dodgy or funny? Shout about it!</h3>
+
+        <a class="button" href="https://twitter.com/intent/tweet?url={{ leaflet.get_absolute_url }}&hashtags=electionlealfet&via=electionspotter">
+          <i class="fa fa-twitter"></i>
+          Tweet this leaflet
+        </a>
+
+        <a class="button" href="https://www.facebook.com/sharer/sharer.php?u={{ leaflet.get_absolute_url }}&ref=responsive">
+          <i class="fa fa-facebook"></i>
+          Share on Facebook
+        </a>
+
+      </section>
+
+      {% if object.publisher_party %}
+      <section class="party">
+          <img src="http://openelectoralcommission.org.uk/party_images/{{ object.publisher_party.emblems.all.0.emblem_url }}">
+          {% if object.publisher_party and object.publisher_party.slug %}
+          <p>Published by <a href="{% url "party-view" object.publisher_party.slug%}">{{object.publisher_party.party_name}}</a></p>
+          {% endif %}
+      </section>
+      {% endif %}
+      <section id="ReportAbuse">
+        <h3>Something wrong with this page?</h3>
+        <p>
+          <a href="{% url "report_abuse"  object.id %}" class="button alert"> Report a problem</a>
+          If someone has uploaded something other than an election leaflet,
+          then please let us know.
+        </p>
+        <p>
+          The data on this page is available in <a href="http://{{ request.META.HTTP_HOST }}{% url "api:leaflet-detail" object.pk%}?format=json">JSON format</a>
+        </p>
+        {% if request.user.is_staff %}
+            <hr/>
+            <a class='staff_link' href='/admin/leaflets/leaflet/{{ object.id }}/'>Edit leaflet</a>
+        {% endif %}
+
+      </section>
+  </aside>
 
 
 

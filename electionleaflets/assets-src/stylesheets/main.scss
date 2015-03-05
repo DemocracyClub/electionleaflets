@@ -5,144 +5,125 @@
 @import "Font-Awesome/scss/font-awesome";
 @import "fonts";
 @import "leaflet_css";
+@import "vars";
+@import "Font-Awesome/scss/font-awesome";
+@import "fonts";
+@import "normalize/index.scss";
 
-body {
-    font-family: 'ptsans';
-    text-rendering: optimizeLegibility;
-    -webkit-font-variant-ligatures: common-ligatures;
-    font-variant-ligatures: common-ligatures;
-    margin: 0;
-    color: #353A38;
-}
-
-
-body > header {
-    background-image:url('../images/clouds.png');
-    margin:0 auto;
-    text-align:right;
-
-    padding-top:0.5em;
-    height:60px;
-    @media screen and (min-width: $mobile-break) {
-        text-align:center;
-        height:100%;
-    }
-    img {
-        float:left;
-        position:relative;
-        left:-270px;
-        top:-50px;
-        @media screen and (min-width: $mobile-break) {
-            float: none;
-            position: inherit;
-            max-width:95%;
-            margin:0 auto;
-            clear:both;
-          }
-    }
-    h1 {
-        position:absolute;
-        float:left;
-        top:0.5em;
-        right:0.5em;
-        margin:0;
-        padding:0;
-        font-size:130%;
-        @media screen and (min-width: $mobile-break) {
-            float: none;
-            position:relative;
-            top:-0.6em;
-
-          }
-    }
-    h2 {
-        display:none;
-        @media screen and (min-width: $mobile-break) {
-            display:block;
+header {
+    .top-bar {
+        background:#e67e22;
+        .name a {
+            font-weight:500;
+        }
+        .top-bar-section li a{
+            font-size:1rem;
         }
     }
 }
 
-nav {
-    clear:both;
-    position:relative;
-    top:-33px;
-    background-color:#353B38;
-    @media screen and (min-width: $mobile-break) {
-        position:inherit;
-        top:0;
-      }
-}
-
-nav > ul {
-    max-width:900px;
-    margin:0 auto;
-    padding:0.4em;
-    list-style-type:none;
-    text-align:center;
-
-    > li {
-        display:inline;
-        padding:0.4em;
-        margin:0.2em;
-        a {
-            color:#FFF;
-        }
+@media only screen and (min-width: 40.063em) {
+    .top-bar-section ul li {
+        background-color: #E67E22;
     }
-}
+    .top-bar-section li:not(.has-form) a:not(.button)  {
+        background-color: #E67E22;
+    }
+    .top-bar-section li:not(.has-form) a:not(.button):hover  {
+        background-color: #E67E22;
+    }
+} 
+
 
 main {
-    clear:both;
-    max-width:900px;
-    margin:1em auto;
-    padding:0.5em;
-
+    min-height:600px;
 }
 
-.full_width main {
-    max-width:100%;
+aside {
+    padding-top:2rem;
+    section {
+        border-top:solid 5px #bdc3c7;
+    }
+}
+
+h1 {
+    font-size:1.5rem;
+}
+
+h2 {
+    font-size:1.4rem;
+}
+
+h3 {
+    font-size:1.3rem;
+}
+
+button, .button {
     width:100%;
 }
 
-body > footer {
-    background-color:#353B38;
-    color:#FFF;
-    padding:0.5em;
-    overflow:auto;
-    > div {
-        max-width:900px;
-        margin:auto;
+footer {
+    margin-top:4rem;
+    padding-top:2rem;
+    background:#6C7A89;
+    color:#fff;
+    a, a:hover {
+        color:#fff;
+        font-weight:bold;
     }
-    nav {
-        float:left;
-        max-width:50%;
+    .supporter {
+        display:inline-block;
+        padding:0 20px 10px 0;
+        img {
+            height:50px
+        }
     }
-    .footer_logos {
-        float:right;
-        width:50%;
+    @media only screen and (min-width: 40.063em) {
+        .supporter {
+            display:inline-block;
+            padding:10px 0;
+            img {
+                height:80px
+            }
+        }
     }
-    a {
-        color:#FFF;
-    }
-}
-.upload {
-    font-weight:bold;
-    font-size:$typl8-font-base * 1.2 + px;
-    text-align:center;
-    display:block;
-}
-
-body.leaflet_app {
-    height:100%;
-    overflow:hidden;
 }
 
-.file_input_button {
+.name h1 {
+    padding-left:27px;
+    background:url(../images/logo.png) no-repeat left 10px center;
+    text-transform:uppercase;
+ }
+
+ul.side-nav {
+  border: solid 1px #dfdfdf;
+  padding:0;
+  border-bottom:0;
+  margin-bottom:2rem;
+}
+
+ul.side-nav li {
+  border-bottom: solid 1px #dfdfdf;
+  margin-bottom:0;
+}
+
+ul.side-nav li a {
+  padding: 0.875rem 0.875rem!important;
+}
+
+ul.side-nav li > a:after {
+  content: "❯";
+  float:right;
+}
+
+ .file_input_button {
+    margin-bottom:1rem;
+    padding:15px;
     position: relative;
     overflow: hidden;
+    cursor:pointer;
     text-align:center;
     text-decoration:underline;
-
     input[type=file] {
         position: absolute;
         top: 0;
@@ -159,34 +140,10 @@ body.leaflet_app {
         display: block;
     }
     .file_input_preview {
-        font-size:4em;
+        font-size:4rem;
         img {
-            width:100%;
+            width:70%;
         }
-    }
-}
-
-
-ul.leaflet_list {
-    padding:0;
-    margin:0;
-    clear:both;
-    overflow:auto;
-    li {
-        margin-bottom:1em;
-        figure {
-            margin:0;
-            padding:0;
-            border:1px solid #EEE;
-            figcaption {
-                font-size:0.8em;
-                text-align:center;
-                padding:0.2em;
-            }
-        }
-        width:150px;
-//        float:left;
-        list-style-type:none;
     }
 }
 
@@ -200,6 +157,12 @@ ul.leaflet_list {
     border-radius: 50%;
     height:2px;
     width:2px;
+}
+
+.leaflet_list {
+    list-style-type:none;
+    padding:0;
+    margin:0;
 }
 
 .leaflet_page {
@@ -232,8 +195,8 @@ ul.leaflet_list {
             > section {
                 background-color:#fdf2d5;
                 border-radius:2px;
-                padding:1em;
-                margin:1.5em 0;
+                padding:1rem;
+                margin:1.5rem 0;
                 &.party {
                     background-color:#FFF;
                     text-align:center;
@@ -250,8 +213,8 @@ ul.leaflet_list {
 
 .admin_tools {
     display:block;
-    padding:1em;
-    margin:0.5em;
+    padding:1rem;
+    margin:0.5rem;
     border:2px solid #999;
     border-radius:2px;
     background: repeating-linear-gradient(
@@ -301,5 +264,11 @@ figure:after {
         transform: rotate(270deg);
         -webkit-transform: rotate(270deg);
         -ms-transform: rotate(270deg);
+    }
+}
+
+.upload_form {
+    button {
+        margin-bottom:1rem;
     }
 }

@@ -1,6 +1,5 @@
 (function () {
 
-
   $('.file_input_button').change(function() {
     var el = $(this);
     var file = el.find('input')[0].files[0];
@@ -15,7 +14,6 @@
       $('.file_input_preview').append(img);
     }
   })  
-  
   
   $('.leaflet_list').masonry({
     // options
