@@ -47,7 +47,7 @@
             <li>
                 <form method="post">{{ form }}
                     <button type="submit" name="submit">Save</button>
-                    <button type="submit" name="submit_and_next">Save & review next</button>
+                    <button type="submit" name="submit_and_next">Save &amp; review next</button>
                 </form>
             </li>
         </ul>
@@ -101,24 +101,24 @@
                   <span id="page-{{image.id}}">Leaflet Front</span>
               {% endif %}
               {% include "leaflets/includes/leaflet_admin_links.html" %}
-              <a href="{% url "full_image"  image.pk %}">view larger image</a>
+              <a href="{% url "all_images"  object.id %}">view all pages</a>
             </figcaption>
           </figure>
         {% endfor%}
-        <a href="{% url "all_images"  object.id %}">view all images</a>
       </section>
 
       <section class="leaflet_map">
-        <p>Delivered in {% if object.constituency %}<a href="{% url "constituency-view"  object.constituency.pk object.constituency.slug %}">{{ object.constituency.name }}</a>{% else %}unknown location{% endif %} on {{ object.date_delivered|date:"l, d M, Y" }} (approximate). Uploaded on {{ object.date_uploaded|date:"l, d M, Y" }} at {{ object.date_uploaded|date:"H:i" }}.</p>
+        <p>This leaflet was spotted by a volunteer 
         {% if object.constituency %}
-
+          in <a href="{% url "constituency-view"  object.constituency.pk object.constituency.slug %}">{{ object.constituency.name }}</a>
         {% endif %}
+        on {{ object.date_uploaded|date:"l, d M, Y" }}.</p>
+        <div id="leaflet_map"></div>
       </section>
-      <div id="leaflet_map"></div>
     </article>
 
     <aside class="columns large-4">
-      <section class="share ">
+      <section class="share">
         <h3>Something interesting, dodgy or funny? Shout about it!</h3>
 
         <a class="button" href="https://twitter.com/intent/tweet?url={{ leaflet.get_absolute_url }}&hashtags=electionlealfet&via=electionspotter">

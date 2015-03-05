@@ -9,7 +9,7 @@
   <div class="row">
     <div class="columns large-12">
       <h1>Latest leaflets</h1>
-      <ul class="leaflet_list">
+      <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
         {% for leaflet in leaflet_list %}
           <li>
             <figure>
@@ -31,26 +31,28 @@
           </li>
         {% endfor %}
       </ul>
-      
+
     {% if is_paginated %}
       <span class="page-current">
-          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
       </span>
       <nav role="menu" aria-label="Pagination">
-         <ul class="pagination">
+         <ul>
           {% if page_obj.has_previous %}
-              <li><a href="{% url "leaflets" %}?page={{ page_obj.previous_page_number }}">previous</a></li>
+              <li><a href="{% url "leaflets" %}?page={{ page_obj.previous_page_number }}">Previous page</a></li>
           {% endif %}
           {% if page_obj.has_next %}
-              <li><a href="{% url "leaflets" %}?page={{ page_obj.next_page_number }}">next</a></li>
+              <li><a href="{% url "leaflets" %}?page={{ page_obj.next_page_number }}">Next page</a></li>
           {% endif %}
          </ul>
       </nav>
     {% endif %}
 
-    <a href="{% url "latest_feed"  %}">
-      <i class="fa fa-rss"></i> RSS
-    </a>
+    <p>
+      <a href="{% url "latest_feed"  %}">
+        This page is available as an RSS feed.
+      </a>
+    </p>
   </div>
 </div>
 

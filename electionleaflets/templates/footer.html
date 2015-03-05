@@ -4,6 +4,17 @@
         <div class="large-8 columns">
             <nav>
                 <ul class="inline-list">
+                    {% if request.user.is_authenticated %}
+                        <li>
+                            <a href="{% url "account_logout" %}">Sign out</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{% url "account_login" %}">Sign in to electionleaflets.org</a>
+                        </li>
+                    {% endif %}
+                </ul>
+                <ul class="inline-list">
                     <li><a href="{% url "home"  %}">Home</a></li>
                     <li>
                       <a href="{% url "parties" %}">Parties</a>

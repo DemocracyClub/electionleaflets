@@ -1,6 +1,5 @@
 import os
 from collections import OrderedDict
-
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
@@ -9,11 +8,7 @@ from django.conf import settings
 from django.views.generic import DetailView, ListView, UpdateView, FormView
 from django.views.generic.detail import BaseDetailView, SingleObjectMixin
 from django.core.files.storage import FileSystemStorage
-
 from braces.views import StaffuserRequiredMixin
-
-
-
 from .models import Leaflet, LeafletImage
 from .forms import (InsidePageImageForm, LeafletDetailsFrom,
     LeafletReviewFrom)

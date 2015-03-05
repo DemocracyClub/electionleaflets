@@ -13,16 +13,7 @@
       img.attr('src', this.result);
       $('.file_input_preview').append(img);
     }
-  })  
-  
-  $('.leaflet_list').masonry({
-    // options
-    // isFitWidth: true,
-    columnWidth: 70,
-    gutter: 15,
-    itemSelector: 'li'
-  });
-
+  })
 
   // Maps
   window.create_leaflet_map = function(point, constituency_id) {

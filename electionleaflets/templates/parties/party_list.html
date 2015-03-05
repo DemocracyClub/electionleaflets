@@ -5,9 +5,12 @@
   <div class="columns large-12">
     <h1>Parties</h1>
     <ul class="side-nav">
-      {% for p in object_list %}
+      {% for party in object_list %}
         <li>
-          <a href="{% url "party-view"  p.pk p.slug %}">{{ p.party_name }} ({{ p.leaflet_set.count }} leaflets)</a>
+          <a href="{% url "party-view"  party.pk party.slug %}">
+            <img class="party-logo" src="http://openelectoralcommission.org.uk/party_images/{{ party.emblems.all.0.emblem_url }}" width="40px"/>
+            {{ party.party_name }} ({{ party.leaflet_set.count }} leaflets)
+          </a>
         </li>
       {% endfor %}
     </ul>

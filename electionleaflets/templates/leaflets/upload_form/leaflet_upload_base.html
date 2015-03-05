@@ -6,6 +6,16 @@
 
 {% block content %}
   <div class="row">
+    {% if form.errors %}
+      <div data-alert class="alert-box alert">
+        {% for key, value in form.errors.items %}
+          {% for error in value %}
+            {{error}}
+          {% endfor %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
     <div class="columns large-12">
       {% block heading %}{% endblock heading %}
       <section class="upload_form">
@@ -15,7 +25,6 @@
           <form action="" method="post" enctype="multipart/form-data">
               {% csrf_token %}
               {{ wizard.management_form }}
-
               {% block form %}
               {% endblock form %}
 
