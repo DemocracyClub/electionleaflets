@@ -3,6 +3,7 @@ Installation Instructions
 
 Short version - until I can write something more useful
 
+<<<<<<< HEAD
 ```
 virtualenv . --no-site-packages
 . bin/activate
@@ -11,3 +12,16 @@ cp electionleaflets/settings/local.py{.example,}
 # create a postgres db, and update settings in local.py
 python manage.py runserver
 ```
+=======
+> virtualenv . --no-site-packages
+> . bin/activate
+> python bootstrap.py
+> bin/buildout
+> bin/django runserver
+
+
+also you may need:
+
+mkdir electionleaflets/media/uploads/thumbnail
+mkdir electionleaflets/media/uploads/small medium large
+>>>>>>> 4b2bf508f606ef335c998a936b214797d040c301
