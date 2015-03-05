@@ -90,5 +90,5 @@ def count_images(step, number):
 def find_constituency(step, constituency_name):
     world.dom = html.fromstring(world.response.content)
     text = world.dom.cssselect('.leaflet_map')[0].text_content()
-    search = "Delivered in %s on" % constituency_name
+    search = "in %s" % constituency_name
     assert search in text
