@@ -25,8 +25,10 @@
                 <a href="/">ElectionLeaflets.org</a>
               </h1>
             </li>
-            <li class="toggle-topbar menu-icon">
-              <a href="#"><span>Menu</span></a>
+            <li class="toggle-topbar">
+              <a href="#">
+                <span></span>
+              </a>
             </li>
           </ul>
 
@@ -35,27 +37,21 @@
               <li>
                 <ul>
                   <li>
+                      <a href="{% url "analysis" %}">
+                        Join the analysis team
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url "leaflets" %}">
+                        Latest leaflets
+                      </a>
+                  </li>
+                  <li>
                       <a href="{% url "upload_leaflet" %}">
                         <i class="fa fa-camera"></i>
                         Add a leaflet
                       </a>
                   </li>
-                  <li>
-                      <a href="{% url "leaflets" %}">
-                        <i class="fa fa-line-chart"></i>
-                        Latest
-                      </a>
-                  </li>
-                  {% if request.user.is_authenticated %}
-                  <li>
-                      <a>{{ request.user }} Logged in</a>
-                  </li>
-                  <li>
-                      <a href="{% url "account_logout" %}">Sign out</a>
-                  </li>
-                  {% else %}
-                  <li><a href="{% url "account_login" %}">Sign in</a></li>
-                  {% endif %}
                 </ul>
               </li>
             </ul>

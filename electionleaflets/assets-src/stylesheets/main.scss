@@ -12,25 +12,41 @@
 
 header {
     .top-bar {
+        border-bottom:solid 7px #de6800;
         background:#e67e22;
         .name a {
             font-weight:500;
         }
         .top-bar-section li a{
             font-size:1rem;
+            font-weight:500;
+            i.fa {
+                position:relative;
+                top:-1px;
+            }
+        }
+        .toggle-topbar a {
+            width:50px;
+            background:url(../images/menu.png) no-repeat top 12px right 8px;
+        }
+    }
+    .top-bar.expanded {
+        border-bottom-color:#000;
+        .toggle-topbar a {
+            background:url(../images/menu.png) no-repeat top -38px right 8px;
         }
     }
 }
 
 @media only screen and (min-width: 40.063em) {
     .top-bar-section ul li {
-        background-color: #E67E22;
+        background-color: transparent;
     }
     .top-bar-section li:not(.has-form) a:not(.button)  {
-        background-color: #E67E22;
+        background-color: transparent;
     }
     .top-bar-section li:not(.has-form) a:not(.button):hover  {
-        background-color: #E67E22;
+        background-color: transparent;
     }
 } 
 
@@ -47,19 +63,48 @@ aside {
 }
 
 h1 {
-    font-size:1.5rem;
+    font-size:1.4rem;
+    line-height:1.3;
 }
 
 h2 {
-    font-size:1.4rem;
+    font-size:1.3rem;
+    line-height:1.3;
 }
 
 h3 {
-    font-size:1.3rem;
+    font-size:1.2rem;
+    line-height:1.3;
 }
 
-button, .button {
+p{
+    line-height:1.45;
+}
+
+.big-number {
+    text-align:center;
+    background:#E67E22;
+    font-weight:bold;
+    color:#fff;
+    span {
+        font-size:5rem;
+    }
+    small {
+        display:block;
+        font-size:0.9rem;
+        padding-bottom:0.9rem;
+    }
+}
+
+button, .button, .button:hover {
     width:100%;
+    border-bottom-width:7px;
+}
+
+@media only screen and (min-width: 64.063em) {
+    .columns.header-fix {
+        padding-top:4rem;
+    }
 }
 
 footer {
@@ -89,14 +134,23 @@ footer {
     }
 }
 
+.top-bar .name p, .top-bar .name {
+    word-wrap: normal;
+    span {
+        font-size:0.9rem;
+    }
+}
+
 .name h1 {
-    padding-left:27px;
-    background:url(../images/logo.png) no-repeat left 10px center;
+    font-size:0.9rem;
+    padding-left:26px;
+    background:url(../images/logo.png) no-repeat left 10px top 13px;
     text-transform:uppercase;
  }
 
 ul.side-nav {
-  border: solid 1px #dfdfdf;
+  border-top: solid 1px #dfdfdf;
+  border-bottom: solid 1px #dfdfdf;
   padding:0;
   border-bottom:0;
   margin-bottom:2rem;
@@ -105,6 +159,14 @@ ul.side-nav {
 ul.side-nav li {
   border-bottom: solid 1px #dfdfdf;
   margin-bottom:0;
+  .party-logo {
+    margin-right:10px;
+    opacity:0.9;
+  }
+  a:hover .party-logo {
+    margin-right:10px;
+    opacity:1;
+  }
 }
 
 ul.side-nav li a {
@@ -114,6 +176,14 @@ ul.side-nav li a {
 ul.side-nav li > a:after {
   content: "❯";
   float:right;
+}
+
+//forms
+.alert-box.alert {
+    text-align: center;
+    font-weight: bold;
+    background:#e74c3c;
+    border:none;
 }
 
  .file_input_button {
@@ -147,9 +217,14 @@ ul.side-nav li > a:after {
     }
 }
 
+.leaflet_map {
+    margin-top:1rem;
+}
+
 #leaflet_map {
     width: 100%;
     height: 300px;
+    cursor: default;
 }
 
 .leaflet_location_icon {
@@ -157,12 +232,6 @@ ul.side-nav li > a:after {
     border-radius: 50%;
     height:2px;
     width:2px;
-}
-
-.leaflet_list {
-    list-style-type:none;
-    padding:0;
-    margin:0;
 }
 
 .leaflet_page {

@@ -8,7 +8,7 @@ import constants
 
 class ImageForm(forms.Form):
     image = forms.ImageField(widget=forms.FileInput(
-        attrs={'accept': "image/*;capture=camera"}))
+        attrs={'accept': "image/*;capture=camera"}), error_messages={'required': 'Please photograph an image'})
 
 
 class FrontPageImageForm(ImageForm):
@@ -24,7 +24,7 @@ class InsidePageImageForm(ImageForm):
 
 
 class PostcodeForm(forms.Form):
-    postcode = GBPostcodeField()
+    postcode = GBPostcodeField(error_messages={'required': 'Please enter a valid UK postcode'})
 
 
 class LeafletDetailsFrom(forms.ModelForm):

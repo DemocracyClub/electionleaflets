@@ -3,6 +3,7 @@ Installation Instructions
 
 Short version - until I can write something more useful
 
+=======
 1) Create virtual environment
 ```
 virtualenv . --no-site-packages
@@ -29,6 +30,11 @@ cp electionleaflets/settings/local.py.example  electionleaflets/settings/local.p
 # create a postgres db, and update settings in local.py
 
 ```
+also you may need:
+
+mkdir electionleaflets/media/uploads/thumbnail
+mkdir electionleaflets/media/uploads/small medium large
+
 Create a database and a user in Postgres, then edit the local.py file and add details of your database.
 
 Then run database migration & setup cach tables
