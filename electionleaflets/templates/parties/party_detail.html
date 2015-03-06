@@ -5,23 +5,10 @@
   <div class="row">
     <div class="columns large-12">
       <h1>Election leaflets from {{ object.party_name }}</h1>
-      {% if part_leaflets %}
-        <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
-          {% for leaflet in party_leaflets %}
-            <li>
-              <figure>
-                <a href="{{ leaflet.get_absolute_url }}">
-                    {% thumbnail leaflet.images.all.0.image "150x150" crop="noop" upscale=False as im %}
-                    <img src="{{ im.url }}" aria-labelledby="page-{{image.id}}">
-                    {% endthumbnail %}
-                    <figcaption>
-                        <a href="{% url "leaflet" leaflet.id %}">{{ leaflet.title }}</a>
-                    </figcaption>
-                </a>
-              </figure>
-            </li>
-          {% endfor %}
-        </ul>
+      {% if party_leaflets %}
+          {% with party_leaflets as leaflet_list %}
+          {% include "leaflets/includes/leaflet_list.html" %}
+          {% endwith %}
 
           <span class="page-current">
               Page {{ party_leaflets.number }} of {{ party_leaflets.paginator.num_pages }}.
