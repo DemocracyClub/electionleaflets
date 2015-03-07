@@ -48,7 +48,7 @@ header {
     .top-bar-section li:not(.has-form) a:not(.button):hover  {
         background-color: transparent;
     }
-} 
+}
 
 
 main {
@@ -156,16 +156,45 @@ ul.side-nav {
   margin-bottom:2rem;
 }
 
+
 ul.side-nav li {
   border-bottom: solid 1px #dfdfdf;
   margin-bottom:0;
-  .party-logo {
-    margin-right:10px;
-    opacity:0.9;
-  }
-  a:hover .party-logo {
-    margin-right:10px;
-    opacity:1;
+  clear:both;
+  overflow:auto;
+  a, a:not(.button) {
+      display:block;
+      line-height:60px;
+      padding:1em 0;
+
+      .party_logo_small_container {
+          display: inline-block;
+          width:35px;
+          height:50px;
+          margin:5px 10px 5px 5px;
+          float:left;
+          overflow:auto;
+          position:relative;
+      }
+
+      .party-logo {
+        display: block;
+        max-width:100%;
+        max-height:100%;
+        width: auto;
+        height: auto;
+        opacity:0.9;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+      }
+
+      &:hover .party-logo {
+        opacity:1;
+      }
   }
 }
 
@@ -341,3 +370,4 @@ figure:after {
         margin-bottom:1rem;
     }
 }
+
