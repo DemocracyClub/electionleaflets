@@ -1,7 +1,7 @@
 Feature: Leaflet uploader
     Scenario: Upload single image leaflet
         Given I access the url "/leaflets/add/front/"
-        Then I see the header "Step 1: photograph the front page"
+        Then I see the header "Step 1: Front page"
         Then I submit the form with:
           | step_name | image          |  action |
           | front     | front_test.jpg |  submit |
@@ -17,7 +17,7 @@ Feature: Leaflet uploader
 
     Scenario: Upload front and back
         Given I access the url "/leaflets/add/front/"
-        Then I see the header "Step 1: photograph the front page"
+        Then I see the header "Step 1: Front page"
         Then I submit the form with:
           | step_name | image          |  action |
           | front     | front_test.jpg |  submit |
@@ -35,7 +35,7 @@ Feature: Leaflet uploader
 
     Scenario: Upload front, back and inside
         Given I access the url "/leaflets/add/front/"
-        Then I see the header "Step 1: photograph the front page"
+        Then I see the header "Step 1: Front page"
         Then I submit the form with:
           | step_name | image           |  action |
           | front     | front_test.jpg  |  submit |
@@ -53,7 +53,7 @@ Feature: Leaflet uploader
 
     Scenario: Upload front, back and two inside pages
         Given I access the url "/leaflets/add/front/"
-        Then I see the header "Step 1: photograph the front page"
+        Then I see the header "Step 1: Front page"
         Then I submit the form with:
           | step_name | image           |  action |
           | front     | front_test.jpg  |  submit |
@@ -73,7 +73,7 @@ Feature: Leaflet uploader
         and I should see 4 leaflet images
     Scenario: Upload front, back and three inside pages
         Given I access the url "/leaflets/add/front/"
-        Then I see the header "Step 1: photograph the front page"
+        Then I see the header "Step 1: Front page"
         Then I submit the form with:
           | step_name | image           |  action |
           | front     | front_test.jpg  |  submit |
