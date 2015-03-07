@@ -50,7 +50,7 @@ class ConstituencyFeed(Feed):
         return obj
 
     def items(self,obj):
-        return Leaflet.objects.filter(constituencies=obj).order_by('-id')[:10]
+        return Leaflet.objects.filter(constituency=obj).order_by('-id')[:10]
 
     def item_title(self, item):
         return item.title
