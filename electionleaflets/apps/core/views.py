@@ -11,14 +11,9 @@ from django.contrib.sites.models import Site
 from constituencies.forms import ConstituencyLookupForm
 from core.helpers import geocode
 
-class HomeView(FormView):
-    form_class = ConstituencyLookupForm
+class HomeView(TemplateView):
     template_name = "core/home.html"
 
-    def form_valid(self, form):
-        location = geocode(form.cleaned_data['postcode'])
-        self.success_url = location['constituency'].get_absolute_url()
-        return super(HomeView, self).form_valid(form)
 
 class MaintenanceView(TemplateView):
     template_name = "core/maintenance.html"
