@@ -1,13 +1,26 @@
 {% extends "leaflets/upload_form/leaflet_upload_base.html" %}
 
 {% block form %}
+
 <div class="file_input_button">
-    <p>Please make sure the leaflet photo is legible and well framed</p>
-    Upload leaflet front
     <div class="file_input_preview">
-        <i class="fa fa-file-text-o"></i>
     </div>
-    <div>(Click to <span class="action">add</span>)</div>
+    <div class="upload-prompt">
+      <span class="mobile-copy">
+        <i class="fa fa-camera"></i>
+        <br/>
+        Photograph the front of the leaflet using your phone
+      </span>
+      <span class="desktop-copy">
+        <i class="fa fa-upload"></i>
+        <br/>
+        Upload a photograph of the front of the leaflet
+      </span>
+      <p>
+        <small>(Please make sure the leaflet photo is legible and well framed)</small>
+      </p>
+    </div>
+    <div class="replace">Click to replace</div>
 {{ form.image }}
 </div>
 {% endblock form %}

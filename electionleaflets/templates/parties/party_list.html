@@ -10,10 +10,10 @@
           <a href="{% url "party-view"  party.pk party.slug %}">
           <span class="party_logo_small_container">
             {% if party.emblems.all.0.emblem_url %}
-                <img class="party-logo" src="http://openelectoralcommission.org.uk/party_images/{{ party.emblems.all.0.emblem_url }}" width="40px"/>
+              <img class="party-logo" src="http://openelectoralcommission.org.uk/party_images/{{ party.emblems.all.0.emblem_url }}" width="40px"/>
             {% endif %}
           </span>
-            {{ party.party_name }} ({{ party.leaflet_set.count }} leaflets)
+          {{ party.party_name }} ({{ party.leaflet_set.count }} leaflets)
           </a>
         </li>
       {% endfor %}

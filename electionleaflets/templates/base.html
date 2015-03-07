@@ -16,7 +16,6 @@
     </head>
 
     <body {% block body_class %}{% endblock %}>
-
       <header>
         <nav  class="top-bar" data-topbar role="navigation">
           <ul class="title-area">
@@ -48,8 +47,14 @@
                   </li>
                   <li>
                       <a href="{% url "upload_leaflet" %}">
-                        <i class="fa fa-camera"></i>
-                        Add a leaflet
+                        <span class="mobile-copy">
+                          <i class="fa fa-camera"></i>
+                          Snap a leaflet
+                        </span>
+                        <span class="desktop-copy">
+                          <i class="fa fa-upload"></i>
+                          Upload a leaflet
+                        </span>
                       </a>
                   </li>
                 </ul>
@@ -60,6 +65,24 @@
       </header>
 
       <main>
+        </div>
+          {% if messages %}
+            <div data-alert class="alert-box success" tabindex="0" aria-live="assertive" role="dialogalert">
+              {% for message in messages %}
+                {{ message }}
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% if form.errors %}
+            <div data-alert class="alert-box alert">
+              {% for key, value in form.errors.items %}
+                {% for error in value %}
+                  {{error}}
+                {% endfor %}
+              {% endfor %}
+            </div>
+          {% endif %}
+
           {% block content %}
           {% endblock %}
       </main>
