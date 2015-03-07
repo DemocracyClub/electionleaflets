@@ -199,7 +199,10 @@ ul.side-nav li {
 }
 
 ul.side-nav li a {
-  padding: 0.875rem 0.875rem!important;
+    padding:0;
+    &:not(.button) {
+        padding:0;
+    }
 }
 
 ul.side-nav li > a:after {

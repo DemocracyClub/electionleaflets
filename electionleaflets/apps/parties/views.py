@@ -6,9 +6,6 @@ from uk_political_parties.models import Party
 from leaflets.models import Leaflet
 
 class PartyList(ListView):
-    queryset = Party.objects.exclude(leaflet=None)\
-               .annotate(num_leaflets=Count('leaflet'))\
-               .order_by('-num_leaflets')
     queryset = Party.objects.annotate(num_leaflets=Count('leaflet'))\
            .order_by('-num_leaflets', 'party_name')
     template_name = "parties/party_list.html"
