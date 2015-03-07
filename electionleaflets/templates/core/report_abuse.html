@@ -1,41 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div id="divContent">
-	
-	<div id="divWarning">
-		{% if form.name.errors %}{{ form.name.errors }}{% endif %}
-		{% if form.email.errors %}{{ form.email.errors }}{% endif %}		
-		{% if form.details.errors %}{{ form.details.errors }}{% endif %}				
-	</div>
-								
-    <div class="contentfull">
-		<h1>Report abuse: <em>{{ leaflet.get_title }}</em></h1>
-            <p>
-                This form is for reporting abuse of this website e.g. people uploading images that are not of election leaflets, maliciously altering the text of a leaflet when transcribing it or generally being an idiot. <strong>It's is not for reporting the content of election leaflets</strong>. If you believe that claims made in an election leaflet are in anyway <a href="http://en.wikipedia.org/wiki/Representation_of_the_People_Act_1983">illegal</a>, abusive, racist, homophobic or sexist please report them directly to the <a href="http://www.electoralcommission.org.uk/contact">Electoral Commission</a>.
-            </p>
-            <form method="post" action="{% url report_abuse leaflet.id%}">
-                <ul class="form">
-        			<li>
-	
-        				<label for="name">Your name</label>
-                        <input type="text" id="id_name" name="name" class="textbox {% if form.name.errors %}error{% endif %}" value="{% if form.name.data %}{{form.name.data }}{% endif %}"/>
-        			</li>
-        			<li>
-        				<label for="txtEmail">Your email address</label>
-                        <input type="text" id="id_email" name="email" class="textbox {% if form.email.errors %}error{% endif %}" value="{% if form.email.data %}{{ form.email.data }}{% endif %}"/>
-        			</li>
-        			<li>
-        				<label for="txtDetails">Details</label>
-                        <textarea id="id_details" name="details" class="textbox {% if form.details.errors %}error{% endif %}" cols="50" rows="5">{% if form.details.data %}{{ form.details.data }}{% endif %}</textarea>
-        			</li>
-                    <li>
-                        <input type="submit" value="Send report" />
-                    </li>
-                </ul>
-            </form>
-		</div>
-	</div>
+<div class="row">
+
+  <h1>Report abuse: <em>{{ leaflet.get_title }}</em></h1>
+  <p>
+    This form is for reporting abuse of this website e.g. people uploading
+    images that are not of election leaflets, maliciously altering the text
+    of a leaflet when transcribing it or generally being an idiot.
+    <strong>It's is not for reporting the content of election leaflets</strong>.
+    If you believe that claims made in an election leaflet are in anyway
+    <a href="http://en.wikipedia.org/wiki/Representation_of_the_People_Act_1983">
+      illegal</a>, abusive, racist, homophobic or sexist please report them
+      directly to the <a href="http://www.electoralcommission.org.uk/contact">
+        Electoral Commission</a>.
+  </p>
+  <form method="post" action="{% url "report_abuse" leaflet.id %}">
+    {{ form.as_p }}
+
+    <button type="submit" class="button postfix">Send report</button>
+
+  </form>
+</div>
 {% endblock %}
 
 

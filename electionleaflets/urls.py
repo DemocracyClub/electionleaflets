@@ -8,7 +8,7 @@ admin.autodiscover()
 
 from leaflets.feeds import *
 
-from core.views import HomeView, MaintenanceView
+from core.views import HomeView, MaintenanceView, ReportView, ReportThanksView
 MAINTENANCE_MODE = getattr(settings, 'MAINTENANCE_MODE', False)
 if MAINTENANCE_MODE:
     urlpatterns = patterns(
@@ -39,8 +39,8 @@ else:
 
         # Individual urls
         url(r'^about/$', TemplateView.as_view(template_name='core/about.html'), name='about'),
-        url(r'^report/(?P<id>\d+)/sent/$', TemplateView.as_view(template_name='core/report_sent.html'), name='report_abuse_sent'),
-        url(r'^report/(?P<id>\d+)/$', 'core.views.report_abuse', name='report_abuse'),
+        url(r'^report/(?P<pk>\d+)/sent/$', ReportThanksView.as_view(), name='report_abuse_sent'),
+        url(r'^report/(?P<pk>\d+)/$', ReportView.as_view(), name='report_abuse'),
 
         # Administration URLS
         (r'^admin/', include(admin.site.urls)),
