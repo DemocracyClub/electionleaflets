@@ -14,6 +14,10 @@ header {
     .top-bar {
         border-bottom:solid 7px #de6800;
         background:#e67e22;
+        .name {
+            position:relative;
+            top:-2px;
+        }
         .name a {
             font-weight:500;
         }
@@ -22,18 +26,19 @@ header {
             font-weight:500;
             i.fa {
                 position:relative;
-                top:-1px;
+                top:-2px;
+                padding-right:2px;
             }
         }
         .toggle-topbar a {
             width:50px;
-            background:url(../images/menu.png) no-repeat top 12px right 8px;
+            background:url(../images/menu.png) no-repeat top 10px right 8px;
         }
     }
     .top-bar.expanded {
         border-bottom-color:#000;
         .toggle-topbar a {
-            background:url(../images/menu.png) no-repeat top -38px right 8px;
+            background:url(../images/menu.png) no-repeat top -36px right 8px;
         }
     }
 }
@@ -101,7 +106,7 @@ button, .button, .button:hover {
     border-bottom-width:7px;
 }
 
-@media only screen and (min-width: 64.063em) {
+@media only screen and (min-width: 40.063em) {
     .columns.header-fix {
         padding-top:4rem;
     }
@@ -178,12 +183,66 @@ ul.side-nav li > a:after {
   float:right;
 }
 
+//mobile/desktop copy
+.desktop-copy {
+    display:none;
+}
+.mobile-copy{
+    display:inline;
+}
+
+@media only screen and (min-width: 40.063em) {
+    .desktop-copy {
+        display:inline;
+    }
+    .mobile-copy{
+        display:none;
+    }
+}
+
 //forms
-.alert-box.alert {
+.alert-box {
     text-align: center;
     font-weight: bold;
-    background:#e74c3c;
+
     border:none;
+}
+
+.alert-box.alert {
+    background:#d35400;
+}
+
+.alert-box.success {
+    background:#2ecc71;
+}
+
+.wizard-step {
+    text-align:center;
+    h1 {
+        margin-top:2rem;
+    }
+    .upload-prompt {
+        background:#E7E7E7;
+        padding:25px 15px 15px 15px;
+        color:#008CBA;
+        outline:solid 10px #E7E7E7;
+        border:dashed 3px #B9B9B9;
+        i.fa {
+            font-size:3rem;
+        }
+        span {
+            text-decoration:underline;
+        }
+        small {
+            text-decoration: none;
+            color:#808080;
+        }
+    }
+    .replace {
+        display:none;
+        color:#008CBA;
+        text-decoration:underline;
+    }
 }
 
  .file_input_button {
@@ -193,7 +252,6 @@ ul.side-nav li > a:after {
     overflow: hidden;
     cursor:pointer;
     text-align:center;
-    text-decoration:underline;
     input[type=file] {
         position: absolute;
         top: 0;

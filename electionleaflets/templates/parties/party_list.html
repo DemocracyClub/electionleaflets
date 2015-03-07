@@ -8,7 +8,7 @@
       {% for party in object_list %}
         <li>
           <a href="{% url "party-view"  party.pk party.slug %}">
-            <img class="party-logo" src="http://openelectoralcommission.org.uk/party_images/{{ party.emblems.all.0.emblem_url }}" width="40px"/>
+            <!-- <img class="party-logo" alt="Party logo for {{party.party_name}}" src="http://openelectoralcommission.org.uk/party_images/{{ party.emblems.all.0.emblem_url }}" width="40px"/> -->
             {{ party.party_name }} ({{ party.leaflet_set.count }} leaflets)
           </a>
         </li>

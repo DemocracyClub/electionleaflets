@@ -6,7 +6,7 @@
 
 {% block content %}
   <div class="row">
-    <div class="large-8 columns">
+    <div class="medium-8 columns">
       <h1>People powered election monitoring</h1>
       <p>
         Even in the internet age, leaflets are a time honoured way for political parties to get their message across. We want to keep track of how politicians are trying to get your vote, and where they are campaigning.
@@ -15,17 +15,23 @@
         <strong>The target is 10,000 leaflets by the May 7th!</strong>
       </p>
     </div>
-    <div class="large-4 columns header-fix">
+    <div class="medium-4 columns header-fix">
       <p>
         <a href="{% url "upload_leaflet" %}" class="button">
-          <i class="fa fa-camera"></i>
-          Add a leaflet
+          <span class="mobile-copy">
+            <i class="fa fa-camera"></i>
+            Snap a leaflet
+          </span>
+          <span class="desktop-copy">
+            <i class="fa fa-upload"></i>
+            Upload a leaflet
+          </span>
         </a>
       </p>      
     </div>
   </div>
   <div class="row">
-    <div class="large-8 columns">
+    <div class="medium-8 columns">
       <h2>Latest leaflets from the campaign</h2>
       <ul class="side-nav">
         <li>
@@ -39,10 +45,10 @@
         </li>
       </ul>
     </div>
-    <div class="large-4 columns header-fix">
+    <div class="medium-4 columns header-fix">
       <div class="big-number">
-        <span>1,005</span>
-        <small>leaflets since 1st January</small>
+        <span>{{leaflet_count}}</span>
+        <small>leaflets since {{start_date}}</small>
       </div>
     </div>
   </div>

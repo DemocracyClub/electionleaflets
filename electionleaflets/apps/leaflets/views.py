@@ -1,7 +1,9 @@
 import os
+import random
 from collections import OrderedDict
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
+from django.contrib import messages
 from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -196,5 +198,6 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                 leaflet.postcode = form.cleaned_data['postcode']
 
         leaflet.save()
+        messages.success(self.request, random.sample(settings.THANKYOU_MESSAGES, 1)[0])
 
         return  redirect(reverse('leaflet', kwargs={'pk': leaflet.pk}))
