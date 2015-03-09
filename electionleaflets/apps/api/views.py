@@ -41,17 +41,21 @@ def latest(request, format):
     resp = []
     for leaflet in leaflets:
         d = {}
-        d['constituency'] = leaflet.constituency() or 'Unknown'
+        if leaflet.constituency_id:
+            d['constituency'] = leaflet.constituency.name
+        else:
+            d['constituency'] = 'Unknown'
         d['constituency'] = str(d['constituency'])
         d['uploaded_date'] = str(leaflet.date_uploaded)
         d['delivery_date'] = str(leaflet.date_delivered)
         d['title'] = escape(leaflet.title)
         d['description'] = escape(leaflet.description)
-        d['party'] = escape( leaflet.publisher_party.name )
+        if leaflet.publisher_party_id:
+            d['party'] = escape(leaflet.publisher_party.party_name)
+        else:
+            d['party'] =  "Unknown"
         i = leaflet.get_first_image()
-        if not isinstance(i, dict):
-            d['small_image'] = 'http://%s%s' % (domain, i.get_small(),)
-            d['medium_image'] = 'http://%s%s' % (domain, i.get_medium(),)
+        d['image'] = i.image.url
         d['link'] = leaflet.get_absolute_url()
         resp.append( d )
 
