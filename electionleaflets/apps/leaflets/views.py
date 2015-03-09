@@ -25,7 +25,7 @@ class LegacyImageView(SingleObjectMixin, RedirectView):
 
     def get_object(self, queryset=None):
         key = self.kwargs.get(self.pk_url_kwarg, None)
-        return LeafletImage.objects.get(legacy_image_key=key)
+        return LeafletImage.objects.filter(legacy_image_key=key)[0]
 
     def get_redirect_url(self, *args, **kwargs):
         return self.get_object().get_absolute_url()
