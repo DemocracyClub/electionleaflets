@@ -1,1 +1,1 @@
-MAPIT_URL = "http://mapit.mysociety.org"
+MAPIT_URL = "https://mapit.mysociety.org"
