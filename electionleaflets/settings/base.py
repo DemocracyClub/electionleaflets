@@ -96,6 +96,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'django.contrib.messages',
     'kombu.transport.django',
     'lettuce.django',
     'pagination',
@@ -162,6 +163,13 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
+
+THANKYOU_MESSAGES = [
+    'Thank you so much! Your leaflet has been added to the archive.',
+    'Thanks, that\'s one more towards to target!',
+    'Great! Thank you!',
+    'Thanks for the leaflet, the election is a tiny bit more transparent!'
+    ]
 
 
 

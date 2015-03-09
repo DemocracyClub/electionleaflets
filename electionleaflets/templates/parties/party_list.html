@@ -8,11 +8,15 @@
       {% for party in object_list %}
         <li>
           <a href="{% url "party-view"  party.pk party.slug %}">
+<<<<<<< HEAD
           <span class="party_logo_small_container">
             {% if party.emblems.all.0.emblem_url %}
                 <img class="party-logo" src="http://openelectoralcommission.org.uk/party_images/{{ party.emblems.all.0.emblem_url }}" width="40px"/>
             {% endif %}
           </span>
+=======
+            <!-- <img class="party-logo" alt="Party logo for {{party.party_name}}" src="http://openelectoralcommission.org.uk/party_images/{{ party.emblems.all.0.emblem_url }}" width="40px"/> -->
+>>>>>>> final-push
             {{ party.party_name }} ({{ party.leaflet_set.count }} leaflets)
           </a>
         </li>

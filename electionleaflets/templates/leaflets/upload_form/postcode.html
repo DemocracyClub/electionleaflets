@@ -1,8 +1,10 @@
 {% extends "leaflets/upload_form/leaflet_upload_base.html" %}
-{% block heading %}<h1>Step 4: What postcode was it delivered to?</h1>{% endblock heading %}
+{% block heading %}<h1>Step 4: postcode</h1>{% endblock heading %}
 {% block form %}
 <div>
-    {{form.postcode.label}}
+    <label for="id_postcode-postcode">
+      What postcode was this leaflet delivered to?
+    </label>
     {{form.postcode}}
 </div>
 {% endblock form %}

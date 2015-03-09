@@ -7,15 +7,22 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.contrib.sites.models import Site
-
 from constituencies.forms import ConstituencyLookupForm
 from leaflets.models import Leaflet
 from .helpers import geocode
 from .forms import ReportAbuseForm
+import datetime
+from core.helpers import geocode
 
 class HomeView(TemplateView):
     template_name = "core/home.html"
 
+    def get_context_data(self, **kwargs):
+        start_date = datetime.date(2015, 1, 1)
+        leaflet_count = Leaflet.objects.filter(date_uploaded__gt=start_date).count()
+        context = super(HomeView, self).get_context_data(**kwargs)
+        context.update({'leaflet_count': leaflet_count, 'start_date': start_date})
+        return context
 
 class MaintenanceView(TemplateView):
     template_name = "core/maintenance.html"

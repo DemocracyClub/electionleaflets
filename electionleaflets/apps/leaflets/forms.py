@@ -8,7 +8,7 @@ import constants
 
 class ImageForm(forms.Form):
     image = forms.ImageField(widget=forms.FileInput(
-        attrs={'accept': "image/*;capture=camera"}), error_messages={'required': 'Please photograph an image'})
+        attrs={'accept': "image/*;capture=camera"}), error_messages={'required': 'Please add a photo or skip this step'})
 
 
 class FrontPageImageForm(ImageForm):
