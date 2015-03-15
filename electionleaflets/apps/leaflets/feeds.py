@@ -20,6 +20,9 @@ class LatestLeafletsFeed(Feed):
     def item_description(self, item):
         return item.description
 
+    def item_enclosure_url(self, item):
+        return item.images.all()[0].image.url
+
 
 # class PartyFeed(Feed):
 #     title = "electionleaflets.org latest party leaflets"
