@@ -27,7 +27,7 @@ class ConstituencyView(DetailView):
 
         return context
 
-class ConstituencyList(FormView, ListView):
+class ConstituencyList(ListView, FormView):
     form_class = ConstituencyLookupForm
     queryset = Constituency.objects.all()\
                .annotate(num_leaflets=Count('leaflet'))\
@@ -46,3 +46,7 @@ class ConstituencyList(FormView, ListView):
         location = geocode(form.cleaned_data['postcode'])
         self.success_url = location['constituency'].get_absolute_url()
         return super(ConstituencyList, self).form_valid(form)
+
+    def post(self, *args, **kwargs):
+        self.object_list = self.get_queryset()
+        return super(ConstituencyList, self).post(*args, **kwargs)
