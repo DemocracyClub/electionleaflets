@@ -167,7 +167,7 @@ SOCIALACCOUNT_AUTO_SIGNUP = True
 
 THANKYOU_MESSAGES = [
     'Thank you so much! Your leaflet has been added to the archive.',
-    'Thanks, that\'s one more towards to target!',
+    'Thanks, that\'s one more towards the target!',
     'Great! Thank you!',
     'Thanks for the leaflet, the election is a tiny bit more transparent!'
     ]
