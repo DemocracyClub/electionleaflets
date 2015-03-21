@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.staticfiles',
     'django.contrib.messages',
+    'django.contrib.humanize',
     'kombu.transport.django',
     'lettuce.django',
     'pagination',

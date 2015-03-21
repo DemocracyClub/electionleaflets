@@ -1,4 +1,5 @@
 {% load thumbnail %}
+{% load humanize %}
 <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
 {% for leaflet in leaflet_list %}
   <li>
@@ -15,7 +16,8 @@
           {% else %}
             Leaflet #{{ leaflet.id }}
           {% endif %}
-        </a>
+        </a><br>
+        <span class="upload_date">Uploaded {{ leaflet.date_uploaded|naturalday }}</span>
       </figcaption>
     </figure>
   </li>
