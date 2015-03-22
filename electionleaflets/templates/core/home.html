@@ -45,8 +45,10 @@
     </div>
     <div class="medium-4 columns header-fix">
       <div class="big-number">
-        <span>{{leaflet_count}}</span>
-        <small>leaflets since {{start_date}}</small>
+        <a href="{% url "leaflets" %}">
+          <span>{{leaflet_count}}</span>
+          <small>leaflets since {{start_date}}</small>
+        </a>
       </div>
     </div>
   </div>
