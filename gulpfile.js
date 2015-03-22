@@ -1,18 +1,18 @@
 /* jshint unused: false */
 (function(){
   'use strict';
-  
+
   var paths = {
     tmp: 'gulptmp/',
     dest: 'electionleaflets/media/',
     src: 'electionleaflets/assets-src/',
     fonts: [],
-    images: [],
+    images: ['electionleaflets/assets-src/images'],
     scripts: {},
     styles: [],
     standalone: [],
   };
-  
+
   paths.styles.push(paths.src + 'stylesheets/**/*.scss');
   paths.styles.push(paths.src + 'stylesheets/**/*.css');
   paths.styles.push(paths.src + 'vendor/**/*.scss');
@@ -21,10 +21,10 @@
   paths.standalone.push(paths.src + 'vendor/Jcrop/css/jquery.Jcrop.min.css');
   paths.standalone.push(paths.src + 'vendor/foundation/css/foundation.css');
   paths.standalone.push(paths.src + 'vendor/foundation/css/foundation.css.map');
-  
+
   // images
   paths.images.push(paths.src + 'images/**/*');
-  
+
   paths.fonts.push(paths.src + 'fonts/*.{otf,eot,svg,ttf,woff,woff2}');
   paths.fonts.push(paths.tmp + 'fonts/*.{otf,eot,svg,ttf,woff,woff2}');
   paths.fonts.push(paths.src + 'vendor/**/*.{otf,eot,svg,ttf,woff,woff2}');
@@ -48,8 +48,8 @@
         paths.src + 'vendor/jquery/dist/jquery.js',
     ]
   };
-  
-  
+
+
   var gulp = require('gulp'),
     handlebars = require('gulp-handlebars'),
     uglify = require('gulp-uglify'),
@@ -65,19 +65,19 @@
     order = require('gulp-order'),
     templateCompiler = require('gulp-ember-template-compiler'),
     sass = require('gulp-ruby-sass');
-  
+
   gulp.task('clean-pre', function() {
     return gulp
       .src([paths.dest, paths.tmp], {read: false})
       .pipe(ignore('node_modules/**'))
       // .pipe(rimraf());
   });
-  
+
   gulp.task('copy-fonts', function() {
     gulp.src(paths.fonts)
       .pipe(gulp.dest(paths.dest + 'fonts/'));
   });
-  
+
   // optimise images
   gulp.task('images', function() {
     gulp
@@ -85,8 +85,8 @@
       .pipe(imagemin({optimizationLevel: 5}))
       .pipe(gulp.dest(paths.dest + 'images'));
   });
-  
-  
+
+
   // copy & compile scss
   gulp.task('copy-sass', function() {
     return gulp
@@ -130,7 +130,7 @@
 
   gulp.task('scripts', ['templates',], function() {
     var all_scripts = paths.scripts.vendor.concat(paths.scripts.app);
-    
+
     return gulp.src(all_scripts)
       // .pipe(uglify({ mangle: true }))
       .pipe(concat('electionleaflets.main.min.js'))
@@ -143,19 +143,19 @@
       // .pipe(concat('electionleaflets.main.min.js'))
       .pipe(gulp.dest(paths.dest + 'javascript/'));
   });
-  
+
   gulp.task('watch', function() {
     //watches SCSS files for changes
     gulp.watch(paths.src + '**/*.scss', ['css']);
- 
+
     //watches handlebars files for changes
     gulp.watch(paths.src + 'javascript/app/templates/**/*.hbs', ['templates', 'scripts']);
-   
+
     //watches JavaScript files for changes
     gulp.watch(paths.src + '**/*.js', ['templates', 'scripts', 'standalone_scripts']);
     gulp.watch(paths.tmp + '**/*.js', ['scripts']);
   });
-  
+
   gulp.task('build', ['clean-pre', 'css', 'scripts']);
   gulp.task('default', [
     'images',
