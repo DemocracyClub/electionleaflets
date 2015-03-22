@@ -59,7 +59,8 @@
     success: function(data) {
         constituency.addData(data,{style: ConstituencyStyles});
         constituency.setStyle(function() {return ConstituencyStyles});
-        map.fitBounds(constituency.getBounds())
+        map.fitBounds(constituency.getBounds());
+        map.zoomOut();
     }
     }).error(function() {});
 
