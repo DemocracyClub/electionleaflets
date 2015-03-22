@@ -89,8 +89,9 @@
           {% block content %}
           {% endblock %}
       </main>
-
+      {% if not hide_footer %}
         {% include "footer.html" %}
+      {% endif %}
 
         {# // <script type="text/javascript"> #}
         {# //     var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www."); #}

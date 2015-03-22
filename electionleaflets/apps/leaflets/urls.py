@@ -20,7 +20,7 @@ upload_form_wizzard = LeafletUploadWizzard.as_view(named_form_list,
     condition_dict={
         'back': skip_back_allowed,
         'inside': skip_inside_allowed,
-    },
+    }
 )
 
 urlpatterns = patterns(
