@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.views.generic import DetailView, ListView
 from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -22,7 +24,8 @@ class PartyView(DetailView):
 
         if not page or page == 1:
             if qs:
-                context['last_leaflet_days'] = (datetime.now() - qs[0].date_uploaded).days
+                context['last_leaflet_days'] = \
+                    (datetime.now() - qs[0].date_uploaded).days
 
         try:
             context['party_leaflets'] = paginator.page(page)
