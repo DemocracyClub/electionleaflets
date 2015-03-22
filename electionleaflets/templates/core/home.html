@@ -1,19 +1,19 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% load leaflet_tags %}
 {% load party_tags %}
 {% load constituency_tags %}
 {% load content_tags %}
 
 {% block content %}
-  <div class="row">
+  <div class="row intro">
     <div class="medium-8 columns">
-      <h1>People powered election monitoring</h1>
       <p>
-        Even in the internet age, leaflets are a time honoured way for political parties to get their message across. We want to keep track of how politicians are trying to get your vote, and where they are campaigning.
+        This is people powered election monitoring! Get out your phone and photograph any political leaflets that come through your door.
         <strong>The target is 10,000 leaflets by the May 7th!</strong>
       </p>
     </div>
-    <div class="medium-4 columns header-fix">
+    <div class="medium-4 columns">
       <p>
         <a href="{% url "upload_leaflet" %}" class="button">
           <span class="mobile-copy">
@@ -27,13 +27,21 @@
         </a>
       </p>      
     </div>
+
   </div>
   <div class="row">
+    <div class="medium-4 columns">
+      <div class="big-number">
+        <a href="{% url "leaflets" %}">
+          <span>{{leaflet_count}}</span>
+          <small>leaflets since {{start_date}}</small>
+        </a>
+      </div>
+    </div>
     <div class="medium-8 columns">
-      <h2>Latest leaflets from the campaign</h2>
       <ul class="side-nav">
         <li>
-          <a href="{% url "leaflets" %}">All</a>
+          <a href="{% url "leaflets" %}">Latest leaflets</a>
         </li>
         <li>
           <a href="{% url "parties" %}">Parties</a>
@@ -43,13 +51,42 @@
         </li>
       </ul>
     </div>
-    <div class="medium-4 columns header-fix">
-      <div class="big-number">
-        <a href="{% url "leaflets" %}">
-          <span>{{leaflet_count}}</span>
-          <small>leaflets since {{start_date}}</small>
-        </a>
-      </div>
+  </div>
+  <div class="row">
+    <div class="columns medium-6">
+      <h3>As featured by</h3>
+      <ul class="featured-logos small-block-grid-3">
+        <li>
+          <img src="{% static "images/featured_dispatches.png" %}" />
+        </li>
+        <li>
+          <img src="{% static "images/featured_bbc.png" %}" />
+        </li>
+        <li>
+          <img src="{% static "images/featured_guardian.png" %}" />
+        </li>
+        <li>
+          <img src="{% static "images/featured_38degrees.png" %}" />
+        </li>
+        <li>
+          <img src="{% static "images/featured_newsnight.png" %}" />
+        </li>
+        <li>
+          <img src="{% static "images/featured_times.png" %}" />
+        </li>
+      </ul>
+    </div>
+    <div class="columns medium-6">
+      <h3>About</h3>
+      <p>
+        ElectionLeaflets.org is an online archive of political leaflets.
+        It is created  by members of the public photographing and classifying what comes through their doors at election time.
+      </p>
+      <p>
+        During the 2010 election there were over 6,000 leaflets added to the archive providing 
+        a valuable resource for journalists, campaigners and investigations.
+      </p>
     </div>
   </div>
+
 {% endblock %}
