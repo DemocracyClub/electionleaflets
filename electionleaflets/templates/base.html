@@ -40,11 +40,17 @@
                 <ul>
                   <li>
                       <a href="{% url "analysis" %}">
+                        <span class="mobile-copy">
+                          <i class="fa fa-eye"></i>
+                        </span>
                         Join the analysis team
                       </a>
                   </li>
                   <li>
                       <a href="{% url "leaflets" %}">
+                        <span class="mobile-copy">
+                          <i class="fa fa-line-chart"></i>
+                        </span>
                         Latest leaflets
                       </a>
                   </li>
@@ -52,7 +58,7 @@
                       <a href="{% url "upload_leaflet" %}">
                         <span class="mobile-copy">
                           <i class="fa fa-camera"></i>
-                          Snap a leaflet
+                          Photograph a leaflet
                         </span>
                         <span class="desktop-copy">
                           <i class="fa fa-upload"></i>
@@ -89,8 +95,9 @@
           {% block content %}
           {% endblock %}
       </main>
-
+      {% if not hide_footer %}
         {% include "footer.html" %}
+      {% endif %}
 
         {# // <script type="text/javascript"> #}
         {# //     var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www."); #}

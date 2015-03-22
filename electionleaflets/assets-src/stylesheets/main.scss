@@ -94,11 +94,18 @@ p{
     span {
         font-size:5rem;
     }
+    a {
+        color:#fff;
+    }
     small {
         display:block;
         font-size:0.9rem;
         padding-bottom:0.9rem;
     }
+}
+
+.intro {
+    margin-top:2rem;
 }
 
 button, .button, .button:hover {
@@ -433,5 +440,5 @@ figure:after {
 }
 
 .upload_date {
-  color:#d3d3d3;
+  color:#6C7A89;
 }

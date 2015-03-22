@@ -61,33 +61,21 @@
           Leaflet #{{object.id}}
         {% endif %}
       </h1>
-      <section class="leaflet_information">
-        <div id="leaflet_description">
-        {% if object.description %}
-            {{ object.description|markdown }}
-        {% endif %}
-        </div>
 
-
-        {% if object.imprint %}
-        <div id="leaflet_imprint">
-        <h4>Promoter and Publisher details</h4>
-        <p>{{ object.imprint }}</p>
-        </div>
-        {% endif %}
-
-        {% if object.tags.all %}
-        <h4>Tags</h4>
-        <ul>
-            {% for t in object.tags.all %}
-                {% if t.slug %}
-                    <li><a href="{% url "tag"  t.slug %}">{{t.tag}}</a></li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-        {% endif %}
-      </section>
-
+      {% if object.publisher_party %}
+        <section class="party">
+            {% if object.publisher_party and object.publisher_party.slug %}
+              <p>
+                Published by 
+                <a href="{% url "party-view" object.publisher_party.slug%}">
+                  <img src="http://openelectoralcommission.org.uk/party_images/{{ object.publisher_party.emblems.all.0.emblem_url }}" width="40px">
+                  {{object.publisher_party.party_name}}
+                </a>
+              </p>
+            {% endif %}
+        </section>
+      {% endif %}
+      
       <section class="leaflet_images" aria-describedby=leaflet_description>
         {% for image in object.images.all %}
           <figure>
@@ -106,6 +94,34 @@
           </figure>
         {% endfor%}
       </section>
+
+      <section class="leaflet_information">
+        <div id="leaflet_description">
+        {% if object.description %}
+            {{ object.description|markdown }}
+        {% endif %}
+        </div>
+
+
+        {% if object.imprint %}
+          <div id="leaflet_imprint">
+          <h4>Promoter and Publisher details</h4>
+          <p>{{ object.imprint }}</p>
+          </div>
+        {% endif %}
+
+        {% if object.tags.all %}
+          <h4>Tags</h4>
+          <ul>
+              {% for t in object.tags.all %}
+                  {% if t.slug %}
+                      <li><a href="{% url "tag"  t.slug %}">{{t.tag}}</a></li>
+                  {% endif %}
+              {% endfor %}
+          </ul>
+        {% endif %}
+      </section>
+
 
       <section class="leaflet_map">
         <p>This leaflet was spotted by a volunteer 
@@ -133,14 +149,6 @@
 
       </section>
 
-      {% if object.publisher_party %}
-      <section class="party">
-          <img src="http://openelectoralcommission.org.uk/party_images/{{ object.publisher_party.emblems.all.0.emblem_url }}">
-          {% if object.publisher_party and object.publisher_party.slug %}
-          <p>Published by <a href="{% url "party-view" object.publisher_party.slug%}">{{object.publisher_party.party_name}}</a></p>
-          {% endif %}
-      </section>
-      {% endif %}
       <section id="ReportAbuse">
         <h3>Something wrong with this page?</h3>
         <p>
@@ -149,7 +157,7 @@
           then please let us know.
         </p>
         <p>
-          The data on this page is available in <a href="http://{{ request.META.HTTP_HOST }}{% url "api:leaflet-detail" object.pk%}?format=json">JSON format</a>
+          The data on this page is available in <a href="http://{{ request.META.HTTP_HOST }}{% url "api:leaflet-detail" object.pk%}?format=json">JSON format</a>. The images of this leaflet should be considered to be in the public domain, in accordance with the <a href="https://creativecommons.org/publicdomain/zero/1.0/">Public Domain Dedication</a>.
         </p>
         {% if request.user.is_staff %}
             <hr/>

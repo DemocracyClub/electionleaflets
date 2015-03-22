@@ -136,6 +136,12 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
     def extra_inside_forms(self):
         return self.storage.extra_data.get('extra_inside', 0)
 
+
+    def get_context_data(self, **kwargs):
+        context = super(LeafletUploadWizzard, self).get_context_data(**kwargs)
+        context['hide_footer'] = True
+        return context
+
     def add_extra_inside_forms(self):
         self.storage.extra_data['extra_inside'] = self.extra_inside_forms + 1
         self.extra_added = True

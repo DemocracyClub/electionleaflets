@@ -59,9 +59,19 @@
     success: function(data) {
         constituency.addData(data,{style: ConstituencyStyles});
         constituency.setStyle(function() {return ConstituencyStyles});
-        map.fitBounds(constituency.getBounds())
+        map.fitBounds(constituency.getBounds());
+        map.zoomOut();
     }
     }).error(function() {});
+
+
+    //add div over the top so scrolling works on a touch device
+    cover = $('<div></div>');
+    cover.css({"position":"absolute", "top": 0, "bottom": 0, "left": 0, "right":0})
+    $('#leaflet_map').parent().css({"position": "relative"})
+    $('#leaflet_map').parent().append(cover)
+
+
   }
 
 

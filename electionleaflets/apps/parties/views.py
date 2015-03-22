@@ -19,6 +19,11 @@ class PartyView(DetailView):
 
         paginator = Paginator(qs, 60)
         page = self.request.GET.get('page')
+
+        if not page or page == 1:
+            if qs:
+                context['last_leaflet_days'] = (datetime.now() - qs[0].date_uploaded).days
+
         try:
             context['party_leaflets'] = paginator.page(page)
         except PageNotAnInteger:

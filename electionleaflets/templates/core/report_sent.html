@@ -4,9 +4,11 @@
 
 
 <div class="row">
-  <div class="attention">
-  <h1>Thank you, your message has been sent</h1>
-  <p><a href="{% url "leaflet" pk=object.pk %}">Click here to return to the leaflet</a></p>
+  <div class="columns large-8">
+    <div class="attention">
+      <h1>Thank you, your message has been sent</h1>
+      <p><a href="{% url "leaflet" pk=object.pk %}">Click here to return to the leaflet</a></p>
+  </div>
 </div>
 
 {% endblock %}
