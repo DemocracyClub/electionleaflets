@@ -5,6 +5,7 @@ from leaflets.models import Leaflet
 from .forms import ConstituencyLookupForm
 from .models import Constituency
 from core.helpers import geocode
+from datetime import datetime
 
 
 class ConstituencyView(DetailView):
@@ -16,11 +17,17 @@ class ConstituencyView(DetailView):
 
         paginator = Paginator(qs, 60)
         page = self.request.GET.get('page')
+
+        if not page or page == 1:
+            if qs:
+                context['last_leaflet_days'] = (datetime.now() - qs[0].date_uploaded).days
+
         try:
             context['constituency_leaflets'] = paginator.page(page)
         except PageNotAnInteger:
             # If page is not an integer, deliver first page.
             context['constituency_leaflets'] = paginator.page(1)
+
         except EmptyPage:
             # If page is out of range (e.g. 9999), deliver last page of results.
             context['constituency_leaflets'] = paginator.page(paginator.num_pages)

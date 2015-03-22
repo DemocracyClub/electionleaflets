@@ -5,6 +5,14 @@
   <div class="row">
     <div class="columns large-12">
       <h1>Election leaflets delivered in {{ object.name }}</h1>
+      {% if last_leaflet_days >= 45 %}
+        <div class="panel">
+          <p>
+          We haven't seen any leaflets in {{object.name}} for {{last_leaflet_days}} days!
+          Please help by tracking some down and photographing them.</p>
+        </div>
+      {% endif %}
+      
       {% if constituency_leaflets %}
         {% with constituency_leaflets as leaflet_list %}
           {% include "leaflets/includes/leaflet_list.html" %}
