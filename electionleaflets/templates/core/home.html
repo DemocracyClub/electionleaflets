@@ -59,7 +59,7 @@
             <li>
               <a href="{% url "leaflet"  leaflet.id %}">
                 {% thumbnail leaflet.get_first_image.image "350x350" crop="top" as im %}
-                  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="Thumbnail of leaflet - {{leaflet.get_title}}">
                 {% endthumbnail %}
               </a>
             </li>
