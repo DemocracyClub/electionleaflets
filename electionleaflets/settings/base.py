@@ -84,8 +84,8 @@ LEAFLET_APPS = [
     'categories',
     'tags',
     'content',
-    # Temporarily removing elections code
-    #'elections',
+    'elections',
+    'people',
 ]
 
 INSTALLED_APPS = [

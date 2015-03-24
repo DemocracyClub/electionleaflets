@@ -35,3 +35,19 @@ class LeafletReviewFrom(forms.ModelForm):
     class Meta:
         model = Leaflet
         fields = ('reviewed', )
+
+class PeopleModelChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.name
+
+class PeopleForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(PeopleForm, self).__init__(*args, **kwargs)
+        self.fields['people'] = \
+            PeopleModelChoiceField(
+                queryset=kwargs['initial']['_people'],
+                widget=forms.RadioSelect,
+                empty_label="Not listed",
+                required=False)
+
+

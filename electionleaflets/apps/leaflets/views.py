@@ -12,6 +12,9 @@ from django.views.generic import (DetailView, ListView, UpdateView, FormView,
 from django.views.generic.detail import BaseDetailView, SingleObjectMixin
 from django.core.files.storage import FileSystemStorage
 from braces.views import StaffuserRequiredMixin
+
+from core.helpers import geocode
+from people.models import Person
 from .models import Leaflet, LeafletImage
 from .forms import (InsidePageImageForm, LeafletDetailsFrom,
     LeafletReviewFrom)
@@ -120,6 +123,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         "back": "leaflets/upload_form/image_back.html",
         "inside": "leaflets/upload_form/image_inside.html",
         "postcode": "leaflets/upload_form/postcode.html",
+        "people": "leaflets/upload_form/people.html",
     }
 
     file_storage = FileSystemStorage(location=os.path.join(
@@ -131,6 +135,19 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             else:
                 step_name = self.steps.current
             return [self.TEMPLATES[step_name]]
+
+    def get_form_initial(self, step):
+        if step == "people":
+            # self.get_cleaned_data_for_step('postcode')['postcode']
+            pc = self.get_cleaned_data_for_step('postcode')['postcode']
+            people_qs = Person.objects.filter(
+                personconstituencies__constituency=geocode(pc)['constituency'])
+
+            return {
+                '_people': people_qs
+            }
+        return {}
+
 
     @property
     def extra_inside_forms(self):
@@ -213,6 +230,13 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
 
             if form_prefix == "postcode":
                 leaflet.postcode = form.cleaned_data['postcode']
+
+            if form_prefix == "people":
+                person = form.cleaned_data['people']
+                if person:
+                    leaflet.publisher_party = person.current_party.party
+                    leaflet.publisher_person = person
+                    leaflet.election = person.current_election
 
         leaflet.save()
         messages.success(self.request, random.sample(settings.THANKYOU_MESSAGES, 1)[0])
