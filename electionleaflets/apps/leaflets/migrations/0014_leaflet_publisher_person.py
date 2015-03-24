@@ -7,7 +7,7 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('people', '0003_auto_20150324_0859'),
+        ('people', '0001_initial'),
         ('leaflets', '0013_leaflet_election'),
     ]
 

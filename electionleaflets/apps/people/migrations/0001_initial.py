@@ -7,8 +7,8 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('elections', '__first__'),
         ('constituencies', '0003_auto_20150111_1441'),
+        ('elections', '0001_initial'),
         ('uk_political_parties', '0004_auto_20150322_2250'),
     ]
 
@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('membership_start', models.DateField()),
-                ('membership_end', models.DateField()),
+                ('membership_end', models.DateField(null=True)),
                 ('party', models.ForeignKey(to='uk_political_parties.Party')),
             ],
             options={
@@ -32,6 +32,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255)),
                 ('remote_id', models.CharField(max_length=255, null=True, blank=True)),
                 ('source_url', models.URLField(null=True, blank=True)),
+                ('source_name', models.CharField(max_length=100, blank=True)),
                 ('image_url', models.URLField(null=True, blank=True)),
             ],
             options={
