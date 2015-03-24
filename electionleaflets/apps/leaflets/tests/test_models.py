@@ -16,7 +16,8 @@ class LeafletTestCase(TestCase):
             {'status': None, 'publisher_party': None, 'description': None,
             'title': u'', 'email': u'', 'imprint': None, 'postcode': u'',
             'location': None, 'date_delivered': None, 'reviewed': False,
-            'constituency': None, u'id': None, 'name': u''})
+            'constituency': None, u'id': None, 'name': u'',
+            'election': None, 'publisher_person': None})
 
         leaflet.status = "draft"
         leaflet.save()
