@@ -7,7 +7,6 @@ from .models import Constituency
 from core.helpers import geocode
 from datetime import datetime
 
-
 class ConstituencyView(DetailView):
     model = Constituency
 

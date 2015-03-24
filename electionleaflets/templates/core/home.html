@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% load leaflet_tags %}
+{% load thumbnail %}
 {% load party_tags %}
 {% load constituency_tags %}
 {% load content_tags %}
@@ -27,7 +28,6 @@
         </a>
       </p>
     </div>
-
   </div>
   <div class="row">
     <div class="medium-4 columns">
@@ -49,6 +49,21 @@
         <li>
           <a href="{% url "constituencies" %}">Constituencies</a>
         </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="columns medium-12">
+      <ul id="home_thumbnails" class="large-block-grid-9 medium-block-grid-3 small-block-grid-3">
+        {% for leaflet in latest_leaflets %}
+            <li>
+              <a href="{% url "leaflet"  leaflet.id %}">
+                {% thumbnail leaflet.get_first_image.image "350x350" crop="top" as im %}
+                  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                {% endthumbnail %}
+              </a>
+            </li>
+        {% endfor %}
       </ul>
     </div>
   </div>

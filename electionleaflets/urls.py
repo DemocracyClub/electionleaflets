@@ -3,6 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+from django.views.decorators.cache import cache_page
 
 admin.autodiscover()
 
@@ -20,7 +21,7 @@ else:
     urlpatterns = patterns(
         '',
 
-        url(r'^$',          HomeView.as_view(), name='home'),
+        url(r'^$',          cache_page(60*5)(HomeView.as_view()), name='home'),
         url(r'^leaflets',   include('leaflets.urls')),
         url(r'^parties',    include('parties.urls')),
         url(r'^constituencies',    include('constituencies.urls')),

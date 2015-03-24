@@ -70,16 +70,19 @@ aside {
 h1 {
     font-size:1.4rem;
     line-height:1.3;
+    font-weight: bold;
 }
 
 h2 {
     font-size:1.3rem;
     line-height:1.3;
+    font-weight: bold;
 }
 
 h3 {
     font-size:1.2rem;
     line-height:1.3;
+    font-weight: bold;
 }
 
 p{
@@ -106,6 +109,10 @@ p{
 
 .intro {
     margin-top:2rem;
+}
+
+#home_thumbnails {
+    border-bottom: 1px solid #DFDFDF;
 }
 
 button, .button, .button:hover {
