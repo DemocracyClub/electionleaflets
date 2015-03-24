@@ -6,13 +6,14 @@ from leaflets.views import (ImageView, LatestLeaflets,
     AllImageView, ImageRotateView, LegacyImageView)
 
 from .forms import  (FrontPageImageForm, BackPageImageForm,
-    InsidePageImageForm, PostcodeForm)
+    InsidePageImageForm, PostcodeForm, PeopleForm)
 
 named_form_list = [
     ('front', FrontPageImageForm),
     ('back', BackPageImageForm),
     ('inside', InsidePageImageForm),
     ('postcode', PostcodeForm),
+    ('people', PeopleForm),
 ]
 
 upload_form_wizzard = LeafletUploadWizzard.as_view(named_form_list,

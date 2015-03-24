@@ -14,6 +14,8 @@ from django.forms.models import model_to_dict
 
 from core.helpers import geocode
 from constituencies.models import Constituency
+from people.models import Person
+from elections.models import Election
 from uk_political_parties.models import Party
 
 import constants
@@ -28,6 +30,8 @@ class Leaflet(geo_model.Model):
     title = models.CharField(blank=True, max_length=765)
     description = models.TextField(blank=True, null=True)
     publisher_party = models.ForeignKey(Party, blank=True, null=True)
+    publisher_person = models.ForeignKey(Person, blank=True, null=True)
+    election = models.ForeignKey(Election, null=True)
     constituency = models.ForeignKey(Constituency, blank=True, null=True)
     imprint = models.TextField(blank=True, null=True)
     postcode = models.CharField(max_length=150, blank=True)

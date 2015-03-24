@@ -1,0 +1,24 @@
+.select_widget {
+  border:1px solid #EEE;
+  margin:1em 0;
+  padding:1em 0;
+
+  .select_row input[type="radio"] {
+    display:none;
+  }
+
+  input[type="radio"] + label {
+    display:block;
+    max-width:100%;
+    background-color:#E7E7E7;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    margin:0.2em 0;
+  }
+
+  input[type="radio"]:checked + label {
+    background-color:#B9B9B9;
+    color:#FFF;
+  }
+
+}

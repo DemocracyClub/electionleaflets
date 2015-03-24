@@ -13,10 +13,10 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.spatialite',
         'NAME': '/tmp/electionleaflets.db',
     },
-    'test': {
-        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
-        'NAME': '/tmp/electionleaflets.db',
-    }
+    # 'test': {
+    #     'ENGINE': 'django.contrib.gis.db.backends.spatialite',
+    #     'NAME': '/tmp/electionleaflets.db',
+    # }
 }
 
 if os.environ.get('RUNNER') == "travis":
