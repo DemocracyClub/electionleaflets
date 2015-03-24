@@ -40,6 +40,7 @@ else:
 
         # Individual urls
         url(r'^about/$', TemplateView.as_view(template_name='core/about.html'), name='about'),
+        url(r'^donate/$', TemplateView.as_view(template_name='core/donate.html'), name='donate'),
         url(r'^report/(?P<pk>\d+)/sent/$', ReportThanksView.as_view(), name='report_abuse_sent'),
         url(r'^report/(?P<pk>\d+)/$', ReportView.as_view(), name='report_abuse'),
 
