@@ -1,3 +1,5 @@
+import datetime
+
 from django.http import HttpResponse
 from django.contrib.sites.models import Site
 from django.utils.html import escape
@@ -7,6 +9,9 @@ from constituencies.models import Constituency
 from uk_political_parties.models import Party
 
 from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
 
 from .serializers import (ConstituencySerializer, PartySerializer,
     LeafletSerializer, LeafletImageSerializer)
@@ -30,6 +35,22 @@ class LeafletImageViewSet(viewsets.ModelViewSet):
 class LeafletViewSet(viewsets.ModelViewSet):
     queryset = Leaflet.objects.all()
     serializer_class = LeafletSerializer
+
+
+class StatsView(APIView):
+    def get(self, request, format=None):
+        stats = {
+            'leaflets': {}
+        }
+        stats['leaflets']['total'] = \
+            Leaflet.objects.all().count()
+
+
+        yesterday = datetime.datetime.now() - datetime.timedelta(hours=24)
+        stats['leaflets']['last_24_hours'] = \
+            Leaflet.objects.filter(date_uploaded__gt=yesterday).count()
+
+        return Response(stats)
 
 def latest(request, format):
     # TODO: Fix this to work properly
