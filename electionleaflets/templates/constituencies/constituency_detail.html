@@ -12,7 +12,7 @@
           Please help by tracking some down and photographing them.</p>
         </div>
       {% endif %}
-      
+
       {% if constituency_leaflets %}
         {% with constituency_leaflets as leaflet_list %}
           {% include "leaflets/includes/leaflet_list.html" %}
@@ -44,7 +44,7 @@
         </p>
         <ol>
           <li>
-            <a href="https://twitter.com/intent/tweet?url={{ request.get_host }}/{% url "constituency-view"  object.pk object.slug %}&text=Has anyone in {{object.name}} got an election leaflet through the door?&hashtags=electionlealfet&via=electionspotter">
+            <a href="https://twitter.com/intent/tweet?url={{ request.get_host }}/{% url "constituency-view"  object.pk object.slug %}&text=Has anyone in {{object.name}} got an election leaflet through the door?&hashtags=electionleaflet&via=electionspotter">
               Put a call out on Twitter or tweet the parties directly
             </a>
           </li>
