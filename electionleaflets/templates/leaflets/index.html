@@ -9,6 +9,11 @@
   <div class="row">
     <div class="columns large-12">
       <h1>Latest leaflets</h1>
+      {% if page_obj.number == 1 %}
+        <p>
+          These are the latest leaflets spotted by our volunteers. You can also view leaflets by <a href="{% url "parties" %}">party</a> or <a href="{% url "constituencies" %}">constituency</a>.
+        </p>
+      {% endif %}
       {% include "leaflets/includes/leaflet_list.html" %}
 
     {% if is_paginated %}

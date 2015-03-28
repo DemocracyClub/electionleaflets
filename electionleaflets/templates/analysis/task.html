@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block content %}
+  <div class="row">
+    <div class="columns large-12">
+      <p class="right">You have <strong>5</strong> points!</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="columns large-6">
+      <h1>Is there a politician pointing at something? (5 points)</h1>
+        <p>
+            It can be anything, a pothole, a computer screen.
+        </p>
+      <form action="" method="post">
+          <label><input type="radio" /> Yes</label>
+          <label><input type="radio" /> No</label>
+        <ul class="button-group even-2">
+          <li><button type="submit" class="secondary" value="skip">Skip</button></li>
+          <li><button type="submit" value="save">Save</button></li>
+        </ul>
+      </form>
+    </div>
+    <div class="columns large-6">
+        <p style="text-align:center; margin-top:40px">LEAFLET GOES HERE</p>
+    </div>
+  </div>
+{% endblock %}

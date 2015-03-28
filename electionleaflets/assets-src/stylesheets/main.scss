@@ -454,13 +454,13 @@ figure:after {
 
 #donation_banner {
   padding:0.5em;
-  background-color:#008CBA;
-  border-bottom: solid 7px #007095;
+  background-color:#6C7A89;
   color:#FFF;
   text-align:center;
 
   p {
     margin:0;
+    font-size: 0.8rem;
   }
 
   a {
@@ -472,10 +472,15 @@ figure:after {
     max-width: 62.5rem;
     margin:0 auto;
   }
+
 }
 
 #donate_iframe {
   width:100%;
   border:0;
   min-height:1000px;
+}
+
+table {
+    width:100%;
 }

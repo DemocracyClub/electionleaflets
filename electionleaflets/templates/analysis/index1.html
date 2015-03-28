@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="row">
+    <div class="columns large-4">
+      <h1>Analysis team</h1>
+      <p>
+        The ElectionLeaflets.org analysis team check and tidy categorising
+        election leaflets as they come in, making the archive more useful for everyone.
+      </p>
+      <p>
+        So far <strong>20 people</strong> have analysed <strong>300 leaflets</strong>. Including <strong>400 with party leaders</strong> on them,  <strong>25 with politicians pointing at potholes</strong> and <strong>1 with a cat</strong>.
+      </p>
+      {% if request.user.is_authenticated %}
+        <p>
+          Welcome {{request.user.username}}!
+          <a href="{% url "task" %}" class="button">Start analysing</a>
+        </p>
+      {% else %}
+        <p>
+          <a href="{% url "account_signup" %}" class="button">Join the team</a>
+          <a href="{% url "account_login" %}" class="button secondary">Sign in</a>
+        </p>
+      {% endif %}
+    </div>
+    <div class="columns large-8">
+      <h2>Insights and data</h2>
+      <ul>
+        <li><a href="http://t.co/A0KSUDaoHc">Leaders on leaflets - early stats</a></li>
+      </ul>
+      <p>
+        If you are a journalist you can <a href="/about/#contact">request to join our daily email update</a>.
+        You can also <a href="https://twitter.com/thesc">follow us on twitter</a> for the latest facts and figures.
+      </p>
+      <h2>League table</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Volunteer</th>
+            <th>Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>username 1</td>
+            <td> 400 points</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
