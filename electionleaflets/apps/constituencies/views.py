@@ -37,7 +37,7 @@ class ConstituencyList(ListView, FormView):
     form_class = ConstituencyLookupForm
     queryset = Constituency.objects.all()\
                .annotate(num_leaflets=Count('leaflet'))\
-               .order_by('-num_leaflets')
+               .order_by('name')
 
     def get(self, request, *args, **kwargs):
         form_class = self.get_form_class()
