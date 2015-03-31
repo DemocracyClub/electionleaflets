@@ -17,7 +17,7 @@ class LatestLeafletsFeed(Feed):
         return Leaflet.objects.order_by('-id')[:10]
 
     def item_title(self, item):
-        return item.title
+        return item.title or item.constituency.name
 
     def item_description(self, item):
         return item.description
