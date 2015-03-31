@@ -1,3 +1,5 @@
+import mimetypes
+
 from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
 from leaflets.models import Leaflet
@@ -23,6 +25,12 @@ class LatestLeafletsFeed(Feed):
     def item_enclosure_url(self, item):
         return item.images.all()[0].image.url
 
+    def item_enclosure_length(self, item):
+        return item.images.all()[0].image.size
+
+    def item_enclosure_mime_type(self, item):
+        type, _ = mimetypes.guess_type(item.images.all()[0].image.url)
+        return type
 
 # class PartyFeed(Feed):
 #     title = "electionleaflets.org latest party leaflets"
