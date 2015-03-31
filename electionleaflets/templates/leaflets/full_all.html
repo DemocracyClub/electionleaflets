@@ -12,7 +12,7 @@
 
 {% block content %}
     {% include "leaflets/includes/leaflet_admin_markup_tools.html" %}
-    <a href="{% url "leaflet" leaflet.id%}">&larr; back to details of <em>{{ leaflet.title }}</em></a>
+    <a href="{% url "leaflet" leaflet.id%}">&larr; back to {{ leaflet.get_title|default_if_none:"leaflet" }} details</a>
 
     {% for image in leaflet.images.all %}
         <figure id="image-{{ image.pk }}">
