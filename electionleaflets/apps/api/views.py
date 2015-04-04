@@ -37,6 +37,22 @@ class LeafletViewSet(viewsets.ModelViewSet):
     serializer_class = LeafletSerializer
 
 
+class LatestByConstituencyView(APIView):
+    def get(self, request, format=None):
+        all_constituencies = {}
+        TIME_SINCE = datetime.datetime.now() - datetime.timedelta(weeks=20)
+        LIMIT = 3
+        for constituency in Constituency.objects.all():
+            print constituency
+            leaflets =  LeafletSerializer(
+                Leaflet.objects.filter(
+                    constituency=constituency,
+                    date_uploaded__gt=TIME_SINCE,
+                )[:LIMIT], many=True).data
+            all_constituencies[constituency.pk] = leaflets
+        return Response(all_constituencies)
+
+
 class StatsView(APIView):
     def get(self, request, format=None):
         stats = {
