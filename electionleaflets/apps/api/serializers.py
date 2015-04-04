@@ -60,7 +60,7 @@ class LeafletSerializer(serializers.HyperlinkedModelSerializer):
     def get_first_page_thumb(self, obj):
         image = obj.get_first_image()
         if image:
-            return get_thumbnail(obj.get_first_image, '350', quality=80).url
+            return get_thumbnail(obj.get_first_image, '350').url
 
     def validate(self, data):
         if not data.get('status') or not data.get('images'):
