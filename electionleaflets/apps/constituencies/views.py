@@ -49,8 +49,7 @@ class ConstituencyList(ListView, FormView):
         return self.render_to_response(context)
 
     def form_valid(self, form):
-        location = geocode(form.cleaned_data['postcode'])
-        self.success_url = location['constituency'].get_absolute_url()
+        self.success_url = form.location['constituency'].get_absolute_url()
         return super(ConstituencyList, self).form_valid(form)
 
     def post(self, *args, **kwargs):
