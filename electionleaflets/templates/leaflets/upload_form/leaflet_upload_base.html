@@ -23,7 +23,11 @@
               {% if "inside" in wizard.steps.current %}
               <button type="submit" class="expand" name="add_extra_inside" value="Add another page">Submit and add another</button>
               {% endif %}
+
+              {% if not "people" in wizard.steps.current %}
               <button type="submit" class="secondary expand" name="skip" value="Skip">Skip</button>
+              {% endif %}
+
               {% endif %}
               <button type="submit" class="expand secondary" name="cancel_upload" value="Cancel">Cancel</button>
           </form>
