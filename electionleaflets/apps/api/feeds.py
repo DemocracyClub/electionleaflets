@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import mimetypes
 
 from django.contrib.syndication.views import Feed
@@ -14,23 +15,34 @@ class LatestLeafletsFeed(Feed):
     description = "The most recently uploaded leaflets"
 
     def items(self):
-        return Leaflet.objects.order_by('-id')[:10]
+        return Leaflet.objects.order_by('-id')[:100]
 
     def item_title(self, item):
-        return item.title or item.constituency.name
+        return item.get_title()
 
     def item_description(self, item):
-        return item.description
+        d = ""
+        if item.description:
+            d = item.description
+        if item.images.all():
+            d = "{0} – {1}".format(
+                d,
+                item.images.all()[0].image.url
+            )
+        return d
 
     def item_enclosure_url(self, item):
-        return item.images.all()[0].image.url
+        if item.images.all():
+            return item.images.all()[0].image.url
 
     def item_enclosure_length(self, item):
-        return item.images.all()[0].image.size
+        if item.images.all():
+            return item.images.all()[0].image.size
 
     def item_enclosure_mime_type(self, item):
-        type, _ = mimetypes.guess_type(item.images.all()[0].image.url)
-        return type
+        if item.images.all():
+            im_type, _ = mimetypes.guess_type(item.images.all()[0].image.url)
+            return im_type
 
 # class PartyFeed(Feed):
 #     title = "electionleaflets.org latest party leaflets"

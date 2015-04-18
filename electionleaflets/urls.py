@@ -7,7 +7,7 @@ from django.views.decorators.cache import cache_page
 
 admin.autodiscover()
 
-from leaflets.feeds import *
+from api import feeds
 
 from core.views import HomeView, MaintenanceView, ReportView, ReportThanksView
 MAINTENANCE_MODE = getattr(settings, 'MAINTENANCE_MODE', False)
@@ -31,12 +31,10 @@ else:
         url(r'^api/', include('api.urls')),
 
         # Feeds
-        url(r'^feeds/latest/$', LatestLeafletsFeed(), name='latest_feed'),
-        # url(r'^feeds/party/(?P<party_slug>[\w_\-\.]+)/$', PartyFeed(), name='party_feed'),
-        # url(r'^feeds/attacking/(?P<party_slug>[\w_\-\.]+)/$', AttackingPartyFeed(), name='attacking_party_feed'),
-        url(r'^feeds/constituency/(?P<cons_slug>[\w_\-\.]+)/$', ConstituencyFeed(), name='constituency_feed'),
-        url(r'^feeds/category/(?P<cat_slug>[\w_\-\.]+)/$', CategoryFeed(), name='category_feed'),
-        url(r'^feeds/tag/(?P<tag_slug>[\w_\-\.]+)/$', TagFeed(), name='tag_feed'),
+        url(r'^feeds/latest/$', feeds.LatestLeafletsFeed(), name='latest_feed'),
+        url(r'^feeds/constituency/(?P<cons_slug>[\w_\-\.]+)/$', feeds.ConstituencyFeed(), name='constituency_feed'),
+        url(r'^feeds/category/(?P<cat_slug>[\w_\-\.]+)/$', feeds.CategoryFeed(), name='category_feed'),
+        url(r'^feeds/tag/(?P<tag_slug>[\w_\-\.]+)/$', feeds.TagFeed(), name='tag_feed'),
 
         # Individual urls
         url(r'^about/$', TemplateView.as_view(template_name='core/about.html'), name='about'),
