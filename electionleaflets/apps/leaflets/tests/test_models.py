@@ -29,7 +29,7 @@ class LeafletTestCase(TestCase):
     def test_leaflet_geocode(self):
         responses.add(
             responses.GET,
-            'http://mapit.mysociety.org/postcode/SE228DJ',
+            'https://mapit.mysociety.org/postcode/SE228DJ',
              body=MAPIT_POSTCODE_RETURN,
              status=200,
              content_type='application/json',
