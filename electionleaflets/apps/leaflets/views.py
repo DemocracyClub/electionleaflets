@@ -144,7 +144,8 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                 personconstituencies__constituency=geo_data['constituency'])
 
             return {
-                '_people': people_qs
+                '_people': people_qs,
+                'people': '',
             }
         return {}
 
