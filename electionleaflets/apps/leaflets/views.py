@@ -235,7 +235,8 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             if form_prefix == "people":
                 person = form.cleaned_data['people']
                 if person:
-                    leaflet.publisher_party = person.current_party.party
+                    if person.current_party:
+                        leaflet.publisher_party = person.current_party.party
                     leaflet.publisher_person = person
                     leaflet.election = person.current_election
 
