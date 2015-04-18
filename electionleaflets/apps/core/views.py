@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.template  import RequestContext
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
@@ -70,7 +71,10 @@ class ReportView(DetailView, FormView):
             'details': form.cleaned_data['details'],
         }
 
-        subject = settings.REPORT_EMAIL_SUBJECT
+        subject = "{0} – {1}".format(
+            settings.REPORT_EMAIL_SUBJECT,
+            self.object.id
+        )
         from_email = settings.DEFAULT_FROM_EMAIL
         to = settings.EMAIL_RECIPIENT
 
