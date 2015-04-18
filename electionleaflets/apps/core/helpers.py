@@ -17,7 +17,6 @@ def geocode(postcode):
     try:
         res = requests.get("%s/postcode/%s" % (constants.MAPIT_URL, postcode))
         res_json = res.json()
-        print res_json
         constituency = Constituency.objects.get(
             constituency_id=str(res_json['shortcuts']['WMC']))
         result = {
@@ -26,7 +25,6 @@ def geocode(postcode):
             'constituency': constituency,
         }
     except Exception, e:
-        print e
         result = None
     cache.set(postcode, result, 60*60*60*24)
     return result
