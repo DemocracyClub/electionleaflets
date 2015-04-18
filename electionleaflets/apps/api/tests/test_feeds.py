@@ -10,4 +10,4 @@ class TestFeeds(TestCase):
 
     def test_latest(self):
         URL = reverse('latest_feed')
-        print self.client.get(URL)
+        self.client.get(URL)
