@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/democracyclub/electionleaflets.png?label=ready&title=Ready)](https://waffle.io/democracyclub/electionleaflets)
 # Electionleaflets
 
 [![Build Status](https://travis-ci.org/DemocracyClub/electionleaflets.svg?branch=django_1_7)](https://travis-ci.org/DemocracyClub/electionleaflets)
