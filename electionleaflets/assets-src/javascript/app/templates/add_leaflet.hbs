@@ -1,0 +1,9 @@
+WANT AN UPLOAD FORM HERE
+
+<form>
+    {{ add-image action="AddImage" }}
+    {{ model }}
+    {{#each image in model}}
+        <li>{{image.id}}, {{image.name}}<img src="{{image.image}}"></li>
+    {{/each}}
+</form>

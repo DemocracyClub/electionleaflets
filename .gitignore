@@ -16,6 +16,8 @@ eggs
 log
 parts
 electionleaflets/media/uploads/
+electionleaflets/media/leaflets/
+electionleaflets/media/cache/
 media/uploads
 tmp
 .DS_Store
@@ -23,3 +25,16 @@ electionleaflets.db
 .Python
 readline-6.2.2-py2.7-macosx-10.7-intel.egg/
 local_settings.py
+node_modules
+.sass-cache
+gulptmp
+electionleaflets/settings/local.py
+electionleaflets/static
+electionleaflets/media/images/leaflets_tmp/
+.coveralls.yml
+.coverage
+electionleaflets/media/raw_leaflets/
+electionleaflets/test_media/leaflets/
+electionleaflets/test_media/raw_leaflets/
+electionleaflets/test_media/cache/
+electionleaflets/test_media/images/leaflets_tmp

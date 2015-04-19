@@ -1,0 +1,25 @@
+{% load thumbnail %}
+{% load humanize %}
+<ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
+{% for leaflet in leaflet_list %}
+  <li>
+    <figure>
+      <a href="{% url "leaflet"  leaflet.id %}">
+        {% thumbnail leaflet.get_first_image.image "350" as im %}
+        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+        {% endthumbnail %}
+      </a>
+      <figcaption>
+        <a href="{% url "leaflet" leaflet.id %}">
+          {% if leaflet.title %}
+            {{ leaflet.title }}
+          {% else %}
+            Leaflet #{{ leaflet.id }}
+          {% endif %}
+        </a><br>
+        <span class="upload_date">Uploaded {{ leaflet.date_uploaded|naturalday }}</span>
+      </figcaption>
+    </figure>
+  </li>
+{% endfor %}
+</ul>

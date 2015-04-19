@@ -1,54 +1,17 @@
 {% extends "base.html" %}
 
 {% block title %}Add a new leaflet{% endblock %}
+{# Disabled until ember is active #}
+{# {% block body_class %}class="leaflet_app"{% endblock %} #}
 
-{% block body %}
-<div class="row-fluid">
-    <form id="frmUpload" method="post" action="{% url add_leaflet %}" enctype="multipart/form-data" onsubmit="uploadImages();">
-    {% include "leaflets/progress.html" %}
-
-        <p class="text-info">
-            Take a photo of a <strong>single leaflet</strong> and upload it below in JPG format. If the leaflet has more than one side you can upload multiple images. If your image files are large (more than about 1MB), please resize to help keep our server happy, very large files may not upload.
-        </p>
-        <p class="text-important">
-            <span class="label label-important">Obscure your address!</span> If the leaflet was sent by mail, please obscure your name and address with a marker pen.
-        </p>
-        <fieldset>
-            <input type="hidden" name="MAX_FILE_SIZE" value="10000000000">
-
-            <ul id="upload_photos">
-                <li>
-                    {{ form.image1 }}
-                </li>
-                <li>
-                    {{ form.image2 }}
-                </li>
-                <li>
-                    {{ form.image3 }}
-                </li>
-                <li>
-                    {{ form.image4 }}
-                </li>
-                <li>
-                    {{ form.image5 }}
-                </li>
-                <li>
-                    {{ form.image6 }}
-                </li>
-                <li>
-                    {{ form.image7 }}
-                </li>
-                <li>
-                    {{ form.image8 }}
-                </li>
-                <li>
-                    <input type="submit" class="btn btn-primary btn-large"  value="Upload files"/>
-                </li>
-            </ul>
-        </fieldset>
-    </form>
-    <div id="uploading" class="hide">
-        <h3>Uploading your images, please don't close this window, <strong>you will need to fill in a few extra details in a moment</strong></h3>
-        <img src="{{ MEDIA_URL }}images/loading.gif"/>
-    </div>
-</div>                {% endblock %}
+{% block content %}
+  <form>
+      <div class="file_input_button">
+          Upload <i>leaflet</i> front
+          <div class="file_input_preview">
+              <i class="fa fa-file-text-o"></i>
+          </div>
+          <input type="file" accept="image/*;capture=camera">
+      </div>
+  </form>
+{% endblock %}

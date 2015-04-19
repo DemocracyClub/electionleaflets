@@ -52,7 +52,7 @@
                 }
 
                 var request = OpenLayers.Request.GET({
-                    url: '{% url boundaries.views.popup mapname%}/' + lonlat.lon + '/' + lonlat.lat + '/' + map.zoom,
+                    url: '{% url "boundaries.views.popup" mapname %}/' + lonlat.lon + '/' + lonlat.lat + '/' + map.zoom,
                     callback: handler
                 });
             }
@@ -84,7 +84,7 @@
 
             //Custom layer
             custom = new OpenLayers.Layer.TMS("Constituencies",
-                       "{% url boundaries.views.tile mapname%}",
+                       "{% url "boundaries.views.tile" mapname %}",
                        { 'type':'png', 'getURL':get_my_url, transparent: 'true', isBaseLayer: false});
             map.addLayer(custom);
 
@@ -125,14 +125,14 @@
 {% endblock %}
 
 
-{% block body %} 
+{% block content %} 
     <!-- define a DIV into which the map will appear. Make it take up the whole window -->
 <div id="sidebar" >
 <H1>Leaflets delivered by constituency</H1>
 <table>
 <tr>
 {% for keyvalue in keyvalues %}
-<td><img src="{% url boundaries.views.view_key mapname keyvalue 10 10 %}"/></td>
+<td><img src="{% url "boundaries.views.view_key"  mapname keyvalue 10 10 %}"/></td>
 {% endfor %}
 </tr>
 <tr>

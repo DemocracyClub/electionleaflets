@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="columns large-12">
+    <h1>Parties</h1>
+    <ul class="side-nav">
+      {% for party in object_list %}
+        <li>
+          <a href="{% url "party-view"  party.pk party.slug %}">
+          <span class="party_logo_small_container">
+            {% if party.emblems.all.0.emblem_url %}
+                <img class="party-logo" src="http://openelectoralcommission.org.uk/party_images/{{ party.emblems.all.0.emblem_url }}" width="40px"/>
+            {% endif %}
+          </span>
+          {{ party.party_name }} ({{ party.leaflet_set.count }} leaflets)
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+<div>
+{% endblock %}

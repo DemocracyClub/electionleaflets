@@ -1,9 +1,9 @@
 <ol>
 	{% for constituency in constituencies %}
-		<li><a href="{% url constituency constituency.slug %}">{{ constituency.name }}</a></li>
+		<li><a href="{% url "constituency"  constituency.slug %}">{{ constituency.name }}</a></li>
     {% endfor %}
 </ol>
 <p>
-    <a href='{% url constituency_notspots %}'>View all not-spots</a>
+    <a href='{% url "constituency_notspots"  %}'>View all not-spots</a>
 </p>
 

@@ -1,70 +1,107 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% load leaflet_tags %}
+{% load thumbnail %}
 {% load party_tags %}
 {% load constituency_tags %}
 {% load content_tags %}
 
-{% block body %}
-<div id="welcome" class="row-fluid">
-    <div class="well" style='font-weight: 300'>
-
-        <div class="span6" style='font-size: 1.4em'>
-            <h2>Got Election leaflets?<br/> Photo them. Send them to us.</h2>
-
-            <p>Even in the internet age, leaflets are a time honoured way for political parties to get their message across. We want to keep track of how politicians are trying to get your vote, and where they are campaigning.</p>
-
-            <p>Sending us your leaflets is incredibly simple: take a high resolution colour photograph (or better yet, use a scanner if you have one) and submit it to us by clicking on the button below.</p>
-
-            <p style='text-align:center;'><a href="{% url add_leaflet %}" class="btn btn-primary btn-large">Add a leaflet</a></p>
-
-        </div>
-
-        <div class="span6">
-            <h3>Taking a decent photo</h3>
-            <p>We recommend putting the leaflet on a flat surface like a table in a well lit room and taking a photograph of it from directly above. You might want to turn off the flash.</p>
-
-            <p>Don’t forget to take a photograph of all the sides of the leaflet (not just the front), and to ensure that the text is legible.</p>
-
-            <h3>I can’t take a photo or scan</h3>
-            <p>No problem, just post the leaflet to Elections Leaflet, ℅ Unlock Democracy, 37 Gray’s Inn Road, London WC1X 8PQ and don't forget to include your postcode.</p>
-        </div>
-
-        <div class="clearfix"></div>
-        <div style='font-weight: 300; color: #777; margin-top: 30px; padding: 10px;'>
-            Election Leaflets is run by a group of volunteers. It is currently being supported by <a href="http://unlockdemocracy.org.uk">Unlock Democracy</a>, the campaign for democracy, rights and freedoms. Both Election Leaflets and Unlock Democracy are independent and not affiliated to any political party
-        </div>
+{% block content %}
+  <div class="row intro">
+    <div class="medium-8 columns">
+      <p>
+        This is people powered election monitoring! Get out your phone and photograph any political leaflets that come through your door.
+        <strong>The target is 10,000 leaflets by the May 7th!</strong>
+      </p>
     </div>
-</div>
-
-
-<div class="row-fluid">
-    <div class="span12 leaflet_list">
-        {% for leaflet in leaflets %}
-            {% if forloop.counter0|divisibleby:3 %}
-                <div class="row-fluid">
-            {% endif %}
-                    <div class="span4">
-                        <a class="leaflet" href="{% url leaflet leaflet.id %}">
-                            <img src="{{ leaflet.get_first_image.get_large }}" data-src="holder.js/300x200" alt="">
-                        </a>
-                    </div>
-            {% if forloop.counter|divisibleby:3 or forloop.last %}
-                </div>
-            {% endif %}
+    <div class="medium-4 columns">
+      <p>
+        <a href="{% url "upload_leaflet" %}" class="button">
+          <span class="mobile-copy">
+            <i class="fa fa-camera"></i>
+            Photograph a leaflet
+          </span>
+          <span class="desktop-copy">
+            <i class="fa fa-upload"></i>
+            Upload a leaflet
+          </span>
+        </a>
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="medium-4 columns">
+      <div class="big-number">
+        <a href="{% url "leaflets" %}">
+          <span>{{leaflet_count}}</span>
+          <small>leaflets since {{start_date}}</small>
+        </a>
+      </div>
+    </div>
+    <div class="medium-8 columns">
+      <ul class="side-nav">
+        <li>
+          <a href="{% url "leaflets" %}">Latest leaflets</a>
+        </li>
+        <li>
+          <a href="{% url "parties" %}">Parties</a>
+        </li>
+        <li>
+          <a href="{% url "constituencies" %}">Constituencies</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="columns medium-12">
+      <ul id="home_thumbnails" class="large-block-grid-9 medium-block-grid-3 small-block-grid-3">
+        {% for leaflet in latest_leaflets %}
+            <li>
+              <a href="{% url "leaflet"  leaflet.id %}">
+                {% thumbnail leaflet.get_first_image.image "350x350" crop="top" as im %}
+                  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="Thumbnail of leaflet - {{leaflet.get_title}}">
+                {% endthumbnail %}
+              </a>
+            </li>
         {% endfor %}
+      </ul>
     </div>
-    <div class="span12 well">
-        <h2>Search leaflets</h2>
-        <form method="post" action="{% url constituencies %}">
-            <p>
-                 <label for="id_search">Enter your postcode to see leaflets near you</label>
-                 <input type="text" id="id_search" name="search" />
-                 <label for='id_constituency'>or choose a constituency</label>
-                 {{ form.constituency }}
-                 <input  class="btn" type="submit" value="GO" />
-            </p>
-         </form>
+  </div>
+  <div class="row">
+    <div class="columns medium-6">
+      <h3>As featured by</h3>
+      <ul class="featured-logos small-block-grid-3">
+        <li>
+          <img alt="Chanel 4 Dispatches logo" src="{% static "images/featured_dispatches.png" %}" />
+        </li>
+        <li>
+          <img alt="BBC News logo" src="{% static "images/featured_bbc.png" %}" />
+        </li>
+        <li>
+          <img alt="Guardian logo" src="{% static "images/featured_guardian.png" %}" />
+        </li>
+        <li>
+          <img alt="38 degrees logo" src="{% static "images/featured_38degrees.png" %}" />
+        </li>
+        <li>
+          <img alt="Newsnight logo" src="{% static "images/featured_newsnight.png" %}" />
+        </li>
+        <li>
+          <img alt="The Times logo" src="{% static "images/featured_times.png" %}" />
+        </li>
+      </ul>
     </div>
-</div>
+    <div class="columns medium-6">
+      <h3>About</h3>
+      <p>
+        ElectionLeaflets.org is an online archive of political leaflets.
+        It is created  by members of the public photographing and classifying what comes through their doors at election time.
+      </p>
+      <p>
+        During the 2010 election there were over 6,000 leaflets added to the archive providing
+        a valuable resource for journalists, campaigners and investigations.
+      </p>
+    </div>
+  </div>
 
 {% endblock %}

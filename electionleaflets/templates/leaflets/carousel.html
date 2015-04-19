@@ -1,8 +1,19 @@
- <ul id="latest_leaflets">
+{% load thumbnail %}
 
- 	{% for leaflet in leaflets %}
-	 	<li>
-	 		<img src="{{ leaflet.get_first_image.get_medium }}">
-	 	</li>
+<a id="btnPrevious" href="#"><img src="{{ MEDIA_URL }}images/arrow_left.png" alt="Previous"/></a>
+<a id="btnNext" href="#"><img src="{{ MEDIA_URL }}images/arrow_right.png" alt="Next"/></a>            
+<ul class="results">
+	{% for leaflet in leaflets %}
+	<li>
+      <a class="leaflet" href="{% url "leaflet" leaflet.pk %}">
+          {# {{ leaflet.images.all.0 }} #}
+          {% thumbnail leaflet.images.all.0.image "150x150" crop="noop" upscale=False as im %}
+          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+            <img src="{{ leaflet.get_first_image.get_small }}">
+          {% endthumbnail %}
+          
+      </a>
+	</li>
 	{% endfor %}
-</ul>
+  </ul>
+

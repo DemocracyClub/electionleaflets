@@ -1,0 +1,13 @@
+{
+  "name": "normalize",
+  "_cacheHeaders": {
+    "ETag": "\"1ac6f21232775f4dd105f68c19ac3c04f7aaec63\"",
+    "Content-Length": "11997",
+    "Content-Type": "text/plain; charset=utf-8"
+  },
+  "_release": "e-tag:1ac6f2123",
+  "main": "index.scss",
+  "_source": "https://raw.githubusercontent.com/kristerkari/normalize.scss/master/_normalize.scss",
+  "_target": "*",
+  "_originalSource": "https://raw.githubusercontent.com/kristerkari/normalize.scss/master/_normalize.scss"
+}

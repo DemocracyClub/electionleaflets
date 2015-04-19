@@ -1,0 +1,18 @@
+[
+{
+    "fields": {
+        "count": null,
+        "retired": null,
+        "name": "Camberwell and Peckham",
+        "guardian_aristotle_id": null,
+        "guardian_pa_code": null,
+        "wikipedia_url": "",
+        "country_name": "England",
+        "url_id": "",
+        "slug": "camberwell_and_peckham",
+        "alternative_name": ""
+    },
+    "model": "constituencies.constituency",
+    "pk": "65913"
+}
+]

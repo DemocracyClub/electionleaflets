@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block body_class %}class="rotate"{% endblock %}
+
+{% block content %}
+    <a href="{% url "leaflet" object.leaflet.pk %}">&larr; back to {{ object.leaflet.get_title|default_if_none:"leaflet" }} details</a>
+    <form method=post>
+        <input type="hidden" name="rotate" value="0" id="rotate">
+        <button type=submit>Rotate</button>
+    </form>
+    <figure>
+        {% thumbnail object.image "600" crop="center" as im %}
+        <img src="{{ im.url }}" class="roate_image rotate0" />
+        {% endthumbnail %}
+    </figure>
+
+
+{% endblock %}
+

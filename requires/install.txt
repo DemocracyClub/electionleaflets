@@ -1,9 +1,0 @@
-python-memcached
-django-filter
-django-pagination
-django-tagging
-django-registration
-django_compressor
-django-extensions
-South
-django-crispy-forms

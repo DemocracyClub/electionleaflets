@@ -1,27 +1,47 @@
 {% extends "base.html" %}
+{% load content_tags %}
 
-{% block body %}
-    <h1>About ElectionLeaflets.org</h1>
-        <p>
-            Electioneering is a high-stakes game. We, at ElectionLeaflets.org, believe that it’s time for that game to become a spectator sport.
-        </p>
-        <p>
-            ElectionLeaflets.org is a real-time election leaflet project. Our ambition is to create a live visualization of the flood of party political leaflets as they are delivered across the country during an election campaign.
+{% block content %}
+  <div class="row">
+    <div class="columns large-8">
+      <h1>About ElectionLeaflets.org</h1>
 
-            If you have recently received any election leaflets through your door you can help by photographing or scanning them and <a href="{% url add_leaflet %}">uploading the images to our server</a>.
-        </p>
-        <p>
-            The idea was conjured up in December 2008 at a weekend in Derbyshire, and 
-            finally acted upon in Francis's front living room in Cambridge at the end of April 2009.
-        </p>
-        <p>
-            The original name of the website was "The Straight Choice", derived from a leaflet in the controversial by-election in <a href="http://en.wikipedia.org/wiki/Bermondsey_by-election,_1983">Bermondsey in 1983</a> which has become the type specimen of accusations of dodgy campaigning. We renamed the site "ElectionLeaflets.org" in August 2010.
-        </p>
+      <p>Electioneering is a high-stakes game. We, at ElectionLeaflets.org, believe
+      that it’s time for that game to become a spectator sport.</p>
 
-		<a name='contact'></a>
-		<h2>Contact details</h2>
-		<p>You can contact the ElectionLeaflets.org team at <a href='mailto:team@electionleaflets.org'>team@electionleaflets.org</a> or you can contact Julian at 0791 6090736
-			or c/o Scraperwiki, IC2, 146 Brownlow Hill, Liverpool, L3 5RF</p>
+      <p>ElectionLeaflets.org is a real-time election leaflet project. Our ambition
+      is to create a live visualization of the flood of party political leaflets as
+      they are delivered across the country during an election campaign.</p>
 
+      <p>If you have recently received any election leaflets through your door you
+      can help by photographing or scanning them and uploading the images to our
+      server.</p>
 
+      <p>The idea was conjured up in December 2008 at a weekend in Derbyshire, and
+      finally acted upon in Francis's front living room in Cambridge at the end of
+      April 2009.</p>
+
+      <p>The original name of the website was "The Straight Choice", derived from a
+      leaflet in the controversial by-election in Bermondsey in 1983 which has become
+      the type specimen of accusations of dodgy campaigning. We renamed the site
+      "ElectionLeaflets.org" in August 2010. It is currently being supported by
+      Unlock Democracy, the campaign for democracy, rights and freedoms, and
+      Democracy Club. Election Leaflets, Unlock Democracy and Democracy Club are
+      independent and not affiliated to any political party</p>
+
+      <h2 id="contact">Contact details</h2>
+
+      <p>You can contact the ElectionLeaflets.org team at <a
+      href="mailto:team@electionleaflets.org">team@electionleaflets.org</a> or you can
+      contact Emily at <a href="tel:07834185266">07834 185 266</a> or </p>
+
+      <p>
+          Elections Leaflet<br>
+          C/O Unlock Democracy<br>
+          37 Gray’s Inn Road<br>
+          London<br>
+          WC1X 8PQ
+      </p>
+    </div>
+  </div>
 {% endblock %}

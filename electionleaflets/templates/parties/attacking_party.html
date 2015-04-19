@@ -3,7 +3,7 @@
 {% load pagination_tags %}
 {% load category_tags %}
 
-{% block body %}
+{% block content %}
 
 <div id="divContent">
 
@@ -22,10 +22,10 @@
         <ul class="results">
 			{% for leaflet in qs %}
 			<li>
-               <a class="leaflet" href="{% url leaflet leaflet.id %}">				
+               <a class="leaflet" href="{% url "leaflet" leaflet.id %}">				
 				  <img src="{{ leaflet.get_first_image.get_thumb }}">
 				</a>	
-                <a href="{% url leaflet leaflet.id %}">{{ leaflet.publisher_party.name }} Leaflet</a>				
+                <a href="{% url "leaflet" leaflet.id %}">{{ leaflet.publisher_party.name }} Leaflet</a>				
 			</li>				
 			{% endfor %}
             <li>
@@ -38,10 +38,10 @@
 
             <div class="contentcolright">
                                                 <div class="infobox">
-                <a href="{% url attacking_party_feed party.slug %}">
+                <a href="{% url "attacking_party_feed"  party.slug %}">
                     <img src="{{MEDIA_URL}}images/rss.png" alt="rss" title="Subscribe to RSS feed for 'Election leaflets tagged  Mark Walker'"/>
                 </a>
-				<a href="{% url attacking_party_feed party.slug %}">Subscribe to an RSS feed of the latest leaflets</a>
+				<a href="{% url "attacking_party_feed"  party.slug %}">Subscribe to an RSS feed of the latest leaflets</a>
                             </div>
         
                                     <div class="infobox">  

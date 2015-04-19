@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Add a new leaflet{% endblock %}
+{# Disabled until ember is active #}
+{# {% block body_class %}class="leaflet_app"{% endblock %} #}
+
+{% block content %}
+  <div class="row">
+    <div class="wizard-step columns medium-10 large-6 medium-centered">
+      {% block heading %}{% endblock heading %}
+      <section class="upload_form">
+          <header>
+              <form action="" method="post" enctype="multipart/form-data"></form>
+          </header>
+          <form action="" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              {{ wizard.management_form }}
+              {% block form %}
+              {% endblock form %}
+
+              <button type="submit" class="expand" value="Submit">Submit</button>
+              {% if wizard.steps.current != "postcode" and wizard.steps.current != "front" %}
+              {% if "inside" in wizard.steps.current %}
+              <button type="submit" class="expand" name="add_extra_inside" value="Add another page">Submit and add another</button>
+              {% endif %}
+
+              {% if not "people" in wizard.steps.current %}
+              <button type="submit" class="secondary expand" name="skip" value="Skip">Skip</button>
+              {% endif %}
+
+              {% endif %}
+              <button type="submit" class="expand secondary" name="cancel_upload" value="Cancel">Cancel</button>
+          </form>
+          <p>
+            <small>By adding a photograph of a leaflet you are placing that photograph in the <a href="https://creativecommons.org/publicdomain/zero/1.0/">public domain (CC0)</a> as part of the ElectionLeaflets.org archive. This means other people can use it for research, journalism or any other purpose without having to ask permission. Thanks!</small>
+          </p>
+      </section>
+    </div>
+  </div>
+{% endblock %}

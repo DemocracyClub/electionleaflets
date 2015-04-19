@@ -1,14 +1,48 @@
-<footer class="footer">
-    <div class="container">
-        <p>ElectionLeaflets.org is a real-time election leaflet monitoring project. By uploading election leaflets that come through the door, you help to hold politicians to account.</p>
-        <ul class="footer-links">
-            <li><a href="http://blog.electionleaflets.org">Blog</a></li>
-            <li class="muted">·</li>
-            <li><a href="{% url about %}">Contact</a></li>
-            <li class="muted">·</li>
-            <li><a href="http://twitter.com/thesc">Twitter</a></li>
-            <li class="muted">·</li>
-            <li><a href="https://github.com/rossjones/electionleaflets">Fork code on Github</a></li>
-        </ul>
+{% load staticfiles %}
+<footer>
+    <div class="row">
+        <div class="large-8 columns">
+            <nav>
+                <ul class="inline-list">
+                    {% if request.user.is_authenticated %}
+                        <li>
+                            <a href="{% url "account_logout" %}">Sign out</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{% url "account_login" %}">Sign in to electionleaflets.org</a>
+                        </li>
+                    {% endif %}
+                </ul>
+                <ul class="inline-list">
+                    <li><a href="{% url "home"  %}">Home</a></li>
+                    <li>
+                      <a href="{% url "parties" %}">Parties</a>
+                    </li>
+                    <li>
+                      <a href="{% url "constituencies" %}">Constituencies</a>
+                    </li>
+                    <li><a href="{% url "about"  %}">About</a></li>
+                    <li><a href="{% url "about"  %}#contact">Contact</a></li>
+                    <li><a href="{% url "about"  %}#contact">Press</a></li>
+                </ul>
+            </nav>
+            <p>Election Leaflets is run by a group of volunteers.
+                It is currently being supported by
+                <a href="http://unlockdemocracy.org.uk">Unlock Democracy</a>, the
+                campaign for democracy, rights and freedoms and
+                <a href="https://democracyclub.org.uk/">Democracy Club</a>.
+                Election Leaflets, Unlock Democracy and Democracy Club
+                are independent and not affiliated to any political party.
+            </p>
+        </div>
+        <div class="large-4 columns">
+            <a href="https://democracyclub.org.uk/" class="supporter">
+                <img src="{% static "images/dc.png" %}" height="80px">
+            </a>
+            <a href="http://unlockdemocracy.org.uk/" class="supporter">
+                <img src="{% static "images/ud11.png" %}" height="80px">
+            </a>
+        </div>
     </div>
 </footer>

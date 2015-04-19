@@ -1,66 +1,124 @@
 {% extends "base.html" %}
 {% load leaflet_tags %}
-{% load crispy_forms_tags %}
 
-{% block body %}
+{% block content %}
+    
+        <div id="divContent">
 
-<div class="row-fluid">
-    <div class="span12">
-        <form id="leaflet_details" method="post" action=".">
-            <fieldset>
-                {% include "leaflets/progress.html" %}
+            			<div id="divWarning">
+							{% if form.errors %}
+								<ul class='nobullets'><li>
+								Please correct the errors below
+								</li></ul>
+								{{ form.errors }}
+							{% endif %}
+	
+	            			</div>
+			
+						<div id="divMessages">
+	            			</div>
+            
+<div class="contentleft">
+    <form id="frmUpload" method="post" action=".">
+        <fieldset>
+</fieldset>        <h1>Step 2 - add a few details</h1>
+        <p>
+            Add some more information about this leaflet
+        </p>
+        <fieldset>
+			<input type='hidden' id='id_lat' name='lat' value='0'>
+			<input type='hidden' id='id_lng' name='lng' value='0'>			
+            <ul>
+                <li>
+                    <label for="title">Give the leaflet a title</label>
+					{{ form.title }}
 
-                {% if form.errors %}
-                    <div class="alert alert-error">
-                            Please correct the errors below
-                    </div>
-                {% endif %}
-                <fieldset>
-        			<input type='hidden' id='id_lat' name='lat' value='0'>
-        			<input type='hidden' id='id_lng' name='lng' value='0'>
+                    <small>e.g. the main headline</small>
+					{{ form.title.errors }}
+                </li>
+                <li>
+                    <label for="description">Enter a transcript of the main points / first paragraph</label>
+					{{ form.description }}
+                    <br/>
+                    <strong>Note: please only add what is actually on the leaflet, not your opinion of it.</strong>
+                </li>
+                <li>
+                    <label for="id_postcode">Which postcode was the leaflet was delivered to?</label>
+					{{ form.postcode }}
+					{{ form.postcode.errors }}
+                    <small>this will let us work out which constituency the leaflet covers</small>
+                </li>
+                <li>
+                    <label for="date_delivered_text">When was the leaflet delivered?</label>
+					{{ form.date_delivered_text}}<br/>
+                    <small class="highlight">Please only add leaflets that have been delivered to you recently</small>
+                </li>
+                <li>
+                    <label for="party">Which party is responsible for the leaflet?</label>
+					{{ form.publisher_party }}
+					{{ form.publisher_party.errors }}
+			    </li>
+				<li>
+					<label>Published and promoted by<sup>*</sup></label>
+					{{ form.imprint }}
+					<div id='imprint_explanation' style='background-color:#eee;padding:4px;'>
+						<sup>*</sup> All leaflets are required by law to include the name and address of the promoter and the publisher, although this is often in <em>very</em> fine print. Like this:<br/>
+						<img style='margin-left: 20px;border: solid 1px #333;' src="{{ MEDIA_URL }}images/imprint.jpg" alt='Imprint example'>
+					</div>
+                </li>					
+                <li>
+                    <label for="txtTags">Tags this leaflet (candidate name, town, policy name, etc)</label>
+					{{form.tags }}
+                    <br/>
+                    <small>e.g. Brian Smith<span class="huge">,</span> Woking<span class="huge">,</span> zero tolerance<span class="huge">,</span> parks<span class="huge">,</span> transport</small>
+                </li>
+                <li>
+                    <label for="name">Enter your name and email address</label>
+					{{ form.name }}
+					{{ form.email }}
+                    <br/>
+                    <small>Your email address will not be made public</small>   
+					{{ form.name.errors }}
+					{{ form.email.errors }}
+                </li>
+            </ul>
+        </fieldset>
+        <div class="buttons">
+            <input type="submit"  value="Save leaflet"/>
+        </div>
+    </form>    
+</div>         
 
-        			{{ form.title|as_crispy_field }}
-                    <span class="help-block">e.g. the main headline</span>
-
-        			{{ form.description|as_crispy_field }}
-                    <span class="text-warning">Note: please only add what is actually on the leaflet, not your opinion of it.</span>
-
-                    <hr/>
-
-                    {{ form.postcode|as_crispy_field }}
-                    <span class="help-block">this will let us work out which constituency the leaflet covers</span>
-
-        			{{ form.date_delivered_text|as_crispy_field}}
-                     <span class="help-block">Please only add leaflets that have been delivered to you recently</span>
-
-                    <hr/>
-
-        			{{ form.publisher_party|as_crispy_field }}
-
-        			{{ form.imprint|as_crispy_field }}
-    				<div id="imprint_explanation">
-                        <p>
-        					<span class="label label-info">What is an imprint?</span>
-                        </p>
-                        <p>
-                            All leaflets are required by law to include the name and address of the promoter and the publisher, although this is often in <em>very</em> fine print. Like this:<br/>
-        					<img src="{{ MEDIA_URL }}images/imprint.jpg" alt='Imprint example'>
-                        </p>
-    				</div>
-
-
-    				{{form.tags|as_crispy_field }}
-                    <span class="help-block">e.g. Brian Smith<span class="huge">,</span> Woking<span class="huge">,</span> zero tolerance<span class="huge">,</span> parks<span class="huge">,</span> transport</span>
-
-                    <hr/>
-
-    				{{ form.name|as_crispy_field }}
-    				{{ form.email|as_crispy_field }}
-                     <span class="help-block">Your email address will not be made public</span>
-                </fieldset>
-                <input type="submit" class="btn btn-large btn-primary"  value="Submit leaflet"/>
-            </fieldset>
-        </form>
-    </div>
+<div class="contentright">
+    <div>
+			<!-- Get the medium versions -->
+			{% if session.image1 %}
+				<img src="{% get_medium_image_from_upload session.image1 %}">
+			{% endif %}
+			{% if session.image2 %}
+				<img src="{% get_medium_image_from_upload session.image2 %}">
+			{% endif %}
+			{% if session.image3 %}
+				<img src="{% get_medium_image_from_upload session.image3 %}">
+			{% endif %}
+			{% if session.image4 %}
+				<img src="{% get_medium_image_from_upload session.image4 %}">
+			{% endif %}
+			{% if session.image5 %}
+				<img src="{% get_medium_image_from_upload session.image5 %}">
+			{% endif %}
+			{% if session.image6 %}
+				<img src="{% get_medium_image_from_upload  session.image6 %}">
+			{% endif %}
+			{% if session.image7 %}
+				<img src="{% get_medium_image_from_upload  session.image7 %}">
+			{% endif %}
+			{% if session.image8 %}
+				<img src="{% get_medium_image_from_upload  session.image8 %}">
+			{% endif %}
+        	
+            <br/>
+            </div>
 </div>
-{% endblock %}
+
+{% endblock %}      

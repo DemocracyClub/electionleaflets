@@ -1,21 +1,14 @@
 {% extends "base.html" %}
 
-{% block body %}
+{% block content %}
 
 
- <div id="divContent">
-
-            			<div id="divWarning">
-	            			</div>
-			
-						<div id="divMessages">
-	            			</div>
-            
-    <div class="contentfull">
-                    <div class="attention">
-                <h1>Thank you, your message has been sent</h1>
-                <p><a href="{% url leaflet params.id %}">Click here to return to the leaflet</a></p>
-            </div>
-            </div>
+<div class="row">
+  <div class="columns large-8">
+    <div class="attention">
+      <h1>Thank you, your message has been sent</h1>
+      <p><a href="{% url "leaflet" pk=object.pk %}">Click here to return to the leaflet</a></p>
+  </div>
+</div>
 
 {% endblock %}

@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 
-{% block body %}
-<div class="row-fluid">
-    <div class="span12">
-        <img src="{{ image.get_large }}" />
-        <a href="{% url leaflet leaflet.id%}">View full details of this leaflet</a>
-    </div>
-</div>
+{% block content %}
+    <a href="{% url "leaflet" object.leaflet.pk %}">&larr; back to {{ object.leaflet.get_title|default_if_none:"leaflet" }} details</a>
+    <figure>
+        <img src="{{ object.image.url }}" />
+        <figcaption>
+            {{ object.leaflet.get_title|default_if_none:"" }}
+        </figcaption>
+    </figure>
+    {# <a href="{% url "leaflet" leaflet.id %}">&larr; back to details of <em>{{ leaflet.title }}</em></a> #}
 {% endblock %}

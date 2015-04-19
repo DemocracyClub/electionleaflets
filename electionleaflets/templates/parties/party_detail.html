@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block content %}
+  <div class="row">
+    <div class="columns large-12">
+      <h1>Election leaflets from {{ object.party_name }}</h1>
+      {% if last_leaflet_days >= 45 %}
+        <div class="panel">
+          <p>
+          We haven't seen any leaflets from {{object.party_name}} for {{last_leaflet_days}} days!
+          Please help by tracking some down and photographing them.</p>
+        </div>
+      {% endif %}
+      {% if party_leaflets %}
+          {% with party_leaflets as leaflet_list %}
+          {% include "leaflets/includes/leaflet_list.html" %}
+          {% endwith %}
+
+          <span class="page-current">
+              Page {{ party_leaflets.number }} of {{ party_leaflets.paginator.num_pages }}.
+          </span>
+          <nav role="menu" aria-label="Pagination">
+             <ul class="pagination">
+              {% if party_leaflets.has_previous %}
+                  <li><a href="?page={{ party_leaflets.previous_page_number }}">previous</a></li>
+              {% endif %}
+              {% if party_leaflets.has_next %}
+                  <li><a href="?page={{ party_leaflets.next_page_number }}">next</a></li>
+              {% endif %}
+             </ul>
+          </nav>
+        {% else %}
+          <p>
+            We don't have <em>any</em> leaflets for {{ object.party_name }}. That won't do.
+            They must have some right?
+          </p>
+          <p>
+            Your mission, if you choose to accept it, is to find us one and photograph it for
+            posterity.
+          </p>
+          <ol>
+            <li>
+              <a href="https://twitter.com/intent/tweet?url={{ request.get_host }}/{% url "party-view"  party.pk party.slug %}&text=Can anyone help find an election leaflet by {{object.party_name}}&hashtags=electionleaflet&via=electionspotter">
+                Put a call out on Twitter or tweet the party directly
+              </a>
+            </li>
+            <li>
+              <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.get_host }}/{% url "party-view"  party.pk party.slug %}&ref=responsive">
+                Ask friends on Facebook
+              </a>
+            </li>
+            <li>
+              Go rummaging through the bin
+            </li>
+          </ol>
+        {% endif %}
+    </div>
+  </div>
+{% endblock %}
+
+

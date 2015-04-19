@@ -1,5 +1,0 @@
-# Some of these are a little touchy on OSX (at least for me) so I have
-# separated them out into a new requirements file
-
-PIL
-mysql-python

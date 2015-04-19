@@ -1,46 +1,38 @@
 {% extends "base.html" %}
-{% load pagination_tags category_tags party_tags %}
+{% load pagination_tags %}
+{% load category_tags %}
+{% load thumbnail %}
 
 {% block title %}Latest leaflets{% endblock %}
 
-{% block body %}
-<div class="row-fluid">
-    <h1>Latest leaflets</h1>
-    <p class="page_count">
-        {% autopaginate qs 12 %}
-        <strong>{{ total }}</strong> leaflets found, page <strong>{{ currentPage }}</strong> of <strong>{{ totalPages }}</strong>
+{% block content %}
+  <div class="row">
+    <div class="columns large-12">
+      <h1>Latest leaflets</h1>
+      {% include "leaflets/includes/leaflet_list.html" %}
+
+    {% if is_paginated %}
+      <span class="page-current">
+          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      </span>
+      <nav role="menu" aria-label="Pagination">
+         <ul>
+          {% if page_obj.has_previous %}
+              <li><a href="{% url "leaflets" %}?page={{ page_obj.previous_page_number }}">Previous page</a></li>
+          {% endif %}
+          {% if page_obj.has_next %}
+              <li><a href="{% url "leaflets" %}?page={{ page_obj.next_page_number }}">Next page</a></li>
+          {% endif %}
+         </ul>
+      </nav>
+    {% endif %}
+
+    <p>
+      <a href="{% url "latest_feed"  %}">
+        This page is available as an RSS feed.
+      </a>
     </p>
-</div>
-<div class="row-fluid">
-    <div class="span9 leaflet_list">
-        {% for leaflet in qs %}
-            {% if forloop.counter0|divisibleby:3 %}
-                <div class="row-fluid">
-            {% endif %}
-                    <div class="span4">
-                        <a class="leaflet" href="{% url leaflet leaflet.id %}">
-                            <img src="{{ leaflet.get_first_image.get_large }}" data-src="holder.js/300x200" alt="">
-                        </a>
-                    </div>
-            {% if forloop.counter|divisibleby:3 or forloop.last %}
-                </div>
-            {% endif %}
-        {% endfor %}
-        {% paginate %}
-    </div>
-    <div class="span3">
-        <a href="{% url latest_feed %}">Subscribe to an RSS feed of the latest leaflets</a>
-
-        <h3>Parties</h3>
-        <ul class="parties">
-            {% party_list_by_count %}
-        </ul>
-
-        <h3>Categories</h3>
-        <ul>
-            {% category_list %}
-        </ul>
-    </div>
+  </div>
 </div>
 
 {% endblock %}
