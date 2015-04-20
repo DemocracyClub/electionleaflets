@@ -9,3 +9,7 @@ class Election(models.Model):
     live_date = models.DateTimeField()
     dead_date = models.DateTimeField()
     active = models.BooleanField(default=True)
+
+    def __unicode__(self):
+        return self.name
+
