@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from django.template  import RequestContext
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
@@ -9,10 +11,12 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.contrib.sites.models import Site
 from constituencies.forms import ConstituencyLookupForm
+
 from leaflets.models import Leaflet
 from .helpers import geocode
 from .forms import ReportAbuseForm
-import datetime
+
+
 from core.helpers import geocode
 
 class HomeView(TemplateView):

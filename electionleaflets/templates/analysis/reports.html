@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+  <article class="columns large-12 reports">
+    <h1>Reports</h1>
+
+    <div class="row fullWidth">
+      <div class="big-number">
+        <a href="{% url "leaflets" %}">
+          <span>{{leaflet_count}}</span>
+          <small>leaflets since {{start_date}}</small>
+        </a>
+      </div>
+    </div>
+
+    <div class="row">
+      <table>
+        <caption>Leaflets per constituency since {{ start_date }}</caption>
+        <thead>
+          <tr>
+            <th>Constituency name</th>
+            <th>Number of leaflets</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for constituency in per_constituency  %}
+          <tr>
+            <td>
+              <a href="{{ constituency.get_absolute_url }}">{{ constituency.name }}</a>
+            </td>
+            <td>{{ constituency.leaflets_count }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </article>
+</div>
+{% endblock content %}
