@@ -159,7 +159,7 @@ SOCIALACCOUNT_PROVIDERS = {
     'facebook': {'SCOPE': ['email',]},
 }
 
-LOGIN_REDIRECT_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
 
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_EMAIL_REQUIRED = True
