@@ -39,6 +39,9 @@ else:
         # Individual urls
         url(r'^about/$', TemplateView.as_view(template_name='core/about.html'), name='about'),
         url(r'^donate/$', TemplateView.as_view(template_name='core/donate.html'), name='donate'),
+        url(r'^press/$', TemplateView.as_view(template_name='core/press.html'), name='press'),
+        url(r'^press/signup/thanks/done$', TemplateView.as_view(template_name='core/press_signup_thanks_done.html'), name='press_signup_thanks_done'),
+        url(r'^press/signup/thanks$', TemplateView.as_view(template_name='core/press_signup_thanks.html'), name='press_signup_thanks'),
         url(r'^report/(?P<pk>\d+)/sent/$', ReportThanksView.as_view(), name='report_abuse_sent'),
         url(r'^report/(?P<pk>\d+)/$', ReportView.as_view(), name='report_abuse'),
 
