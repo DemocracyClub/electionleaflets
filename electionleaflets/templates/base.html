@@ -47,6 +47,14 @@
                       </a>
                   </li>
                   <li>
+                      <a href="{% url "donate" %}">
+                        <span class="mobile-copy">
+                          <i class="fa fa-credit-card"></i>
+                        </span>
+                        Donate
+                      </a>
+                  </li>
+                  <li>
                       <a href="{% url "leaflets" %}">
                         <span class="mobile-copy">
                           <i class="fa fa-line-chart"></i>
@@ -74,15 +82,7 @@
       </header>
 
       <main>
-        <section id="donation_banner">
-          <div class="inner">
-            <p>We need your help to keep this site running over this election and in to the next. <a href="/donate">Please donate today</a></p>
-
-
-
-          </div>
-        </section>
-        </div>
+      </div>
           {% if messages %}
             <div data-alert class="alert-box success" tabindex="0" aria-live="assertive" role="dialogalert">
               {% for message in messages %}
