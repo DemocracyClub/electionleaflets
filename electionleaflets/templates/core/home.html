@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 {% load staticfiles %}
 {% load leaflet_tags %}
 {% load thumbnail %}
@@ -33,7 +34,7 @@
     <div class="medium-4 columns">
       <div class="big-number">
         <a href="{% url "leaflets" %}">
-          <span>{{leaflet_count}}</span>
+          <span>{{leaflet_count|intcomma}}</span>
           <small>leaflets since {{start_date}}</small>
         </a>
       </div>
