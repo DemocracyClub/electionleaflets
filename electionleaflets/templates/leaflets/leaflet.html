@@ -141,7 +141,9 @@
           in <a href="{% url "constituency-view"  object.constituency.pk object.constituency.slug %}">{{ object.constituency.name }}</a>
         {% endif %}
         on {{ object.date_uploaded|date:"l, d M, Y" }}.</p>
+        <div>
         <div id="leaflet_map"></div>
+        </div>
       </section>
     </article>
 
