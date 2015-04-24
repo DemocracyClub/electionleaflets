@@ -61,6 +61,10 @@
           Leaflet #{{object.id}}
         {% endif %}
       </h1>
+      <p>This leaflet was spotted by a volunteer
+      {% if object.constituency %}
+        in <a href="{% url "constituency-view"  object.constituency.pk object.constituency.slug %}">{{ object.constituency.name }}</a>
+      {% endif %} <br>on {{ object.date_uploaded|date:"l, d M, Y" }}.</p>
 
       {% if object.publisher_person %}
         <section class="person">
@@ -136,14 +140,7 @@
 
 
       <section class="leaflet_map">
-        <p>This leaflet was spotted by a volunteer
-        {% if object.constituency %}
-          in <a href="{% url "constituency-view"  object.constituency.pk object.constituency.slug %}">{{ object.constituency.name }}</a>
-        {% endif %}
-        on {{ object.date_uploaded|date:"l, d M, Y" }}.</p>
-        <div>
-        <div id="leaflet_map"></div>
-        </div>
+      <div id="leaflet_map"></div>
       </section>
     </article>
 
