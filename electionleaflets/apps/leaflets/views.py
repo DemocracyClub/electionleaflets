@@ -168,15 +168,34 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         return super(LeafletUploadWizzard, self).get(*args, **kwargs)
 
     def post(self, *args, **kwargs):
+
+        # Clear the cache if the user presses cancel
         if self.request.POST.get('cancel_upload', None):
             self.storage.reset()
             return HttpResponseRedirect(reverse('home'))
+
+        # Add forms to the form_list that we should have.
+        # We need to do this on every request, as the extra forms
+        # Aren't stored betweet requests, but are held in the session.
+        self._insert_extra_inside_forms()
+
+        # The user has finished uploading all image, move to the postcode form
         if self.request.POST.get('skip', None):
+            if self.request.FILES:
+                form = self.get_form(
+                    data=self.request.POST, files=self.request.FILES)
+                if form.is_valid():
+                    super(LeafletUploadWizzard, self).post(*args, **kwargs)
+            else:
+                if 'extra_inside' in self.storage.extra_data:
+                    self.storage.extra_data['extra_inside'] -= 1
+            self._insert_extra_inside_forms(force=True)
             self.storage.extra_data['skip_to_postcode'] = True
             return self.render_goto_step('postcode')
 
-        self._insert_extra_inside_forms()
 
+        # If there are more pages, add them to the form_list
+        # Validate the form first, though
         if self.request.POST.get('add_extra_inside', None):
             form = self.get_form(
                 data=self.request.POST, files=self.request.FILES)
@@ -190,18 +209,32 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         Adds to self.form_list, inserting an extra 'inside page' form
         after the last inside page form we have.
         """
+
+        # We've not added any new forms, so the form list is as set in urls.py
         if not self.extra_inside_forms:
             return self.form_list
+
+        # If we've already added the extra forms, don't them again.
         if self.extra_added and not force:
             return self.form_list
+
+        # self.form_list is an ordered dict.  Convert it to a list of tuples.
         form_list = [(k, v) for k, v in self.form_list.items()]
+
+        # Reverse the list, so the the first step starting with 'inside'
+        # is the last inside page form.
         form_list.reverse()
+
         for index, (name, form) in enumerate(form_list):
             if name.startswith('inside'):
+                # For every extra inside form in self.extra_inside_forms
+                # add to the form_list
                 for step in range(self.extra_inside_forms):
                     new_name = "inside-%s" % step
                     form_list.insert(index, (new_name, InsidePageImageForm))
+                # We're finished going back through the form_list now
                 break
+
         form_list.reverse()
         self.form_list = OrderedDict()
         for k, v in form_list:

@@ -18,7 +18,7 @@
               {% block form %}
               {% endblock form %}
 
-              {% if wizard.steps.current != "postcode" and wizard.steps.current != "people" %}
+              {% if "inside" in wizard.steps.current  %}
               <button type="submit" class="expand" name="add_extra_inside" value="Submit">Submit and add another page</button>
               {% else %}
               <button type="submit" class="expand" value="Submit">Submit</button>
