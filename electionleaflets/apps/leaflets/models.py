@@ -123,7 +123,9 @@ class LeafletImage(models.Model):
         f = ImageFile(self.image.file)
         tmp_image = e.get_image(f)
         tmp_image = e._orientation(tmp_image)
+        tmp_image = tmp_image.convert('RGB')
         new_file = StringIO()
+
         tmp_image.save(new_file, 'jpeg')
         file_content = ContentFile(new_file.getvalue())
         self.image.save(self.image.name, file_content, save=False)
