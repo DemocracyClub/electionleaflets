@@ -22,16 +22,3 @@ class CreateLeafletTests(APITestCase):
         self.assertEqual(response.data['status'], 'draft')
         leaflet_id = response.data['pk']
         self.assertEqual(leaflet_id, 1)
-        # import ipdb
-        # ipdb.set_trace()
-        # # Upload some images
-        # for name, path in IMAGES:
-        #     data = {
-        #         'image': open(path),
-        #         'leaflet_id': leaflet_id
-        #     }
-        #
-        #     response = self.client.post(leaflet_image_url,
-        #         data, format='multipart')
-        # response = self.client.get(leaflet_url+"1/", format='json')
-        # self.assertEqual(len(response.data['images']), 6)
