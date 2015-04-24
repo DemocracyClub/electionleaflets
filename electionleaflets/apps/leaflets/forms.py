@@ -33,21 +33,20 @@ class PostcodeForm(forms.Form):
     constituency = forms.CharField(
         required=False, max_length=255, widget=forms.HiddenInput())
 
-    def clean_postcode(self):
+    def clean(self):
+        data = super(PostcodeForm, self).clean()
+        if not data.get('postcode'):
+            raise forms.ValidationError("Please enter a full valid UK postcode")
+
         postcode = self.cleaned_data['postcode']
         self.geo_data = geocode(postcode)
         if not self.geo_data or 'constituency' not in self.geo_data:
             raise forms.ValidationError("Please enter a full valid UK postcode")
-        return postcode
 
-    def clean(self):
-        data = super(PostcodeForm, self).clean()
-        if hasattr(self, 'geo_data') and self.geo_data:
-            data['constituency'] = self.geo_data['constituency']
-            data['wgs84_lon'] = self.geo_data['wgs84_lon']
-            data['wgs84_lat'] = self.geo_data['wgs84_lat']
-        else:
-            raise forms.ValidationError("Please enter a full valid UK postcode")
+        data['constituency'] = self.geo_data['constituency']
+        data['wgs84_lon'] = self.geo_data['wgs84_lon']
+        data['wgs84_lat'] = self.geo_data['wgs84_lat']
+
         return data
 
 class LeafletDetailsFrom(forms.ModelForm):
