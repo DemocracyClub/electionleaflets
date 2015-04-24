@@ -11,7 +11,10 @@ Feature: Leaflet uploader
         Then I submit the form with:
           | step_name | postcode          |  action |
           | postcode  | SE22 8DJ          |  submit |
-        Then I should see the url "/leaflets/1/"
+        Then I submit the form with:
+          | step_name | people          |  action |
+          | people    | None          |  submit |
+        Then I should see the leaflet url
         and I should see 1 leaflet images
         in the constituency "Camberwell and Peckham"
 
@@ -30,7 +33,10 @@ Feature: Leaflet uploader
         Then I submit the form with:
           | step_name | postcode          |  action |
           | postcode  | SE22 8DJ          |  submit |
-        Then I should see the url "/leaflets/2/"
+        Then I submit the form with:
+          | step_name | people          |  action |
+          | people    | None          |  submit |
+        Then I should see the leaflet url
         and I should see 2 leaflet images
 
     Scenario: Upload front, back and inside
@@ -48,7 +54,10 @@ Feature: Leaflet uploader
         Then I submit the form with:
           | step_name | postcode        |  action |
           | postcode  | SE22 8DJ        |  submit |
-        Then I should see the url "/leaflets/3/"
+        Then I submit the form with:
+          | step_name | people          |  action |
+          | people    | None          |  submit |
+        Then I should see the leaflet url
         and I should see 3 leaflet images
 
     Scenario: Upload front, back and two inside pages
@@ -69,8 +78,14 @@ Feature: Leaflet uploader
         Then I submit the form with:
           | step_name | postcode        |  action |
           | postcode  | SE22 8DJ        |  submit |
-        Then I should see the url "/leaflets/4/"
+        Then I submit the form with:
+          | step_name | people          |  action |
+          | people    | None          |  submit |
+        Then I should see the leaflet url
         and I should see 4 leaflet images
+
+
+
     Scenario: Upload front, back and three inside pages
         Given I access the url "/leaflets/add/front/"
         Then I see the header "Step 1: Front page"
@@ -94,5 +109,3 @@ Feature: Leaflet uploader
           | postcode  | SE22 8DJ        |  submit |
         Then I should see the url "/leaflets/5/"
         and I should see 5 leaflet images
-
-

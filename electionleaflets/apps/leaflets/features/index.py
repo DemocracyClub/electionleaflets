@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import re
 import json
 
 from lxml import html
@@ -55,6 +56,10 @@ def submit_image_form(step, form_name):
             format='multipart'
         )
 
+@step(r'should see the leaflet url')
+def check_leaflet_url(step):
+    assert re.match(r"^/leaflets/\d+/",world.response.request['PATH_INFO'])
+
 @step(r'see the url "(.*)"')
 def check_url(step, url):
     assert world.response.request['PATH_INFO'] == url
@@ -73,7 +78,9 @@ def fill_journey(step):
         form['leaflet_upload_wizzard-current_step'] = form_name
         if 'action' in form.keys() and form['action']:
             form[form['action']] = True
-
+        if 'people-people' in form.keys():
+            if form['people-people'] == "None":
+                form['people-people'] = ""
         world.response = world.browser.post(
                 reverse('upload_step', kwargs={'step':form_name}),
                 form,
