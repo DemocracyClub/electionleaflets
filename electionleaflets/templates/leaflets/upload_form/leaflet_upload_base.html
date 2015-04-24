@@ -18,17 +18,16 @@
               {% block form %}
               {% endblock form %}
 
+              {% if wizard.steps.current != "postcode" and wizard.steps.current != "people" %}
+              <button type="submit" class="expand" name="add_extra_inside" value="Submit">Submit and add another page</button>
+              {% else %}
               <button type="submit" class="expand" value="Submit">Submit</button>
-              {% if wizard.steps.current != "postcode" and wizard.steps.current != "front" %}
-              {% if "inside" in wizard.steps.current %}
-              <button type="submit" class="expand" name="add_extra_inside" value="Add another page">Submit and add another</button>
               {% endif %}
 
-              {% if not "people" in wizard.steps.current %}
-              <button type="submit" class="secondary expand" name="skip" value="Skip">Skip</button>
+              {% if wizard.steps.current != "postcode" and wizard.steps.current != "people" and wizard.steps.current != "front" %}
+              <button type="submit" class="secondary expand" name="skip" value="Skip">No more pages</button>
               {% endif %}
 
-              {% endif %}
               <button type="submit" class="expand secondary" name="cancel_upload" value="Cancel">Cancel</button>
           </form>
           <p>
