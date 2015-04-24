@@ -6,9 +6,7 @@
 
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 
-{% block content %}
-<div class="row">
-  <div class="columns large-8">
+{% block inner_content %}
     <h1>{% trans "Sign In" %}</h1>
 
     {% if socialaccount.providers  %}
@@ -42,6 +40,4 @@
       <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
       <button class="primaryAction" type="submit">{% trans "Sign In" %}</button>
     </form>
-  </div>
-</div>
 {% endblock %}
