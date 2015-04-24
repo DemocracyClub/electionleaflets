@@ -60,9 +60,14 @@ class LeafletReviewFrom(forms.ModelForm):
 
 class PeopleModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
+        if obj.current_party:
+            party_name = obj.current_party.party.party_name
+        else:
+            party_name = "Independent"
+
         return u"{0} ({1})".format(
             obj.name,
-            obj.current_party.party.party_name,
+            party_name,
         )
 
 class PeopleForm(forms.Form):
