@@ -61,7 +61,10 @@ class LeafletReviewFrom(forms.ModelForm):
 
 class PeopleModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
-        return obj.name
+        return u"{0} ({1})".format(
+            obj.name,
+            obj.current_party.party.party_name,
+        )
 
 class PeopleForm(forms.Form):
     def __init__(self, *args, **kwargs):
