@@ -17,6 +17,8 @@ def geocode(postcode):
     try:
         res = requests.get("%s/postcode/%s" % (constants.MAPIT_URL, postcode))
         res_json = res.json()
+        if 'code' in res_json and res_json['code'] == 404:
+            return None
         if 'code' in res_json and res_json['code'] == 400:
             # This might be an outcode, try to get that
             res = requests.get("%s/postcode/partial/%s" % (
