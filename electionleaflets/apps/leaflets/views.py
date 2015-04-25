@@ -138,6 +138,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
 
     def get_form_initial(self, step):
         if step == "people":
+            # self.get_cleaned_data_for_step('postcode')['postcode']
             geo_data = self.get_cleaned_data_for_step('postcode')
             people_qs = Person.objects.filter(
                 personconstituencies__constituency=geo_data['constituency'])
