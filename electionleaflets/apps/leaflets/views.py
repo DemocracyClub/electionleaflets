@@ -83,7 +83,10 @@ class LeafletView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(LeafletView, self).get_context_data(**kwargs)
-        context['analysis_form'] = QuestionSetForm(self.object)
+        context['analysis_form'] = QuestionSetForm(
+            self.object,
+            self.request.user
+        )
         return context
 
     def post(self, request, *args, **kwargs):
@@ -91,7 +94,11 @@ class LeafletView(DetailView):
             return HttpResponseForbidden()
 
         self.object = self.get_object()
-        form = QuestionSetForm(self.object, request.POST)
+        form = QuestionSetForm(
+            self.object,
+            self.request.user,
+            request.POST,
+        )
 
         if form.is_valid():
             form.save()

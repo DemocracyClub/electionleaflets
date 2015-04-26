@@ -44,9 +44,10 @@ class QuestionSetForm(forms.ModelForm):
     class Meta:
         model = LeafletProperties
 
-    def __init__(self, leaflet, *args, **kwargs):
+    def __init__(self, leaflet, user, *args, **kwargs):
       super(QuestionSetForm, self).__init__(*args, **kwargs)
       self.leaflet = leaflet
+      self.user = user
       self.fields = {
           'form_name': forms.CharField(widget=forms.HiddenInput),
           'leaflet_pk': forms.CharField(
@@ -79,6 +80,7 @@ class QuestionSetForm(forms.ModelForm):
             if question in QUESTIONS.keys():
                 question, created = LeafletProperties.objects.update_or_create(
                     leaflet=self.leaflet,
+                    user=self.user,
                     key=question,
                     defaults={
                         'value': answer
