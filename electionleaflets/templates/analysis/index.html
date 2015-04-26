@@ -1,22 +1,60 @@
 {% extends "base.html" %}
 {% block content %}
   <div class="row">
-    <div class="columns large-8">
-      <h1>Analysis team</h1>
-      <p>
-        The ElectionLeaflets.org analysis team will be categorising and annotating
-        election leaflets as they come in.
-      </p>
-      <p>
-        This section is not ready yet, but when it is you will be able to sign in and join the team.
-      </p>
-      <p>
-        If you would like to join the analysis team email <a href="mailto:leaflets@unlockdemocracy.org.uk">leaflets@unlockdemocracy.org.uk</a>
-      </p>
-      <!-- <p>
-        <a href="#" class="button expand disabled">Sign in</a>
-        <a href="#" class="button expand disabled">Create an account</a>
-      </p> -->
-    </div>
+
+    <div class="columns large-6">
+      <h1></h1>
+          <h1>Analysis team</h1>
+          <p>
+            The ElectionLeaflets.org analysis team check and tidy categorising
+            election leaflets as they come in, making the archive more useful for everyone.
+          </p>
+          <p>
+            So far <strong>{{ number_of_people }} people</strong> have analysed
+            <strong>{{ leaflets_analysed }} leaflets</strong>. Including
+            <strong>{{ with_party_leaders }} with party leaders</strong> on the and,
+            <strong>{{ with_graph }} with {{ with_graph|pluralize:"a graph,graphs" }} on</strong>.
+          </p>
+          {% if request.user.is_authenticated %}
+            <p>
+              Welcome {{request.user.username}}!
+              {# <a href="{% url "task" %}" class="button">Start analysing</a> #}
+            </p>
+          {% else %}
+            <p>
+              <a href="{% url "account_signup" %}" class="button">Join the team</a>
+              <a href="{% url "account_login" %}" class="button secondary">Sign in</a>
+            </p>
+          {% endif %}
+        </div>
+
+
+
+        <div class="columns large-6">
+              <h2>Insights and data</h2>
+              <p>
+                If you are a journalist you can <a href="/press/"> join our daily email update</a>.
+                You can also <a href="https://twitter.com/thesc">follow us on twitter</a> for the latest facts and figures.
+              </p>
+              <h2>League table</h2>
+              <table class="columns large-12">
+                <thead>
+                  <tr>
+                    <th>Volunteer</th>
+                    <th>Contributions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for user in contributing_people %}
+                  <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.edits_count }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+
+
   </div>
 {% endblock %}
