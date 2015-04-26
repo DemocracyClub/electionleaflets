@@ -1,0 +1,38 @@
+.analysis_form {
+    button+button {
+      margin-top:1em;
+    }
+
+  .form_field {
+    margin:0 0 1.5em 0;
+    overflow:auto;
+    h4 {
+      font-weight:bold;
+      margin:0 0 0.5em 0;
+    }
+    .help_text {
+      font-size:0.7em;
+      margin:0;
+    }
+
+    .select_widget {
+      border:none;
+      margin:0;
+      padding:0;
+      text-align:center;
+      input[type=radio]+label {
+        margin:0.1em 2px;
+        padding:0.5em 0;
+      }
+
+      /* three items */
+      .select_row:first-child:nth-last-child(3),
+      .select_row:first-child:nth-last-child(3) ~ .select_row {
+      	width: 33.3333%;
+        float:left;
+      }
+
+    }
+
+  }
+}

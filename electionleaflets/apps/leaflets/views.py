@@ -2,7 +2,7 @@ import os
 import random
 from collections import OrderedDict
 from django.shortcuts import redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib import messages
 from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
 from django.core.urlresolvers import reverse
@@ -13,6 +13,7 @@ from django.views.generic.detail import BaseDetailView, SingleObjectMixin
 from django.core.files.storage import FileSystemStorage
 from braces.views import StaffuserRequiredMixin
 
+from analysis.forms import QuestionSetForm
 from core.helpers import geocode
 from people.models import Person
 from .models import Leaflet, LeafletImage
@@ -75,20 +76,34 @@ class LatestLeaflets(ListView):
     paginate_by = 60
 
 
-class LeafletView(UpdateView):
+
+class LeafletView(DetailView):
     template_name = 'leaflets/leaflet.html'
     model = Leaflet
-    form_class = LeafletReviewFrom
 
-    def get_success_url(self):
-        if 'submit_and_next' in self.request.POST:
-            next_models = Leaflet.objects.filter(reviewed=False)\
-                                .order_by('-date_uploaded')
-            if next_models:
-                return next_models[0].get_absolute_url()
-            else:
-                return '/'
-        return super(LeafletView, self).get_success_url()
+    def get_context_data(self, **kwargs):
+        context = super(LeafletView, self).get_context_data(**kwargs)
+        context['analysis_form'] = QuestionSetForm(self.object)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden()
+
+        self.object = self.get_object()
+        form = QuestionSetForm(self.object, request.POST)
+
+        if form.is_valid():
+            form.save()
+            if 'save_and_next' in request.POST:
+                next_leaflet = Leaflet.objects.filter(leafletproperties=None)
+                if next_leaflet:
+                    url = next_leaflet[0].get_absolute_url()
+                    return HttpResponseRedirect(url)
+            return HttpResponseRedirect(self.object.get_absolute_url())
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
 
 def _skip_step_allowed_condition(wizard, step_name):
     extra_data = wizard.storage.extra_data
