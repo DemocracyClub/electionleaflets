@@ -12,6 +12,11 @@ QUESTIONS = {
         'help_text': "Is there a photo of the sending party's leader?",
         'choices': ('Yes', 'No', 'n/a')
     },
+    'has_leader': {
+        'label': "Party leader mentioned",
+        'help_text': "Is the party leader mentioned?",
+        'choices': ('Yes', 'No', 'n/a')
+    },
     'has_opposition_leader': {
         'label': "Opposition leader pictured",
         'help_text': "Is there a photo of the another party leader?",
