@@ -31,7 +31,7 @@ class AnalysisHomeView(TemplateView):
                     .filter(key="has_leader_photo").count()
 
         context['with_graph'] = LeafletProperties.objects\
-                    .filter(key="include_graph").count()
+                    .filter(key="include_graph", value="Yes").count()
 
 
         return context
