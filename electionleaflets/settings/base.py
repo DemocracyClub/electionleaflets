@@ -173,7 +173,7 @@ THANKYOU_MESSAGES = [
     'Thanks for the leaflet, the election is a tiny bit more transparent!'
     ]
 
-
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # .local.py overrides all the common settings.
 try:
@@ -188,3 +188,4 @@ if len(sys.argv) > 1 and sys.argv[1] in ['test', 'harvest']:
         from .testing import *
     except ImportError:
         pass
+        
