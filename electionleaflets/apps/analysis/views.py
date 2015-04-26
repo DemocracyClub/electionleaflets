@@ -4,7 +4,6 @@ from django.views.generic import TemplateView
 from django.db.models import Count
 from django.contrib.auth.models import User
 
-from .forms import QuestionSetForm
 from .models import LeafletProperties
 from constituencies.models import Constituency
 from leaflets.models import Leaflet
@@ -17,15 +16,20 @@ class AnalysisHomeView(TemplateView):
 
         context['contributing_people'] = User.objects\
             .exclude(leafletproperties=None)\
-            .annotate(edits_count=Count('leafletproperties'))\
+            .annotate(edits_count=Count(
+                'leafletproperties__leaflet',
+                distinct=True))\
             .order_by('-edits_count')[:10]
 
         context['number_of_people'] = LeafletProperties.objects\
                     .order_by().values_list('user').distinct().count()
+
         context['leaflets_analysed'] = LeafletProperties.objects\
                     .order_by().values_list('leaflet').distinct().count()
+
         context['with_party_leaders'] = LeafletProperties.objects\
                     .filter(key="has_leader_photo").count()
+
         context['with_graph'] = LeafletProperties.objects\
                     .filter(key="include_graph").count()
 
