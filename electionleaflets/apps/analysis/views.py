@@ -1,6 +1,6 @@
 import datetime
 
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from django.db.models import Count
 from django.contrib.auth.models import User
 
@@ -35,6 +35,13 @@ class AnalysisHomeView(TemplateView):
 
 
         return context
+
+class AnalysisStartRedirectView(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        next_leaflet = Leaflet.objects.filter(leafletproperties=None)
+        url = next_leaflet[0].get_absolute_url()
+        return url
+
 
 class ReportView(TemplateView):
     template_name = "analysis/reports.html"

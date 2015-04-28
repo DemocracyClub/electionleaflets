@@ -16,9 +16,9 @@
             <strong>{{ with_graph }} with {{ with_graph|pluralize:"a graph,graphs" }} on</strong>.
           </p>
           {% if request.user.is_authenticated %}
+            <h3>Welcome {{request.user.username}}!</h3>
             <p>
-              Welcome {{request.user.username}}!
-              {# <a href="{% url "task" %}" class="button">Start analysing</a> #}
+              <a href="{% url "analysis_start" %}" class="button">Start analysing</a>
             </p>
           {% else %}
             <p>
