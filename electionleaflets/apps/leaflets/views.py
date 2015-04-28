@@ -1,4 +1,5 @@
 import os
+import datetime
 import random
 from collections import OrderedDict
 from django.shortcuts import redirect
@@ -103,7 +104,10 @@ class LeafletView(DetailView):
         if form.is_valid():
             form.save()
             if 'save_and_next' in request.POST:
-                next_leaflet = Leaflet.objects.filter(leafletproperties=None)
+                start_date = datetime.date(2015, 1, 1)
+                next_leaflet = Leaflet.objects.filter(leafletproperties=None)\
+                .filter(date_uploaded__gt=start_date)\
+                .order_by('?')
                 if next_leaflet:
                     url = next_leaflet[0].get_absolute_url()
                     return HttpResponseRedirect(url)

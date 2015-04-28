@@ -37,8 +37,12 @@ class AnalysisHomeView(TemplateView):
         return context
 
 class AnalysisStartRedirectView(RedirectView):
+    permanent = False
     def get_redirect_url(self, *args, **kwargs):
-        next_leaflet = Leaflet.objects.filter(leafletproperties=None)
+        start_date = datetime.date(2015, 1, 1)
+        next_leaflet = Leaflet.objects.filter(leafletproperties=None)\
+        .filter(date_uploaded__gt=start_date)\
+        .order_by('?')
         url = next_leaflet[0].get_absolute_url()
         return url
 
