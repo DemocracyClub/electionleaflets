@@ -24,6 +24,7 @@ else:
         url(r'^$',          cache_page(60*5)(HomeView.as_view()), name='home'),
         url(r'^leaflets',   include('leaflets.urls')),
         url(r'^parties',    include('parties.urls')),
+        url(r'^person',    include('people.urls')),
         url(r'^constituencies',    include('constituencies.urls')),
         url(r'^analysis',   include('analysis.urls')),
         url(r'^tags',       include('tags.urls')),

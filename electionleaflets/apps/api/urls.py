@@ -16,4 +16,5 @@ urlpatterns = patterns(
     url(r'^', include(router.urls, namespace='api')),
     url(r'stats', views.StatsView.as_view()),
     url(r'latest_by_constituency', views.LatestByConstituencyView.as_view()),
+    url(r'latest_by_person', views.LatestByPersonView.as_view()),
 )

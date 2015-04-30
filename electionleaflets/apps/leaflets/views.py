@@ -2,24 +2,23 @@ import os
 import datetime
 import random
 from collections import OrderedDict
+
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib import messages
 from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.views.generic import (DetailView, ListView, UpdateView, FormView,
+from django.views.generic import (DetailView, ListView, UpdateView,
                                     RedirectView)
-from django.views.generic.detail import BaseDetailView, SingleObjectMixin
+from django.views.generic.detail import SingleObjectMixin
 from django.core.files.storage import FileSystemStorage
 from braces.views import StaffuserRequiredMixin
 
 from analysis.forms import QuestionSetForm
-from core.helpers import geocode
 from people.models import Person
 from .models import Leaflet, LeafletImage
-from .forms import (InsidePageImageForm, LeafletDetailsFrom,
-    LeafletReviewFrom)
+from .forms import (InsidePageImageForm, LeafletDetailsFrom)
 
 
 class ImageView(DetailView):
@@ -300,6 +299,8 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     leaflet.election = person.current_election
 
         leaflet.save()
-        messages.success(self.request, random.sample(settings.THANKYOU_MESSAGES, 1)[0])
+        messages.success(
+            self.request,
+            random.sample(settings.THANKYOU_MESSAGES, 1)[0])
 
         return  redirect(reverse('leaflet', kwargs={'pk': leaflet.pk}))

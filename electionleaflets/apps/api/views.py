@@ -6,6 +6,7 @@ from django.utils.html import escape
 
 from leaflets.models import Leaflet, LeafletImage
 from constituencies.models import Constituency
+from people.models import Person
 from uk_political_parties.models import Party
 
 from rest_framework import viewsets
@@ -14,7 +15,7 @@ from rest_framework.response import Response
 
 
 from .serializers import (ConstituencySerializer, PartySerializer,
-    LeafletSerializer, LeafletImageSerializer)
+    LeafletMinSerializer, LeafletSerializer, LeafletImageSerializer)
 
 
 class ConstituencyViewSet(viewsets.ModelViewSet):
@@ -43,7 +44,6 @@ class LatestByConstituencyView(APIView):
         TIME_SINCE = datetime.datetime.now() - datetime.timedelta(weeks=20)
         LIMIT = 3
         for constituency in Constituency.objects.all():
-            print constituency
             leaflets =  LeafletSerializer(
                 Leaflet.objects.filter(
                     constituency=constituency,
@@ -51,6 +51,20 @@ class LatestByConstituencyView(APIView):
                 )[:LIMIT], many=True).data
             all_constituencies[constituency.pk] = leaflets
         return Response(all_constituencies)
+
+class LatestByPersonView(APIView):
+    def get(self, request, format=None):
+        all_people = {}
+        TIME_SINCE = datetime.datetime.now() - datetime.timedelta(weeks=20)
+        LIMIT = 3
+        for person in Person.objects.exclude(leaflet=None):
+            leaflets =  LeafletMinSerializer(
+                Leaflet.objects.filter(
+                    publisher_person=person,
+                    date_uploaded__gt=TIME_SINCE,
+                )[:LIMIT], many=True, context={'request': request}).data
+            all_people[person.remote_id] = leaflets
+        return Response(all_people)
 
 
 class StatsView(APIView):

@@ -70,7 +70,7 @@
         <section class="person">
               <p>
                 Sent by
-                <a href="{{ object.publisher_person.source_url }}">
+                <a href="{% url "person" object.publisher_person.remote_id %}">
                   {{object.publisher_person.name}}
                 </a>
               </p>

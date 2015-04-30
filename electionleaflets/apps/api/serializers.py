@@ -46,6 +46,7 @@ class LeafletImageSerializer(serializers.ModelSerializer):
         fields = (
             'image',
             'image_text',
+            'image_type',
         )
     image = serializers.ImageField()
 
@@ -67,8 +68,6 @@ class LeafletSerializer(serializers.HyperlinkedModelSerializer):
             data['status'] = 'draft'
         return data
 
-
-
     class Meta:
         model = Leaflet
         depth = 1
@@ -81,6 +80,25 @@ class LeafletSerializer(serializers.HyperlinkedModelSerializer):
             'constituency',
             'images',
             'first_page_thumb',
+            'date_uploaded',
+            'date_delivered',
+            'status',
+        )
+
+
+class LeafletMinSerializer(serializers.ModelSerializer):
+    images = LeafletImageSerializer(many=True, required=False)
+
+    class Meta:
+        model = Leaflet
+        depth = 0
+        fields = (
+            'pk',
+            'title',
+            'description',
+            'publisher_party',
+            'constituency',
+            'images',
             'date_uploaded',
             'date_delivered',
             'status',
