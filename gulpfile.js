@@ -46,6 +46,7 @@
         paths.src + 'vendor/foundation/js/foundation.js',
         paths.src + 'vendor/modernizr/modernizr.js',
         paths.src + 'vendor/jquery/dist/jquery.js',
+        paths.src + 'vendor/jquery.tablesorter.min.js',
     ]
   };
 

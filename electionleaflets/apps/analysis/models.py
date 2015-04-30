@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from leaflets.models import Leaflet
 
-class LeafletPropertiesManager(models.Manager):
+class LeafletPropertiesQuerySet(models.QuerySet):
     def leaders_photo_count(self):
         return self.filter(key="has_leader_photo", value="Yes").count()
 
@@ -35,6 +35,9 @@ class LeafletPropertiesManager(models.Manager):
     def leaflets_analysed(self):
         return self.order_by().values_list('leaflet').distinct().count()
 
+class LeafletPropertiesManager(models.Manager):
+    def get_queryset(self):
+       return LeafletPropertiesQuerySet(self.model, using=self._db)
 
 class LeafletProperties(TimeStampedModel):
     leaflet = models.ForeignKey(Leaflet)

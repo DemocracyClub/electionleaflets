@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from .models import LeafletProperties
 from constituencies.models import Constituency
 from leaflets.models import Leaflet
+from uk_political_parties.models import Party
 
 class AnalysisHomeView(TemplateView):
     template_name = "analysis/index.html"
@@ -21,19 +22,19 @@ class AnalysisHomeView(TemplateView):
                 distinct=True))\
             .order_by('-edits_count')[:10]
 
-        context['total_contributions'] = LeafletProperties.objects\
+        context['total_contributions'] = LeafletProperties.objects.all()\
             .leaflets_analysed()
 
         context['number_of_people'] = LeafletProperties.objects\
                     .order_by().values_list('user').distinct().count()
 
-        context['leaflets_analysed'] = LeafletProperties.objects\
+        context['leaflets_analysed'] = LeafletProperties.objects.all()\
                     .leaflets_analysed()
 
-        context['with_party_leaders'] = LeafletProperties.objects\
+        context['with_party_leaders'] = LeafletProperties.objects.all()\
                     .leaders_photo_count()
 
-        context['with_graph'] = LeafletProperties.objects\
+        context['with_graph'] = LeafletProperties.objects.all()\
                     .graphs_count()
 
 
@@ -82,43 +83,75 @@ class ConstituencyReportView(ReportViewMixin, TemplateView):
 
         return context
 
-class AnalysisReportView(ReportViewMixin, TemplateView):
-    template_name = "analysis/reports/analysis.html"
+class BaseAnalysisReportView(ReportViewMixin, TemplateView):
+    def add_data_to_context(self, queryset=None):
+        if not queryset:
+            queryset = self.base_queryset
 
-    def get_context_data(self, **kwargs):
-        context = super(AnalysisReportView, self).get_context_data(**kwargs)
-
+        context = {}
         context['leaflet_count'] = self.leaflet_count
 
         context['leaders_photo_count'] = \
-            LeafletProperties.objects.leaders_photo_count()
+            queryset.leaders_photo_count()
         context['leaders_mentions'] = \
-            LeafletProperties.objects.leaders_photo_count()
+            queryset.leaders_photo_count()
         context['party_logo'] = \
-            LeafletProperties.objects.party_logo()
+            queryset.party_logo()
         context['opposition_photo_count'] = \
-            LeafletProperties.objects.opposition_photo_count()
+            queryset.opposition_photo_count()
         context['opposition_mentions_count'] = \
-            LeafletProperties.objects.opposition_mentions_count()
+            queryset.opposition_mentions_count()
         context['squeeze_messages_count'] = \
-            LeafletProperties.objects.squeeze_messages_count()
+            queryset.squeeze_messages_count()
         context['graphs_count'] = \
-            LeafletProperties.objects.graphs_count()
+            queryset.graphs_count()
 
         context['type_leaflet_count'] = \
-            LeafletProperties.objects.leaflet_type_count('Leaflet')
+            queryset.leaflet_type_count('Leaflet')
         context['type_letter_count'] = \
-            LeafletProperties.objects.leaflet_type_count('Letter')
+            queryset.leaflet_type_count('Letter')
         context['type_magazine_count'] = \
-            LeafletProperties.objects.leaflet_type_count('Magazine')
+            queryset.leaflet_type_count('Magazine')
         context['type_newsletter_count'] = \
-            LeafletProperties.objects.leaflet_type_count('Newsletter')
+            queryset.leaflet_type_count('Newsletter')
         context['type_newspaper_count'] = \
-            LeafletProperties.objects.leaflet_type_count('Newspaper')
+            queryset.leaflet_type_count('Newspaper')
         context['type_cv_count'] = \
-            LeafletProperties.objects.leaflet_type_count('CV')
+            queryset.leaflet_type_count('CV')
         context['type_survey_count'] = \
-            LeafletProperties.objects.leaflet_type_count('Survey')
-
+            queryset.leaflet_type_count('Survey')
 
         return context
+
+
+class AnalysisReportView(BaseAnalysisReportView):
+    template_name = "analysis/reports/analysis.html"
+    base_queryset = LeafletProperties.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(AnalysisReportView, self).get_context_data(**kwargs)
+        context.update(self.add_data_to_context())
+        return context
+
+class AnalysisPerPartyReportView(BaseAnalysisReportView):
+    template_name = "analysis/reports/analysis_per_party.html"
+    base_queryset = LeafletProperties.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            AnalysisPerPartyReportView, self).get_context_data(**kwargs)
+        parties = []
+        for party in Party.objects.filter(
+                leaflet__date_uploaded__gte=datetime.date(2015, 1, 1))\
+                .distinct():
+            qs = LeafletProperties.objects.filter(
+                leaflet__publisher_party_id=party.pk)
+
+            parties.append({
+                'party': party,
+                'data': self.add_data_to_context(queryset=qs),
+            })
+
+        context['parties'] = parties
+        return context
+

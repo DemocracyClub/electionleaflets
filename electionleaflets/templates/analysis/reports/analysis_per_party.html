@@ -1,0 +1,86 @@
+{% extends "analysis/reports/reports_base.html" %}
+{% load staticfiles %}
+{% load percent_tags %}
+
+{% block content %}
+<div class="row">
+  <article class="columns large-12 reports">
+    <h1>Analysis in per party</h1>
+    <p><a href="{% url "analysis_report" %}">View totals</a></p>
+    <style>
+    .per_party_analysis td, .per_party_analysis th {
+      text-align:center;
+    }
+
+    .header{
+        background:url(data:image/gif;base64,R0lGODlhCwALAJEAAAAAAP///xUVFf///yH5BAEAAAMALAAAAAALAAsAAAIUnC2nKLnT4or00PvyrQwrPzUZshQAOw==) no-repeat center right;
+    }
+    .headerSortUp{
+        background:url(data:image/gif;base64,R0lGODlhCwALAJEAAAAAAP///xUVFf///yH5BAEAAAMALAAAAAALAAsAAAIPnI+py+0/hJzz0IruwjsVADs=) no-repeat center right;
+    }
+    .headerSortDown{
+        background:url(data:image/gif;base64,R0lGODlhCwALAJEAAAAAAP///xUVFf///yH5BAEAAAMALAAAAAALAAsAAAIRnC2nKLnT4or00Puy3rx7VQAAOw==) no-repeat center right;
+    }
+
+    </style>
+    <div class="row">
+      <table class="per_party_analysis">
+        <thead>
+          <tr></tr>
+            <th>Party</th>
+            <th>Pictures of standing party leader</th>
+            <th>Mentions of sending party leader</th>
+            <th>Contains party logo</th>
+            <th>Pictures of opposition of party leader</th>
+            <th>Mentions of opposition of party leader</th>
+            <th>Squeeze messages</th>
+            <th>Graph included</th>
+            <th>Number of leaflets per style i.e. newspaper, leaflets</th>
+        </thead>
+        <tbody>
+        {% for party in parties %}
+          <tr>
+            <td><a href="{% url "party-view" party.party.pk %}">{{ party.party.party_name }}</a></td>
+            <td>{{ party.data.leaders_photo_count }}</td>
+            <td>{{ party.data.leaders_mentions }}</td>
+            <td>{{ party.data.party_logo }}</td>
+            <td>{{ party.data.opposition_photo_count }}</td>
+            <td>{{ party.data.opposition_mentions_count }}</td>
+            <td>{{ party.data.squeeze_messages_count }}</td>
+            <td>{{ party.data.graphs_count }}</td>
+
+
+            <td>
+              <strong>Leaflet</strong>: {{ party.data.type_leaflet_count }}<br />
+              <strong>Letter</strong>: {{ party.data.type_letter_count }}<br />
+              <strong>Newsletter</strong>: {{ party.data.type_newsletter_count }}<br />
+              <strong>Magazine</strong>: {{ party.data.type_magazine_count }}<br />
+              <strong>CV</strong>: {{ party.data.type_cv_count }}<br />
+              <strong>Newspaper</strong>: {{ party.data.type_newspaper_count }}<br />
+              <strong>Survey</strong>: {{ party.data.type_survey_count }}<br />
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+
+
+    </div>
+  </article>
+
+
+
+</div>
+{% endblock content %}
+
+{% block extra_scripts %}
+  <script src="{% static "javascript/jquery.tablesorter.min.js" %}"></script>
+  <script>
+    $(document).ready(function()
+        {
+            $(".per_party_analysis").tablesorter();
+        }
+    );
+  </script>
+{% endblock %}
