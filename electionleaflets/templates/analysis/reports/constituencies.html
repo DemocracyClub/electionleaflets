@@ -1,18 +1,9 @@
-{% extends "base.html" %}
+{% extends "analysis/reports/reports_base.html" %}
 
 {% block content %}
 <div class="row">
   <article class="columns large-12 reports">
     <h1>Reports</h1>
-
-    <div class="row fullWidth">
-      <div class="big-number">
-        <a href="{% url "leaflets" %}">
-          <span>{{leaflet_count}}</span>
-          <small>leaflets since {{start_date}}</small>
-        </a>
-      </div>
-    </div>
 
     <div class="row">
       <table>

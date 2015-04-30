@@ -1,0 +1,131 @@
+{% extends "analysis/reports/reports_base.html" %}
+{% load percent_tags %}
+
+{% block content %}
+<div class="row">
+  <article class="columns large-12 reports">
+    <h1>Analysis findings</h1>
+
+
+    <div class="row">
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              Number of leaflets
+            </td>
+            <td>{{leaflet_count}}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              Pictures of sending party leader
+            </td>
+            <td>{{ leaders_photo_count }}</td>
+            <td>{% as_percent leaders_photo_count leaflet_count %}%</td>
+          </tr>
+          <tr>
+            <td>
+              Mentions of sending party leader
+            </td>
+            <td>{{ leaders_mentions }}</td>
+            <td>{% as_percent leaders_mentions leaflet_count %}%</td>
+          </tr>
+          <tr>
+            <td>
+              Contains party logo
+            </td>
+            <td>{{ party_logo }}</td>
+            <td>{% as_percent party_logo leaflet_count %}%</td>
+          </tr>
+          <tr>
+            <td>
+              Pictures of opposition of party leader
+            </td>
+            <td>{{ opposition_photo_count }}</td>
+            <td>{% as_percent opposition_photo_count leaflet_count %}%</td>
+          </tr>
+          <tr>
+            <td>
+              Mentions of opposition of party leader
+            </td>
+            <td>{{ opposition_mentions_count }}</td>
+            <td>{% as_percent opposition_mentions_count leaflet_count %}%</td>
+          </tr>
+          <tr>
+            <td>
+              Squeeze messages
+            </td>
+            <td>{{ squeeze_messages_count }}</td>
+            <td>{% as_percent squeeze_messages_count leaflet_count %}%</td>
+          </tr>
+          <tr>
+            <td>
+              Graph included
+            </td>
+            <td>{{ graphs_count }}</td>
+            <td>{% as_percent graphs_count leaflet_count %}%</td>
+          </tr>
+          <tr>
+            <th colspan=3>
+              Number of leaflets per style i.e. newspaper, leaflets
+            </th>
+          </tr>
+          <tr>
+            <td>
+              Leaflet
+            </td>
+            <td>{{ type_leaflet_count }}</td>
+            <td>{% as_percent type_leaflet_count leaflet_count %}%</td>
+          </tr>
+          <tr>
+            <td>
+              Letter
+            </td>
+            <td>{{ type_letter_count }}</td>
+            <td>{% as_percent type_letter_count leaflet_count %}%</td>
+          </tr>
+          <tr>
+            <td>
+              Magazine
+            </td>
+            <td>{{ type_magazine_count }}</td>
+            <td>{% as_percent type_magazine_count leaflet_count %}%</td>
+          </tr>
+          <tr>
+            <td>
+              Newsletter
+            </td>
+            <td>{{ type_newsletter_count }}</td>
+            <td>{% as_percent type_newsletter_count leaflet_count %}%</td>
+          </tr>
+          <tr>
+            <td>
+              Newspaper
+            </td>
+            <td>{{ type_newspaper_count }}</td>
+            <td>{% as_percent type_newspaper_count leaflet_count %}%</td>
+          </tr>
+          <tr>
+            <td>
+              CV
+            </td>
+            <td>{{ type_cv_count }}</td>
+            <td>{% as_percent type_cv_count leaflet_count %}%</td>
+          </tr>
+          <tr>
+            <td>
+              Survey
+            </td>
+            <td>{{ type_survey_count }}</td>
+            <td>{% as_percent type_survey_count leaflet_count %}%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+
+
+</div>
+{% endblock content %}

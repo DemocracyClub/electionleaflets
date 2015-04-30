@@ -15,6 +15,7 @@
             <strong>{{ with_party_leaders }} with party leaders</strong> on the and,
             <strong>{{ with_graph }} with {{ with_graph|pluralize:"a graph,graphs" }} on</strong>.
           </p>
+          <p><a href="{% url "report_view" %}">See all numbers</a></p>
           {% if request.user.is_authenticated %}
             <h3>Welcome {{request.user.username}}!</h3>
             <p>
@@ -36,6 +37,12 @@
                 If you are a journalist you can <a href="/press/"> join our daily email update</a>.
                 You can also <a href="https://twitter.com/thesc">follow us on twitter</a> for the latest facts and figures.
               </p>
+              <h2>Numbers</h2>
+              <ul>
+                <li><a href="{% url "analysis_report" %}">Analysis report</a></li>
+                <li><a href="{% url "constituencies_report" %}">Leaflets by Constituency</a></li>
+              </ul>
+
               <h2>League table</h2>
               <table class="columns large-12">
                 <thead>
@@ -53,6 +60,7 @@
                   {% endfor %}
                 </tbody>
               </table>
+              <p><strong>{{total_contributions}}</strong> in total</p>
             </div>
 
 
