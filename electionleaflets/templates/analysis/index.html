@@ -11,9 +11,9 @@
           </p>
           <p>
             So far <strong>{{ number_of_people }} people</strong> have analysed
-            <strong>{{ leaflets_analysed }} leaflets</strong>. Including
-            <strong>{{ with_party_leaders }} with party leaders</strong> on the and,
-            <strong>{{ with_graph }} with {{ with_graph|pluralize:"a graph,graphs" }} on</strong>.
+            <strong><a href="{% url "analysis_report" %}">{{ leaflets_analysed }} leaflets</a></strong>. Including
+            <strong><a href="{% url "analysis_report" %}">{{ with_party_leaders }} with party leaders</a></strong> on the and,
+            <strong><a href="{% url "analysis_report" %}">{{ with_graph }}</a> <a href="{% url "analysis_report" %}">with {{ with_graph|pluralize:"a graph,graphs" }} on</a></strong>.
           </p>
           <p><a href="{% url "report_view" %}">See all numbers</a></p>
           {% if request.user.is_authenticated %}
