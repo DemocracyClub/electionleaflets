@@ -88,6 +88,12 @@ class LeafletSerializer(serializers.HyperlinkedModelSerializer):
 
 class LeafletMinSerializer(serializers.ModelSerializer):
     images = LeafletImageSerializer(many=True, required=False)
+    first_page_thumb = serializers.SerializerMethodField()
+
+    def get_first_page_thumb(self, obj):
+        image = obj.get_first_image()
+        if image:
+            return get_thumbnail(obj.get_first_image().image, '350').url
 
     class Meta:
         model = Leaflet
@@ -99,6 +105,7 @@ class LeafletMinSerializer(serializers.ModelSerializer):
             'publisher_party',
             'constituency',
             'images',
+            'first_page_thumb',
             'date_uploaded',
             'date_delivered',
             'status',
