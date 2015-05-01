@@ -15,11 +15,13 @@
             See more leaflets sent in {{ object.current_constituency.name }}
           </a>
         </li>
+        {% if object.current_party %}
         <li>
           <a href="{% url "party-view" object.current_party.party.pk object.current_party.party.party_name|slugify %}">
             See more leaflets sent by {{ object.current_party.party.party_name }}
           </a>
         </li>
+        {% endif %}
       </ul>
       <h2>Leaflets sent by {{ object.name }}</h2>
       {% with person_leaflets as leaflet_list %}
