@@ -183,9 +183,9 @@ except ImportError:
 
 
 # importing test settings file if necessary (TODO chould be done better)
-if len(sys.argv) > 1 and sys.argv[1] in ['test',]:
+if len(sys.argv) > 1 and sys.argv[1] in ['test', 'harvest']:
     try:
         from .testing import *
     except ImportError:
         pass
-
+        
