@@ -165,7 +165,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         if step == "people":
             geo_data = self.get_cleaned_data_for_step('postcode')
             if not geo_data:
-                raise ValueError(self.get_all_cleaned_data())
+                return {}
             people_qs = Person.objects.filter(
                 personconstituencies__constituency=geo_data['constituency'])
 

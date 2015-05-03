@@ -73,11 +73,12 @@ class PeopleModelChoiceField(forms.ModelChoiceField):
 class PeopleForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(PeopleForm, self).__init__(*args, **kwargs)
-        self.fields['people'] = \
-            PeopleModelChoiceField(
-                queryset=kwargs['initial']['_people'],
-                widget=forms.RadioSelect,
-                empty_label="Not listed",
-                required=False)
+        if 'people' in kwargs['initial']:
+            self.fields['people'] = \
+                PeopleModelChoiceField(
+                    queryset=kwargs['initial']['_people'],
+                    widget=forms.RadioSelect,
+                    empty_label="Not listed",
+                    required=False)
 
 

@@ -110,7 +110,7 @@ Feature: Leaflet uploader
         Then I submit the form with:
           | step_name | people          |  action |
           | people    | None          |  submit |
-        Then I should see the url "/leaflets/5/"
+        Then I should see the leaflet url
         and I should see 5 leaflet images
 
     Scenario: Upload front, back and three inside pages, pressing 'no more pages'
@@ -140,7 +140,7 @@ Feature: Leaflet uploader
         Then I submit the form with:
           | step_name | people          |  action |
           | people    | None          |  submit |
-        Then I should see the url "/leaflets/6/"
+        Then I should see the leaflet url
         and I should see 5 leaflet images
 
     Scenario: Upload single image leaflet with partial postcode
