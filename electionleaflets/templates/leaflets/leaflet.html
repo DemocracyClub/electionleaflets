@@ -97,7 +97,7 @@
           <figure>
             <a href="{% url "full_image"  image.id %}">
               {% thumbnail image.image "600" crop="center" as im %}
-              <img src="{{ im.url }}" aria-labelledby="page-{{image.id}}">
+              <img src="{{ im.url }}" aria-labelledby="page-{{image.id}}" data-full_image_url="{{ image.image.url }}">
               {% endthumbnail %}
             </a>
             <figcaption>
@@ -198,5 +198,17 @@
 var point = [{{leaflet.location.1}},{{leaflet.location.0}}];
 var constituency_id = "{{object.constituency.constituency_id}}";
 create_leaflet_map(point, constituency_id);
+
+
+$.each($('.leaflet_images'), function(i, el) {
+  var full_image = $(el).find('img').data('full_image_url');
+  $(el).zoom({
+    url: full_image,
+    magnify: 1
+    // lensSize: 200
+  });
+})
+
+
 </script>
 {% endblock %}
