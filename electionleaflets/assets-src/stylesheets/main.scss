@@ -340,6 +340,14 @@ ul.side-nav li > a:after {
     width:2px;
 }
 
+.leaflet_images {
+  figure {
+      > a {
+        display:block;
+      }
+  }
+}
+
 .leaflet_page {
     main {
         &:after {
@@ -354,7 +362,11 @@ ul.side-nav li > a:after {
               }
 
             text-align:justify;
+
             figure {
+                > a {
+                  display:block;
+                }
                 img {
                     width:100%;
                 }

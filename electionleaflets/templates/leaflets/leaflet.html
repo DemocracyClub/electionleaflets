@@ -95,7 +95,7 @@
       <section class="leaflet_images" aria-describedby=leaflet_description>
         {% for image in object.images.all %}
           <figure>
-            <a href="{% url "full_image"  image.id %}">
+            <a href="{% url "full_image"  image.id %}" class="leaflet_link">
               {% thumbnail image.image "600" crop="center" as im %}
               <img src="{{ im.url }}" aria-labelledby="page-{{image.id}}" data-full_image_url="{{ image.image.url }}">
               {% endthumbnail %}
@@ -200,13 +200,12 @@ var constituency_id = "{{object.constituency.constituency_id}}";
 create_leaflet_map(point, constituency_id);
 
 
-$.each($('.leaflet_images figure'), function(i, el) {
+$.each($('.leaflet_images figure a'), function(i, el) {
   var full_image = $(el).find('img').data('full_image_url');
   $(el).zoom({
     url: full_image
   });
 })
-
 
 </script>
 {% endblock %}
