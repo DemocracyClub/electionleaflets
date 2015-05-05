@@ -200,12 +200,10 @@ var constituency_id = "{{object.constituency.constituency_id}}";
 create_leaflet_map(point, constituency_id);
 
 
-$.each($('.leaflet_images'), function(i, el) {
+$.each($('.leaflet_images figure'), function(i, el) {
   var full_image = $(el).find('img').data('full_image_url');
   $(el).zoom({
-    url: full_image,
-    magnify: 1
-    // lensSize: 200
+    url: full_image
   });
 })
 
