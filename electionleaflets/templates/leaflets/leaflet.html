@@ -200,12 +200,22 @@ var constituency_id = "{{object.constituency.constituency_id}}";
 create_leaflet_map(point, constituency_id);
 
 
-$.each($('.leaflet_images figure a'), function(i, el) {
-  var full_image = $(el).find('img').data('full_image_url');
-  $(el).zoom({
-    url: full_image
-  });
-})
+function UseZoom(){
+    return !(
+        (navigator.platform.indexOf("iPhone") != -1) ||
+        (navigator.platform.indexOf("iPod") != -1) ||
+        (navigator.platform.indexOf("iPad") != -1)
+    );
+}
+
+if (UseZoom()) {
+  $.each($('.leaflet_images figure a'), function(i, el) {
+    var full_image = $(el).find('img').data('full_image_url');
+    $(el).zoom({
+      url: full_image
+    });
+  })
+}
 
 </script>
 {% endblock %}
