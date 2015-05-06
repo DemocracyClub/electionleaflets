@@ -94,7 +94,7 @@ class BaseAnalysisReportView(ReportViewMixin, TemplateView):
         context['leaders_photo_count'] = \
             queryset.leaders_photo_count()
         context['leaders_mentions'] = \
-            queryset.leaders_photo_count()
+            queryset.leaders_mentions()
         context['party_logo'] = \
             queryset.party_logo()
         context['opposition_photo_count'] = \
