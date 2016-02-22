@@ -37,7 +37,10 @@ class LatestLeafletsFeed(Feed):
 
     def item_enclosure_length(self, item):
         if item.images.all():
-            return item.images.all()[0].image.size
+            try:
+                return item.images.all()[0].image.size
+            except:
+                return None
 
     def item_enclosure_mime_type(self, item):
         if item.images.all():
