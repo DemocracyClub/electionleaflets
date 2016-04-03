@@ -12,23 +12,20 @@ from api import feeds
 from core.views import HomeView, MaintenanceView, ReportView, ReportThanksView
 MAINTENANCE_MODE = getattr(settings, 'MAINTENANCE_MODE', False)
 if MAINTENANCE_MODE:
-    urlpatterns = patterns(
-        '',
+    urlpatterns = [
         url(r'.*', MaintenanceView.as_view(), name='maintenance_view'),
-    )
+    ]
 
 else:
-    urlpatterns = patterns(
-        '',
-
+    urlpatterns = [
         url(r'^$',          cache_page(60*5)(HomeView.as_view()), name='home'),
-        url(r'^leaflets',   include('leaflets.urls')),
-        url(r'^parties',    include('parties.urls')),
-        url(r'^person',    include('people.urls')),
-        url(r'^constituencies',    include('constituencies.urls')),
-        url(r'^analysis',   include('analysis.urls')),
-        url(r'^tags',       include('tags.urls')),
-        url(r'^categories', include('categories.urls')),
+        url(r'^leaflets/',   include('leaflets.urls')),
+        url(r'^parties/',    include('parties.urls')),
+        url(r'^person/',    include('people.urls')),
+        url(r'^constituencies/',    include('constituencies.urls')),
+        url(r'^analysis/',   include('analysis.urls')),
+        url(r'^tags/',       include('tags.urls')),
+        url(r'^categories/', include('categories.urls')),
         url(r'^api/', include('api.urls')),
 
         # Feeds
@@ -47,8 +44,8 @@ else:
         url(r'^report/(?P<pk>\d+)/$', ReportView.as_view(), name='report_abuse'),
 
         # Administration URLS
-        (r'^admin/', include(admin.site.urls)),
+        url(r'^admin/', include(admin.site.urls)),
         url(r'^accounts/', include('allauth.urls')),
-    )
+    ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

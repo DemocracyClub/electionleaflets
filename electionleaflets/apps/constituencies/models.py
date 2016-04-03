@@ -10,7 +10,7 @@ class Constituency(models.Model):
 
     alternative_name = models.CharField(max_length=765, blank=True)
     retired = models.IntegerField(null=True, blank=True)
-    slug = AutoSlugField( populate_from='name', max_length=255,separator=u'_')
+    slug = AutoSlugField( populate_from='name', max_length=255,separator='_')
     count = models.IntegerField(null=True)
 
     # Not used anywhere

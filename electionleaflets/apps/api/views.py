@@ -114,7 +114,7 @@ def latest(request, format):
     output += "<leaflets>"
     for d in resp:
         output += "<leaflet>"
-        for k,v in d.iteritems():
+        for k,v in d.items():
             output += "<" + k + ">"
             output += v
             output += "</" + k + ">"

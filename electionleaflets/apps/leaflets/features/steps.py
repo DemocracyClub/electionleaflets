@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 import re
-import json
 
 from lxml import html
 
@@ -9,24 +8,36 @@ from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.core.management import call_command
 
-from lettuce import *
-from lettuce.django import django_url
+from aloe import before, step, world
+from aloe_django import django_url
 
+from constituencies.models import Constituency
 
 
 @before.all
 def set_browser():
     world.browser = Client()
 
-@before.all
-def load_fixtures():
-    call_command('loaddata', 'fixtures', 'constituencies')
+
+@step(r'constituency called "(.*)"')
+def add_constituency(step, name):
+    Constituency.objects.get_or_create(
+        slug="camberwell_and_peckham",
+        pk="65913",
+        defaults={
+            "name": "Camberwell and Peckham",
+            "country_name": "England",
+
+        }
+    )
+
 
 @step(r'I access the url "(.*)"')
 def access_url(step, url):
-    full_url = django_url(url)
+    full_url = django_url(step, url)
     response = world.browser.get(full_url)
     world.dom = html.fromstring(response.content)
+
 
 @step(r'I see the header "(.*)"')
 def see_header(step, text):
@@ -36,39 +47,44 @@ def see_header(step, text):
             return
     assert False
 
+
 @step(r'I pick the file (.*):')
 def set_file(step, name):
     file_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__),'../tests/test_images/', name))
+        os.path.join(os.path.dirname(__file__), '../tests/test_images/', name))
     if os.path.exists(file_path):
-        world.data = {'image': open(file_path, 'r')}
+        world.data = {'image': open(file_path, 'rb')}
         assert True
         return
     assert False
+
 
 @step(r'submit the image (.*) form')
 def submit_image_form(step, form_name):
     world.data['leaflet_upload_wizzard-current_step'] = form_name
     world.response = world.browser.post(
-            reverse('upload_step', kwargs={'step':form_name}),
-            world.data,
-            follow=True,
-            format='multipart'
-        )
+        reverse('upload_step', kwargs={'step': form_name}),
+        world.data,
+        follow=True,
+        format='multipart'
+    )
+
 
 @step(r'should see the leaflet url')
 def check_leaflet_url(step):
-    assert re.match(r"^/leaflets/\d+/",world.response.request['PATH_INFO'])
+    assert re.match(r"^/leaflets/\d+/", world.response.request['PATH_INFO'])
+
 
 @step(r'see the url "(.*)"')
 def check_url(step, url):
     assert world.response.request['PATH_INFO'] == url
 
+
 @step(r'I submit the form with:')
 def fill_journey(step):
     for form in step.hashes:
-        for k,v in form.items():
-            if k not in ['step_name','image', 'action']:
+        for k, v in form.copy().items():
+            if k not in ['step_name', 'image', 'action']:
                 form["%s-%s" % (form['step_name'], k)] = v
 
         if 'image' in form.keys() and form['image']:
@@ -81,17 +97,20 @@ def fill_journey(step):
         if 'people-people' in form.keys():
             if form['people-people'] == "None":
                 form['people-people'] = ""
+
         world.response = world.browser.post(
-                reverse('upload_step', kwargs={'step':form_name}),
-                form,
-                follow=True,
-                format='multipart'
-            )
+            reverse('upload_step', kwargs={'step': form_name}),
+            form,
+            follow=True,
+            format='multipart'
+        )
+
 
 @step(r'and I should see (.*) leaflet images')
 def count_images(step, number):
     world.dom = html.fromstring(world.response.content)
     assert len(world.dom.cssselect('.leaflet_images figure')) == int(number)
+
 
 @step(r'in the constituency "(.*)"')
 def find_constituency(step, constituency_name):

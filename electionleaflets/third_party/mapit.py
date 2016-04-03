@@ -3,13 +3,13 @@ Performs a lookup of postcode to Lat/Lon using the mapit.mysociety.org API.
 """
 
 def postcode_to_latlong(postcode):
-    import urllib2
+    import urllib.request, urllib.error, urllib.parse
     from django.utils import simplejson as json
 
     url = 'http://mapit.mysociety.org/postcode/%s' % postcode.lower().replace(' ', '')
     result_dict = None
     try:
-        request = urllib2.urlopen(url)
+        request = urllib.request.urlopen(url)
         result_dict = json.load(request)
     except:
         pass

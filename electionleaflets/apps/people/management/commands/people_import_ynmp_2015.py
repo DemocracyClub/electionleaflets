@@ -1,5 +1,5 @@
 import csv
-import StringIO
+import io
 import datetime
 
 import requests
@@ -18,7 +18,7 @@ class Command(BaseCommand):
     def handle(self, **options):
         csv_url = "https://yournextmp.com/media/candidates.csv"
         req = requests.get(csv_url, verify=False)
-        content = StringIO.StringIO(req.content)
+        content = io.StringIO(req.content)
         csv_data = csv.DictReader(content)
 
         # Source is always the 2015 General Election

@@ -30,7 +30,7 @@ def truncatesmart(value, limit=80):
     except ValueError:
         return value
 
-    value = unicode(value)
+    value = str(value)
 
     if len(value) <= limit:
         return value

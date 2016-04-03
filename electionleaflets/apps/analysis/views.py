@@ -50,10 +50,14 @@ class AnalysisStartRedirectView(RedirectView):
         url = next_leaflet[0].get_absolute_url()
         return url
 
+
 class ReportViewMixin(object):
-    start_date = datetime.date(2015, 1, 1)
-    leaflet_count = Leaflet.objects.filter(
-                date_uploaded__gt=start_date).count()
+    @property
+    def leaflet_count(self):
+        start_date = datetime.date(2015, 1, 1)
+        return Leaflet.objects.filter(
+            date_uploaded__gt=start_date).count()
+
 
 class ReportView(ReportViewMixin, TemplateView):
     template_name = "analysis/reports/index.html"

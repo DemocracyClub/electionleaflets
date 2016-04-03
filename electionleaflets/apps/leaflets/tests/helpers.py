@@ -15,5 +15,5 @@ def create_dummy_leaflets(number=1):
         l.save()
         image_file = get_test_image()
         li = LeafletImage(image=image_file, leaflet=l)
-        li.image.save('test_1.jpg', File(open(image_file, 'r')))
+        li.image.save('test_1.jpg', File(open(image_file, 'rb')))
         li.save()

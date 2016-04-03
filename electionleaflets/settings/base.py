@@ -44,11 +44,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
-
 SITE_ID=1
 USE_I18N = False
 USE_L10N = True
@@ -68,8 +63,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'leaflets.middleware.SourceTagMiddleware',
-    'django.middleware.doc.XViewMiddleware',
-    'pagination.middleware.PaginationMiddleware',
+    'django.contrib.admindocs.middleware.XViewMiddleware',
+    'linaro_django_pagination.middleware.PaginationMiddleware',
 )
 
 ROOT_URLCONF = 'electionleaflets.urls'
@@ -100,8 +95,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.humanize',
     'kombu.transport.django',
-    'lettuce.django',
-    'pagination',
+    'linaro_django_pagination',
     'rest_framework',
     'sorl.thumbnail',
     'storages',
@@ -113,29 +107,36 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.twitter',
+    'aloe_django',
 
 ] + LEAFLET_APPS
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    'django.core.context_processors.request',
-    "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages",
-    "django.contrib.auth.context_processors.auth",
-    "allauth.account.context_processors.account",
-    "allauth.socialaccount.context_processors.socialaccount",
-
-)
 
 THUMBNAIL_FORMAT = 'PNG'
 THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
 
-TEMPLATE_DIRS = (
-    root('templates'),
-)
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            root('templates'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                'django.template.context_processors.request',
+                "django.template.context_processors.tz",
+                "django.contrib.messages.context_processors.messages",
+                "django.contrib.auth.context_processors.auth",
+            ]
+        }
+    }
+]
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -188,4 +189,4 @@ if len(sys.argv) > 1 and sys.argv[1] in ['test', 'harvest']:
         from .testing import *
     except ImportError:
         pass
-        
+

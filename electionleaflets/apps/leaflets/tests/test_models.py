@@ -14,15 +14,15 @@ class LeafletTestCase(TestCase):
         leaflet = Leaflet()
         self.assertEqual(leaflet._initial,
             {'status': None, 'publisher_party': None, 'description': None,
-            'title': u'', 'email': u'', 'imprint': None, 'postcode': u'',
+            'title': '', 'email': '', 'imprint': None, 'postcode': '',
             'location': None, 'date_delivered': None, 'reviewed': False,
-            'constituency': None, u'id': None, 'name': u'',
+            'constituency': None, 'id': None, 'name': '',
             'election': None, 'publisher_person': None})
 
         leaflet.status = "draft"
         leaflet.save()
         self.assertNotEqual(leaflet._initial['status'], 'draft')
-        leaflet = Leaflet.objects.get(pk=1)
+        leaflet = Leaflet.objects.first()
         self.assertEqual(leaflet._initial['status'], 'draft')
 
     @responses.activate

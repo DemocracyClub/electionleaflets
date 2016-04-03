@@ -1,5 +1,4 @@
-from urllib2 import urlopen
-import json
+import requests
 
 from django.core.management.base import BaseCommand
 
@@ -8,8 +7,8 @@ from constituencies.models import Constituency
 class Command(BaseCommand):
     def fetch_constituencies(self):
         base_url = "http://mapit.mysociety.org/"
-        req = urlopen(base_url + 'areas/WMC')
-        return json.loads(req.read())
+        req = requests.get(base_url + 'areas/WMC')
+        return req.json()
 
     def clean_constituency(self, constituency):
         """
@@ -29,8 +28,8 @@ class Command(BaseCommand):
 
     def handle(self, **options):
         constituencies = self.fetch_constituencies()
-        for constituency_id, constituency in constituencies.items():
-            print constituency
+        for constituency_id, constituency in list(constituencies.items()):
+            print(constituency)
             Constituency.objects.update_or_create(
                 constituency_id=constituency['id'],
                 defaults=self.clean_constituency(constituency))

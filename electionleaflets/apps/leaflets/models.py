@@ -1,5 +1,5 @@
 import os
-from cStringIO import StringIO
+from io import BytesIO
 
 from sorl.thumbnail import ImageField
 from sorl.thumbnail import delete
@@ -18,7 +18,7 @@ from people.models import Person
 from elections.models import Election
 from uk_political_parties.models import Party
 
-import constants
+from . import constants
 
 
 class Leaflet(geo_model.Model):
@@ -124,7 +124,7 @@ class LeafletImage(models.Model):
         tmp_image = e.get_image(f)
         tmp_image = e._orientation(tmp_image)
         tmp_image = tmp_image.convert('RGB')
-        new_file = StringIO()
+        new_file = BytesIO()
 
         tmp_image.save(new_file, 'jpeg')
         file_content = ContentFile(new_file.getvalue())
@@ -146,7 +146,7 @@ class LeafletImage(models.Model):
         im = Image.open(self.raw_image.file)
         cropped = im.copy()
         cropped = cropped.crop((x, y, x2, y2))
-        new_file = StringIO()
+        new_file = BytesIO()
         cropped.save(new_file, 'jpeg')
         file_content = ContentFile(new_file.getvalue())
         self.image.save(file_name, file_content)
@@ -167,7 +167,7 @@ class LeafletImage(models.Model):
             im = Image.open(image_field.file)
             rotated = im.copy()
             rotated = rotated.rotate(rotate_angle)
-            new_file = StringIO()
+            new_file = BytesIO()
             rotated.save(new_file, 'jpeg')
             file_content = ContentFile(new_file.getvalue())
             image_field.save(file_name, file_content)

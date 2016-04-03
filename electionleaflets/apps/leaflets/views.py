@@ -6,7 +6,7 @@ from collections import OrderedDict
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib import messages
-from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
+from formtools.wizard.views import NamedUrlSessionWizardView
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.views.generic import (DetailView, ListView, UpdateView,
@@ -48,7 +48,7 @@ class ImageRotateView(StaffuserRequiredMixin, DetailView):
     def post(self, request, *args, **kwargs):
         image_model = self.get_object()
         rotation = request.POST.get('rotate')
-        print rotation
+        print(rotation)
         image_model.rotate(int(rotation))
         return HttpResponseRedirect(image_model.get_absolute_url())
 
@@ -246,7 +246,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             return self.form_list
 
         # self.form_list is an ordered dict.  Convert it to a list of tuples.
-        form_list = [(k, v) for k, v in self.form_list.items()]
+        form_list = [(k, v) for k, v in list(self.form_list.items())]
 
         # Reverse the list, so the the first step starting with 'inside'
         # is the last inside page form.

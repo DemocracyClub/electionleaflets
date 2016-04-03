@@ -51,6 +51,7 @@ QUESTIONS = OrderedDict([
 class QuestionSetForm(forms.ModelForm):
     class Meta:
         model = LeafletProperties
+        fields = '__all__'
 
     def __init__(self, leaflet, user, *args, **kwargs):
       super(QuestionSetForm, self).__init__(*args, **kwargs)
@@ -67,7 +68,7 @@ class QuestionSetForm(forms.ModelForm):
       self.initial['form_name'] = 'analysis_questions_1'
       self.get_initial_from_models()
 
-      for key, value in QUESTIONS.items():
+      for key, value in list(QUESTIONS.items()):
         self.fields[key] = forms.ChoiceField(
             label=value['label'],
             choices=[(v,v) for v in value['choices']],
@@ -82,10 +83,10 @@ class QuestionSetForm(forms.ModelForm):
 
 
     def save(self, *args, **kwargs):
-        for question, answer in self.cleaned_data.items():
+        for question, answer in list(self.cleaned_data.items()):
             if not answer:
                 continue
-            if question in QUESTIONS.keys():
+            if question in list(QUESTIONS.keys()):
                 question, created = LeafletProperties.objects.update_or_create(
                     leaflet=self.leaflet,
                     user=self.user,

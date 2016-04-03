@@ -1,4 +1,8 @@
+
 Feature: Leaflet uploader
+    Background:
+        Given there is a constituency called "Camberwell and Peckham"
+
     Scenario: Upload single image leaflet
         Given I access the url "/leaflets/add/front/"
         Then I see the header "Step 1: Front page"
@@ -15,8 +19,8 @@ Feature: Leaflet uploader
           | step_name | people          |  action |
           | people    | None          |  submit |
         Then I should see the leaflet url
-        and I should see 1 leaflet images
-        in the constituency "Camberwell and Peckham"
+        And I should see 1 leaflet images
+        And it should be in the constituency "Camberwell and Peckham"
 
     Scenario: Upload front and back
         Given I access the url "/leaflets/add/front/"
@@ -37,7 +41,7 @@ Feature: Leaflet uploader
           | step_name | people          |  action |
           | people    | None          |  submit |
         Then I should see the leaflet url
-        and I should see 2 leaflet images
+        And I should see 2 leaflet images
 
     Scenario: Upload front, back and inside
         Given I access the url "/leaflets/add/front/"
@@ -58,7 +62,7 @@ Feature: Leaflet uploader
           | step_name | people          |  action |
           | people    | None          |  submit |
         Then I should see the leaflet url
-        and I should see 3 leaflet images
+        And I should see 3 leaflet images
 
     Scenario: Upload front, back and two inside pages
         Given I access the url "/leaflets/add/front/"
@@ -82,7 +86,7 @@ Feature: Leaflet uploader
           | step_name | people          |  action |
           | people    | None          |  submit |
         Then I should see the leaflet url
-        and I should see 4 leaflet images
+        And I should see 4 leaflet images
 
 
 
@@ -111,7 +115,7 @@ Feature: Leaflet uploader
           | step_name | people          |  action |
           | people    | None          |  submit |
         Then I should see the leaflet url
-        and I should see 5 leaflet images
+        And I should see 5 leaflet images
 
     Scenario: Upload front, back and three inside pages, pressing 'no more pages'
         Given I access the url "/leaflets/add/front/"
@@ -141,7 +145,7 @@ Feature: Leaflet uploader
           | step_name | people          |  action |
           | people    | None          |  submit |
         Then I should see the leaflet url
-        and I should see 5 leaflet images
+        And I should see 5 leaflet images
 
     Scenario: Upload single image leaflet with partial postcode
         Given I access the url "/leaflets/add/front/"

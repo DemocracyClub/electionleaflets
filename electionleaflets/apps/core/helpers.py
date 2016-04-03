@@ -4,7 +4,7 @@ from django.core.cache import cache
 
 from constituencies.models import Constituency
 
-import constants
+from . import constants
 
 
 def geocode(postcode):
@@ -30,8 +30,8 @@ def geocode(postcode):
             'wgs84_lat': lat,
             'constituency': constituency,
         }
-    except Exception, e:
-        print e
+    except Exception as e:
+        print(e)
         result = None
     cache.set(postcode, result, 60*60*60*24)
     return result

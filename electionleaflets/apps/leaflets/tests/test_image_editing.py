@@ -10,7 +10,7 @@ from .helpers import create_dummy_leaflets
 class TestImageCrop(TestCase):
     def setUp(self):
         create_dummy_leaflets()
-        self.image_model = LeafletImage.objects.get(pk=1)
+        self.image_model = LeafletImage.objects.first()
 
     def test_dimensions(self):
         self.assertEqual(self.image_model.dimensions, (419, 300))

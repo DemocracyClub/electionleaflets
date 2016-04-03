@@ -4,7 +4,7 @@ from localflavor.gb.forms import GBPostcodeField
 
 from core.helpers import geocode
 from .models import Leaflet, LeafletImage
-import constants
+from . import constants
 
 
 class ImageForm(forms.Form):
@@ -52,6 +52,7 @@ class PostcodeForm(forms.Form):
 class LeafletDetailsFrom(forms.ModelForm):
     class Meta:
         model = Leaflet
+        fields = '__all__'
 
 class LeafletReviewFrom(forms.ModelForm):
     class Meta:
@@ -65,7 +66,7 @@ class PeopleModelChoiceField(forms.ModelChoiceField):
         else:
             party_name = "Independent"
 
-        return u"{0} ({1})".format(
+        return "{0} ({1})".format(
             obj.name,
             party_name,
         )

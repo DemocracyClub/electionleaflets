@@ -88,10 +88,10 @@ class TestModels(TestCase):
         )
 
     def test_current_party(self):
-        self.assertEqual(self.person1.current_party.pk, 1)
+        self.assertEqual(self.person1.current_party.pk, 3)
 
     def test_current_election(self):
-        self.assertEqual(self.person1.current_election.pk, 1)
+        self.assertEqual(self.person1.current_election.pk, 2)
 
     def test_current_constituency(self):
-        self.assertEqual(self.person1.current_constituency.pk, '1')
+        self.assertEqual(self.person1.current_constituency.pk, '0')

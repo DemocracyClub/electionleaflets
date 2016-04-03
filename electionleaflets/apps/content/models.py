@@ -13,4 +13,4 @@ class ContentBlock(models.Model):
         return self.name
     
     class Meta:
-        db_table = u'contentblock'
+        db_table = 'contentblock'

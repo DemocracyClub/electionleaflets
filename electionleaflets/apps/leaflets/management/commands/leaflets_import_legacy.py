@@ -40,7 +40,7 @@ class Command(BaseCommand):
             )
 
             if os.path.exists(image_path):
-                print "Exists"
+                print("Exists")
                 f = open(image_path, 'r')
                 data['image'] = File(f)
             else:
@@ -50,11 +50,11 @@ class Command(BaseCommand):
                     key
                 )
                 if os.path.exists(image_path):
-                    print "Exists"
+                    print("Exists")
                     f = open(image_path, 'r')
                     data['image'] = File(f)
                 else:
-                    print "Doesn't exist"
+                    print("Doesn't exist")
             return data
 
     def clean_constituency(self, con):
@@ -122,13 +122,13 @@ class Command(BaseCommand):
                             party,
                             constituency=con
                             ))
-                    print new_leaflet.pk,
+                    print(new_leaflet.pk, end=' ')
                     if not new_leaflet.images.all():
-                        print "Adding images"
+                        print("Adding images")
                         for legacy_image in legacy_leaflet.images.all():
                             new_image, created = LeafletImage.objects.update_or_create(
                             leaflet=new_leaflet,
                             legacy_image_key=legacy_image.image_key,
                             defaults=self.clean_legacy_leaflet_image(legacy_image))
                     else:
-                        print ""
+                        print("")
