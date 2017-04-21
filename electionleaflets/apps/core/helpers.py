@@ -15,7 +15,7 @@ def geocode(postcode):
     if cached:
         return cached
     try:
-        res = requests.get("%s/postcode/%s" % (constants.MAPIT_URL, postcode))
+        res = requests.get("%s/postcode/%s" % (constants.MAPIT_URL, postcode), verify=False)
         res_json = res.json()
         if 'code' in res_json and res_json['code'] == 404:
             return None
