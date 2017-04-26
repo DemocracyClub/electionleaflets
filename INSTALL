@@ -32,8 +32,7 @@ cp electionleaflets/settings/local.py.example  electionleaflets/settings/local.p
 ```
 also you may need:
 
-mkdir electionleaflets/media/uploads/thumbnail
-mkdir electionleaflets/media/uploads/small medium large
+mkdir -p electionleaflets/media/uploads/{thumbnail,small,medium,large}
 
 Create a database and a user in Postgres, then edit the local.py file and add details of your database.
 
@@ -44,18 +43,20 @@ python manage.py migrate
 python manage.py createcachetable
 ```
 
-4) Install css, javascript packages and setup sass stuff
+4) Install css, javascript packages and setup sass stuff. [Install yarn][yarn] first
 
 ```
-npm install && bower install
+yarn install && bower install
 ```
 
 5) Run Gulp (for development only)
 ```
-bundle exec gulp
+gulp
 ```
 
 6) Run django
 ```
 python manage.py runserver
 ```
+
+[yarn]: https://yarnpkg.com/en/docs/install
