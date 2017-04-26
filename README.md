@@ -4,23 +4,75 @@
 [![Build Status](https://travis-ci.org/DemocracyClub/electionleaflets.svg)](https://travis-ci.org/DemocracyClub/electionleaflets)
 [![Coverage Status](https://coveralls.io/repos/DemocracyClub/electionleaflets/badge.svg?branch=master)](https://coveralls.io/r/DemocracyClub/electionleaflets?branch=django_1_7)
 
-## Notes from version 1.0
-
 ### Welcome
 
-Welcome, this is a port to Django of the PHP election leaflets application which can be found at http://code.google.com/p/theelectionleafletproject/.
+This is a port to Django of the PHP election leaflets application which can be found at http://code.google.com/p/theelectionleafletproject/.
 
-In order to speed up this port, we are running the very first version with the original database structure and aiming to move to refined version over time as new functionality is added that requires a tidy up in a particular area. This shouldn't make a big difference if you are building from scratch it helped me out lots with all of the existing data.
+In order to speed up this port, we are running the first version using the original database structure. We'll tidy up areas of the database as necessary as new functionality is added. This shouldn't make a difference to new developers if you're starting from scratch.
 
-### Upcoming functionality
+### Getting started
 
-* Users
+You'll need some basic requirements installed on your machine, probably through your package manager:
 
+- Python 2.7.x
+- Node.JS 7+
+- PostgreSQL
+- PostGIS
+- Redis
+- Yarn
 
-### Future TODO List
+This should do the trick on macOS with Homebrew:
 
-A list of things outside of upcoming features that need doing to make this more useful outside of the UK.
+```shell
+deactivate ; brew install python node postgresql postgis redis yarn
+```
 
- * Provide translations of the templates
- * Use local flavors for checking postcodes/zipcodes
- * Allow for multi-tenant hosting of sites for various languages
+1. Create python virtual environment
+```shell
+virtualenv .venv --no-site-packages
+. .venv/bin/activate
+```
+
+2. Install python requirements
+
+For development:
+```shell
+pip install -r requirements/dev.txt
+```
+
+For production:
+```shell
+pip install -r requirements/production.txt
+```
+
+3. Settings and database
+```shell
+createdb electionleaflets
+createuser electionleaflets
+psql -c 'ALTER ROLE electionleaflets WITH SUPERUSER' # Needed to activate PostGIS
+cp electionleaflets/settings/local.py.example electionleaflets/settings/local.py # Optional: add a TheyWorkForYou API key here
+python manage.py migrate
+python manage.py createcachetable
+python manage.py constituencies_load_constituencies
+mkdir -p electionleaflets/media/uploads/{thumbnail,small,medium,large}
+python manage.py createsuperuser # Create a user to login to /admin with
+```
+
+4. Install frontend dependencies
+```
+yarn install && bower install
+```
+
+5. Run gulp in another tab for development. This will watch for changes and recompile assets automatically
+```
+gulp
+```
+
+6. Run django
+```
+python manage.py runserver
+```
+
+7. Visit the site at http://127.0.0.1:8000/
+
+8. See our [guidelines for contributing](CONTRIBUTING.md)
