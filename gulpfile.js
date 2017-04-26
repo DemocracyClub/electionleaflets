@@ -60,7 +60,7 @@
     wrap = require('gulp-wrap'),
     declare = require('gulp-declare'),
     concat = require('gulp-concat'),
-    minifyCss = require('gulp-minify-css'),
+    cleanCss = require('gulp-clean-css'),
     rename = require('gulp-rename'),
     ignore = require('gulp-ignore'),
     rimraf = require('gulp-rimraf'),
@@ -68,7 +68,7 @@
     imagemin = require('gulp-imagemin'),
     order = require('gulp-order'),
     templateCompiler = require('gulp-ember-template-compiler'),
-    sass = require('gulp-ruby-sass');
+    sass = require('gulp-sass');
 
   gulp.task('clean-pre', function() {
     return gulp
@@ -113,7 +113,7 @@
   gulp.task('css', ['copy-sass', 'sass'], function() {
     gulp
       .src(paths.tmp + 'stylesheets/main.css')
-      .pipe(minifyCss())
+      .pipe(cleanCss())
       .pipe(rename({ suffix: '.min' }))
       .pipe(gulp.dest(paths.dest + 'stylesheets/'));
   });
