@@ -7,8 +7,9 @@ install: pip install -r requirements/dev.txt --download-cache $HOME/.pip-cache
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
   - psql -U postgres -d travis_ci_test -c "create extension postgis"
-script: coverage run --source=electionleaflets manage.py test
-script: coverage run -a --source=electionleaflets manage.py harvest -a leaflets
+script:
+  - coverage run --source=electionleaflets manage.py test
+  - coverage run -a --source=electionleaflets manage.py harvest
 after_success:
   - coveralls
 notifications:
@@ -19,3 +20,5 @@ cache:
     - $HOME/.pip-cache/
 addons:
   postgresql: "9.3"
+services:
+  - redis-server
