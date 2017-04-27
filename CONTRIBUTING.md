@@ -1,6 +1,6 @@
 # Contributing
 
-At [DemocracyClub](https://democracyclub.org.uk/) we value contributions to our projects from volunteers and contirbutors.
+At [Democracy Club](https://democracyclub.org.uk/) we value contributions to our projects from volunteers and contributors.
 
 ## Issues
 * To report a bug or suggest an improvement, [create an issue](https://github.com/DemocracyClub/electionleaflets/issues/new).
@@ -15,9 +15,9 @@ At [DemocracyClub](https://democracyclub.org.uk/) we value contributions to our 
 * Check your work against our test suite. You can run tests locally using:
     * `pytest` (unit tests) and
     * `python manage.py harvest` (acceptance tests)
-    or enable [travis-ci](https://travis-ci.org/) for your fork, so the tests will be executed after a `push`.
+    or enable [Travis CI](https://travis-ci.org/) for your fork, so the tests will be executed after a `push`.
 * Push your changes to a topic branch in your fork of the repository.
 * Submit a pull request to the repository.
 * Reference the #issue number in your pull request.
 * Keep pull requests limited to a single issue.
-* Test any front-end changes (HTML, CSS, javascript) in multiple browsers.
+* Test any front-end changes (HTML, CSS, JavaScript) in multiple browsers.
