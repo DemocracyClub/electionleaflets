@@ -3,24 +3,24 @@
 {% block extra_head %}
 
 	<!-- /css/main.css?v=6" -->
-	
+
     <!-- bring in the OpenLayers javascript library
          (here we bring it from the remote site, but you could
          easily serve up this javascript yourself) -->
-    <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
- 
+    <script src="https://www.openlayers.org/api/OpenLayers.js"></script>
+
     <!-- bring in the OpenStreetMap OpenLayers layers.
          Using this hosted file will make sure we are kept up
          to date with any necessary changes -->
-    <script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
-    
+    <script src="https://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+
 <script type="text/javascript">
         // Start position for the map (hardcoded here for simplicity)
         var lat=53;
         var lon=-1;
         var zoom=5;
 
-        OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
+        OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
             defaultHandlerOptions: {
                 'single': true,
                 'double': false,
@@ -34,13 +34,13 @@
                 );
                OpenLayers.Control.prototype.initialize.apply(
                    this, arguments
-                ); 
+                );
                 this.handler = new OpenLayers.Handler.Click(
                     this, {
                        'click': this.trigger
                     }, this.handlerOptions
                 );
-            }, 
+            },
 
             trigger: function(e) {
                 var lonlat = map.getLonLatFromViewPortPx(e.xy).transform(new OpenLayers.Projection("EPSG:900913"));
@@ -59,9 +59,9 @@
 
             });
 
- 
+
         var map; //complex object of type OpenLayers.Map
- 
+
         //Initialise the 'map' object
         function init() {
             map = new OpenLayers.Map ("map", {
@@ -76,7 +76,7 @@
                 displayProjection: new OpenLayers.Projection("EPSG:900913")
             } );
 
-		
+
             // Define the map layer
             // Other defined layers are OpenLayers.Layer.OSM.Mapnik, OpenLayers.Layer.OSM.Maplint and OpenLayers.Layer.OSM.CycleMap
             layer = new OpenLayers.Layer.OSM( "Open Street Map");
@@ -92,7 +92,7 @@
             map.addControl(click);
             click.activate();
 
- 
+
             if( ! map.getCenter() ){
                 var lonLat = new OpenLayers.LonLat(lon, lat).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
                 map.setCenter (lonLat, zoom);
@@ -104,7 +104,7 @@
             var x = Math.round ((bounds.left - this.maxExtent.left) / (res * this.tileSize.w));
             var y = Math.round ((this.maxExtent.top - bounds.top) / (res * this.tileSize.h));
             var z = this.map.getZoom();
-    
+
             var path = z + "/" + x + "/" + y + "." + this.type;
             var url = this.url;
             if (url instanceof Array) {
@@ -125,7 +125,7 @@
 {% endblock %}
 
 
-{% block content %} 
+{% block content %}
     <!-- define a DIV into which the map will appear. Make it take up the whole window -->
 <div id="sidebar" >
 <H1>Leaflets delivered by constituency</H1>

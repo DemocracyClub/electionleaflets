@@ -6,7 +6,7 @@ def postcode_to_latlong(postcode):
     import urllib.request, urllib.error, urllib.parse
     from django.utils import simplejson as json
 
-    url = 'http://mapit.mysociety.org/postcode/%s' % postcode.lower().replace(' ', '')
+    url = 'https://mapit.mysociety.org/postcode/%s' % postcode.lower().replace(' ', '')
     result_dict = None
     try:
         request = urllib.request.urlopen(url)

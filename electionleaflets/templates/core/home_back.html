@@ -9,34 +9,34 @@
 
             			<div id="divWarning">
 	            			</div>
-			
+
 						<div id="divMessages">
 	            			</div>
-            
+
 <div id="divContentFull">
-	
-	
+
+
          <div id="divFrontLookup">
              <form method="post" action="{% url "constituencies"  %}">
                  <label for="id_search">Enter your postcode to see leaflets near you</label>
                  <input type="text" id="id_search" name="search" />
 				 <label for='id_constituency'>or choose a constituency</label>
 				 {{ form.constituency }}
-                 <input  class="button" type="submit" value="GO" />                    
+                 <input  class="button" type="submit" value="GO" />
              </form>
          </div>
     <div id="divWelcome">
 		{% content_block "homepage" %}
-		
+
 		{% if request.user.is_staff %}
 		<a class='staff_link' href='/admin/content/contentblock/1/'>Edit ContentBlock</a>
 		{% endif%}
-		
+
         <p id="pCount">
             Over 6000 leaflets added so far!
         </p>
 	</div>
-	
+
      <div id="divAction">
         <div>
             <h3>1) Scan any leaflets you receive</h3>
@@ -59,38 +59,38 @@
 
 		{% leaflet_carousel %}
 
-        <p><a href="{% url "leaflets" %}">Browse leaflets by party or category &raquo;</a></p>                        
+        <p><a href="{% url "leaflets" %}">Browse leaflets by party or category &raquo;</a></p>
     </div>
     <br class="clear"/>
-    
+
     <div class="stats">
 	<a name='elections2011'></a>
         <div>
             <h2>Elections in 2011</h2>
 			Find out about who is standing<br/> and what the polls say<br/>
 			from Wikipedia</br>
-			
+
 			<ul>
 				<li>
-<a href='http://en.wikipedia.org/wiki/National_Assembly_for_Wales_election,_2011' target='_blank'>National Assembly for Wales Election</a>
+<a href='https://en.wikipedia.org/wiki/National_Assembly_for_Wales_election,_2011' target='_blank'>National Assembly for Wales Election</a>
 				</li>
 				<li>
-<a href='http://en.wikipedia.org/wiki/Scottish_Parliament_general_election,_2011' target='_blank'>Scottish Parliament General Election</a>
+<a href='https://en.wikipedia.org/wiki/Scottish_Parliament_general_election,_2011' target='_blank'>Scottish Parliament General Election</a>
 				</li>
 				<li>
-<a href='http://en.wikipedia.org/wiki/Northern_Ireland_Assembly_election,_2011' target='_blank'>Northern Ireland Assembly Election</a>
+<a href='https://en.wikipedia.org/wiki/Northern_Ireland_Assembly_election,_2011' target='_blank'>Northern Ireland Assembly Election</a>
 				</li>
 				<li>
-<a href='http://en.wikipedia.org/wiki/United_Kingdom_local_elections,_2011' target='_blank'>UK Local Elections</a>	
+<a href='https://en.wikipedia.org/wiki/United_Kingdom_local_elections,_2011' target='_blank'>UK Local Elections</a>
 				</li>
 				<li>
-<a href='http://en.wikipedia.org/wiki/United_Kingdom_Alternative_Vote_referendum,_2011' target='_blank'>UK Alternative Vote Referendum</a>			
+<a href='https://en.wikipedia.org/wiki/United_Kingdom_Alternative_Vote_referendum,_2011' target='_blank'>UK Alternative Vote Referendum</a>
 				</li>
 				<li><br/>Try something different<br/><a  target='_blank' href='http://scraperwikiviews.com/run/alternative_simulation/' class='awesome blue'>Play our Alternative Vote Simulator</a></li>
 			</ul>
 			<br/>
         </div>
-	
+
         <div>
             <h2>Top parties</h2>
 
