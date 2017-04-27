@@ -6,7 +6,7 @@
 
 ### Welcome
 
-This is a port to Django of the PHP election leaflets application which can be found at http://code.google.com/p/theelectionleafletproject/.
+This is a port to Django of the PHP election leaflets application which can be found at https://code.google.com/archive/p/theelectionleafletproject/.
 
 In order to speed up this port, we are running the first version using the original database structure. We'll tidy up areas of the database as necessary as new functionality is added. This shouldn't make a difference to new developers if you're starting from scratch.
 
