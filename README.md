@@ -24,11 +24,13 @@ You'll need some basic requirements installed on your machine, probably through 
 This should do the trick on macOS with Homebrew:
 
 ```shell
-deactivate ; brew install python node postgresql postgis redis yarn
+brew install python node postgresql postgis redis yarn
 ```
 
 1. Create python virtual environment
 ```shell
+deactivate #any running ones
+pip install virtualenv #if you don't have it
 virtualenv .venv --no-site-packages
 . .venv/bin/activate
 ```
@@ -63,7 +65,7 @@ python manage.py createsuperuser # Create a user to login to /admin with
 yarn install && bower install
 ```
 
-5. Run gulp in another tab for development. This will watch for changes and recompile assets automatically
+5. Run gulp in another tab for development. This will watch for changes and recompile assets automatically. You'll need [gulp-cli](https://www.npmjs.com/package/gulp-cli) 
 ```
 gulp
 ```
