@@ -9,7 +9,7 @@ django-compressor==1.2
 django-extensions==1.4.8
 django-formtools
 django-localflavor==1.1
-git+https://github.com/zyga/django-pagination.git#egg=linaro_django_pagination
+linaro_django_pagination==2.0.3
 django-markdown-deux==1.0.5
 django-registration==0.8
 django-storages-redux==1.2.3
@@ -35,3 +35,6 @@ sure==1.2.9
 boto==2.38.0
 git+https://github.com/DemocracyClub/django-uk-political-parties.git#egg=django-uk-political-parties
 gunicorn==19.7.1
+django-environ==0.4.3
+django-redis==4.8.0
+dj-static==0.0.6

@@ -1,32 +1,30 @@
-import sys
-from os.path import join, abspath, dirname
+import environ, sys
+root = environ.Path(__file__) - 2 # three folder back (/a/b/c/ - 3 = /)
+env = environ.Env() # set default values and casting
 
-# PATH vars
-here = lambda *x: join(abspath(dirname(__file__)), *x)
-PROJECT_ROOT = here("..")
-root = lambda *x: join(abspath(PROJECT_ROOT), *x)
 sys.path.insert(0, root('third_party'))
 sys.path.insert(0, root('apps'))
 sys.path.insert(0, '../django-uk-political-parties/')
 
+DEBUG = env.bool('DEBUG', default=False)
+TEMPLATE_DEBUG = DEBUG
 
-DEBUG = False
-template_DEBUG = DEBUG
+db_url = env('DATABASE_URL', default='postgres://postgres@localhost/electionleaflets')
+db_url = db_url.replace('postgres://', 'postgis://')
 
-# DATABASES define in environment specific settings file
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'electionleaflets',
-        'USER': 'electionleaflets',
-    }
+    'default': env.db_url_config(db_url)
 }
 
+redis_url_env = env('REDIS_PROVIDER', default='REDIS_URL')
+CACHES = {
+    'default': env.cache(redis_url_env, default='redis://localhost:6379/0')
+}
 
 TIME_ZONE = 'Europe/London'
 LANGUAGE_CODE = 'en-GB'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 MEDIA_ROOT = root('media', )
 MEDIA_URL = '/media/'
@@ -36,13 +34,38 @@ STATICFILES_DIRS = (
     root('media'),
 )
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-AWS_S3_FILE_OVERWRITE = False
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+if env("AWS_STORAGE_BUCKET_NAME", default=None):
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+    AWS_S3_FILE_OVERWRITE = env.bool("AWS_S3_FILE_OVERWRITE", default=False)
+    AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_HOST = env("AWS_S3_HOST")
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='team@electionleaflets.org')
+EMAIL_RECIPIENT = env('EMAIL_RECIPIENT', default='team@electionleaflets.org')
+REPORT_EMAIL_SUBJECT = env('REPORT_EMAIL_SUBJECT', default='ELECTION LEAFLET REPORT')
+
+MAINTENANCE_MODE = env.bool('MAINTENANCE_MODE', default=False)
+GOOGLE_ANALYTICS_ENABLED = env.bool('GOOGLE_ANALYTICS_ENABLED', default=False)
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+
+TWITTER_KEY = env('TWITTER_KEY', default='')
+TWITTER_SECRET = env('TWITTER_SECRET', default='')
+TWITTER_TOKEN = env('TWITTER_TOKEN', default='')
+TWITTER_TOKEN_SECRET = env('TWITTER_TOKEN_SECRET', default='')
+
+ADMINS = [a.split(',') for a in env('ADMINS', default='').split(';')]
+MANAGERS = ADMINS
 
 SITE_ID=1
 USE_I18N = False
@@ -54,8 +77,7 @@ LOGIN_URL = "/"
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/admin_media/'
 
-# Don't share this with anybody.
-SECRET_KEY = "elyfryi8on!dmw&8b3j-g0yve4u&%4_6%(tf3*)@#&mq*$yzhf^6"
+SECRET_KEY = env('SECRET_KEY', default='INSECURE')
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -113,7 +135,7 @@ INSTALLED_APPS = [
 
 
 THUMBNAIL_FORMAT = 'PNG'
-THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
+THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.cached_db_kvstore.KVStore'
 
 
 TEMPLATES = [
@@ -176,11 +198,7 @@ THANKYOU_MESSAGES = [
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
-# .local.py overrides all the common settings.
-try:
-    from .local import *
-except ImportError:
-    pass
+THEYWORKFORYOU_API_KEY = env('THEYWORKFORYOU_API_KEY', default='')
 
 
 # importing test settings file if necessary (TODO chould be done better)
