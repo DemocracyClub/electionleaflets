@@ -1,0 +1,15 @@
+{
+  "name": "Election Leaflets",
+  "buildpacks": [
+    {
+      "url": "heroku/node"
+    },
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "addons": [
+    "openredis",
+    "heroku-postgresql",
+  ]
+}
