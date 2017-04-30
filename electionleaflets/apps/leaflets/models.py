@@ -92,6 +92,17 @@ class Leaflet(geo_model.Model):
 
 
 class LeafletImage(models.Model):
+    ORIENTATION_CHOICES = (
+        (1, 'Horizontal (normal)'),
+        (2, 'Mirror horizontal'),
+        (3, 'Rotate 180'),
+        (4, 'Mirror vertical'),
+        (5, 'Mirror horizontal and rotate 270 CW'),
+        (6, 'Rotate 90 CW'),
+        (7, 'Mirror horizontal and rotate 90 CW'),
+        (8, 'Rotate 270 CW'),
+    )
+
     leaflet = models.ForeignKey(Leaflet, related_name='images')
     image = ImageField(upload_to="leaflets", max_length=255)
     raw_image = ImageField(upload_to="raw_leaflets", blank=True, max_length=255)
@@ -119,15 +130,22 @@ class LeafletImage(models.Model):
         from sorl.thumbnail.engines.pil_engine import Engine
         from sorl.thumbnail.images import ImageFile
 
-        e = Engine()
-        f = ImageFile(self.image.file)
-        tmp_image = e.get_image(f)
-        tmp_image = e._orientation(tmp_image)
+        tmp_image = Image.open(self.image)
+
         tmp_image = tmp_image.convert('RGB')
         new_file = BytesIO()
 
-        tmp_image.save(new_file, 'jpeg')
+        # strip exif
+        data = list(tmp_image.getdata())
+        image_without_exif = Image.new(tmp_image.mode, tmp_image.size)
+        image_without_exif.putdata(data)
+
+        print(self.image.name, image_without_exif.info)
+
+        new_file = BytesIO()
+        image_without_exif.save(new_file, 'jpeg')
         file_content = ContentFile(new_file.getvalue())
+
         self.image.save(self.image.name, file_content, save=False)
 
     @models.permalink
