@@ -11,3 +11,4 @@ unittest2==0.8.0
 coveralls
 responses==0.3.0
 factory_boy
+django-sslserver
