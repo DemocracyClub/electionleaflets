@@ -161,7 +161,6 @@ class LeafletImage(models.Model):
         e = Engine()
         f = ImageFile(self.image.file)
         tmp_image = e.get_image(f)
-        # tmp_image = e._orientation(tmp_image)
 
         new_file = BytesIO()
         tmp_image.save(new_file, 'jpeg')
