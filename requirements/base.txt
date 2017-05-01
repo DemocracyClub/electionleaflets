@@ -38,3 +38,5 @@ gunicorn==19.7.1
 django-environ==0.4.3
 django-redis==4.8.0
 dj-static==0.0.6
+aloe
+aloe_django
