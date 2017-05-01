@@ -33,8 +33,6 @@ STATICFILES_DIRS = (
     root('media'),
 )
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 if env("AWS_STORAGE_BUCKET_NAME", default=None):
     import boto.s3.connection
 
@@ -46,6 +44,29 @@ if env("AWS_STORAGE_BUCKET_NAME", default=None):
     AWS_S3_HOST = env("AWS_S3_HOST", default="s3-eu-west-1.amazonaws.com")
     AWS_S3_CUSTOM_DOMAIN = env("AWS_S3_CUSTOM_DOMAIN", default=None)
     AWS_S3_CALLING_FORMAT = boto.s3.connection.OrdinaryCallingFormat()
+
+if env('MAILGUN_SMTP_SERVER', default=None):
+    EMAIL_HOST = env('MAILGUN_SMTP_SERVER')
+    EMAIL_HOST_USER = env('MAILGUN_SMTP_LOGIN')
+    EMAIL_HOST_PASSWORD = env('MAILGUN_SMTP_PASSWORD')
+    EMAIL_PORT = env('MAILGUN_SMTP_PORT')
+    EMAIL_USE_TLS = True
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+elif env('MAILTRAP_API_TOKEN', default=None):
+    from urllib2 import Request, urlopen
+    import json
+    request = Request('https://mailtrap.io/api/v1/inboxes.json?api_token={}'.format(env('MAILTRAP_API_TOKEN')))
+    response_body = urlopen(request).read()
+    credentials = json.loads(response_body)[0]
+
+    EMAIL_HOST = credentials['domain']
+    EMAIL_HOST_USER = str(credentials['username'])
+    EMAIL_HOST_PASSWORD = str(credentials['password'])
+    EMAIL_PORT = credentials['smtp_ports'][0]
+    EMAIL_USE_TLS = True
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
