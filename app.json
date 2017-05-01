@@ -1,15 +1,30 @@
 {
   "name": "Election Leaflets",
+  "repository": "https://github.com/DemocracyClub/electionleaflets",
+  "website": "https://electionleaflets.org/",
+  "success_url": "/",
   "buildpacks": [
-    {
-      "url": "heroku/node"
-    },
-    {
-      "url": "heroku/python"
-    }
+    {"url": "https://github.com/cyberdelia/heroku-geo-buildpack.git"},
+    {"url": "heroku/python"}
   ],
   "addons": [
-    "openredis",
+    "rediscloud",
     "heroku-postgresql",
-  ]
+  ],
+  "scripts": {
+    "postdeploy": "./postdeploy.sh"
+  },
+  "env": {
+    "SECRET_TOKEN": {
+        "description": "A secret key for verifying the integrity of signed cookies.",
+        "generator": "secret"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "stack": "Heroku-16"
 }
