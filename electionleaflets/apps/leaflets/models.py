@@ -133,11 +133,22 @@ class LeafletImage(models.Model):
         image_without_exif = Image.new(full_image.mode, full_image.size)
         image_without_exif.putdata(data)
 
+        rotated_image = self._correctly_orient_image(image_without_exif)
+
         new_file = BytesIO()
-        image_without_exif.save(new_file, 'jpeg')
+        rotated_image.save(new_file, 'jpeg')
         file_content = ContentFile(new_file.getvalue())
 
         self.image.save(self.image.name, file_content, save=False)
+
+    def _correctly_orient_image(self, image):
+        if self.orientation == 3:
+            return image.transpose(Image.ROTATE_180)
+        elif self.orientation == 6:
+            return image.transpose(Image.ROTATE_270)
+        elif self.orientation == 8:
+            return image.transpose(Image.ROTATE_90)
+        return image
 
     def save(self, *args, **kwargs):
         """
