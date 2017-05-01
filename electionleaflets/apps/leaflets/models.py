@@ -112,7 +112,7 @@ class LeafletImage(models.Model):
         null=True, blank=True, max_length=255)
     image_text = models.TextField(blank=True)
     orientation = models.PositiveSmallIntegerField(choices=ORIENTATION_CHOICES, default=1)
-    exif_data = models.BinaryField(blank=True)
+    exif_data = models.BinaryField(null=True, blank=True)
 
     class Meta:
         ordering = ['image_type']
@@ -146,7 +146,7 @@ class LeafletImage(models.Model):
         This is so we don't destroy images, by cropping them too small
         for example.
         """
-        if not self.exif_data:
+        if not self.exif_data and self.exif_data != b'':
             self._remove_exif_data()
 
         super(LeafletImage, self).save(*args, **kwargs)

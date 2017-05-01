@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='leafletimage',
             name='exif_data',
-            field=models.BinaryField(blank=True),
+            field=models.BinaryField(blank=True, null=True),
         ),
         migrations.AddField(
             model_name='leafletimage',
