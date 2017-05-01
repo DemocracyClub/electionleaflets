@@ -41,3 +41,4 @@ dj-static==0.0.6
 aloe
 aloe_django
 django-sslserver
+raven==6.0.0

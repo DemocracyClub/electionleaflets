@@ -157,6 +157,13 @@ INSTALLED_APPS = [
     'sslserver',
 ] + LEAFLET_APPS
 
+if env('SENTRY_DSN', default=None):
+    INSTALLED_APPS.append('raven.contrib.django.raven_compat')
+    RAVEN_CONFIG = {
+        'dsn': env('SENTRY_DSN'),
+        'environment': env('SENTRY_ENVIRONMENT', default='production')
+    }
+
 
 THUMBNAIL_FORMAT = 'PNG'
 THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.cached_db_kvstore.KVStore'
