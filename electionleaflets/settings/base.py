@@ -36,12 +36,16 @@ STATICFILES_DIRS = (
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 if env("AWS_STORAGE_BUCKET_NAME", default=None):
+    import boto.s3.connection
+
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     AWS_S3_FILE_OVERWRITE = env.bool("AWS_S3_FILE_OVERWRITE", default=False)
     AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
     AWS_S3_HOST = env("AWS_S3_HOST", default="s3-eu-west-1.amazonaws.com")
+    AWS_S3_CUSTOM_DOMAIN = env("AWS_S3_CUSTOM_DOMAIN", default=None)
+    AWS_S3_CALLING_FORMAT = boto.s3.connection.OrdinaryCallingFormat()
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
