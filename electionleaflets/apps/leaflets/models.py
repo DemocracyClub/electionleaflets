@@ -3,6 +3,7 @@ from io import BytesIO
 
 from sorl.thumbnail import ImageField
 from sorl.thumbnail import delete
+import piexif
 import pytesser
 from PIL import Image
 
@@ -92,6 +93,17 @@ class Leaflet(geo_model.Model):
 
 
 class LeafletImage(models.Model):
+    ORIENTATION_CHOICES = (
+        (1, 'Horizontal (normal)'),
+        (2, 'Mirror horizontal'),
+        (3, 'Rotate 180'),
+        (4, 'Mirror vertical'),
+        (5, 'Mirror horizontal and rotate 270 CW'),
+        (6, 'Rotate 90 CW'),
+        (7, 'Mirror horizontal and rotate 90 CW'),
+        (8, 'Rotate 270 CW'),
+    )
+
     leaflet = models.ForeignKey(Leaflet, related_name='images')
     image = ImageField(upload_to="leaflets", max_length=255)
     raw_image = ImageField(upload_to="raw_leaflets", blank=True, max_length=255)
@@ -99,9 +111,33 @@ class LeafletImage(models.Model):
     image_type = models.CharField(choices=constants.IMAGE_TYPES,
         null=True, blank=True, max_length=255)
     image_text = models.TextField(blank=True)
+    orientation = models.PositiveSmallIntegerField(choices=ORIENTATION_CHOICES, default=1)
+    exif_data = models.BinaryField(null=True, blank=True)
 
     class Meta:
         ordering = ['image_type']
+
+    def _remove_exif_data(self):
+        full_image = Image.open(self.image)
+
+        if full_image.info.get('exif'):
+            exif_dict = piexif.load(full_image.info['exif'])
+            orientation = exif_dict.get('0th', {}).get(piexif.ImageIFD.Orientation, 1)
+
+            self.orientation = orientation
+            self.exif_data = full_image.info['exif']
+        else:
+            self.exif_data = b''
+
+        data = list(full_image.getdata())
+        image_without_exif = Image.new(full_image.mode, full_image.size)
+        image_without_exif.putdata(data)
+
+        new_file = BytesIO()
+        image_without_exif.save(new_file, 'jpeg')
+        file_content = ContentFile(new_file.getvalue())
+
+        self.image.save(self.image.name, file_content, save=False)
 
     def save(self, *args, **kwargs):
         """
@@ -110,6 +146,9 @@ class LeafletImage(models.Model):
         This is so we don't destroy images, by cropping them too small
         for example.
         """
+        if not self.exif_data and self.exif_data != b'':
+            self._remove_exif_data()
+
         super(LeafletImage, self).save(*args, **kwargs)
         if not self.raw_image:
             self.raw_image.save(self.image.name, self.image.file)
@@ -122,12 +161,11 @@ class LeafletImage(models.Model):
         e = Engine()
         f = ImageFile(self.image.file)
         tmp_image = e.get_image(f)
-        tmp_image = e._orientation(tmp_image)
-        tmp_image = tmp_image.convert('RGB')
-        new_file = BytesIO()
 
+        new_file = BytesIO()
         tmp_image.save(new_file, 'jpeg')
         file_content = ContentFile(new_file.getvalue())
+
         self.image.save(self.image.name, file_content, save=False)
 
     @models.permalink
