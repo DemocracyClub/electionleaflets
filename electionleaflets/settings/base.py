@@ -11,7 +11,6 @@ TEMPLATE_DEBUG = DEBUG
 
 db_url = env('DATABASE_URL', default='postgres://postgres@localhost/electionleaflets')
 db_url = db_url.replace('postgres://', 'postgis://')
-
 DATABASES = {
     'default': env.db_url_config(db_url)
 }
@@ -42,7 +41,7 @@ if env("AWS_STORAGE_BUCKET_NAME", default=None):
     AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
-    AWS_S3_HOST = env("AWS_S3_HOST")
+    AWS_S3_HOST = env("AWS_S3_HOST", default="s3-eu-west-1.amazonaws.com")
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -64,7 +63,7 @@ TWITTER_SECRET = env('TWITTER_SECRET', default='')
 TWITTER_TOKEN = env('TWITTER_TOKEN', default='')
 TWITTER_TOKEN_SECRET = env('TWITTER_TOKEN_SECRET', default='')
 
-ADMINS = [a.split(',') for a in env('ADMINS', default='').split(';')]
+ADMINS = [a.split(',') for a in env('ADMINS', default='Admin,admin@example.com').split(';')]
 MANAGERS = ADMINS
 
 SITE_ID=1
