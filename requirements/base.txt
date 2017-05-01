@@ -40,3 +40,4 @@ django-redis==4.8.0
 dj-static==0.0.6
 aloe
 aloe_django
+django-sslserver
