@@ -1,0 +1,20 @@
+{
+    "dev": {
+        "aws_region": "eu-west-1",
+        "django_settings": "electionleaflets.settings.zappa",
+        "s3_bucket": "zappa-electionleaflets-eu-west-1",
+        "vpc_config": {
+            "SubnetIds": [ "subnet-c0df1aa7", "subnet-6600c12f" ],
+            "SecurityGroupIds": [ "sg-c56934bc" ]
+        },
+        "keep_warm": false,
+        "extra_permissions": [
+            {
+                "Effect": "Allow",
+                "Action": ["s3:*"],
+                "Resource": "arn:aws:s3:::data.electionleaflets.org"
+            }
+        ],
+        "remote_env": "s3://zappa-electionleaflets-eu-west-1/staging_secrets.json"
+    }
+}
