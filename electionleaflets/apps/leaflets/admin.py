@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.gis import admin
 from leaflets.models import Leaflet, LeafletImage
 
 from sorl.thumbnail.admin import AdminImageMixin
@@ -10,7 +9,7 @@ class LeafletImageInline(AdminImageMixin, admin.TabularInline):
     model = LeafletImage
 
 
-class LeafletAdmin(admin.OSMGeoAdmin):
+class LeafletAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'publisher_party', 'postcode',
                     'name', 'email', 'get_description', 'status']
     list_filter = ['status', ]
