@@ -15,6 +15,9 @@
                 "Resource": "arn:aws:s3:::data.electionleaflets.org"
             }
         ],
-        "remote_env": "s3://zappa-electionleaflets-eu-west-1/staging_secrets.json"
+        "remote_env": "s3://zappa-electionleaflets-eu-west-1/staging_secrets.json",
+        "domain": "staging.electionleaflets.org",
+        "memory_size": 1536,
+        "timeout_seconds": 60,
     }
 }
