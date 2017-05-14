@@ -38,7 +38,7 @@ hjson==2.0.2
 jmespath==0.9.2
 kappa==0.6.0
 kombu==3.0.37
-lambda-packages==0.14.2
+lambda-packages==0.15.0
 linaro-django-pagination==2.0.3
 linecache2==1.0.0
 lxml==3.4.1
@@ -77,4 +77,4 @@ Unidecode==0.4.20
 unittest2==1.1.0
 Werkzeug==0.12
 wsgi-request-logger==0.4.6
-zappa==0.41.1
+git+https://github.com/Miserlou/Zappa.git@93e9d659a4824abc9506abd4d6de11bd07cf2a84
