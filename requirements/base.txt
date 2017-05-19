@@ -77,4 +77,4 @@ Unidecode==0.4.20
 unittest2==1.1.0
 Werkzeug==0.12
 wsgi-request-logger==0.4.6
-git+https://github.com/Miserlou/Zappa.git@93e9d659a4824abc9506abd4d6de11bd07cf2a84
+zappa==0.42.0
