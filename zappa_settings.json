@@ -1,5 +1,5 @@
 {
-    "dev": {
+    "staging": {
         "aws_region": "eu-west-1",
         "django_settings": "electionleaflets.settings.zappa",
         "s3_bucket": "zappa-electionleaflets-eu-west-1",
