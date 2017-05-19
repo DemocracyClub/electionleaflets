@@ -4,8 +4,8 @@
         "django_settings": "electionleaflets.settings.zappa",
         "s3_bucket": "zappa-electionleaflets-eu-west-1",
         "vpc_config": {
-            "SubnetIds": [ "subnet-c0df1aa7", "subnet-6600c12f" ],
-            "SecurityGroupIds": [ "sg-c56934bc" ]
+            "SubnetIds": [ "subnet-aaaa6bcd", "subnet-b73df0fe" ],
+            "SecurityGroupIds": [ "sg-a0a784d9" ]
         },
         "keep_warm": false,
         "extra_permissions": [
