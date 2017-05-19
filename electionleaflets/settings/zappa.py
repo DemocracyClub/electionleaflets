@@ -10,10 +10,10 @@ ALLOWED_HOSTS = ['*']
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'electionleaflets',
-        'USER': 'electionleaflets',
         'HOST': os.environ.get('DATABASE_HOST'),
+        'USER': os.environ.get('DATABASE_USER'),
         'PORT': '5432',
+        'NAME': os.environ.get('DATABASE_NAME'),
         'PASSWORD': os.environ.get('DATABASE_PASS')
     }
 }
