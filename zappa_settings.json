@@ -19,5 +19,10 @@
         "domain": "staging.electionleaflets.org",
         "memory_size": 1536,
         "timeout_seconds": 60,
+    },
+    "production": {
+        "extends": "staging",
+        "remote_env": "s3://zappa-electionleaflets-eu-west-1/production_secrets.json",
+        "domain": "www.electionleaflets.org",
     }
 }
