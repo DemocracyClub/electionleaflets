@@ -10,12 +10,18 @@ from people.models import Person
 from uk_political_parties.models import Party
 
 from rest_framework import viewsets
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 
 from .serializers import (ConstituencySerializer, PartySerializer,
     LeafletMinSerializer, LeafletSerializer, LeafletImageSerializer)
+
+
+class StandardResultsSetPagination(LimitOffsetPagination):
+    default_limit = 100
+    max_limit = 1000
 
 
 class ConstituencyViewSet(viewsets.ModelViewSet):
@@ -31,11 +37,13 @@ class PartyViewSet(viewsets.ModelViewSet):
 class LeafletImageViewSet(viewsets.ModelViewSet):
     queryset = LeafletImage.objects.all()
     serializer_class = LeafletImageSerializer
+    pagination_class = StandardResultsSetPagination
 
 
 class LeafletViewSet(viewsets.ModelViewSet):
     queryset = Leaflet.objects.all()
     serializer_class = LeafletSerializer
+    pagination_class = StandardResultsSetPagination
 
 
 class LatestByConstituencyView(APIView):
