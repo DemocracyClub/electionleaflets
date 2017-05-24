@@ -11,6 +11,7 @@ from uk_political_parties.models import Party
 
 from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.permissions import BasePermission
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -22,6 +23,17 @@ from .serializers import (ConstituencySerializer, PartySerializer,
 class StandardResultsSetPagination(LimitOffsetPagination):
     default_limit = 100
     max_limit = 1000
+
+
+class LeafletPermissions(BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        # Allow unauthenticated users to GET and POST
+        # but not PUT, PATCH and DELETE
+        if request.method in ['GET', 'POST']:
+            return True
+        else:
+            return request.user == obj.owner
 
 
 class ConstituencyViewSet(viewsets.ModelViewSet):
@@ -44,6 +56,7 @@ class LeafletViewSet(viewsets.ModelViewSet):
     queryset = Leaflet.objects.all()
     serializer_class = LeafletSerializer
     pagination_class = StandardResultsSetPagination
+    permission_classes = (LeafletPermissions, )
 
 
 class LatestByConstituencyView(APIView):
