@@ -21,4 +21,4 @@ class CreateLeafletTests(APITestCase):
         response = self.client.post(leaflet_url, {}, format='json')
         self.assertEqual(response.data['status'], 'draft')
         leaflet_id = response.data['pk']
-        self.assertEqual(leaflet_id, 1)
+        self.assertGreater(leaflet_id, 0)
