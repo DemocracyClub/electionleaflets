@@ -109,6 +109,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.twitter',
     'aloe_django',
     'sslserver',
+    'django_extensions',
 ] + LEAFLET_APPS
 
 
