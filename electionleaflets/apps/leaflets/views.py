@@ -167,7 +167,9 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             if not geo_data:
                 return {}
             people_qs = Person.objects.filter(
-                personconstituencies__constituency=geo_data['constituency'])
+                personconstituencies__constituency=geo_data['constituency'],
+                personconstituencies__election__active=True
+            )
 
             return {
                 '_people': people_qs,
