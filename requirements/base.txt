@@ -34,4 +34,3 @@ sorl-thumbnail==v12.4a1
 sure==1.2.9
 boto==2.38.0
 git+https://github.com/DemocracyClub/django-uk-political-parties.git#egg=django-uk-political-parties
-django-extensions
