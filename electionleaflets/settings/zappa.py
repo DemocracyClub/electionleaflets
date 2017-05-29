@@ -2,7 +2,7 @@ import os
 
 from .base import *
 
-GEOS_LIBRARY_PATH = '/var/task/libgeos_c.so'
+# GEOS_LIBRARY_PATH = '/var/task/libgeos_c.so'
 
 ALLOWED_HOSTS = ['*']
 
@@ -19,6 +19,7 @@ DATABASES = {
 }
 
 DEFAULT_FILE_STORAGE = 's3_lambda_storage.S3LambdaStorage'
+STATICFILES_STORAGE = 's3_lambda_storage.S3StaticLambdaStorage'
 AWS_STORAGE_BUCKET_NAME = "data.electionleaflets.org"
 AWS_S3_SECURE_URLS = True
 AWS_S3_HOST = 's3-eu-west-1.amazonaws.com'
