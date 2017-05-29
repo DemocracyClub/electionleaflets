@@ -6,7 +6,7 @@ django-appconf==0.6
 django-allauth==0.25.2
 django-braces==1.8.0
 django-compressor==1.2
-django-extensions==1.4.8
+django-extensions==1.7.9
 django-formtools
 django-localflavor==1.1
 git+https://github.com/zyga/django-pagination.git#egg=linaro_django_pagination
@@ -34,4 +34,3 @@ sorl-thumbnail==v12.4a1
 sure==1.2.9
 boto==2.38.0
 git+https://github.com/DemocracyClub/django-uk-political-parties.git#egg=django-uk-political-parties
-django-extensions
