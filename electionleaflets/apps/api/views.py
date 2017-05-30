@@ -36,6 +36,11 @@ class LeafletPermissions(BasePermission):
             return request.user == obj.owner
 
 
+class ReadOnly(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return request.method in permissions.SAFE_METHODS
+
+
 class ConstituencyViewSet(viewsets.ModelViewSet):
     queryset = Constituency.objects.all()
     serializer_class = ConstituencySerializer
@@ -60,6 +65,9 @@ class LeafletViewSet(viewsets.ModelViewSet):
 
 
 class LatestByConstituencyView(APIView):
+
+    permission_classes = (ReadOnly, )
+
     def get(self, request, format=None):
         all_constituencies = {}
         TIME_SINCE = datetime.datetime.now() - datetime.timedelta(weeks=20)
@@ -74,6 +82,9 @@ class LatestByConstituencyView(APIView):
         return Response(all_constituencies)
 
 class LatestByPersonView(APIView):
+
+    permission_classes = (ReadOnly, )
+
     def get(self, request, format=None):
         all_people = {}
         TIME_SINCE = datetime.datetime.now() - datetime.timedelta(weeks=20)
@@ -89,6 +100,9 @@ class LatestByPersonView(APIView):
 
 
 class StatsView(APIView):
+
+    permission_classes = (ReadOnly, )
+
     def get(self, request, format=None):
         stats = {
             'leaflets': {}
