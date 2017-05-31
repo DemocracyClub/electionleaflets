@@ -107,8 +107,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.twitter',
-    'aloe_django',
-    'sslserver',
     'django_extensions',
 ] + LEAFLET_APPS
 

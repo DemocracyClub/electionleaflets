@@ -15,3 +15,5 @@ if os.environ.get('RUNNER') == "travis":
             'USER': 'postgres',
         }
     }
+
+INSTALLED_APPS.append('aloe_django')

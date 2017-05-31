@@ -5,9 +5,6 @@ ipython==2.3.1
 aloe
 aloe_django
 nose
-mock==1.0.1
-testtools==1.5.0
-unittest2==0.8.0
 coveralls
 responses==0.3.0
 factory_boy

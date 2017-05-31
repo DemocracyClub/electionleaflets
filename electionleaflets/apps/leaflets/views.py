@@ -19,6 +19,7 @@ from analysis.forms import QuestionSetForm
 from people.models import Person
 from .models import Leaflet, LeafletImage
 from .forms import (InsidePageImageForm, LeafletDetailsFrom)
+from s3_lambda_storage import S3LambdaStorage
 
 
 class ImageView(DetailView):
@@ -151,8 +152,11 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         "people": "leaflets/upload_form/people.html",
     }
 
-    file_storage = FileSystemStorage(location=os.path.join(
-        settings.MEDIA_ROOT, 'images/leaflets_tmp'))
+    if os.environ.get('AWS_SESSION_TOKEN', None):
+        file_storage = S3LambdaStorage(location='leaflets_tmp')
+    else:
+        file_storage = FileSystemStorage(location=os.path.join(
+            settings.MEDIA_ROOT, 'images/leaflets_tmp'))
 
     def get_template_names(self):
             if self.steps.current.startswith('inside'):
