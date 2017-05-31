@@ -2,7 +2,7 @@ import os
 
 from .base import *
 
-# GEOS_LIBRARY_PATH = '/var/task/libgeos_c.so'
+GEOS_LIBRARY_PATH = '/var/task/libgeos_c.so'
 
 ALLOWED_HOSTS = ['*']
 
