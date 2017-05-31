@@ -1,0 +1,36 @@
+version: '3'
+services:
+  migration:
+    build: .
+    image: app
+    command: bash -c "python manage.py migrate && python manage.py uk_political_parties_load_parties && python manage.py constituencies_load_constituencies"
+    volumes:
+      - .:/app
+    links:
+      - postgres
+      - redis
+    environment:
+      DATABASE_URL: postgis://postgres@postgres:5432/postgres
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+  web:
+    depends_on:
+      - migration
+    image: app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    links:
+      - redis
+      - postgres
+    environment:
+      DATABASE_URL: postgis://postgres@postgres:5432/postgres
+      REDIS_URL: redis://redis:6379/0
+  redis:
+    image: redis
+  postgres:
+    image: mdillon/postgis:9.6
+
