@@ -187,6 +187,9 @@ THANKYOU_MESSAGES = [
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
+MAPIT_API_KEY = environ.get('MAPIT_API_KEY', None)
+MAPIT_API_URL = environ.get('MAPIT_API_URL', 'https://mapit.mysociety.org')
+
 # .local.py overrides all the common settings.
 try:
     from .local import *  # noqa: F401,F403
