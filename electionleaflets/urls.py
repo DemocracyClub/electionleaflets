@@ -29,8 +29,8 @@ else:
         url(r'^api/', include('api.urls')),
 
         # Feeds
-        url(r'^feeds/latest/$', feeds.LatestLeafletsFeed(), name='latest_feed'),
-        url(r'^feeds/constituency/(?P<cons_slug>[\w_\-\.]+)/$', feeds.ConstituencyFeed(), name='constituency_feed'),
+        url(r'^feeds/latest/$', feeds.CachedLatestLeafletsFeed, name='latest_feed'),
+        url(r'^feeds/constituency/(?P<cons_slug>[\w_\-\.]+)/$', feeds.CachedConstituencyFeed, name='constituency_feed'),
         url(r'^feeds/category/(?P<cat_slug>[\w_\-\.]+)/$', feeds.CategoryFeed(), name='category_feed'),
         url(r'^feeds/tag/(?P<tag_slug>[\w_\-\.]+)/$', feeds.TagFeed(), name='tag_feed'),
 

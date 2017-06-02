@@ -3,11 +3,17 @@ import mimetypes
 
 from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import last_modified
+
 from leaflets.models import Leaflet
 # from parties.models import Party
 from constituencies.models import Constituency
 from tags.models import Tag
 from categories.models import Category
+
+def last_modified_latest(request):
+    return Leaflet.objects.order_by('-id')[:1].values_list('date_uploaded', flat=True)[0]
 
 class LatestLeafletsFeed(Feed):
     title = "electionleaflets.org latest items"
@@ -47,6 +53,8 @@ class LatestLeafletsFeed(Feed):
             im_type, _ = mimetypes.guess_type(item.images.all()[0].image.url)
             return im_type
 
+CachedLatestLeafletsFeed = last_modified(last_modified_latest)(LatestLeafletsFeed())
+
 # class PartyFeed(Feed):
 #     title = "electionleaflets.org latest party leaflets"
 #     description = "The most recently uploaded party leaflets"
@@ -66,6 +74,10 @@ class LatestLeafletsFeed(Feed):
 #         return item.description
 
 
+def last_modified_constituency(request, cons_slug):
+    obj = get_object_or_404(Constituency, slug=cons_slug)
+    return Leaflet.objects.filter(constituency=obj).order_by('-id')[:1].values_list('date_uploaded', flat=True)[0]
+
 class ConstituencyFeed(Feed):
 
     def get_object(self, request, cons_slug):
@@ -83,6 +95,8 @@ class ConstituencyFeed(Feed):
 
     def item_description(self, item):
         return item.description
+
+CachedConstituencyFeed = last_modified(last_modified_constituency)(ConstituencyFeed())
 
 class TagFeed(Feed):
 
