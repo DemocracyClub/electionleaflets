@@ -1,10 +1,10 @@
+from raven.contrib.django.raven_compat.models import client
 import requests
 
+from django.conf import settings
 from django.core.cache import cache
 
 from constituencies.models import Constituency
-
-from . import constants
 
 
 def geocode(postcode):
@@ -15,7 +15,11 @@ def geocode(postcode):
     if cached:
         return cached
     try:
-        res = requests.get("%s/postcode/%s" % (constants.MAPIT_URL, postcode), verify=False)
+        url = "%s/postcode/%s" % (settings.MAPIT_API_URL, postcode)
+        headers = {}
+        if settings.MAPIT_API_KEY:
+            headers['X-Api-Key'] = settings.MAPIT_API_KEY
+        res = requests.get(url, verify=False, headers=headers)
         res_json = res.json()
         if 'code' in res_json and res_json['code'] == 404:
             return None
@@ -32,6 +36,8 @@ def geocode(postcode):
         }
     except Exception as e:
         print(e)
+        client.captureException()
         result = None
+
     cache.set(postcode, result, 60*60*60*24)
     return result
