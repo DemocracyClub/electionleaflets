@@ -25,6 +25,7 @@ class EmailAlert(models.Model):
     activated = models.IntegerField(null=True, blank=True)
     confirm_id = models.CharField(max_length=300)
     title = models.CharField(max_length=765)
+
     class Meta:
         db_table = 'email_alert'
         verbose_name_plural = 'Email alerts'
@@ -36,8 +37,10 @@ class EmailQue(models.Model):
     email = models.CharField(max_length=765)
     postcode = models.CharField(max_length=60)
     delivery_date = models.DateTimeField()
+
     class Meta:
         db_table = 'email_que'
+
 
 class ImageQue(models.Model):
     image_que_id = models.IntegerField(primary_key=True)
@@ -46,11 +49,13 @@ class ImageQue(models.Model):
     email = models.CharField(max_length=300, blank=True)
     image_key = models.CharField(max_length=765, blank=True)
     uploaded_date = models.DateTimeField()
+
     class Meta:
         db_table = 'image_que'
 
+
 class ImageQueSeq(models.Model):
     sequence = models.IntegerField(primary_key=True)
+
     class Meta:
         db_table = 'image_que_seq'
-

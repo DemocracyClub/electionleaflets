@@ -8,7 +8,7 @@ from constituencies.models import Constituency
 
 from elections.models import Election
 from people.models import (Person, PartyMemberships,
-        PersonConstituencies)
+                           PersonConstituencies)
 
 
 class YNMPPeopleFactory(DjangoModelFactory):
@@ -18,7 +18,7 @@ class YNMPPeopleFactory(DjangoModelFactory):
     source_name = "YNMP"
     name = factory.Sequence(lambda n: 'user %d' % n)
     remote_id = factory.Sequence(lambda n: '%d' % n)
-    source_url  = factory.Sequence(lambda n: 'http://yournextmp.com/person/%d/' % n)
+    source_url = factory.Sequence(lambda n: 'http://yournextmp.com/person/%d/' % n)
 
 
 class PartyFactory(DjangoModelFactory):
@@ -46,6 +46,7 @@ class ElectionFactory(DjangoModelFactory):
     dead_date = "2110-5-6"
 
 # GLOBAL_ELECTION = ElectionFactory(create=False)
+
 
 class PartyMembershipsFactory(DjangoModelFactory):
     class Meta:
@@ -78,12 +79,13 @@ class PersonWithRelations(YNMPPeopleFactory):
             for election in extracted:
                 self.elections.add(election)
 
+
 class TestModels(TestCase):
 
     def setUp(self):
         self.person1 = PersonWithRelations()
         self.person1.elections.add(
-            self.person1.constituencies.all()[0]\
+            self.person1.constituencies.all()[0]
             .personconstituencies_set.all()[0].election
         )
 

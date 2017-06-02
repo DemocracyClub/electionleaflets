@@ -47,40 +47,38 @@ QUESTIONS = OrderedDict([
 ])
 
 
-
 class QuestionSetForm(forms.ModelForm):
     class Meta:
         model = LeafletProperties
         fields = '__all__'
 
     def __init__(self, leaflet, user, *args, **kwargs):
-      super(QuestionSetForm, self).__init__(*args, **kwargs)
-      self.leaflet = leaflet
-      self.user = user
-      self.fields = OrderedDict({
-          'form_name': forms.CharField(widget=forms.HiddenInput),
-          'leaflet_pk': forms.CharField(
-              widget=forms.HiddenInput,
-              required=False,
-              ),
-      })
+        super(QuestionSetForm, self).__init__(*args, **kwargs)
+        self.leaflet = leaflet
+        self.user = user
+        self.fields = OrderedDict({
+            'form_name': forms.CharField(widget=forms.HiddenInput),
+            'leaflet_pk': forms.CharField(
+                widget=forms.HiddenInput,
+                required=False,
+            ),
+        })
 
-      self.initial['form_name'] = 'analysis_questions_1'
-      self.get_initial_from_models()
+        self.initial['form_name'] = 'analysis_questions_1'
+        self.get_initial_from_models()
 
-      for key, value in list(QUESTIONS.items()):
-        self.fields[key] = forms.ChoiceField(
-            label=value['label'],
-            choices=[(v,v) for v in value['choices']],
-            widget=forms.RadioSelect,
-            help_text=value.get('help_text', None),
-            required=False,
-        )
+        for key, value in list(QUESTIONS.items()):
+            self.fields[key] = forms.ChoiceField(
+                label=value['label'],
+                choices=[(v, v) for v in value['choices']],
+                widget=forms.RadioSelect,
+                help_text=value.get('help_text', None),
+                required=False,
+            )
 
     def get_initial_from_models(self):
         for question in LeafletProperties.objects.filter(leaflet=self.leaflet):
             self.initial[question.key] = question.value
-
 
     def save(self, *args, **kwargs):
         for question, answer in list(self.cleaned_data.items()):
@@ -95,4 +93,3 @@ class QuestionSetForm(forms.ModelForm):
                         'value': answer
                     }
                 )
-

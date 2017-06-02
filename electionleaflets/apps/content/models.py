@@ -8,9 +8,9 @@ class ContentBlock(models.Model):
     """
     name = models.CharField(max_length=64)
     content = models.TextField(blank=True)
-    
+
     def __unicode__(self):
         return self.name
-    
+
     class Meta:
         db_table = 'contentblock'

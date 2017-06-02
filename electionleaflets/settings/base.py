@@ -45,7 +45,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-SITE_ID=1
+SITE_ID = 1
 USE_I18N = False
 USE_L10N = True
 LOGIN_URL = "/"
@@ -164,7 +164,7 @@ AUTHENTICATION_BACKENDS = (
 SOCIALACCOUNT_PROVIDERS = {
     'google': {'SCOPE': ['https://www.googleapis.com/auth/userinfo.profile'],
                'AUTH_PARAMS': {'access_type': 'online'}},
-    'facebook': {'SCOPE': ['email',]},
+    'facebook': {'SCOPE': ['email', ]},
 }
 
 LOGIN_REDIRECT_URL = '/'
@@ -179,7 +179,7 @@ THANKYOU_MESSAGES = [
     'Thanks, that\'s one more towards the target!',
     'Great! Thank you!',
     'Thanks for the leaflet, the election is a tiny bit more transparent!'
-    ]
+]
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
@@ -196,4 +196,3 @@ if len(sys.argv) > 1 and sys.argv[1] in ['test', 'harvest']:
         from .testing import *
     except ImportError:
         pass
-

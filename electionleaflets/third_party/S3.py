@@ -16,16 +16,20 @@ import re
 import sha
 import sys
 import time
-import urllib.request, urllib.parse, urllib.error
+import urllib.request
+import urllib.parse
+import urllib.error
 import urllib.parse
 import xml.sax
 
 DEFAULT_HOST = 's3.amazonaws.com'
-PORTS_BY_SECURITY = { True: 443, False: 80 }
+PORTS_BY_SECURITY = {True: 443, False: 80}
 METADATA_PREFIX = 'x-amz-meta-'
 AMAZON_HEADER_PREFIX = 'x-amz-'
 
 # generates the aws canonical string for the given parameters
+
+
 def canonical_string(method, bucket="", key="", query_args={}, headers={}, expires=None):
     interesting_headers = {}
     for header_key in headers:
@@ -80,12 +84,15 @@ def canonical_string(method, bucket="", key="", query_args={}, headers={}, expir
 
 # computes the base64'ed hmac-sha hash of the canonical string and the secret
 # access key, optionally urlencoding the result
+
+
 def encode(aws_secret_access_key, str, urlencode=False):
     b64_hmac = base64.encodestring(hmac.new(aws_secret_access_key, str, sha).digest()).strip()
     if urlencode:
         return urllib.parse.quote_plus(b64_hmac)
     else:
         return b64_hmac
+
 
 def merge_meta(headers, metadata):
     final_headers = headers.copy()
@@ -95,6 +102,8 @@ def merge_meta(headers, metadata):
     return final_headers
 
 # builds the query arg string
+
+
 def query_args_hash_to_string(query_args):
     query_string = ""
     pairs = []
@@ -134,16 +143,14 @@ class CallingFormat:
     build_url_base = staticmethod(build_url_base)
 
 
-
 class Location:
     DEFAULT = None
     EU = 'EU'
 
 
-
 class AWSAuthConnection:
     def __init__(self, aws_access_key_id, aws_secret_access_key, is_secure=True,
-            server=DEFAULT_HOST, port=None, calling_format=CallingFormat.SUBDOMAIN):
+                 server=DEFAULT_HOST, port=None, calling_format=CallingFormat.SUBDOMAIN):
 
         if not port:
             port = PORTS_BY_SECURITY[is_secure]
@@ -181,54 +188,54 @@ class AWSAuthConnection:
             object = S3Object(object)
 
         return Response(
-                self._make_request(
-                    'PUT',
-                    bucket,
-                    key,
-                    {},
-                    headers,
-                    object.data,
-                    object.metadata))
+            self._make_request(
+                'PUT',
+                bucket,
+                key,
+                {},
+                headers,
+                object.data,
+                object.metadata))
 
     def get(self, bucket, key, headers={}):
         return GetResponse(
-                self._make_request('GET', bucket, key, {}, headers))
+            self._make_request('GET', bucket, key, {}, headers))
 
     def delete(self, bucket, key, headers={}):
         return Response(
-                self._make_request('DELETE', bucket, key, {}, headers))
+            self._make_request('DELETE', bucket, key, {}, headers))
 
     def get_bucket_logging(self, bucket, headers={}):
-        return GetResponse(self._make_request('GET', bucket, '', { 'logging': None }, headers))
+        return GetResponse(self._make_request('GET', bucket, '', {'logging': None}, headers))
 
     def put_bucket_logging(self, bucket, logging_xml_doc, headers={}):
-        return Response(self._make_request('PUT', bucket, '', { 'logging': None }, headers, logging_xml_doc))
+        return Response(self._make_request('PUT', bucket, '', {'logging': None}, headers, logging_xml_doc))
 
     def get_bucket_acl(self, bucket, headers={}):
         return self.get_acl(bucket, '', headers)
 
     def get_acl(self, bucket, key, headers={}):
         return GetResponse(
-                self._make_request('GET', bucket, key, { 'acl': None }, headers))
+            self._make_request('GET', bucket, key, {'acl': None}, headers))
 
     def put_bucket_acl(self, bucket, acl_xml_document, headers={}):
         return self.put_acl(bucket, '', acl_xml_document, headers)
 
     def put_acl(self, bucket, key, acl_xml_document, headers={}):
         return Response(
-                self._make_request(
-                    'PUT',
-                    bucket,
-                    key,
-                    { 'acl': None },
-                    headers,
-                    acl_xml_document))
+            self._make_request(
+                'PUT',
+                bucket,
+                key,
+                {'acl': None},
+                headers,
+                acl_xml_document))
 
     def list_all_my_buckets(self, headers={}):
         return ListAllMyBucketsResponse(self._make_request('GET', '', '', {}, headers))
 
     def get_bucket_location(self, bucket):
-        return LocationResponse(self._make_request('GET', bucket, '', {'location' : None}))
+        return LocationResponse(self._make_request('GET', bucket, '', {'location': None}))
 
     # end public methods
 
@@ -253,9 +260,8 @@ class AWSAuthConnection:
         # the key will be appended if it is non-empty
         path += "/%s" % urllib.parse.quote_plus(key)
 
-
         # build the path_argument string
-        # add the ? in all cases since 
+        # add the ? in all cases since
         # signature and credentials follow path args
         if len(query_args):
             path += "?" + query_args_hash_to_string(query_args)
@@ -268,7 +274,7 @@ class AWSAuthConnection:
             else:
                 connection = http.client.HTTPConnection(host)
 
-            final_headers = merge_meta(headers, metadata);
+            final_headers = merge_meta(headers, metadata)
             # add auth header
             self._add_aws_auth_header(final_headers, method, bucket, key, query_args)
 
@@ -283,11 +289,15 @@ class AWSAuthConnection:
             # (close connection)
             resp.read()
             scheme, host, path, params, query, fragment \
-                    = urllib.parse.urlparse(location)
-            if scheme == "http":    is_secure = True
-            elif scheme == "https": is_secure = False
-            else: raise invalidURL("Not http/https: " + location)
-            if query: path += "?" + query
+                = urllib.parse.urlparse(location)
+            if scheme == "http":
+                is_secure = True
+            elif scheme == "https":
+                is_secure = False
+            else:
+                raise invalidURL("Not http/https: " + location)
+            if query:
+                path += "?" + query
             # retry with redirect
 
     def _add_aws_auth_header(self, headers, method, bucket, key, query_args):
@@ -348,11 +358,11 @@ class QueryStringAuthGenerator:
             object = S3Object(object)
 
         return self.generate_url(
-                'PUT',
-                bucket,
-                key,
-                {},
-                merge_meta(headers, object.metadata))
+            'PUT',
+            bucket,
+            key,
+            {},
+            merge_meta(headers, object.metadata))
 
     def get(self, bucket, key, headers={}):
         return self.generate_url('GET', bucket, key, {}, headers)
@@ -361,23 +371,23 @@ class QueryStringAuthGenerator:
         return self.generate_url('DELETE', bucket, key, {}, headers)
 
     def get_bucket_logging(self, bucket, headers={}):
-        return self.generate_url('GET', bucket, '', { 'logging': None }, headers)
+        return self.generate_url('GET', bucket, '', {'logging': None}, headers)
 
     def put_bucket_logging(self, bucket, logging_xml_doc, headers={}):
-        return self.generate_url('PUT', bucket, '', { 'logging': None }, headers)
+        return self.generate_url('PUT', bucket, '', {'logging': None}, headers)
 
     def get_bucket_acl(self, bucket, headers={}):
         return self.get_acl(bucket, '', headers)
 
     def get_acl(self, bucket, key='', headers={}):
-        return self.generate_url('GET', bucket, key, { 'acl': None }, headers)
+        return self.generate_url('GET', bucket, key, {'acl': None}, headers)
 
     def put_bucket_acl(self, bucket, acl_xml_document, headers={}):
         return self.put_acl(bucket, '', acl_xml_document, headers)
 
     # don't really care what the doc is here.
     def put_acl(self, bucket, key, acl_xml_document, headers={}):
-        return self.generate_url('PUT', bucket, key, { 'acl': None }, headers)
+        return self.generate_url('PUT', bucket, key, {'acl': None}, headers)
 
     def list_all_my_buckets(self, headers={}):
         return self.generate_url('GET', '', '', {}, headers)
@@ -416,10 +426,12 @@ class S3Object:
         self.data = data
         self.metadata = metadata
 
+
 class Owner:
     def __init__(self, id='', display_name=''):
         self.id = id
         self.display_name = display_name
+
 
 class ListEntry:
     def __init__(self, key='', last_modified=None, etag='', size=0, storage_class='', owner=None):
@@ -430,14 +442,17 @@ class ListEntry:
         self.storage_class = storage_class
         self.owner = owner
 
+
 class CommonPrefixEntry:
     def __init(self, prefix=''):
         self.prefix = prefix
+
 
 class Bucket:
     def __init__(self, name='', creation_date=''):
         self.name = name
         self.creation_date = creation_date
+
 
 class Response:
     def __init__(self, http_response):
@@ -449,7 +464,6 @@ class Response:
             self.message = self.body
         else:
             self.message = "%03d %s" % (http_response.status, http_response.reason)
-
 
 
 class ListBucketResponse(Response):
@@ -470,15 +484,17 @@ class ListBucketResponse(Response):
         else:
             self.entries = []
 
+
 class ListAllMyBucketsResponse(Response):
     def __init__(self, http_response):
         Response.__init__(self, http_response)
-        if http_response.status < 300: 
+        if http_response.status < 300:
             handler = ListAllMyBucketsHandler()
             xml.sax.parseString(self.body, handler)
             self.entries = handler.entries
         else:
             self.entries = []
+
 
 class GetResponse(Response):
     def __init__(self, http_response):
@@ -496,13 +512,15 @@ class GetResponse(Response):
 
         return metadata
 
+
 class LocationResponse(Response):
     def __init__(self, http_response):
         Response.__init__(self, http_response)
-        if http_response.status < 300: 
+        if http_response.status < 300:
             handler = LocationHandler()
             xml.sax.parseString(self.body, handler)
             self.location = handler.location
+
 
 class ListBucketHandler(xml.sax.ContentHandler):
     def __init__(self):
@@ -527,7 +545,6 @@ class ListBucketHandler(xml.sax.ContentHandler):
             self.curr_entry.owner = Owner()
         elif name == 'CommonPrefixes':
             self.curr_common_prefix = CommonPrefixEntry()
-
 
     def endElement(self, name):
         if name == 'Contents':
@@ -604,13 +621,16 @@ class LocationHandler(xml.sax.ContentHandler):
             if name == 'LocationConstraint':
                 self.state = 'tag_location'
                 self.location = ''
-            else: self.state = 'bad'
-        else: self.state = 'bad'
+            else:
+                self.state = 'bad'
+        else:
+            self.state = 'bad'
 
     def endElement(self, name):
         if self.state == 'tag_location' and name == 'LocationConstraint':
             self.state = 'done'
-        else: self.state = 'bad'
+        else:
+            self.state = 'bad'
 
     def characters(self, content):
         if self.state == 'tag_location':

@@ -12,6 +12,7 @@ from leaflets.models import Leaflet, LeafletImage
 from constituencies.models import Constituency
 from uk_political_parties.models import Party
 
+
 class Command(BaseCommand):
 
     def clean_legacy_leaflet(self, legacy_leaflet, party=None, constituency=None):
@@ -87,11 +88,12 @@ class Command(BaseCommand):
             postcode = postcode.replace('*', "8")
             postcode = postcode.replace('(', "9")
             postcode = postcode.replace(')', "0")
-            postcode = re.sub(r'[^\x00-\x7F]+',' ', postcode)
+            postcode = re.sub(r'[^\x00-\x7F]+', ' ', postcode)
             postcode = re.sub('^[A-Z0-9\s]', '', postcode)
             postcode = postcode.strip()
         except:
-            import ipdb; ipdb.set_trace()
+            import ipdb
+            ipdb.set_trace()
         return postcode
 
     def handle(self, **options):
@@ -121,14 +123,14 @@ class Command(BaseCommand):
                             legacy_leaflet,
                             party,
                             constituency=con
-                            ))
+                        ))
                     print(new_leaflet.pk, end=' ')
                     if not new_leaflet.images.all():
                         print("Adding images")
                         for legacy_image in legacy_leaflet.images.all():
                             new_image, created = LeafletImage.objects.update_or_create(
-                            leaflet=new_leaflet,
-                            legacy_image_key=legacy_image.image_key,
-                            defaults=self.clean_legacy_leaflet_image(legacy_image))
+                                leaflet=new_leaflet,
+                                legacy_image_key=legacy_image.image_key,
+                                defaults=self.clean_legacy_leaflet_image(legacy_image))
                     else:
                         print("")

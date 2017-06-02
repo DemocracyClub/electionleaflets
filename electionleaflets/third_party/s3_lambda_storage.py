@@ -2,6 +2,7 @@ import boto3
 from django.conf import settings
 from storages.backends.s3boto3 import S3Boto3Storage
 
+
 class S3LambdaStorage(S3Boto3Storage):
     @property
     def connection(self):
@@ -15,6 +16,7 @@ class S3LambdaStorage(S3Boto3Storage):
                 config=self.config
             )
         return self._connection
+
 
 class S3StaticLambdaStorage(S3LambdaStorage):
     def __init__(self, *args, **kwargs):

@@ -8,6 +8,7 @@ from django.conf import settings
 from leaflets.models import LeafletImage
 from leaflets.tasks import ocr_leaflet_image
 
+
 class Command(BaseCommand):
 
     def handle(self, **options):

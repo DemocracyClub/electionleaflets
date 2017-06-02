@@ -5,7 +5,6 @@ from uk_political_parties.models import Party
 from elections.models import Election
 
 
-
 class Person(models.Model):
     name = models.CharField(blank=False, max_length=255)
     remote_id = models.CharField(blank=True, max_length=255, null=True)
@@ -15,7 +14,6 @@ class Person(models.Model):
     elections = models.ManyToManyField(Election)
     parties = models.ManyToManyField(Party, through='PartyMemberships')
     constituencies = models.ManyToManyField(Constituency, through='PersonConstituencies')
-
 
     @property
     def current_party(self):

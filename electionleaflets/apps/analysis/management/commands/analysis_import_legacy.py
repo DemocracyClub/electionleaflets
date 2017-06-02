@@ -11,6 +11,7 @@ from constituencies.models import Constituency
 from uk_political_parties.models import Party
 from leaflets.models import Leaflet
 
+
 class Command(BaseCommand):
     YES_VALUES = [
         re.compile('^yes.*'),
@@ -28,21 +29,20 @@ class Command(BaseCommand):
     LEAFLET_VALUES = [re.compile('.*leaflet.*'), re.compile('^leaflets$')]
     CV_VALUES = [re.compile('^cv$')]
     LETTER_VALUES = [re.compile('^letter.*'), re.compile('^leter.*'),
-        re.compile('^personal letter$')]
+                     re.compile('^personal letter$')]
     MAGAZINE_VALUES = [re.compile('^magazine.*')]
     NEWSLETTER_VALUES = [re.compile('^newsletter.*'),
-        re.compile('.*newletter.*'), re.compile('^newsleter.*'),
-        re.compile('^local newsletter.*')]
+                         re.compile('.*newletter.*'), re.compile('^newsleter.*'),
+                         re.compile('^local newsletter.*')]
     NEWSPAPER_VALUES = [re.compile('^newspaper.*'),
-        re.compile('^newpaper.*')]
+                        re.compile('^newpaper.*')]
     SURVEY_VALUES = [re.compile('^survey.*'),
-        re.compile('^newpaper.*')]
-
+                     re.compile('^newpaper.*')]
 
     def _is_match(self, value, match_list):
-       return set([
-           x.match(value) for x in match_list if x.match(value)
-       ])
+        return set([
+            x.match(value) for x in match_list if x.match(value)
+        ])
 
     def clean_value(self, value):
         value = value.lower().strip()
@@ -66,7 +66,7 @@ class Command(BaseCommand):
         if self._is_match(value, self.NEWSLETTER_VALUES):
             return 'Newsletter'
         if self._is_match(value, self.NA_VALUES) or\
-             self._is_match(value, self.NO_VALUES):
+                self._is_match(value, self.NO_VALUES):
             return "n/a"
         if self._is_match(value, self.NEWSPAPER_VALUES):
             return 'Newspaper'
@@ -101,7 +101,6 @@ class Command(BaseCommand):
                     }
                 )
 
-
             if self.clean_value(line['Leader mentioned']):
                 _add_question('has_leader', self.clean_value(line['Leader mentioned']))
 
@@ -125,9 +124,3 @@ class Command(BaseCommand):
 
             if self.clean_value(line["""squeeze message"""]):
                 _add_question('squeeze_message', self.clean_value(line["""squeeze message"""]))
-
-
-
-
-
-

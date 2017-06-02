@@ -26,7 +26,7 @@ class Leaflet(geo_model.Model):
     def __init__(self, *args, **kwargs):
         super(Leaflet, self).__init__(*args, **kwargs)
         self._initial = model_to_dict(self, fields=[field.name for field in
-                             self._meta.fields])
+                                                    self._meta.fields])
 
     title = models.CharField(blank=True, max_length=765)
     description = models.TextField(blank=True, null=True)
@@ -42,7 +42,7 @@ class Leaflet(geo_model.Model):
     date_uploaded = models.DateTimeField(auto_now_add=True)
     date_delivered = models.DateTimeField(blank=True, null=True)
     status = models.CharField(choices=constants.LEAFLET_STATUSES,
-        null=True, blank=True, max_length=255)
+                              null=True, blank=True, max_length=255)
     reviewed = models.BooleanField(default=False)
 
     objects = geo_model.GeoManager()
@@ -56,7 +56,7 @@ class Leaflet(geo_model.Model):
     def get_absolute_url(self):
         from django.contrib.sites.models import Site
         return 'http://%s/leaflets/%s/' % (Site.objects.get_current().domain,
-            self.id)
+                                           self.id)
 
     def get_first_image(self):
         try:
@@ -81,8 +81,6 @@ class Leaflet(geo_model.Model):
                 data['wgs84_lon'],
                 data['wgs84_lat'],
             )
-
-
 
     def save(self, *args, **kwargs):
         if self.postcode:
@@ -109,7 +107,7 @@ class LeafletImage(models.Model):
     raw_image = ImageField(upload_to="raw_leaflets", blank=True, max_length=255)
     legacy_image_key = models.CharField(max_length=255, blank=True)
     image_type = models.CharField(choices=constants.IMAGE_TYPES,
-        null=True, blank=True, max_length=255)
+                                  null=True, blank=True, max_length=255)
     image_text = models.TextField(blank=True)
     orientation = models.PositiveSmallIntegerField(choices=ORIENTATION_CHOICES, default=1)
     exif_data = models.BinaryField(null=True, blank=True)
@@ -211,7 +209,7 @@ class LeafletImage(models.Model):
         for image_field in (
             # self.raw_image,
             self.image,
-            ):
+        ):
             file_name = image_field.name
             im = Image.open(image_field.file)
             rotated = im.copy()

@@ -7,6 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from people.models import Person
 from leaflets.models import Leaflet
 
+
 class PersonView(DetailView):
     model = Person
     template_name = 'people/person.html'

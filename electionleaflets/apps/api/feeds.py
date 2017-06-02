@@ -9,6 +9,7 @@ from constituencies.models import Constituency
 from tags.models import Tag
 from categories.models import Category
 
+
 class LatestLeafletsFeed(Feed):
     title = "electionleaflets.org latest items"
     link = "/leaflets/"
@@ -75,7 +76,7 @@ class ConstituencyFeed(Feed):
         self.title = "electionleaflets feed for %s" % obj.name
         return obj
 
-    def items(self,obj):
+    def items(self, obj):
         return Leaflet.objects.filter(constituency=obj).order_by('-id')[:10]
 
     def item_title(self, item):
@@ -83,6 +84,7 @@ class ConstituencyFeed(Feed):
 
     def item_description(self, item):
         return item.description
+
 
 class TagFeed(Feed):
 
@@ -93,7 +95,7 @@ class TagFeed(Feed):
         self.title = "electionleaflets feed for %s" % obj.tag
         return obj
 
-    def items(self,obj):
+    def items(self, obj):
         return Leaflet.objects.filter(tags=obj).order_by('-id')[:10]
 
     def item_title(self, item):
@@ -112,7 +114,7 @@ class CategoryFeed(Feed):
         self.title = "electionleaflets feed for %s" % obj.name
         return obj
 
-    def items(self,obj):
+    def items(self, obj):
         return Leaflet.objects.filter(categories=obj).order_by('-id')[:10]
 
     def item_title(self, item):
@@ -120,4 +122,3 @@ class CategoryFeed(Feed):
 
     def item_description(self, item):
         return item.description
-

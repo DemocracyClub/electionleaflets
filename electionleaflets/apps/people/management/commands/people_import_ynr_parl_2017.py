@@ -13,6 +13,7 @@ from people.models import Person, PartyMemberships, PersonConstituencies
 
 SOURCE = "YNR2017"
 
+
 class Command(BaseCommand):
 
     def handle(self, **options):
@@ -33,7 +34,6 @@ class Command(BaseCommand):
             defaults = {
                 'name': line['name']
             }
-
 
             person, created = Person.objects.update_or_create(
                 remote_id=line['id'],

@@ -13,11 +13,11 @@ class LeafletTestCase(TestCase):
     def test_model_initial(self):
         leaflet = Leaflet()
         self.assertEqual(leaflet._initial,
-            {'status': None, 'publisher_party': None, 'description': None,
-            'title': '', 'email': '', 'imprint': None, 'postcode': '',
-            'location': None, 'date_delivered': None, 'reviewed': False,
-            'constituency': None, 'id': None, 'name': '',
-            'election': None, 'publisher_person': None})
+                         {'status': None, 'publisher_party': None, 'description': None,
+                          'title': '', 'email': '', 'imprint': None, 'postcode': '',
+                          'location': None, 'date_delivered': None, 'reviewed': False,
+                          'constituency': None, 'id': None, 'name': '',
+                          'election': None, 'publisher_person': None})
 
         leaflet.status = "draft"
         leaflet.save()
@@ -30,15 +30,16 @@ class LeafletTestCase(TestCase):
         responses.add(
             responses.GET,
             'https://mapit.mysociety.org/postcode/SE228DJ',
-             body=MAPIT_POSTCODE_RETURN,
-             status=200,
-             content_type='application/json',
+            body=MAPIT_POSTCODE_RETURN,
+            status=200,
+            content_type='application/json',
         )
         l = Leaflet()
         l.geocode('SE228DJ')
         self.assertEqual(l.constituency.name, 'Camberwell and Peckham')
         self.assertEqual(l.location.x, -0.0824797738988752)
         self.assertEqual(l.location.y, 51.4599323104553)
+
 
 class LeafletImageTestCase(TestCase):
     def test_raw_image_field(self):

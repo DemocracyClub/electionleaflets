@@ -5,6 +5,7 @@ from tqdm import tqdm
 
 from leaflets.models import LeafletImage
 
+
 class Command(BaseCommand):
 
     def handle(self, **options):

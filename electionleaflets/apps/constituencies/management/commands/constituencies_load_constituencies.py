@@ -4,6 +4,7 @@ from django.core.management.base import BaseCommand
 
 from constituencies.models import Constituency
 
+
 class Command(BaseCommand):
     def fetch_constituencies(self):
         base_url = "http://mapit.mysociety.org/"
@@ -24,7 +25,6 @@ class Command(BaseCommand):
 
         }
         return cleaned_constituency
-
 
     def handle(self, **options):
         constituencies = self.fetch_constituencies()
