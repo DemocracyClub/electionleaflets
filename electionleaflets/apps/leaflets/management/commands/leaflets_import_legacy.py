@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.core.files import File
 
-from legacy.models import legacyLeaflet, legacyParty
+from legacy.models import legacyLeaflet
 
 from leaflets.models import Leaflet, LeafletImage
 from constituencies.models import Constituency
@@ -124,7 +124,7 @@ class Command(BaseCommand):
                             party,
                             constituency=con
                         ))
-                    print(new_leaflet.pk, end=' ')
+                    print(new_leaflet.pk)
                     if not new_leaflet.images.all():
                         print("Adding images")
                         for legacy_image in legacy_leaflet.images.all():

@@ -15,7 +15,6 @@ class CreateLeafletTests(APITestCase):
     def test_create_leaflet(self):
 
         leaflet_url = reverse('api:leaflet-list')
-        leaflet_image_url = reverse('api:leafletimage-list')
 
         response = self.client.post(leaflet_url, {}, format='json')
         self.assertEqual(response.data['status'], 'draft')

@@ -3,9 +3,19 @@ from os.path import join, abspath, dirname
 from os import environ
 
 # PATH vars
-here = lambda *x: join(abspath(dirname(__file__)), *x)
+
+
+def here(x):
+    return join(abspath(dirname(__file__)), x)
+
+
 PROJECT_ROOT = here("..")
-root = lambda *x: join(abspath(PROJECT_ROOT), *x)
+
+
+def root(x):
+    return join(abspath(PROJECT_ROOT), x)
+
+
 sys.path.insert(0, root('third_party'))
 sys.path.insert(0, root('apps'))
 sys.path.insert(0, '../django-uk-political-parties/')

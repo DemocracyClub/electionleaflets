@@ -53,7 +53,6 @@ class ReportView(DetailView, FormView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
         return super(ReportView, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):

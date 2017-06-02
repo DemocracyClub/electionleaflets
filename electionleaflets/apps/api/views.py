@@ -1,7 +1,6 @@
 import datetime
 
 from django.http import HttpResponse
-from django.contrib.sites.models import Site
 from django.utils.html import escape
 
 from leaflets.models import Leaflet, LeafletImage
@@ -11,7 +10,7 @@ from uk_political_parties.models import Party
 
 from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -38,7 +37,7 @@ class LeafletPermissions(BasePermission):
 
 class ReadOnly(BasePermission):
     def has_object_permission(self, request, view, obj):
-        return request.method in permissions.SAFE_METHODS
+        return request.method in SAFE_METHODS
 
 
 class ConstituencyViewSet(viewsets.ModelViewSet):
@@ -121,8 +120,6 @@ class StatsView(APIView):
 def latest(request, format):
     # TODO: Fix this to work properly
     from leaflets.models import Leaflet
-
-    domain = Site.objects.get_current().domain
 
     leaflets = Leaflet.objects.order_by('-id').all()[0:20]
     resp = []
