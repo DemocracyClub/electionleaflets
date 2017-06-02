@@ -1,7 +1,5 @@
 from django import template
 from django.conf import settings
-from leaflets.models import Leaflet
-from django.db.models import Count
 
 register = template.Library()
 

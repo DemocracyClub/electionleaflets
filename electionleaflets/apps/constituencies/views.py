@@ -4,7 +4,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from leaflets.models import Leaflet
 from .forms import ConstituencyLookupForm
 from .models import Constituency
-from core.helpers import geocode
 from datetime import datetime
 
 

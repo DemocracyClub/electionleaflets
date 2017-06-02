@@ -185,7 +185,7 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # .local.py overrides all the common settings.
 try:
-    from .local import *
+    from .local import *  # noqa: F401,F403
 except ImportError:
     pass
 
@@ -193,6 +193,6 @@ except ImportError:
 # importing test settings file if necessary (TODO chould be done better)
 if len(sys.argv) > 1 and sys.argv[1] in ['test', 'harvest']:
     try:
-        from .testing import *
+        from .testing import *  # noqa: F401,F403
     except ImportError:
         pass

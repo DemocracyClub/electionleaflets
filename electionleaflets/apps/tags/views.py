@@ -8,7 +8,6 @@ from tags.models import Tag
 def view_tag(request, slug):
     from tags.models import Tag
     from leaflets.models import Leaflet
-    from categories.models import Category
     import math
 
     tag = get_object_or_404(Tag, slug=slug)

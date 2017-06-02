@@ -1,6 +1,6 @@
 import os
 
-from .base import *
+from .base import *  # noqa: F401,F403
 
 if os.environ.get('SERVERTYPE', None) == 'AWS Lambda':
     GEOS_LIBRARY_PATH = '/var/task/libgeos_c.so'

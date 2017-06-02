@@ -1,6 +1,5 @@
 from django.db import models
 from django_extensions.db.fields import AutoSlugField
-from core.models import Country
 
 
 class Constituency(models.Model):

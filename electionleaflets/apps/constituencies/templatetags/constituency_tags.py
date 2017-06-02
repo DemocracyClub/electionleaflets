@@ -1,6 +1,5 @@
 from django import template
 from django.conf import settings
-from leaflets.models import Leaflet
 from constituencies.models import Constituency
 
 register = template.Library()

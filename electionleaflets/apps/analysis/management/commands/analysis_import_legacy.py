@@ -1,14 +1,11 @@
 import os
 import re
 import csv
-import datetime
 
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
 from analysis.models import LeafletProperties
-from constituencies.models import Constituency
-from uk_political_parties.models import Party
 from leaflets.models import Leaflet
 
 

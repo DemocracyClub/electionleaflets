@@ -1,8 +1,6 @@
 import os
-import json
 
 from django.core.urlresolvers import reverse
-from rest_framework import status
 from rest_framework.test import APITestCase
 
 TEST_IMAGES = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '1.jpg', ]

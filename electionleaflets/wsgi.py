@@ -24,5 +24,5 @@ path.append(SITE_ROOT)
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "manchester_traffic_offences.settings")
 
 
-from django.core.wsgi import get_wsgi_application
+from django.core.wsgi import get_wsgi_application  # noqa: E402
 application = get_wsgi_application()

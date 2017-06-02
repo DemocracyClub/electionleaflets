@@ -4,7 +4,7 @@ import os
 from django.test import TestCase
 from django.conf import settings
 
-from leaflets.models import Leaflet, LeafletImage
+from leaflets.models import LeafletImage
 from .helpers import create_dummy_leaflets
 
 
