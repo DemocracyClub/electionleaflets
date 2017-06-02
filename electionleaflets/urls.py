@@ -9,7 +9,7 @@ admin.autodiscover()
 
 from api import feeds
 
-from core.views import HomeView, MaintenanceView, ReportView, ReportThanksView
+from core.views import CachedHomeView, MaintenanceView, ReportView, ReportThanksView
 MAINTENANCE_MODE = getattr(settings, 'MAINTENANCE_MODE', False)
 if MAINTENANCE_MODE:
     urlpatterns = [
@@ -18,7 +18,7 @@ if MAINTENANCE_MODE:
 
 else:
     urlpatterns = [
-        url(r'^$',          cache_page(60*5)(HomeView.as_view()), name='home'),
+        url(r'^$',          CachedHomeView, name='home'),
         url(r'^leaflets/',   include('leaflets.urls')),
         url(r'^parties/',    include('parties.urls')),
         url(r'^person/',    include('people.urls')),

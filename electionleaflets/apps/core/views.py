@@ -10,6 +10,9 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.contrib.sites.models import Site
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import last_modified
+from django.views.decorators.cache import cache_control
 from constituencies.forms import ConstituencyLookupForm
 
 from leaflets.models import Leaflet
@@ -18,6 +21,9 @@ from .forms import ReportAbuseForm
 
 
 from core.helpers import geocode
+
+def latest_home(request):
+    return Leaflet.objects.all()[:1].values_list('date_uploaded', flat=True)[0]
 
 class HomeView(TemplateView):
     template_name = "core/home.html"
@@ -37,6 +43,8 @@ class HomeView(TemplateView):
 
 
         return context
+CachedHomeView = cache_control(max_age=60)(last_modified(latest_home)(HomeView.as_view()))
+
 
 class MaintenanceView(TemplateView):
     template_name = "core/maintenance.html"
