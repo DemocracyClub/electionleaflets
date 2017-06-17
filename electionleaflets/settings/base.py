@@ -1,5 +1,6 @@
 import sys
 from os.path import join, abspath, dirname
+from os import environ
 
 # PATH vars
 here = lambda *x: join(abspath(dirname(__file__)), *x)
@@ -109,6 +110,13 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.twitter',
     'django_extensions',
 ] + LEAFLET_APPS
+
+if environ.get('SENTRY_DSN', None):
+    INSTALLED_APPS.append('raven.contrib.django.raven_compat')
+    RAVEN_CONFIG = {
+        'dsn': environ.get('SENTRY_DSN'),
+        'environment': environ.get('SENTRY_ENVIRONMENT', 'production')
+    }
 
 
 THUMBNAIL_FORMAT = 'PNG'
