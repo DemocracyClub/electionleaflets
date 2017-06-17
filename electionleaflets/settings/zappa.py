@@ -2,7 +2,8 @@ import os
 
 from .base import *
 
-GEOS_LIBRARY_PATH = '/var/task/libgeos_c.so'
+if os.environ.get('SERVERTYPE', None) == 'AWS Lambda':
+    GEOS_LIBRARY_PATH = '/var/task/libgeos_c.so'
 
 ALLOWED_HOSTS = ['*']
 
