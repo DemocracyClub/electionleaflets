@@ -51,7 +51,7 @@ pbr==3.0.0
 piexif==1.0.12
 Pillow==3.2.0
 placebo==0.8.1
-psycopg2==2.5.4
+psycopg2==2.7.3.2
 pyparsing==2.2.0
 python-dateutil==2.6.0
 python-Levenshtein==0.12.0
