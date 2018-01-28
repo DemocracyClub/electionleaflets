@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 
 from leaflets.tests.model_factory import LeafletFactory
 
+
 class TestFeeds(TestCase):
     def setUp(self):
         # make some leaflets

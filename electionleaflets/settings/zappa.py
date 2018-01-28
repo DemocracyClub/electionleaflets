@@ -1,6 +1,6 @@
 import os
 
-from .base import *
+from .base import *  # noqa: F401,F403
 
 if os.environ.get('SERVERTYPE', None) == 'AWS Lambda':
     GEOS_LIBRARY_PATH = '/var/task/libgeos_c.so'
@@ -33,6 +33,6 @@ CACHES = {
     }
 }
 
-THUMBNAIL_KVSTORE ='sorl.thumbnail.kvstores.cached_db_kvstore.KVStore'
+THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.cached_db_kvstore.KVStore'
 
 CSRF_TRUSTED_ORIGINS = ['.electionleaflets.org']

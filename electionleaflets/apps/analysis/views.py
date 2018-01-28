@@ -9,6 +9,7 @@ from constituencies.models import Constituency
 from leaflets.models import Leaflet
 from uk_political_parties.models import Party
 
+
 class AnalysisHomeView(TemplateView):
     template_name = "analysis/index.html"
 
@@ -26,27 +27,28 @@ class AnalysisHomeView(TemplateView):
             .leaflets_analysed()
 
         context['number_of_people'] = LeafletProperties.objects\
-                    .order_by().values_list('user').distinct().count()
+            .order_by().values_list('user').distinct().count()
 
         context['leaflets_analysed'] = LeafletProperties.objects.all()\
-                    .leaflets_analysed()
+            .leaflets_analysed()
 
         context['with_party_leaders'] = LeafletProperties.objects.all()\
-                    .leaders_photo_count()
+            .leaders_photo_count()
 
         context['with_graph'] = LeafletProperties.objects.all()\
-                    .graphs_count()
-
+            .graphs_count()
 
         return context
 
+
 class AnalysisStartRedirectView(RedirectView):
     permanent = False
+
     def get_redirect_url(self, *args, **kwargs):
         start_date = datetime.date(2015, 1, 1)
         next_leaflet = Leaflet.objects.filter(leafletproperties=None)\
-        .filter(date_uploaded__gt=start_date)\
-        .order_by('?')
+            .filter(date_uploaded__gt=start_date)\
+            .order_by('?')
         url = next_leaflet[0].get_absolute_url()
         return url
 
@@ -72,6 +74,7 @@ class ReportView(ReportViewMixin, TemplateView):
 
         return context
 
+
 class ConstituencyReportView(ReportViewMixin, TemplateView):
     template_name = "analysis/reports/constituencies.html"
 
@@ -86,6 +89,7 @@ class ConstituencyReportView(ReportViewMixin, TemplateView):
         context['per_constituency'] = per_constituency
 
         return context
+
 
 class BaseAnalysisReportView(ReportViewMixin, TemplateView):
     def add_data_to_context(self, queryset=None):
@@ -137,6 +141,7 @@ class AnalysisReportView(BaseAnalysisReportView):
         context.update(self.add_data_to_context())
         return context
 
+
 class AnalysisPerPartyReportView(BaseAnalysisReportView):
     template_name = "analysis/reports/analysis_per_party.html"
     base_queryset = LeafletProperties.objects.all()
@@ -158,4 +163,3 @@ class AnalysisPerPartyReportView(BaseAnalysisReportView):
 
         context['parties'] = parties
         return context
-

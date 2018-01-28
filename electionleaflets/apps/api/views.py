@@ -1,7 +1,6 @@
 import datetime
 
 from django.http import HttpResponse
-from django.contrib.sites.models import Site
 from django.utils.html import escape
 
 from leaflets.models import Leaflet, LeafletImage
@@ -11,13 +10,13 @@ from uk_political_parties.models import Party
 
 from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 
 from .serializers import (ConstituencySerializer, PartySerializer,
-    LeafletMinSerializer, LeafletSerializer, LeafletImageSerializer)
+                          LeafletMinSerializer, LeafletSerializer, LeafletImageSerializer)
 
 
 class StandardResultsSetPagination(LimitOffsetPagination):
@@ -38,7 +37,7 @@ class LeafletPermissions(BasePermission):
 
 class ReadOnly(BasePermission):
     def has_object_permission(self, request, view, obj):
-        return request.method in permissions.SAFE_METHODS
+        return request.method in SAFE_METHODS
 
 
 class ConstituencyViewSet(viewsets.ModelViewSet):
@@ -73,13 +72,14 @@ class LatestByConstituencyView(APIView):
         TIME_SINCE = datetime.datetime.now() - datetime.timedelta(weeks=20)
         LIMIT = 3
         for constituency in Constituency.objects.all():
-            leaflets =  LeafletSerializer(
+            leaflets = LeafletSerializer(
                 Leaflet.objects.filter(
                     constituency=constituency,
                     date_uploaded__gt=TIME_SINCE,
                 )[:LIMIT], many=True).data
             all_constituencies[constituency.pk] = leaflets
         return Response(all_constituencies)
+
 
 class LatestByPersonView(APIView):
 
@@ -90,7 +90,7 @@ class LatestByPersonView(APIView):
         TIME_SINCE = datetime.datetime.now() - datetime.timedelta(weeks=20)
         LIMIT = 3
         for person in Person.objects.exclude(leaflet=None):
-            leaflets =  LeafletMinSerializer(
+            leaflets = LeafletMinSerializer(
                 Leaflet.objects.filter(
                     publisher_person=person,
                     date_uploaded__gt=TIME_SINCE,
@@ -110,18 +110,16 @@ class StatsView(APIView):
         stats['leaflets']['total'] = \
             Leaflet.objects.all().count()
 
-
         yesterday = datetime.datetime.now() - datetime.timedelta(hours=24)
         stats['leaflets']['last_24_hours'] = \
             Leaflet.objects.filter(date_uploaded__gt=yesterday).count()
 
         return Response(stats)
 
+
 def latest(request, format):
     # TODO: Fix this to work properly
     from leaflets.models import Leaflet
-
-    domain = Site.objects.get_current().domain
 
     leaflets = Leaflet.objects.order_by('-id').all()[0:20]
     resp = []
@@ -139,17 +137,17 @@ def latest(request, format):
         if leaflet.publisher_party_id:
             d['party'] = escape(leaflet.publisher_party.party_name)
         else:
-            d['party'] =  "Unknown"
+            d['party'] = "Unknown"
         i = leaflet.get_first_image()
         d['image'] = i.image.url
         d['link'] = leaflet.get_absolute_url()
-        resp.append( d )
+        resp.append(d)
 
     output = '<?xml version="1.0" ?>\n'
     output += "<leaflets>"
     for d in resp:
         output += "<leaflet>"
-        for k,v in d.items():
+        for k, v in d.items():
             output += "<" + k + ">"
             output += v
             output += "</" + k + ">"

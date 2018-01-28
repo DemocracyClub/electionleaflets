@@ -18,7 +18,7 @@ PROG_NAME = 'tesseract'
 TEMP_IMAGE = 'tmp.bmp'
 TEMP_FILE = 'tmp'
 
-#All the PSM arguments as a variable name (avoid having to know them)
+# All the PSM arguments as a variable name (avoid having to know them)
 PSM_OSD_ONLY = 0
 PSM_SEG_AND_OSD = 1
 PSM_SEG_ONLY = 2
@@ -31,21 +31,25 @@ PSM_SINGLE_WORD = 8
 PSM_SINGLE_WORD_CIRCLE = 9
 PSM_SINGLE_CHAR = 10
 
-class TesseractException(Exception): #Raised when tesseract does not return 0
+
+class TesseractException(Exception):  # Raised when tesseract does not return 0
     pass
 
-class TesseractNotFound(Exception): #When tesseract is not found in the path
+
+class TesseractNotFound(Exception):  # When tesseract is not found in the path
     pass
 
-def check_path(): #Check if tesseract is in the path raise TesseractNotFound otherwise
+
+def check_path():  # Check if tesseract is in the path raise TesseractNotFound otherwise
     for path in os.environ.get('PATH', '').split(':'):
         filepath = os.path.join(path, PROG_NAME)
         if os.path.exists(filepath) and not os.path.isdir(filepath):
             return True
     raise TesseractNotFound
 
+
 def process_request(input_file, output_file, lang=None, psm=None):
-    args = [PROG_NAME, input_file, output_file] #Create the arguments
+    args = [PROG_NAME, input_file, output_file]  # Create the arguments
     if lang is not None:
         args.append("-l")
         args.append(lang)
@@ -53,17 +57,18 @@ def process_request(input_file, output_file, lang=None, psm=None):
         args.append("-psm")
         args.append(str(psm))
     print(" ".join(args))
-    proc = Popen(args, stdout=PIPE, stderr=PIPE) #Open process
-    ret = proc.communicate() #Launch it
+    proc = Popen(args, stdout=PIPE, stderr=PIPE)  # Open process
+    ret = proc.communicate()  # Launch it
 
     code = proc.returncode
     if code != 0:
         if code == 2:
             raise TesseractException("File not found")
         if code == -11:
-            raise TesseractException("Language code invalid: "+ret[1])
+            raise TesseractException("Language code invalid: " + ret[1])
         else:
             raise TesseractException(ret[1])
+
 
 def iplimage_to_string(im, lang=None, psm=None):
     if not OPENCV_AVAILABLE:
@@ -75,14 +80,16 @@ def iplimage_to_string(im, lang=None, psm=None):
         os.remove(TEMP_IMAGE)
         return txt
 
-def image_to_string(file,lang=None, psm=None):
+
+def image_to_string(file, lang=None, psm=None):
     TEMP_FILE = tempfile.NamedTemporaryFile(delete=False).name
-    check_path() #Check if tesseract available in the path
-    process_request(file, TEMP_FILE, lang, psm) #Process command
-    f = open("%s.txt" % TEMP_FILE, "r") #Open back the file
+    check_path()  # Check if tesseract available in the path
+    process_request(file, TEMP_FILE, lang, psm)  # Process command
+    f = open("%s.txt" % TEMP_FILE, "r")  # Open back the file
     txt = f.read()
     os.remove(TEMP_FILE)
     return txt
+
 
 def mat_to_string(im, lang=None, psm=None):
     if not OPENCV2_AVAILABLE:
@@ -94,5 +101,6 @@ def mat_to_string(im, lang=None, psm=None):
         os.remove(TEMP_IMAGE)
         return txt
 
-if __name__ =='__main__':
-    print(image_to_string("image.jpg", "fra", PSM_AUTO)) #Example
+
+if __name__ == '__main__':
+    print(image_to_string("image.jpg", "fra", PSM_AUTO))  # Example

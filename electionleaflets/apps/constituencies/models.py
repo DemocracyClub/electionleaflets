@@ -1,6 +1,5 @@
 from django.db import models
-from django_extensions.db.fields import  AutoSlugField
-from core.models import Country
+from django_extensions.db.fields import AutoSlugField
 
 
 class Constituency(models.Model):
@@ -10,7 +9,7 @@ class Constituency(models.Model):
 
     alternative_name = models.CharField(max_length=765, blank=True)
     retired = models.IntegerField(null=True, blank=True)
-    slug = AutoSlugField( populate_from='name', max_length=255,separator='_')
+    slug = AutoSlugField(populate_from='name', max_length=255, separator='_')
     count = models.IntegerField(null=True)
 
     # Not used anywhere
@@ -30,4 +29,4 @@ class Constituency(models.Model):
         return ('constituency-view', (), {
                 'pk': self.pk,
                 'ignored_slug': self.slug,
-            })
+                })

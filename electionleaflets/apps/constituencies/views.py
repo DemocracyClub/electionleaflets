@@ -4,8 +4,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from leaflets.models import Leaflet
 from .forms import ConstituencyLookupForm
 from .models import Constituency
-from core.helpers import geocode
 from datetime import datetime
+
 
 class ConstituencyView(DetailView):
     model = Constituency
@@ -33,11 +33,12 @@ class ConstituencyView(DetailView):
 
         return context
 
+
 class ConstituencyList(ListView, FormView):
     form_class = ConstituencyLookupForm
     queryset = Constituency.objects.all()\
-               .annotate(num_leaflets=Count('leaflet'))\
-               .order_by('name')
+        .annotate(num_leaflets=Count('leaflet'))\
+        .order_by('name')
 
     def get(self, request, *args, **kwargs):
         form_class = self.get_form_class()

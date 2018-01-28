@@ -1,42 +1,36 @@
 # -*- coding: utf-8 -*-
 import datetime
 
-from django.template  import RequestContext
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic import FormView, TemplateView, DetailView
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.contrib.sites.models import Site
-from constituencies.forms import ConstituencyLookupForm
 
 from leaflets.models import Leaflet
-from .helpers import geocode
 from .forms import ReportAbuseForm
 
-
-from core.helpers import geocode
 
 class HomeView(TemplateView):
     template_name = "core/home.html"
 
     def get_context_data(self, **kwargs):
 
-        #get leaflet count
+        # get leaflet count
         start_date = datetime.date(2015, 1, 1)
         leaflet_count = Leaflet.objects.filter(date_uploaded__gt=start_date).count()
         context = super(HomeView, self).get_context_data(**kwargs)
 
-        #get latest leaflets (with titles)
+        # get latest leaflets (with titles)
         latest_leaflets = Leaflet.objects.all()[:9]
 
-        #update context
+        # update context
         context.update({'leaflet_count': leaflet_count, 'start_date': start_date, 'latest_leaflets': latest_leaflets})
 
-
         return context
+
 
 class MaintenanceView(TemplateView):
     template_name = "core/maintenance.html"
@@ -59,7 +53,6 @@ class ReportView(DetailView, FormView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
         return super(ReportView, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -67,8 +60,8 @@ class ReportView(DetailView, FormView):
         ctx = {
             'link': 'http://%s%s' % (
                 domain, reverse('leaflet', kwargs={
-                        'pk':self.object.id
-                    }),
+                    'pk': self.object.id
+                }),
             ),
             'name': form.cleaned_data['name'],
             'email': form.cleaned_data['email'],
@@ -92,6 +85,7 @@ class ReportView(DetailView, FormView):
         return HttpResponseRedirect(
             reverse('report_abuse_sent', kwargs={'pk': self.object.pk})
         )
+
 
 class ReportThanksView(DetailView):
     model = Leaflet

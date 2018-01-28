@@ -41,5 +41,6 @@ class LeafletImageOptions(AdminImageMixin, admin.ModelAdmin):
             return "<img src='%s'>" % thumb.url
     thumbnail.allow_tags = True
 
+
 admin.site.register(LeafletImage, LeafletImageOptions)
 admin.site.register(Leaflet, LeafletAdmin)

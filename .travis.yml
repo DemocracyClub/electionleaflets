@@ -9,6 +9,7 @@ before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
   - psql -U postgres -d travis_ci_test -c "create extension postgis"
 script:
+  - flake8 electionleaflets
   - coverage run --source=electionleaflets manage.py test
   - coverage run -a --source=electionleaflets manage.py harvest
 after_success:

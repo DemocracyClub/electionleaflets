@@ -3,8 +3,7 @@ from django import forms
 from localflavor.gb.forms import GBPostcodeField
 
 from core.helpers import geocode
-from .models import Leaflet, LeafletImage
-from . import constants
+from leaflets.models import Leaflet
 
 
 class ImageForm(forms.Form):
@@ -49,15 +48,18 @@ class PostcodeForm(forms.Form):
 
         return data
 
+
 class LeafletDetailsFrom(forms.ModelForm):
     class Meta:
         model = Leaflet
         fields = '__all__'
 
+
 class LeafletReviewFrom(forms.ModelForm):
     class Meta:
         model = Leaflet
         fields = ('reviewed', )
+
 
 class PeopleModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
@@ -71,6 +73,7 @@ class PeopleModelChoiceField(forms.ModelChoiceField):
             party_name,
         )
 
+
 class PeopleForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(PeopleForm, self).__init__(*args, **kwargs)
@@ -81,5 +84,3 @@ class PeopleForm(forms.Form):
                     widget=forms.RadioSelect,
                     empty_label="Not listed",
                     required=False)
-
-

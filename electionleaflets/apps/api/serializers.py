@@ -28,6 +28,7 @@ class PartySerializer(serializers.HyperlinkedModelSerializer):
             'status',
         )
 
+
 class PersonSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Person

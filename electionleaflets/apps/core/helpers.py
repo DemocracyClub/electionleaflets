@@ -33,5 +33,5 @@ def geocode(postcode):
     except Exception as e:
         print(e)
         result = None
-    cache.set(postcode, result, 60*60*60*24)
+    cache.set(postcode, result, 60 * 60 * 60 * 24)
     return result

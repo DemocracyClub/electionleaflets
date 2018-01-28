@@ -3,9 +3,19 @@ from os.path import join, abspath, dirname
 from os import environ
 
 # PATH vars
-here = lambda *x: join(abspath(dirname(__file__)), *x)
+
+
+def here(x):
+    return join(abspath(dirname(__file__)), x)
+
+
 PROJECT_ROOT = here("..")
-root = lambda *x: join(abspath(PROJECT_ROOT), *x)
+
+
+def root(x):
+    return join(abspath(PROJECT_ROOT), x)
+
+
 sys.path.insert(0, root('third_party'))
 sys.path.insert(0, root('apps'))
 sys.path.insert(0, '../django-uk-political-parties/')
@@ -45,7 +55,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-SITE_ID=1
+SITE_ID = 1
 USE_I18N = False
 USE_L10N = True
 LOGIN_URL = "/"
@@ -164,7 +174,7 @@ AUTHENTICATION_BACKENDS = (
 SOCIALACCOUNT_PROVIDERS = {
     'google': {'SCOPE': ['https://www.googleapis.com/auth/userinfo.profile'],
                'AUTH_PARAMS': {'access_type': 'online'}},
-    'facebook': {'SCOPE': ['email',]},
+    'facebook': {'SCOPE': ['email', ]},
 }
 
 LOGIN_REDIRECT_URL = '/'
@@ -179,13 +189,13 @@ THANKYOU_MESSAGES = [
     'Thanks, that\'s one more towards the target!',
     'Great! Thank you!',
     'Thanks for the leaflet, the election is a tiny bit more transparent!'
-    ]
+]
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # .local.py overrides all the common settings.
 try:
-    from .local import *
+    from .local import *  # noqa: F401,F403
 except ImportError:
     pass
 
@@ -193,7 +203,6 @@ except ImportError:
 # importing test settings file if necessary (TODO chould be done better)
 if len(sys.argv) > 1 and sys.argv[1] in ['test', 'harvest']:
     try:
-        from .testing import *
+        from .testing import *  # noqa: F401,F403
     except ImportError:
         pass
-

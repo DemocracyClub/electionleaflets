@@ -3,6 +3,7 @@ from factory.django import DjangoModelFactory
 
 from leaflets.models import Leaflet
 
+
 class LeafletFactory(DjangoModelFactory):
     class Meta:
         model = Leaflet

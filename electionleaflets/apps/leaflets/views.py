@@ -10,7 +10,7 @@ from formtools.wizard.views import NamedUrlSessionWizardView
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.views.generic import (DetailView, ListView, UpdateView,
-                                    RedirectView)
+                                  RedirectView)
 from django.views.generic.detail import SingleObjectMixin
 from django.core.files.storage import FileSystemStorage
 from braces.views import StaffuserRequiredMixin
@@ -26,6 +26,7 @@ class ImageView(DetailView):
     model = LeafletImage
     template_name = 'leaflets/full.html'
 
+
 class LegacyImageView(SingleObjectMixin, RedirectView):
     model = LeafletImage
     permanent = True
@@ -37,6 +38,7 @@ class LegacyImageView(SingleObjectMixin, RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         return self.get_object().get_absolute_url()
 
+
 class AllImageView(UpdateView):
     model = Leaflet
     form_class = LeafletDetailsFrom
@@ -46,14 +48,13 @@ class AllImageView(UpdateView):
 class ImageRotateView(StaffuserRequiredMixin, DetailView):
     model = LeafletImage
     template_name = 'leaflets/image_rotate.html'
+
     def post(self, request, *args, **kwargs):
         image_model = self.get_object()
         rotation = request.POST.get('rotate')
         print(rotation)
         image_model.rotate(int(rotation))
         return HttpResponseRedirect(image_model.get_absolute_url())
-
-
 
 
 class ImageCropView(StaffuserRequiredMixin, DetailView):
@@ -75,7 +76,6 @@ class LatestLeaflets(ListView):
     model = Leaflet
     template_name = 'leaflets/index.html'
     paginate_by = 60
-
 
 
 class LeafletView(DetailView):
@@ -106,8 +106,8 @@ class LeafletView(DetailView):
             if 'save_and_next' in request.POST:
                 start_date = datetime.date(2015, 1, 1)
                 next_leaflet = Leaflet.objects.filter(leafletproperties=None)\
-                .filter(date_uploaded__gt=start_date)\
-                .order_by('?')
+                    .filter(date_uploaded__gt=start_date)\
+                    .order_by('?')
                 if next_leaflet:
                     url = next_leaflet[0].get_absolute_url()
                     return HttpResponseRedirect(url)
@@ -159,11 +159,11 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             settings.MEDIA_ROOT, 'images/leaflets_tmp'))
 
     def get_template_names(self):
-            if self.steps.current.startswith('inside'):
-                step_name = 'inside'
-            else:
-                step_name = self.steps.current
-            return [self.TEMPLATES[step_name]]
+        if self.steps.current.startswith('inside'):
+            step_name = 'inside'
+        else:
+            step_name = self.steps.current
+        return [self.TEMPLATES[step_name]]
 
     def get_form_initial(self, step):
         if step == "people":
@@ -181,11 +181,9 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             }
         return {}
 
-
     @property
     def extra_inside_forms(self):
         return self.storage.extra_data.get('extra_inside', 0)
-
 
     def get_context_data(self, **kwargs):
         context = super(LeafletUploadWizzard, self).get_context_data(**kwargs)
@@ -225,7 +223,6 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             self._insert_extra_inside_forms(force=True)
             self.storage.extra_data['skip_to_postcode'] = True
             return self.render_goto_step('postcode')
-
 
         # If there are more pages, add them to the form_list
         # Validate the form first, though
@@ -276,7 +273,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         return self.form_list
 
     def done(self, form_list, **kwargs):
-        #Create a new leaflet
+        # Create a new leaflet
         leaflet = Leaflet()
         leaflet.save()
         for form in form_list:
@@ -310,4 +307,4 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             self.request,
             random.sample(settings.THANKYOU_MESSAGES, 1)[0])
 
-        return  redirect(reverse('leaflet', kwargs={'pk': leaflet.pk}))
+        return redirect(reverse('leaflet', kwargs={'pk': leaflet.pk}))

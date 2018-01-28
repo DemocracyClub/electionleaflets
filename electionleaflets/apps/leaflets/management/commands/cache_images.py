@@ -1,9 +1,9 @@
 from django.core.management.base import BaseCommand
-from django.conf import settings
 from sorl.thumbnail import get_thumbnail
 from tqdm import tqdm
 
 from leaflets.models import LeafletImage
+
 
 class Command(BaseCommand):
 
