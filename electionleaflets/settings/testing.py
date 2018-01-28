@@ -15,5 +15,15 @@ if os.environ.get('RUNNER') == "travis":
             'USER': 'postgres',
         }
     }
+elif os.environ.get('RUNNER') == "circleci":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': 'electionleaflets_test',
+            'USER': 'postgres',
+            'HOST': '127.0.0.1',
+            'PORT': '5432'
+        }
+    }
 
 INSTALLED_APPS.append('aloe_django')  # noqa: F405
