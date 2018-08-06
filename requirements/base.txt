@@ -47,7 +47,7 @@ lambda-packages==0.15.0
 linaro-django-pagination==2.0.3
 linecache2==1.0.0
 lxml==3.4.1
-markdown2==2.3.4
+markdown2==2.3.5
 mccabe==0.6.1
 mock==2.0.0
 oauthlib==2.0.2
