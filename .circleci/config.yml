@@ -9,18 +9,18 @@ jobs:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
       - image: boffbowsh/circleci-python-geos:2.7.14-3.5.0
-        env:
-          - RUNNER=circleci
+        environment:
+          RUNNER: circleci
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
       - image: mdillon/postgis:9.6
-        env:
-          - POSTGRES_USER=postgres
-          - PGUSER=postgres
-          - POSTGRES_DB=electionleaflets_test
-          - POSTGRES_PASSWORD=
+        environment:
+          POSTGRES_USER: postgres
+          PGUSER: postgres
+          POSTGRES_DB: electionleaflets_test
+          POSTGRES_PASSWORD:
       - image: redis
 
     working_directory: ~/repo
@@ -31,21 +31,17 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "requirements/dev.txt" }}-{{ checksum "requirements/base.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
+          - v2-dependencies-{{ checksum "Pipfile.lock" }}
       - run:
           name: install dependencies
           command: |
-            python -m virtualenv venv
-            . venv/bin/activate
-            pip install -r requirements/dev.txt
+            sudo pip install pipenv
+            pipenv install
 
       - save_cache:
+          key: v2-dependencies-{{ checksum "Pipfile.lock" }}
           paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "requirements/dev.txt" }}-{{ checksum "requirements/base.txt" }}
+            - ".venv"
 
       # run tests!
       # this example uses Django's built-in test-runner
@@ -55,12 +51,10 @@ jobs:
       - run:
           name: run tests
           command: |
-            . venv/bin/activate
-            flake8 electionleaflets
-            coverage run --source=electionleaflets manage.py test
-            coverage run -a --source=electionleaflets manage.py harvest
+            pipenv run flake8 electionleaflets
+            pipenv run python manage.py test
+            pipenv run python manage.py harvest
 
       - store_artifacts:
           path: test-reports
           destination: test-reports
-

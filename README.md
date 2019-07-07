@@ -21,33 +21,18 @@ You'll need some basic requirements installed on your machine, probably through 
 - Redis
 - Yarn
 
-This should do the trick on macOS with Homebrew:
+This should do the trick on macOS or Linux with Homebrew:
 
 ```shell
-brew install python node postgresql postgis redis yarn
+brew install python node postgresql postgis redis yarn pipenv
 ```
 
-1. Create python virtual environment
+1. Launch a shell with pipenv
 ```shell
-deactivate #any running ones
-pip install virtualenv #if you don't have it
-virtualenv .venv --no-site-packages
-. .venv/bin/activate
+pipenv shell
 ```
 
-2. Install python requirements
-
-For development:
-```shell
-pip install -r requirements/dev.txt
-```
-
-For production:
-```shell
-pip install -r requirements/production.txt
-```
-
-3. Settings and database
+2. Settings and database
 ```shell
 createdb electionleaflets
 createuser electionleaflets
@@ -60,21 +45,21 @@ mkdir -p electionleaflets/media/uploads/{thumbnail,small,medium,large}
 python manage.py createsuperuser # Create a user to login to /admin with
 ```
 
-4. Install frontend dependencies
+3. Install frontend dependencies
 ```
 yarn install && bower install
 ```
 
-5. Run gulp in another tab for development. This will watch for changes and recompile assets automatically. You'll need [gulp-cli](https://www.npmjs.com/package/gulp-cli) 
+4. Run gulp in another tab for development. This will watch for changes and recompile assets automatically. You'll need [gulp-cli](https://www.npmjs.com/package/gulp-cli) 
 ```
 gulp
 ```
 
-6. Run django
+5. Run django
 ```
 python manage.py runserver
 ```
 
-7. Visit the site at http://127.0.0.1:8000/
+6. Visit the site at http://127.0.0.1:8000/
 
-8. See our [guidelines for contributing](CONTRIBUTING.md)
+7. See our [guidelines for contributing](CONTRIBUTING.md)
