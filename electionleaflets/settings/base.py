@@ -124,7 +124,7 @@ if environ.get('SENTRY_DSN', None):
 
 
 THUMBNAIL_FORMAT = 'PNG'
-THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
+THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.cached_db_kvstore.KVStore'
 
 
 TEMPLATES = [
