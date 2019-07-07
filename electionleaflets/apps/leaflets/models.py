@@ -1,10 +1,8 @@
-import os
 from io import BytesIO
 
 from sorl.thumbnail import ImageField
 from sorl.thumbnail import delete
 import piexif
-import pytesser
 from PIL import Image
 
 from django.db import models
@@ -108,7 +106,6 @@ class LeafletImage(models.Model):
     legacy_image_key = models.CharField(max_length=255, blank=True)
     image_type = models.CharField(choices=constants.IMAGE_TYPES,
                                   null=True, blank=True, max_length=255)
-    image_text = models.TextField(blank=True)
     orientation = models.PositiveSmallIntegerField(choices=ORIENTATION_CHOICES, default=1)
     exif_data = models.BinaryField(null=True, blank=True)
 
@@ -219,16 +216,3 @@ class LeafletImage(models.Model):
             file_content = ContentFile(new_file.getvalue())
             image_field.save(file_name, file_content)
             delete(self.image, delete_file=False)
-
-    def ocr(self):
-        if not self.image:
-            return ""
-
-        image_path = self.image.path
-
-        text = pytesser.image_to_string(image_path)
-        text = os.linesep.join([s for s in text.splitlines() if s])
-        self.image_text = text
-        self.save()
-        os.remove(image_path)
-        return text
