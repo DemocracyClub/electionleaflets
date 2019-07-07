@@ -84,12 +84,8 @@ WSGI_APPLICATION = 'electionleaflets.wsgi.application'
 LEAFLET_APPS = [
     'core',
     'leaflets',
-    'parties',
     'constituencies',
     'analysis',
-    'categories',
-    'tags',
-    'content',
     'elections',
     'people',
 ]
