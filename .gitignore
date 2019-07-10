@@ -5,6 +5,8 @@
 .installed.cfg
 __minitage__*
 .svn
+.requirements
+.serverless
 bin/*
 lib/*
 include/*
