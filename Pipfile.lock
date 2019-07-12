@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "762ba48eb09556b1886376d656952160d2ed5a9c653fe9b2409a4e5fbfa0992b"
+            "sha256": "d5ec8317da728c40e08ee124df093419a38c3695a805dcb6c092f73d163a1298"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -67,6 +67,20 @@
             ],
             "index": "pypi",
             "version": "==1.5.40"
+        },
+        "certifi": {
+            "hashes": [
+                "sha256:046832c04d4e752f37383b628bc601a7ea7211496b4638f6514d0e5b9acc4939",
+                "sha256:945e3ba63a0b9f577b1395204e13c3a231f9bc0223888be653286534e5873695"
+            ],
+            "version": "==2019.6.16"
+        },
+        "chardet": {
+            "hashes": [
+                "sha256:84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae",
+                "sha256:fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691"
+            ],
+            "version": "==3.0.4"
         },
         "colorama": {
             "hashes": [
@@ -277,6 +291,13 @@
                 "sha256:7f6fa7a3ceffda8bba0f56b42140cc6bae001d010fef336b5b2602252242395d"
             ],
             "version": "==4.1.3"
+        },
+        "idna": {
+            "hashes": [
+                "sha256:c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407",
+                "sha256:ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"
+            ],
+            "version": "==2.8"
         },
         "ipaddress": {
             "hashes": [
@@ -552,11 +573,10 @@
         },
         "requests": {
             "hashes": [
-                "sha256:3b39cde35be51762885631cf586f4dc2284951b44d479a4454020758d767cc2f",
-                "sha256:a274abba399a23e8713ffd2b5706535ae280ebe2b8069ee6a941cb089440d153"
+                "sha256:11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4",
+                "sha256:9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31"
             ],
-            "index": "pypi",
-            "version": "==2.14.2"
+            "version": "==2.22.0"
         },
         "requests-oauthlib": {
             "hashes": [
@@ -651,6 +671,13 @@
             ],
             "index": "pypi",
             "version": "==1.1.0"
+        },
+        "urllib3": {
+            "hashes": [
+                "sha256:b246607a25ac80bedac05c6f282e3cdaf3afb65420fd024ac94435cabe6e18d1",
+                "sha256:dbe59173209418ae49d485b87d1681aefa36252ee85884c31346debd19463232"
+            ],
+            "version": "==1.25.3"
         },
         "werkzeug": {
             "hashes": [
