@@ -7,8 +7,10 @@ from leaflets.models import Leaflet
 
 
 class ImageForm(forms.Form):
+    use_required_attribute = False
     image = forms.ImageField(widget=forms.FileInput(
-        attrs={'accept': "image/*;capture=camera"}), error_messages={'required': 'Please add a photo or skip this step'})
+        attrs={'accept': "image/*;capture=camera"}),
+        error_messages={'required': 'Please add a photo or skip this step'})
 
 
 class FrontPageImageForm(ImageForm):
