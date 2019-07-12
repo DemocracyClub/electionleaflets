@@ -11,7 +11,8 @@ def geocode(postcode):
     """
     Use MaPit to convert the postcode to a location and constituency
     """
-    cached = cache.get(postcode)
+    cache_key = postcode.replace(' ', '')
+    cached = cache.get(cache_key)
     if cached:
         return cached
     try:
@@ -33,5 +34,5 @@ def geocode(postcode):
     except Exception as e:
         print(e)
         result = None
-    cache.set(postcode, result, 60 * 60 * 60 * 24)
+    cache.set(cache_key, result, 60 * 60 * 60 * 24)
     return result
