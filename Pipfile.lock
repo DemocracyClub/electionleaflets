@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b424334bd64bc88798e16ba2f056ab76f0b321b31cd74e4d8a3a1a59d593f4e0"
+            "sha256": "45e58e3dda275f9d2b1c1fc5036b4e2b5388a025e928d4e3c14e6ca0422675ac"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -197,11 +197,11 @@
         },
         "django-storages": {
             "hashes": [
-                "sha256:470b67b325abfd7f82362cfcb09cceba19f1f9499b42ace0f998aa75a05297c7",
-                "sha256:60fe20cbf31eeda4e6065039646b6abecc45d6cc41246dd198c477031d848ffa"
+                "sha256:9e0f3423cdf8fabe74c174380de6cd65b9343b5c83c08f35ace57213f17fb083",
+                "sha256:e021ae94c0ca39c683260fa0065cae0df041d795dd79fee8f7bf4ba31798640d"
             ],
             "index": "pypi",
-            "version": "==1.5.2"
+            "version": "==1.7"
         },
         "django-uk-political-parties": {
             "git": "https://github.com/DemocracyClub/django-uk-political-parties.git",
