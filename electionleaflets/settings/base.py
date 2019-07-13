@@ -23,6 +23,7 @@ sys.path.insert(0, '../django-uk-political-parties/')
 
 DEBUG = False
 template_DEBUG = DEBUG
+TEMPLATE_DEBUG = DEBUG
 
 # DATABASES define in environment specific settings file
 DATABASES = {
