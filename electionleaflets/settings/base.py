@@ -23,6 +23,7 @@ sys.path.insert(0, '../django-uk-political-parties/')
 
 DEBUG = False
 template_DEBUG = DEBUG
+TEMPLATE_DEBUG = DEBUG
 
 # DATABASES define in environment specific settings file
 DATABASES = {
@@ -42,7 +43,7 @@ ALLOWED_HOSTS = []
 MEDIA_ROOT = root('media', )
 MEDIA_URL = '/media/'
 STATIC_ROOT = root('static')
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATICFILES_DIRS = (
     root('media'),
 )

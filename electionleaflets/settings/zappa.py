@@ -3,7 +3,8 @@ import os
 from .base import *  # noqa: F401,F403
 
 if os.environ.get('SERVERTYPE', None) == 'AWS Lambda':
-    GEOS_LIBRARY_PATH = '/var/task/libgeos_c.so'
+    GEOS_LIBRARY_PATH = '/opt/lib/libgeos_c.so'
+    GDAL_LIBRARY_PATH = '/opt/lib/libgdal.so.26.0.0'
 
 ALLOWED_HOSTS = ['*']
 
@@ -18,6 +19,11 @@ DATABASES = {
         'PASSWORD': os.environ.get('DATABASE_PASS')
     }
 }
+
+EMAIL_BACKEND = 'django_ses.SESBackend'
+DEFAULT_FROM_EMAIL = 'hello@democracyclub.org.uk'
+AWS_SES_REGION_NAME = 'eu-west-1'
+AWS_SES_REGION_ENDPOINT = 'email.eu-west-1.amazonaws.com'
 
 DEFAULT_FILE_STORAGE = 's3_lambda_storage.S3LambdaStorage'
 STATICFILES_STORAGE = 's3_lambda_storage.S3StaticLambdaStorage'
