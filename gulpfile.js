@@ -55,26 +55,18 @@
 
 
   var gulp = require('gulp'),
-    handlebars = require('gulp-handlebars'),
-    uglify = require('gulp-uglify'),
-    wrap = require('gulp-wrap'),
-    declare = require('gulp-declare'),
     concat = require('gulp-concat'),
     cleanCss = require('gulp-clean-css'),
     rename = require('gulp-rename'),
     ignore = require('gulp-ignore'),
-    rimraf = require('gulp-rimraf'),
     watch = require('gulp-watch'),
     imagemin = require('gulp-imagemin'),
-    order = require('gulp-order'),
-    templateCompiler = require('gulp-ember-template-compiler'),
     sass = require('gulp-sass');
 
   gulp.task('clean-pre', function() {
     return gulp
       .src([paths.dest, paths.tmp], {read: false})
       .pipe(ignore('node_modules/**'))
-      // .pipe(rimraf());
   });
 
   gulp.task('copy-fonts', function() {
@@ -125,14 +117,7 @@
       .pipe(gulp.dest(paths.dest + 'stylesheets/'));
   });
 
-  gulp.task('templates', function () {
-    gulp.src(paths.src + 'javascript/app/templates/**/*.hbs')
-      .pipe(templateCompiler())
-      .pipe(concat('templates.js'))
-      .pipe(gulp.dest(paths.tmp + 'javascript/'));
-  });
-
-  gulp.task('scripts', ['templates',], function() {
+  gulp.task('scripts', function() {
     var all_scripts = paths.scripts.vendor.concat(paths.scripts.app);
 
     return gulp.src(all_scripts)
@@ -151,9 +136,6 @@
   gulp.task('watch', function() {
     //watches SCSS files for changes
     gulp.watch(paths.src + '**/*.scss', ['css']);
-
-    //watches handlebars files for changes
-    gulp.watch(paths.src + 'javascript/app/templates/**/*.hbs', ['templates', 'scripts']);
 
     //watches JavaScript files for changes
     gulp.watch(paths.src + '**/*.js', ['templates', 'scripts', 'standalone_scripts']);
