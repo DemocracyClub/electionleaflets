@@ -40,19 +40,6 @@
 
 {% block content %}
   <div class="row">
-    {# {% if request.user.is_staff %} #}
-    {#   <section class="admin_tools columns large-12"> #}
-    {#     <ul> #}
-    {#         <li><a class='staff_link' href='/admin/leaflets/leaflet/{{ object.id }}/'>Edit leaflet</a></li> #}
-    {#         <li> #}
-    {#             <form method="post">{{ form }} #}
-    {#                 <button type="submit" name="submit">Save</button> #}
-    {#                 <button type="submit" name="submit_and_next">Save &amp; review next</button> #}
-    {#             </form> #}
-    {#         </li> #}
-    {#     </ul> #}
-    {#   </section> #}
-    {# {% endif %} #}
     <article class="columns large-8">
       <h1>
         {% if object.get_title %}

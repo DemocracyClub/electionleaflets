@@ -22,7 +22,7 @@ sys.path.insert(0, root('apps'))
 sys.path.insert(0, '../django-uk-political-parties/')
 
 
-DEBUG = False
+DEBUG = True
 template_DEBUG = DEBUG
 TEMPLATE_DEBUG = DEBUG
 
@@ -31,7 +31,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'electionleaflets',
-        'USER': 'electionleaflets',
+        'USER': 'boffbowsh',
     }
 }
 
@@ -208,3 +208,19 @@ if len(sys.argv) > 1 and sys.argv[1] in ['test', 'harvest']:
         from .testing import *  # noqa: F401,F403
     except ImportError:
         pass
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': environ.get('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
