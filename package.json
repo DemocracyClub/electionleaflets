@@ -5,15 +5,15 @@
     "node": "> 7"
   },
   "dependencies": {
-    "gulp": "^3.9.1",
-    "gulp-clean-css": "^3.0.4",
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^3.10.0",
     "gulp-cli": "^2.2.0",
     "gulp-concat": "^2.6.1",
     "gulp-ignore": "^2.0.2",
-    "gulp-imagemin": "^3.2.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^3.1.0",
-    "gulp-watch": "^4.3.11",
+    "gulp-imagemin": "^6.0.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^3.2.1",
+    "gulp-watch": "^5.0.1",
     "serverless-apigw-binary": "^0.4.4",
     "serverless-domain-manager": "^3.2.6",
     "serverless-python-requirements": "^4.3.0"

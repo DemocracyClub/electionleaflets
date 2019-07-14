@@ -102,8 +102,8 @@
 
 
 
-  gulp.task('css', ['copy-sass', 'sass'], function() {
-    gulp
+  gulp.task('css', gulp.series(['copy-sass', 'sass']), function() {
+    return gulp
       .src(paths.tmp + 'stylesheets/main.css')
       .pipe(cleanCss())
       .pipe(rename({ suffix: '.min' }))
@@ -112,7 +112,7 @@
 
 
   gulp.task('standalone_css', function() {
-    gulp
+    return gulp
       .src(paths.standalone)
       .pipe(gulp.dest(paths.dest + 'stylesheets/'));
   });
@@ -142,8 +142,8 @@
     gulp.watch(paths.tmp + '**/*.js', ['scripts']);
   });
 
-  gulp.task('build', ['clean-pre', 'css', 'scripts']);
-  gulp.task('default', [
+  gulp.task('build', gulp.series(['clean-pre', 'css', 'scripts']));
+  gulp.task('default', gulp.series([
     'images',
     'copy-fonts',
     'css',
@@ -151,6 +151,6 @@
     'standalone_scripts',
     'standalone_css',
     'watch'
-  ]);
+  ]));
 
 })();
