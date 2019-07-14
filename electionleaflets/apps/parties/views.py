@@ -14,17 +14,6 @@ class PartyList(ListView):
         queryset = Party.objects.annotate(
             num_leaflets=Count('leaflet')
         ).order_by('-num_leaflets', 'party_name')
-
-        queryset = queryset.extra(
-            select={
-                'leaflets_this_year': """
-                SELECT COUNT(id)
-                FROM leaflets_leaflet as l
-                WHERE l.publisher_party_id=uk_political_parties_party.party_id
-                AND date_uploaded > '01-01-2015'
-                """
-            }
-        )
         return queryset
 
     template_name = "parties/party_list.html"
