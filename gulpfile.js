@@ -41,7 +41,7 @@
 
     ],
     app: [
-        paths.src + 'javascript/app/app.js',
+        paths.src + 'javascript/app.js',
     ],
     standalone: [
         paths.src + 'javascript/admin.js',
