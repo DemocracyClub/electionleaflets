@@ -2,8 +2,9 @@ import sys
 from os.path import join, abspath, dirname
 from os import environ
 
-# PATH vars
+from boto.s3.connection import ProtocolIndependentOrdinaryCallingFormat
 
+# PATH vars
 
 def here(x):
     return join(abspath(dirname(__file__)), x)
@@ -50,6 +51,12 @@ STATICFILES_DIRS = (
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 AWS_S3_FILE_OVERWRITE = False
+AWS_STORAGE_BUCKET_NAME = "data.electionleaflets.org"
+AWS_S3_SECURE_URLS = True
+AWS_S3_HOST = 's3-eu-west-1.amazonaws.com'
+AWS_S3_CUSTOM_DOMAIN = "data.electionleaflets.org"
+AWS_S3_CALLING_FORMAT = ProtocolIndependentOrdinaryCallingFormat()
+AWS_S3_ADDRESSING_STYLE = 'path'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
