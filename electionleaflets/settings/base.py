@@ -49,7 +49,7 @@ ALLOWED_HOSTS = []
 MEDIA_ROOT = root('media', )
 MEDIA_URL = '/media/'
 STATIC_ROOT = root('static')
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     root('assets'),
 )

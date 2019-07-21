@@ -21,13 +21,14 @@ class HomeView(TemplateView):
         # get leaflet count
         start_date = datetime.date(2015, 1, 1)
         leaflet_count = Leaflet.objects.filter(date_uploaded__gt=start_date).count()
+        last_30_days = Leaflet.objects.filter(date_uploaded__gt=datetime.datetime.now() + datetime.timedelta(-30)).count()
         context = super(HomeView, self).get_context_data(**kwargs)
 
         # get latest leaflets (with titles)
         latest_leaflets = Leaflet.objects.all()[:9]
 
         # update context
-        context.update({'leaflet_count': leaflet_count, 'start_date': start_date, 'latest_leaflets': latest_leaflets})
+        context.update({'leaflet_count': leaflet_count, 'start_date': start_date, 'latest_leaflets': latest_leaflets, 'last_30_days': last_30_days})
 
         return context
 

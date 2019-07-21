@@ -6,91 +6,77 @@
 {% load constituency_tags %}
 
 {% block content %}
-  <div class="row intro">
-    <div class="medium-8 columns">
+  <div class="fukol-grid">
+    <div class="fukol-grid__col fukol-grid__col--60-70">
       <p>
         This is people-powered election monitoring! Get out your phone and photograph any political leaflets that come through your door.
-        <strong></strong>
       </p>
     </div>
-    <div class="medium-4 columns">
-      <p>
-        <a href="{% url "upload_leaflet" %}" class="button">
-          <span class="mobile-copy">
-            <i class="fa fa-camera"></i>
-            Photograph a leaflet
-          </span>
-          <span class="desktop-copy">
-            <i class="fa fa-upload"></i>
-            Upload a leaflet
-          </span>
-        </a>
-      </p>
+    <div class="fukol-grid__col fukol-grid__col--40-30 align-center">
+      <a href="{% url "upload_leaflet" %}" class="button button-upload">
+        <span class="mobile-copy">
+          <i class="fa fa-camera"></i>
+          Photograph a leaflet
+        </span>
+        <span class="desktop-copy">
+          <i class="fa fa-upload"></i>
+          Upload a leaflet
+        </span>
+      </a>
     </div>
   </div>
-  <div class="row">
-    <div class="medium-4 columns">
-      <div class="big-number">
+  <div class="fukol-grid">
+    <div class="fukol-grid__col fukol-grid__col--60-70">
+      <a href="{% url "leaflets" %}">
+      <div class="feature-card">
+        <h3>Latest leaflets</h3>
+        {{last_30_days}} in the last month
+      </div>
+      </a>
+      <a href="{% url "parties" %}">
+      <div class="feature-card">
+        <h3>Parties</h3>
+        Filter leaflets by party
+      </div>
+      </a>
+      <a href="{% url "constituencies" %}">
+      <div class="feature-card">
+        <h3>Constituencies</h3>
+        Filter leaflets by constituency
+      </div>
+      </a>
+    </div>
+    <div class="fukol-grid__col fukol-grid__col--40-30">
+      <div class="feature-card feature-card--grey leaflet-count-stat">
         <a href="{% url "leaflets" %}">
           <span>{{leaflet_count}}</span>
           <small>leaflets since {{start_date}}</small>
         </a>
       </div>
     </div>
-    <div class="medium-8 columns">
-      <ul class="side-nav">
-        <li>
-          <a href="{% url "leaflets" %}">Latest leaflets</a>
-        </li>
-        <li>
-          <a href="{% url "parties" %}">Parties</a>
-        </li>
-        <li>
-          <a href="{% url "constituencies" %}">Constituencies</a>
-        </li>
-      </ul>
-    </div>
   </div>
-  <div class="row">
-    <div class="columns medium-12">
-      <ul id="home_thumbnails" class="large-block-grid-9 medium-block-grid-3 small-block-grid-3">
-        {% for leaflet in latest_leaflets %}
-            <li>
-              <a href="{% url "leaflet"  leaflet.id %}">
-                {% thumbnail leaflet.get_first_image.image "350x350" crop="top" as im %}
-                  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="Thumbnail of leaflet - {{leaflet.get_title}}">
-                {% endthumbnail %}
-              </a>
-            </li>
-        {% endfor %}
-      </ul>
-    </div>
+  <div class="fukol-grid leaflet-grid">
+    {% for leaflet in latest_leaflets %}
+      <a href="{% url "leaflet"  leaflet.id %}" class="feature-card">
+        {% thumbnail leaflet.get_first_image.image "350x350" crop="top" as im %}
+          <img src="{{ im.url }}" alt="Thumbnail of leaflet - {{leaflet.get_title}}">
+        {% endthumbnail %}
+      </a>
+    {% endfor %}
   </div>
-  <div class="row">
-    <div class="columns medium-6">
+  <div class="about-grid">
+    <div class="feature-card">
       <h3>As featured by</h3>
-      <ul class="featured-logos small-block-grid-3">
-        <li>
-          <img alt="Channel 4 Dispatches logo" src="{% static "images/featured_dispatches.png" %}" />
-        </li>
-        <li>
-          <img alt="BBC News logo" src="{% static "images/featured_bbc.png" %}" />
-        </li>
-        <li>
-          <img alt="Guardian logo" src="{% static "images/featured_guardian.png" %}" />
-        </li>
-        <li>
-          <img alt="38 degrees logo" src="{% static "images/featured_38degrees.png" %}" />
-        </li>
-        <li>
-          <img alt="Newsnight logo" src="{% static "images/featured_newsnight.png" %}" />
-        </li>
-        <li>
-          <img alt="The Times logo" src="{% static "images/featured_times.png" %}" />
-        </li>
-      </ul>
+      <div class="featured-orgs-grid">
+        <img alt="Channel 4 Dispatches logo" src="{% static "images/featured_dispatches.png" %}" />
+        <img alt="BBC News logo" src="{% static "images/featured_bbc.png" %}" />
+        <img alt="Guardian logo" src="{% static "images/featured_guardian.png" %}" />
+        <img alt="38 degrees logo" src="{% static "images/featured_38degrees.png" %}" />
+        <img alt="Newsnight logo" src="{% static "images/featured_newsnight.png" %}" />
+        <img alt="The Times logo" src="{% static "images/featured_times.png" %}" />
+      </div>
     </div>
-    <div class="columns medium-6">
+    <div class="feature-card">
       <h3>About</h3>
       <p>
         ElectionLeaflets.org is an online archive of political leaflets.
@@ -102,5 +88,4 @@
       </p>
     </div>
   </div>
-
 {% endblock %}

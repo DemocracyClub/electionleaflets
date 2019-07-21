@@ -1,0 +1,58 @@
+//
+// Fukol Grid Override (.fukol-grid)
+//
+//***********************************************************************
+.fukol-grid { margin: -0.5em; }
+
+	// Change the padding from margin to padding,
+	// force full width on mobile by default
+	.fukol-grid__col {
+		flex-basis: calc(100% - 1em);
+		margin: 0;
+		padding: 0.5em;
+
+		// Default flex-basis for fukol-grid
+		@include media(tablet) {
+			flex-basis: 10em;
+		}
+	}
+
+	// 60% tablet, %70 desktop
+	.fukol-grid__col--60-70 {
+		@include media(tablet) {
+			max-width: 60%;
+			flex-basis: 60%;
+		}
+		@include media(desktop) {
+			max-width: 70%;
+			flex-basis: 70%;
+		}
+	}
+
+	// 40% tablet, %30 desktop
+	.fukol-grid__col--40-30 {
+		@include media(tablet) {
+			max-width: 40%;
+			flex-basis: 40%;
+		}
+		@include media(desktop) {
+			max-width: 30%;
+			flex-basis: 30%;
+		}
+	}
+
+	// 50% tablet (default), 60% desktop
+	.fukol-grid__col--50-60 {
+		@include media(desktop) {
+			max-width: 60%;
+			flex-basis: 60%;
+		}
+	}
+
+	// 50% tablet (default), 40% desktop
+	.fukol-grid__col--50-40  {
+		@include media(desktop) {
+			max-width: 40%;
+			flex-basis: 40%;
+		}
+	}

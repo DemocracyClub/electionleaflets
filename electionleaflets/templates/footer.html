@@ -1,9 +1,10 @@
 {% load staticfiles %}
-<footer>
-    <div class="row">
-        <div class="large-8 columns">
-            <nav>
-                <ul class="inline-list">
+<footer class="site-footer">
+    <h3>ElectionLeaflets.org</h3>
+    <div class="fukol-grid">
+        <div class="fukol-grid__col">
+            <nav aria-label="primary">
+                <ul>
                     {% if request.user.is_authenticated %}
                         <li>
                             <a href="{% url "account_logout" %}">Sign out</a>
@@ -13,38 +14,39 @@
                             <a href="{% url "account_login" %}">Sign in to electionleaflets.org</a>
                         </li>
                     {% endif %}
-                </ul>
-                <ul class="inline-list">
                     <li><a href="{% url "home"  %}">Home</a></li>
                     <li>
-                      <a href="{% url "parties" %}">Parties</a>
+                        <a href="{% url "parties" %}">Parties</a>
                     </li>
                     <li>
-                      <a href="{% url "constituencies" %}">Constituencies</a>
+                        <a href="{% url "constituencies" %}">Constituencies</a>
                     </li>
                     <li><a href="{% url "about"  %}">About</a></li>
                     <li><a href="{% url "about"  %}#contact">Contact</a></li>
                     <li><a href="{% url "press"  %}">Press</a></li>
                     <li><a href="https://democracyclub.org.uk/mailing_list/signup/">Mailing List</a></li>
-                    {# <li><a href="{% url "reports"  %}">Reports</a></li> #}
                 </ul>
             </nav>
+        </div>
+        <div class="fukol-grid__col">
             <p>Election Leaflets is run by a group of volunteers.
                 It is currently being supported by
                 <a href="https://www.unlockdemocracy.org/">Unlock Democracy</a>, the
                 campaign for democracy, rights and freedoms and
                 <a href="https://democracyclub.org.uk/">Democracy Club</a>.
+            </p>
+            <p>
                 Election Leaflets, Unlock Democracy and Democracy Club
                 are independent and not affiliated to any political party.
             </p>
-        </div>
-        <div class="large-4 columns">
-            <a href="https://democracyclub.org.uk/" class="supporter">
-                <img src="{% static "images/dc.png" %}" height="80px">
+            <div class="site-footer__credits">
+            <a href="/">
+                <img class="site-footer__logo" src="https://static.democracyclub.org.uk/static/images/logo-with-text-2017--inverted.c45f7f0b5c1f.png" alt="Democracy Club">
             </a>
-            <a href="https://www.unlockdemocracy.org/" class="supporter">
-                <img src="{% static "images/ud11.png" %}" height="80px">
-            </a>
+            <p>Copyright © 2018 Democracy Club</p>
+            <p>Community Interest Company</p>
+            <p>Company No: <a href="https://beta.companieshouse.gov.uk/company/09461226">09461226</a></p>
+            </div>
         </div>
     </div>
 </footer>

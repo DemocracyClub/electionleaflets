@@ -1,0 +1,12 @@
+//
+// Site Wrapper (.site-wrapper)
+//
+//***********************************************************************
+// Because certain things span full width (borders etc) we need an inner wrap class
+.site-wrapper { max-width: 1280px; margin: 0 auto; padding: 0 15px; }
+
+	// make gutter wider on desktop
+	@include media(desktop) { .site-wrapper { padding: 0 25px; } }
+
+	// Body container (centered, thinner for line length)
+	.site-wrapper__body-text { max-width: 690px; margin: 0 auto; float: none; }

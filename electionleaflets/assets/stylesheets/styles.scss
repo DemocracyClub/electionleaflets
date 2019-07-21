@@ -1,0 +1,85 @@
+@import 'dc_base';
+
+@import 'sass/base/base';
+@import 'sass/base/dc_button';
+
+@import 'sass/layout/fukol-grid--override';
+@import 'sass/layout/container--override';
+@import 'sass/layout/site-wrapper';
+@import 'sass/layout/site-header';
+@import 'sass/layout/site-footer';
+@import 'sass/layout/nav-site';
+
+@import 'sass/components/feature-card';
+
+//mobile/desktop copy
+.desktop-copy {
+    display:none;
+}
+.mobile-copy{
+    display:inline;
+}
+
+@media only screen and (min-width: 40.063em) {
+    .desktop-copy {
+        display:inline;
+    }
+    .mobile-copy{
+        display:none;
+    }
+}
+
+.leaflet-count-stat {
+    text-align: center;
+    span {
+        display:block;
+        font-size:5rem;
+    }
+}
+
+.button.button-upload {
+    font-size: 1.5rem;
+}
+
+.leaflet-grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1em -0.5em;
+    overflow-y: hidden;
+    max-height: 6em;
+
+    a {
+        line-height: 1rem;
+        flex: 1 0 1em;
+        margin: 0.5em;
+        min-width: 6rem;
+    }
+}
+
+.featured-orgs-grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -0.5em;
+
+    img {
+        flex: 1 0 1em;
+        margin: 0.5em;
+        max-width: calc(33% - 1em);
+    }
+}
+
+.about-grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -0.5em;
+
+    > * {
+        flex: 1 0 1em;
+        margin: 0.5em;
+        min-width: 12rem;
+    }
+}
+
+.align-center {
+    text-align: center;
+}
