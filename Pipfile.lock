@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5d919b74540e5f5ed3dbd6965a89a2f1611f0bf92e477aedb9db957163fe4ffd"
+            "sha256": "e80a9e9051a427019dc5db7ec1822695b7104e336bef79edf8afbbc47e4bc99e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -61,19 +61,18 @@
         },
         "boto3": {
             "hashes": [
-                "sha256:5050c29353fec97301116386f469fa5858ccf47201623b53cf9f74e603bda52f",
-                "sha256:518f724c4758e5a5bed114fbcbd1cf470a15306d416ff421a025b76f1d390939"
+                "sha256:18c625fd31a657237e7f3ec221df6c173aa35bf1f4ed17e1e05f31185bf0a529",
+                "sha256:4d47227a12a8c1284266895a90dabc9bf08387435ce35077701fe5d06d39a5bf"
             ],
             "index": "pypi",
-            "version": "==1.4.4"
+            "version": "==1.9.194"
         },
         "botocore": {
             "hashes": [
-                "sha256:512a0a612e93142ed6b698740e1a40df7d899ddd79c297e13336d1048ac6d95a",
-                "sha256:ad8ba09dfe5233c4a0099edec7cfadd240d6c232bd71684ebb28c752198c20a3"
+                "sha256:90b183cc625cd4b9e2b0a08caecd1c8eb2bd4d61ba9fe6960c4d19cdd973733a",
+                "sha256:fd3dae94aa4a55aefe96964d51f96ed51c4863d77d215907df9dc1f7590de033"
             ],
-            "index": "pypi",
-            "version": "==1.5.40"
+            "version": "==1.12.194"
         },
         "certifi": {
             "hashes": [
@@ -230,9 +229,12 @@
         },
         "docutils": {
             "hashes": [
-                "sha256:ba4584f9107571ced0d2c7f56a5499c696215ba90797849c92d395979da68521"
+                "sha256:02aec4bd92ab067f6ff27a38a38a41173bf01bed8f89157768c1573f53e474a6",
+                "sha256:51e64ef2ebfb29cae1faa133b3710143496eca21c530f3f71424d77687764274",
+                "sha256:7a4bd47eaf6596e1295ecb11361139febe29b084a87bf005bf899f9a42edc3c6"
             ],
-            "version": "==0.15.post1"
+            "index": "pypi",
+            "version": "==0.14"
         },
         "durationpy": {
             "hashes": [
@@ -661,11 +663,10 @@
         },
         "s3transfer": {
             "hashes": [
-                "sha256:ba1a9104939b7c0331dc4dd234d79afeed8b66edce77bbeeecd4f56de74a0fc1",
-                "sha256:bc52f38637f37572ae180c08a2dd87a4825b46713797633aab6e1a42d6b2b8ff"
+                "sha256:6efc926738a3cd576c2a79725fed9afde92378aa5c6a957e3af010cb019fac9d",
+                "sha256:b780f2411b824cb541dbcd2c713d0cb61c7d1bcadae204cdddda2b35cef493ba"
             ],
-            "index": "pypi",
-            "version": "==0.1.10"
+            "version": "==0.2.1"
         },
         "six": {
             "hashes": [
@@ -742,6 +743,7 @@
                 "sha256:b246607a25ac80bedac05c6f282e3cdaf3afb65420fd024ac94435cabe6e18d1",
                 "sha256:dbe59173209418ae49d485b87d1681aefa36252ee85884c31346debd19463232"
             ],
+            "markers": "python_version == '2.7'",
             "version": "==1.25.3"
         },
         "werkzeug": {
