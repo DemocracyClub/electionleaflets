@@ -1,25 +1,21 @@
 {% load thumbnail %}
 {% load humanize %}
-<ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
+<div class="leaflet-grid">
 {% for leaflet in leaflet_list %}
-  <li>
-    <figure>
-      <a href="{% url "leaflet"  leaflet.id %}">
-        {% thumbnail leaflet.get_first_image.image "350" as im %}
-        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+  <a href="{% url "leaflet" leaflet.id %}">
+    <div class="feature-card">
+      <figure>
+        {% thumbnail leaflet.get_first_image.image "350x350" as im %}
+          <img src="{{ im.url }}">
         {% endthumbnail %}
-      </a>
-      <figcaption>
-        <a href="{% url "leaflet" leaflet.id %}">
-          {% if leaflet.title %}
-            {{ leaflet.title }}
-          {% else %}
-            Leaflet #{{ leaflet.id }}
-          {% endif %}
-        </a><br>
-        <span class="upload_date">Uploaded {{ leaflet.date_uploaded|naturalday }}</span>
-      </figcaption>
-    </figure>
-  </li>
+        <figcaption>
+            <p class="upload_date">Uploaded {{ leaflet.date_uploaded|naturalday }}</p>
+            {% if leaflet.publisher_party %}
+              <p>{{ leaflet.publisher_party.party_name }}</p>
+            {% endif %}
+        </figcaption>
+      </figure>
+    </div>
+  </a>
 {% endfor %}
-</ul>
+</div>
