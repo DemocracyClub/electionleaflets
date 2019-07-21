@@ -70,6 +70,8 @@ factory-boy = "*"
 responses = "*"
 django-ses = "*"
 future = "==0.16.0"
+dc-base-theme = {editable = true,git = "git://github.com/DemocracyClub/dc_base_theme.git",ref = "django-1-11"}
+django-pipeline = "==1.6.14"
 
 [requires]
 python_version = "2.7"

@@ -40,6 +40,8 @@ else:
         # Administration URLS
         url(r'^admin/', include(admin.site.urls)),
         url(r'^accounts/', include('allauth.urls')),
+
+        url(r'^dc_base_theme', include('dc_theme.urls')),
     ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

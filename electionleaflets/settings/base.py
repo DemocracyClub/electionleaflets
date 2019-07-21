@@ -2,6 +2,12 @@ import sys
 from os.path import join, abspath, dirname
 from os import environ
 
+from dc_theme.settings import (  # noqa: F401
+    get_pipeline_settings,
+    STATICFILES_STORAGE,
+    STATICFILES_FINDERS
+)
+
 # PATH vars
 
 
@@ -45,18 +51,18 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = root('static')
 STATIC_URL = 'static/'
 STATICFILES_DIRS = (
-    root('media'),
+    root('assets'),
 )
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 AWS_S3_FILE_OVERWRITE = False
 
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+PIPELINE = get_pipeline_settings(
+    extra_css=['stylesheets/styles.scss', ],
 )
 
 SITE_ID = 1
+SITE_LOGO = 'dc_theme/images/logo-with-text.png'
 USE_I18N = False
 USE_L10N = True
 LOGIN_URL = "/"
@@ -114,6 +120,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.twitter',
     'django_extensions',
+    'pipeline',
+    'dc_theme',
 ] + LEAFLET_APPS
 
 if environ.get('SENTRY_DSN', None):
@@ -145,6 +153,7 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 "django.contrib.auth.context_processors.auth",
+                'dc_theme.context_processors.dc_theme_context',
             ]
         }
     }
