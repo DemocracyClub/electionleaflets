@@ -23,6 +23,7 @@ sys.path.insert(0, '../django-uk-political-parties/')
 
 DEBUG = False
 template_DEBUG = DEBUG
+TEMPLATE_DEBUG = DEBUG
 
 # DATABASES define in environment specific settings file
 DATABASES = {
@@ -42,7 +43,7 @@ ALLOWED_HOSTS = []
 MEDIA_ROOT = root('media', )
 MEDIA_URL = '/media/'
 STATIC_ROOT = root('static')
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATICFILES_DIRS = (
     root('media'),
 )
@@ -186,6 +187,9 @@ THANKYOU_MESSAGES = [
 ]
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+MAPIT_API_KEY = environ.get('MAPIT_API_KEY', None)
+MAPIT_API_URL = environ.get('MAPIT_API_URL', 'https://mapit.mysociety.org')
 
 # .local.py overrides all the common settings.
 try:

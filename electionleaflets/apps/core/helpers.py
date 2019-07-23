@@ -1,21 +1,25 @@
 import requests
 
+from django.conf import settings
 from django.core.cache import cache
 
 from constituencies.models import Constituency
-
-from . import constants
 
 
 def geocode(postcode):
     """
     Use MaPit to convert the postcode to a location and constituency
     """
-    cached = cache.get(postcode)
+    cache_key = postcode.replace(' ', '')
+    cached = cache.get(cache_key)
     if cached:
         return cached
     try:
-        res = requests.get("%s/postcode/%s" % (constants.MAPIT_URL, postcode), verify=False)
+        url = "%s/postcode/%s" % (settings.MAPIT_API_URL, postcode)
+        headers = {}
+        if settings.MAPIT_API_KEY:
+            headers['X-Api-Key'] = settings.MAPIT_API_KEY
+        res = requests.get(url, headers=headers)
         res_json = res.json()
         if 'code' in res_json and res_json['code'] == 404:
             return None
@@ -33,5 +37,5 @@ def geocode(postcode):
     except Exception as e:
         print(e)
         result = None
-    cache.set(postcode, result, 60 * 60 * 60 * 24)
+    cache.set(cache_key, result, 60 * 60 * 60 * 24)
     return result

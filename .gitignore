@@ -40,3 +40,4 @@ electionleaflets/test_media/leaflets/
 electionleaflets/test_media/raw_leaflets/
 electionleaflets/test_media/cache/
 electionleaflets/test_media/images/leaflets_tmp
+electionleaflets/test_media/test_images/*_test_*.jpg

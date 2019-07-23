@@ -29,6 +29,14 @@ provider:
       Resource:
         - 'arn:aws:s3:::data.electionleaflets.org'
         - 'arn:aws:s3:::data.electionleaflets.org/*'
+    - Effect: 'Allow'
+      Action:
+        - 'ses:GetSendQuota'
+        - 'ses:SendEmail'
+        - 'ses:SendRawEmail'
+      Resource:
+        - '*'
+
   vpc:
     securityGroupIds:
       - sg-a0a784d9
@@ -38,7 +46,13 @@ provider:
 
 package:
   include:
-    - electionleaflets/**
+    - electionleaflets/apps/**
+    - electionleaflets/assets/**
+    - electionleaflets/media/**
+    - electionleaflets/settings/**
+    - electionleaflets/templates/**
+    - electionleaflets/third_party/**
+    - electionleaflets/*
     - manage.py
     - libgeos*
   exclude:
@@ -51,7 +65,8 @@ functions:
       - http: ANY /
       - http: ANY {proxy+}
     layers:
-      arn:aws:lambda:eu-west-1:929325949831:layer:pdal
+      - arn:aws:lambda:eu-west-1:929325949831:layer:pdal:1
+      - {Ref: PythonRequirementsLambdaLayer}
 
 custom:
   staging:
@@ -65,6 +80,7 @@ custom:
   pythonRequirements:
     dockerizePip: true
     useStaticCache: true
+    layer: true
   apigwBinary:
     types:
       - 'multipart/form-data'
