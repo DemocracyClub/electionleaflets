@@ -84,18 +84,13 @@ WSGI_APPLICATION = 'electionleaflets.wsgi.application'
 LEAFLET_APPS = [
     'core',
     'leaflets',
-    'parties',
     'constituencies',
     'analysis',
-    'categories',
-    'tags',
-    'content',
     'elections',
     'people',
 ]
 
 INSTALLED_APPS = [
-    'celery',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -105,7 +100,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.messages',
     'django.contrib.humanize',
-    'kombu.transport.django',
     'linaro_django_pagination',
     'rest_framework',
     'sorl.thumbnail',
@@ -130,7 +124,7 @@ if environ.get('SENTRY_DSN', None):
 
 
 THUMBNAIL_FORMAT = 'PNG'
-THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
+THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.cached_db_kvstore.KVStore'
 
 
 TEMPLATES = [

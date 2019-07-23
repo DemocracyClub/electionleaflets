@@ -25,7 +25,7 @@ class LeafletAdmin(admin.ModelAdmin):
 
 
 class LeafletImageOptions(AdminImageMixin, admin.ModelAdmin):
-    list_display = ['id', 'get_leaflet_title', 'thumbnail', 'image_text']
+    list_display = ['id', 'get_leaflet_title', 'thumbnail']
     ordering = ['-id', ]
     raw_id_fields = ['leaflet']
 
