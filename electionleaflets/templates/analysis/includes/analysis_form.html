@@ -1,17 +1,15 @@
 {% load klass %}
 {% if request.user.is_authenticated %}
-<form method="post" class="analysis_form">
+<form method="post" class="analysis_form feature-card feature-card--grey">
   {% for field in analysis_form.visible_fields  %}
   <div class="form_field">
     {% if field|klass == "ChoiceField" %}
-    <h4>{{ field.label }}</h4>
-    <p class="help_text">{{ field.help_text }}</p>
-    <div class="select_widget">
+    <h3>{{ field.label }}</h3>
+    <p class="help-text">{{ field.help_text }}</p>
+    <div class="option-group">
       {% for radio in field %}
-        <div class="select_row">
-          <input {% if radio.choice_value == field.value %}checked=checked{% endif %} id="{{ radio.id_for_label }}" name="{{ field.name }}" type="radio" value="{{ radio.choice_value }}">
-          <label for="{{ radio.id_for_label }}"> {{ radio.choice_label }}</label>
-        </div>
+        <input {% if radio.choice_value == field.value %}checked=checked{% endif %} id="{{ radio.id_for_label }}" name="{{ field.name }}" type="radio" value="{{ radio.choice_value }}">
+        <label for="{{ radio.id_for_label }}"> {{ radio.choice_label }}</label>
       {% endfor %}
     </div>
     {% else %}
@@ -24,7 +22,14 @@
   {% for hidden in analysis_form.hidden_fields %}
   {{ hidden }}
   {% endfor %}
-  <button type="submit">Save</button>
-  <button type="submit" name="save_and_next">Save &amp; Next</button>
+  <div class="form-buttons">
+    <button class="button" type="submit">Save</button>
+    <button class="button" type="submit" name="save_and_next">Save &amp; Next</button>
+    {% if request.user.is_staff %}
+      <a class='button' href='/admin/leaflets/leaflet/{{ object.id }}/'>Edit
+      leaflet</a>
+    {% endif %}
+  </div>
+
 </form>
 {% endif %}

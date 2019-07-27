@@ -39,21 +39,8 @@
 {% block extra_head %}{% endblock %}
 
 {% block content %}
-  <div class="row">
-    {# {% if request.user.is_staff %} #}
-    {#   <section class="admin_tools columns large-12"> #}
-    {#     <ul> #}
-    {#         <li><a class='staff_link' href='/admin/leaflets/leaflet/{{ object.id }}/'>Edit leaflet</a></li> #}
-    {#         <li> #}
-    {#             <form method="post">{{ form }} #}
-    {#                 <button type="submit" name="submit">Save</button> #}
-    {#                 <button type="submit" name="submit_and_next">Save &amp; review next</button> #}
-    {#             </form> #}
-    {#         </li> #}
-    {#     </ul> #}
-    {#   </section> #}
-    {# {% endif %} #}
-    <article class="columns large-8">
+  <div class="fukol-grid">
+    <article class="fukol-grid__col fukol-grid__col--60-70">
       <h1>
         {% if object.get_title %}
           {{ object.get_title }}
@@ -144,7 +131,7 @@
       </section>
     </article>
 
-    <aside class="columns large-4">
+    <aside class="fukol-grid__col fukol-grid__col--40-30">
       {% include "analysis/includes/analysis_form.html" %}
       <section class="share">
         <h3>Something interesting, dodgy or funny? Shout about it!</h3>
@@ -182,11 +169,6 @@
         <p>
           The data on this page is available in <a href="http://{{ request.META.HTTP_HOST }}{% url "api:leaflet-detail" object.pk%}?format=json">JSON format</a>. The images of this leaflet should be considered to be in the public domain, in accordance with the <a href="https://creativecommons.org/publicdomain/zero/1.0/">Public Domain Dedication</a>.
         </p>
-        {% if request.user.is_staff %}
-            <hr/>
-            <a class='staff_link' href='/admin/leaflets/leaflet/{{ object.id }}/'>Edit leaflet</a>
-        {% endif %}
-
       </section>
   </aside>
 
