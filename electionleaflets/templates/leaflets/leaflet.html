@@ -40,137 +40,128 @@
 
 {% block content %}
   <div class="fukol-grid">
-    <article class="fukol-grid__col fukol-grid__col--60-70">
-      <h1>
-        {% if object.get_title %}
-          {{ object.get_title }}
-        {% else %}
-          Leaflet #{{object.id}}
+    <div class="fukol-grid__col fukol-grid__col--60-70">
+      <article class="feature-card">
+        <h1>
+          {% if object.get_title %}
+            {{ object.get_title }}
+          {% else %}
+            Leaflet #{{object.id}}
+          {% endif %}
+        </h1>
+        <p>This leaflet was spotted by a volunteer
+        {% if object.constituency %}
+          in <a href="{% url "constituency-view"  object.constituency.pk object.constituency.slug %}">{{ object.constituency.name }}</a>
+        {% endif %} <br>on {{ object.date_uploaded|date:"l, d M, Y" }}.</p>
+
+        {% if object.publisher_person %}
+          <section class="person">
+                <p>
+                  Sent by
+                  <a href="{% url "person" object.publisher_person.remote_id %}">
+                    {{object.publisher_person.name}}
+                  </a>
+                </p>
+          </section>
+
         {% endif %}
-      </h1>
-      <p>This leaflet was spotted by a volunteer
-      {% if object.constituency %}
-        in <a href="{% url "constituency-view"  object.constituency.pk object.constituency.slug %}">{{ object.constituency.name }}</a>
-      {% endif %} <br>on {{ object.date_uploaded|date:"l, d M, Y" }}.</p>
 
-      {% if object.publisher_person %}
-        <section class="person">
-              <p>
-                Sent by
-                <a href="{% url "person" object.publisher_person.remote_id %}">
-                  {{object.publisher_person.name}}
-                </a>
-              </p>
-        </section>
-
-      {% endif %}
-
-      {% if object.publisher_party %}
-        <section class="party">
-            {% if object.publisher_party and object.publisher_party.slug %}
-              <p>
-                Published by
-                <a href="{% url "party-view" object.publisher_party.pk object.publisher_party.slug %}">
-                  <img src="http://openelectoralcommission.org.uk/party_images/{{ object.publisher_party.emblems.all.0.emblem_url }}" width="40px">
-                  {{object.publisher_party.party_name}}
-                </a>
-              </p>
-            {% endif %}
-        </section>
-      {% endif %}
-
-      <section class="leaflet_images" aria-describedby=leaflet_description>
-        {% for image in object.images.all %}
-          <figure>
-            <a href="{% url "full_image"  image.id %}" class="leaflet_link">
-              {% thumbnail image.image "600" crop="center" as im %}
-              <img src="{{ im.url }}" aria-labelledby="page-{{image.id}}" data-full_image_url="{{ image.image.url }}">
-              {% endthumbnail %}
-            </a>
-            <figcaption>
-              {% if image.image_type == "1_front" %}
-                  <span id="page-{{image.id}}">Leaflet Front</span>
+        {% if object.publisher_party %}
+          <section class="party">
+              {% if object.publisher_party and object.publisher_party.slug %}
+                <p>
+                  Published by
+                  <a href="{% url "party-view" object.publisher_party.pk object.publisher_party.slug %}">
+                    <img src="http://openelectoralcommission.org.uk/party_images/{{ object.publisher_party.emblems.all.0.emblem_url }}" width="40px">
+                    {{object.publisher_party.party_name}}
+                  </a>
+                </p>
               {% endif %}
-              {% include "leaflets/includes/leaflet_admin_links.html" %}
-              <a href="{% url "all_images"  object.id %}">view all pages</a>
-            </figcaption>
-          </figure>
-        {% endfor%}
-      </section>
-
-      <section class="leaflet_information">
-        <div id="leaflet_description">
-        {% if object.description %}
-            {{ object.description|markdown }}
+          </section>
         {% endif %}
-        </div>
 
+        <section class="leaflet_images" aria-describedby=leaflet_description>
+          {% for image in object.images.all %}
+            <figure>
+              <a href="{% url "full_image"  image.id %}" class="leaflet_link">
+                {% thumbnail image.image "600" crop="center" as im %}
+                <img src="{{ im.url }}" aria-labelledby="page-{{image.id}}" data-full_image_url="{{ image.image.url }}">
+                {% endthumbnail %}
+              </a>
+              <figcaption>
+                {% if image.image_type == "1_front" %}
+                    <span id="page-{{image.id}}">Leaflet Front</span>
+                {% endif %}
+              </figcaption>
+            </figure>
+          {% endfor%}
+        </section>
 
-        {% if object.imprint %}
-          <div id="leaflet_imprint">
-          <h4>Promoter and Publisher details</h4>
-          <p>{{ object.imprint }}</p>
+        <section class="leaflet_information">
+          <div id="leaflet_description">
+          {% if object.description %}
+              {{ object.description|markdown }}
+          {% endif %}
           </div>
-        {% endif %}
-
-        {% if object.tags.all %}
-          <h4>Tags</h4>
-          <ul>
-              {% for t in object.tags.all %}
-                  {% if t.slug %}
-                      <li><a href="{% url "tag"  t.slug %}">{{t.tag}}</a></li>
-                  {% endif %}
-              {% endfor %}
-          </ul>
-        {% endif %}
-      </section>
 
 
-      <section class="leaflet_map">
-      <div id="leaflet_map"></div>
-      </section>
-    </article>
+          {% if object.imprint %}
+            <div id="leaflet_imprint">
+            <h4>Promoter and Publisher details</h4>
+            <p>{{ object.imprint }}</p>
+            </div>
+          {% endif %}
+
+          {% if object.tags.all %}
+            <h4>Tags</h4>
+            <ul>
+                {% for t in object.tags.all %}
+                    {% if t.slug %}
+                        <li><a href="{% url "tag"  t.slug %}">{{t.tag}}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+          {% endif %}
+        </section>
+
+
+        <section class="leaflet_map">
+        <div id="leaflet_map"></div>
+        </section>
+        <p>
+            The data on this page is available in <a href="http://{{request.META.HTTP_HOST }}{% url "api:leaflet-detail" object.pk%}?format=json">JSON format</a>. The images of this leaflet
+            should be considered to be in the public domain, in accordance with
+            the <a
+            href="https://creativecommons.org/publicdomain/zero/1.0/">Public
+            Domain Dedication</a>.
+        </p>
+
+      </article>
+    </div>
 
     <aside class="fukol-grid__col fukol-grid__col--40-30">
       {% include "analysis/includes/analysis_form.html" %}
-      <section class="share">
-        <h3>Something interesting, dodgy or funny? Shout about it!</h3>
-
-        <a class="button" href="https://twitter.com/intent/tweet?url={{ leaflet.get_absolute_url }}&hashtags=electionleaflet&via=electionspotter">
-          <i class="fa fa-twitter"></i>
-          Tweet this leaflet
-        </a>
-
-        <a class="button" href="https://www.facebook.com/sharer/sharer.php?u={{ leaflet.get_absolute_url }}&ref=responsive">
-          <i class="fa fa-facebook"></i>
-          Share on Facebook
-        </a>
-
-      </section>
-
-
-      <section class="share">
-        <h3>Seen a claim on this leaflet?</h3>
-
-        <p>
-          <a href="http://www.askforevidence.org/" target="_blank">
-            <img src="{{ STATIC_URL }}images/AskforEvidencewebbutton.png" alt="Ask for Evidence" title="Ask for Evidence" width="199" height="141" />
+      <section class="share feature-card feature-card--grey">
+        <h3>Share this leaflet</h3>
+          <a class="button" href="https://twitter.com/intent/tweet?url={{ leaflet.get_absolute_url }}&hashtags=electionleaflet&via=electionspotter">
+            <i class="fa fa-twitter"></i>
+            Tweet this leaflet
           </a>
-        </p>
+          <a class="button" href="https://www.facebook.com/sharer/sharer.php?u={{ leaflet.get_absolute_url }}&ref=responsive">
+            <i class="fa fa-facebook"></i>
+            Share on Facebook
+          </a>
       </section>
 
-      <section id="ReportAbuse">
+      <section class="share feature-card feature-card--grey">
         <h3>Something wrong with this page?</h3>
-        <p>
-          <a href="{% url "report_abuse"  object.id %}" class="button alert"> Report a problem</a>
+          <a href="{% url "report_abuse" object.id %}" class="button alert">
+          Report a problem</a>
           If someone has uploaded something other than an election leaflet,
-          then please let us know.
-        </p>
-        <p>
-          The data on this page is available in <a href="http://{{ request.META.HTTP_HOST }}{% url "api:leaflet-detail" object.pk%}?format=json">JSON format</a>. The images of this leaflet should be considered to be in the public domain, in accordance with the <a href="https://creativecommons.org/publicdomain/zero/1.0/">Public Domain Dedication</a>.
-        </p>
+          please let us know.
+
       </section>
-  </aside>
+    </aside>
 
 
 
