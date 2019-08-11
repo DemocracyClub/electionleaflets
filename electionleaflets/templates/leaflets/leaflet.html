@@ -36,8 +36,6 @@
   {% endfor %}
 {% endblock og_tags %}
 
-{% block extra_head %}{% endblock %}
-
 {% block content %}
   <div class="fukol-grid">
     <div class="fukol-grid__col fukol-grid__col--60-70">
@@ -124,9 +122,6 @@
         </section>
 
 
-        <section class="leaflet_map">
-        <div id="leaflet_map"></div>
-        </section>
         <p>
             The data on this page is available in <a href="http://{{request.META.HTTP_HOST }}{% url "api:leaflet-detail" object.pk%}?format=json">JSON format</a>. The images of this leaflet
             should be considered to be in the public domain, in accordance with
@@ -161,33 +156,6 @@
 
       </section>
     </aside>
+  </div>
 
-
-
-{% endblock %}
-{% block extra_scripts %}
-<script type="text/javascript">
-var point = [{{leaflet.location.1}},{{leaflet.location.0}}];
-var constituency_id = "{{object.constituency.constituency_id}}";
-create_leaflet_map(point, constituency_id);
-
-
-function UseZoom(){
-    return !(
-        (navigator.platform.indexOf("iPhone") != -1) ||
-        (navigator.platform.indexOf("iPod") != -1) ||
-        (navigator.platform.indexOf("iPad") != -1)
-    );
-}
-
-if (UseZoom()) {
-  $.each($('.leaflet_images figure a'), function(i, el) {
-    var full_image = $(el).find('img').data('full_image_url');
-    $(el).zoom({
-      url: full_image
-    });
-  })
-}
-
-</script>
 {% endblock %}
