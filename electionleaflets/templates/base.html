@@ -35,6 +35,7 @@
 
   <script src="{% static "static_jquery/js/jquery.min.js" %}"></script>
   <script src="{% static "javascript/app.js" %}"></script>
+  {% block extra_scripts %}{% endblock %}
 
   {% if request.user.is_staff %}
     <script src="{% static "javascript/admin.js" %}"></script>

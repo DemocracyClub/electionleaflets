@@ -133,3 +133,9 @@ section.share {
 article h1 {
     margin: 0;
 }
+
+table.odd-even {
+    tbody tr:nth-child(odd) {
+        background-color: $dc-light-grey;
+    }
+}
