@@ -83,7 +83,7 @@ class ConstituencyReportView(ReportViewMixin, TemplateView):
 
         # Get per constituency
         per_constituency = Constituency.objects.filter(
-            leaflet__date_uploaded__gt=self.start_date).annotate(
+            leaflet__date_uploaded__gt=datetime.date(2015, 1, 1)).annotate(
             leaflets_count=Count('leaflet')
         ).order_by('-leaflets_count')
         context['per_constituency'] = per_constituency
