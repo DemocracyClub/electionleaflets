@@ -33,6 +33,7 @@
 {% block site_footer %}
   {% include "footer.html" %}
 
+  <script src="{% static "static_jquery/js/jquery.min.js" %}"></script>
   <script src="{% static "javascript/app.js" %}"></script>
 
   {% if request.user.is_staff %}

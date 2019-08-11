@@ -122,6 +122,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'pipeline',
     'dc_theme',
+    'django_static_jquery',
 ] + LEAFLET_APPS
 
 if environ.get('SENTRY_DSN', None):
