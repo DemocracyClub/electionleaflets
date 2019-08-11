@@ -156,10 +156,11 @@ class AnalysisPerPartyReportView(BaseAnalysisReportView):
             qs = LeafletProperties.objects.filter(
                 leaflet__publisher_party_id=party.pk)
 
-            parties.append({
-                'party': party,
-                'data': self.add_data_to_context(queryset=qs),
-            })
+            if qs:
+                parties.append({
+                    'party': party,
+                    'data': self.add_data_to_context(queryset=qs),
+                })
 
         context['parties'] = parties
         return context
