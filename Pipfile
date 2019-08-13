@@ -68,10 +68,11 @@ factory-boy = "*"
 responses = "*"
 django-ses = "*"
 future = "==0.16.0"
-dc-base-theme = {editable = true,git = "git://github.com/DemocracyClub/dc_base_theme.git",ref = "django-1-11"}
+dc-base-theme = {git = "git://github.com/DemocracyClub/dc_base_theme.git",ref = "django-1-11"}
 django-pipeline = "==1.6.14"
 docutils = "==0.14"
 django-static-jquery = "==2.1.4"
+setuptools = "==41.0.1"
 
 [requires]
 python_version = "2.7"

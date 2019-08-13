@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6b7720b8faddeb85f0f873bdbb4947b9c93c47092a8970b6e68c37a022bc33ad"
+            "sha256": "e6d63cdbdeb5eb25c6b81f1fbac5e4c7c19f5096c3bd1c810705859e016dad14"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -126,7 +126,6 @@
             "version": "==0.9.1"
         },
         "dc-base-theme": {
-            "editable": true,
             "git": "git://github.com/DemocracyClub/dc_base_theme.git",
             "ref": "68a20928856fcb314a42ae610a83fcc2178995de"
         },
@@ -348,32 +347,6 @@
                 "sha256:bde2aef6f44302dfb30320115b17d030798de8c4110e28d5cf6cf91a7a31074c"
             ],
             "version": "==0.9.4"
-        },
-        "jsmin": {
-            "hashes": [
-                "sha256:b6df99b2cd1c75d9d342e4335b535789b8da9107ec748212706ef7bbe5c2553b"
-            ],
-            "version": "==2.2.2"
-        },
-        "libsass": {
-            "hashes": [
-                "sha256:07e009d8b42316e42d05144f466bd70a028a4e00dc4209f0dcc4ac547031225f",
-                "sha256:12296608c120bacba5fec5811ad4bb56b685278b9e10998e456fb4d4bb73c89b",
-                "sha256:12a1aff7b04b3190f160e7dd7f62f5bfab4613e5c6a817b44e07c0b49a73b3ec",
-                "sha256:39f9ab1ef8d822cc87f552fc51e9dc23cf9d325e219029560b39d912bc962a8b",
-                "sha256:3d5f2c739d45aae23370dfb8c19a02ae40276fbb9e6d0f322e49243f0833f1ae",
-                "sha256:6a4aa32a50e68c4e07a8d99efd9cf9168b8c4d7ec9dcacc3e1c5cf83f8e71641",
-                "sha256:6e3dcc37e6db7da7678fd66739b3a8957b04a5613768858425eb249c14fe26b3",
-                "sha256:7fc1408c5422297c5ee3f811afb8b7e21cd4af69a201ddd7fe69e543b7d2da59",
-                "sha256:af590da23a834b2d814b159766b3d7817d18fa68bd2aef05e3501965ef297834",
-                "sha256:b498de549c2083597a7d42e78e1a4005c3fcc0af24242d04c7f5ea4783c38839",
-                "sha256:bb93323fca103f7716a62f8199fe830e85b8186545e674f7ba0f3b5a800ee5a8",
-                "sha256:ccd3e42f5951290fa3f22a51804365e94dccf05c821a795cd2c04856c201675e",
-                "sha256:d8d5fa185465a11f047bd2e9de2ea3e7f7ff3d2d8afd9ecde870050125213517",
-                "sha256:dbed1573538424ac2bfc37ba33b507bf14450d3f3dcfc4363488b6ce925e285c",
-                "sha256:ddf905e6f2fcb547884718142756c9c0f2ecd07a03ae9275180ec3f09c54213b"
-            ],
-            "version": "==0.14.1"
         },
         "linaro-django-pagination": {
             "hashes": [
