@@ -22,6 +22,7 @@ provider:
     MAPIT_API_URL: ${ssm:election_leaflets_${self:provider.stage}_MAPIT_API_URL}
     SERVERTYPE: AWS Lambda
     STRIP_STAGE_PATH: yes
+    STATICFILES_MANIFEST_NAME: staticfiles_${self:provider.stage}.json
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -90,12 +91,16 @@ custom:
       - "**/botocore/data/ec2/**/*"
       - "**/localflavor/locale/**/*"
 
-
   apigwBinary:
     types:
       - 'multipart/form-data'
+
+  scripts:
+    hooks:
+      'deploy:createDeploymentArtifacts': env STATICFILES_MANIFEST_NAME=staticfiles_${self:provider.stage}.json pipenv run python manage.py collectstatic --no-input
 
 plugins:
   - serverless-wsgi
   - serverless-python-requirements
   - serverless-apigw-binary
+  - serverless-plugin-scripts

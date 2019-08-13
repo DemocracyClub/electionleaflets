@@ -4,7 +4,6 @@ from os import environ
 
 from dc_theme.settings import (  # noqa: F401
     get_pipeline_settings,
-    STATICFILES_STORAGE,
     STATICFILES_FINDERS
 )
 
@@ -44,18 +43,24 @@ DATABASES = {
 TIME_ZONE = 'Europe/London'
 LANGUAGE_CODE = 'en-GB'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 MEDIA_ROOT = root('media', )
 MEDIA_URL = '/media/'
 STATIC_ROOT = root('static')
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATICFILES_DIRS = (
     root('assets'),
 )
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 AWS_S3_FILE_OVERWRITE = False
+STATICFILES_STORAGE = 's3_lambda_storage.S3StaticStorage'
+STATICFILES_MANIFEST_NAME = environ.get('STATICFILES_MANIFEST_NAME', 'staticfiles.json')
+AWS_STORAGE_BUCKET_NAME = "data.electionleaflets.org"
+AWS_S3_SECURE_URLS = True
+AWS_S3_HOST = 's3-eu-west-1.amazonaws.com'
+AWS_S3_CUSTOM_DOMAIN = "data.electionleaflets.org"
 
 PIPELINE = get_pipeline_settings(
     extra_css=['stylesheets/styles.scss', ],
