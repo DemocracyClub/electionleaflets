@@ -23,7 +23,7 @@
     "gulp-wrap": "^0.13.0",
     "serverless-apigw-binary": "^0.4.4",
     "serverless-domain-manager": "^3.2.6",
-    "serverless-python-requirements": "^4.3.0",
+    "serverless-python-requirements": "^5.0.0",
     "yuglify": "^2.0.0"
   },
   "devDependencies": {

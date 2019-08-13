@@ -79,8 +79,18 @@ custom:
     app: electionleaflets.wsgi.application
   pythonRequirements:
     dockerizePip: true
-    useStaticCache: true
     layer: true
+    noDeploy:
+      - lxml
+      - faker
+    slim: true
+    slimPatternsAppendDefaults: false
+    slimPatterns:
+      - "**/faker/**/*"
+      - "**/botocore/data/ec2/**/*"
+      - "**/localflavor/locale/**/*"
+
+
   apigwBinary:
     types:
       - 'multipart/form-data'
