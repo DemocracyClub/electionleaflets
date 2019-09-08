@@ -5,27 +5,10 @@
     "node": "> 7"
   },
   "dependencies": {
-    "bower": "^1.8.0",
-    "gulp": "^3.9.1",
-    "gulp-clean-css": "^3.0.4",
-    "gulp-concat": "^2.6.1",
-    "gulp-declare": "^0.3.0",
-    "gulp-ember-template-compiler": "^0.1.4",
-    "gulp-handlebars": "^4.0.0",
-    "gulp-ignore": "^2.0.2",
-    "gulp-imagemin": "^3.2.0",
-    "gulp-order": "^1.1.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-rimraf": "^0.2.1",
-    "gulp-sass": "^3.1.0",
-    "gulp-uglify": "^2.1.2",
-    "gulp-watch": "^4.3.11",
-    "gulp-wrap": "^0.13.0",
     "serverless-apigw-binary": "^0.4.4",
     "serverless-domain-manager": "^3.2.6",
     "serverless-plugin-scripts": "^1.0.2",
-    "serverless-python-requirements": "^5.0.0",
-    "yuglify": "^2.0.0"
+    "serverless-python-requirements": "^5.0.0"
   },
   "devDependencies": {
     "serverless-wsgi": "git://github.com/boffbowsh/serverless-wsgi.git#allow-cloudfront"
