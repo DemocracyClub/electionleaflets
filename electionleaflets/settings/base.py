@@ -67,7 +67,7 @@ PIPELINE = get_pipeline_settings(
 )
 
 SITE_ID = 1
-SITE_LOGO = 'dc_theme/images/logo-with-text.png'
+SITE_LOGO = 'images/logo.png'
 USE_I18N = False
 USE_L10N = True
 LOGIN_URL = "/"
