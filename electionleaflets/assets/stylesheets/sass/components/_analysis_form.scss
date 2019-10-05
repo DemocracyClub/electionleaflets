@@ -1,0 +1,49 @@
+form.analysis_form {
+    h3 {
+        font-size: 1.1rem;
+    }
+
+    p.help-text {
+        margin: 0px;
+        font-size: 1rem;
+    }
+
+    .option-group {
+        $option-group-gutter: 5px;
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -#{$option-group-gutter} 10px;
+
+        input {
+            display: none;
+        }
+
+        label {
+            flex: 1 0 calc(33% - #{2 * $option-group-gutter});
+            background-color: #dee0e2;
+            margin: $option-group-gutter;
+            text-align: center;
+            border: 1px solid #dee0e2;
+            font-size: 1.2rem;
+            &:hover {
+                border-color: #000;
+            }
+        }
+
+        input:checked+label {
+            background-color: $dc-bright-pink;
+            color: #fff;
+        }
+    }
+
+    .form-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0px -5px;
+
+        .button {
+            flex: 1 0 calc(50% - 10px);
+            margin: 5px;
+        }
+    }
+}

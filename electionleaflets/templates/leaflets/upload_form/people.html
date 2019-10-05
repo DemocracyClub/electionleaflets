@@ -3,12 +3,10 @@
 {% block form %}
 <div>
       Was the leaflet sent by one of these people?
-      <div class="select_widget">
+      <div class="option-group">
         {% for radio in form.people %}
-          <div class="select_row">
-            <input {% if radio.choice_value == form.people.value %}checked=checked{% endif %} id="{{ radio.id_for_label }}" name="people-people" type="radio" value="{{ radio.choice_value }}">
-            <label for="{{ radio.id_for_label }}"> {{ radio.choice_label }}</label>
-          </div>
+          <input {% if radio.choice_value == form.people.value %}checked=checked{% endif %} id="{{ radio.id_for_label }}" name="people-people" type="radio" value="{{ radio.choice_value }}">
+          <label for="{{ radio.id_for_label }}"> {{ radio.choice_label }}</label>
         {% endfor %}
       </div>
 </div>

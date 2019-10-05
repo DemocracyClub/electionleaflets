@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Test links</h2>
+    <ul>
+    {% for link in links %}
+        <li>
+            <a href="{{ link.url }}">{{ link.text }}</a>
+            {% if link.help %}<small>{{ link.help }}</small>{% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock content %}

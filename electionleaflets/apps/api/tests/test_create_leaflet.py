@@ -1,14 +1,5 @@
-import os
-
 from django.core.urlresolvers import reverse
 from rest_framework.test import APITestCase
-
-TEST_IMAGES = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '1.jpg', ]
-BASE_PATH = os.path.join(
-    os.path.dirname(__file__),
-    'test_images'
-)
-IMAGES = [(name, os.path.join(BASE_PATH, name)) for name in TEST_IMAGES]
 
 
 class CreateLeafletTests(APITestCase):

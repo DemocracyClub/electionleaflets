@@ -8,7 +8,7 @@ from django.views.decorators.cache import cache_page
 admin.autodiscover()
 
 from api import feeds  # noqa: E402
-from core.views import HomeView, MaintenanceView, ReportView, ReportThanksView  # noqa: E402
+from core.views import HomeView, MaintenanceView, ReportView, ReportThanksView, TestView  # noqa: E402
 
 MAINTENANCE_MODE = getattr(settings, 'MAINTENANCE_MODE', False)
 if MAINTENANCE_MODE:
@@ -40,6 +40,9 @@ else:
         # Administration URLS
         url(r'^admin/', include(admin.site.urls)),
         url(r'^accounts/', include('allauth.urls')),
+
+        url(r'^dc_base_theme', include('dc_theme.urls')),
+        url(r'^test', TestView.as_view(), name="test"),
     ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

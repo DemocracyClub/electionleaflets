@@ -83,7 +83,7 @@ class ConstituencyReportView(ReportViewMixin, TemplateView):
 
         # Get per constituency
         per_constituency = Constituency.objects.filter(
-            leaflet__date_uploaded__gt=self.start_date).annotate(
+            leaflet__date_uploaded__gt=datetime.date(2015, 1, 1)).annotate(
             leaflets_count=Count('leaflet')
         ).order_by('-leaflets_count')
         context['per_constituency'] = per_constituency
@@ -156,10 +156,11 @@ class AnalysisPerPartyReportView(BaseAnalysisReportView):
             qs = LeafletProperties.objects.filter(
                 leaflet__publisher_party_id=party.pk)
 
-            parties.append({
-                'party': party,
-                'data': self.add_data_to_context(queryset=qs),
-            })
+            if qs:
+                parties.append({
+                    'party': party,
+                    'data': self.add_data_to_context(queryset=qs),
+                })
 
         context['parties'] = parties
         return context

@@ -1,0 +1,40 @@
+//
+// Site footer (.site-footer)
+//
+//***********************************************************************
+.site-footer {
+  margin: 40px 0 0;
+  padding: 40px;
+  color: #fff;
+  background-color: $off-black;
+}
+
+// Override DC Theme
+footer.site-footer a::after { padding: 0; content: normal; }
+
+// Footer credit list
+.site-footer__credits {
+  margin: 40px 0 0;
+  font-size: 14px;
+  text-align: right;
+
+  // Footer logo
+  .site-footer__logo {
+    max-width: 120px;
+  }
+
+  p {
+    margin: 0; padding: 0;
+
+    @include media(tablet) {
+      text-align: right;
+    }
+  }
+}
+
+// Right hand footer column, align content to right hand side
+.site-footer__right-col {
+  @include media(tablet) {
+    text-align: right;
+  }
+}

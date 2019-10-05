@@ -1,0 +1,141 @@
+@import 'dc_base';
+
+@import 'sass/base/base';
+@import 'sass/base/dc_button';
+
+@import 'sass/layout/fukol-grid--override';
+@import 'sass/layout/container--override';
+@import 'sass/layout/site-wrapper';
+@import 'sass/layout/site-header';
+@import 'sass/layout/site-footer';
+@import 'sass/layout/nav-site';
+
+@import 'sass/components/feature-card';
+@import 'sass/components/analysis_form';
+@import 'sass/components/upload_form';
+
+//mobile/desktop copy
+.desktop-copy {
+    display:none;
+}
+.mobile-copy{
+    display:inline;
+}
+
+@media only screen and (min-width: 40.063em) {
+    .desktop-copy {
+        display:inline;
+    }
+    .mobile-copy{
+        display:none;
+    }
+}
+
+.leaflet-count-stat {
+    text-align: center;
+    span {
+        display:block;
+        font-size:5rem;
+    }
+}
+
+.button.button-upload {
+    font-size: 1.5rem;
+}
+
+.leaflet-grid {
+    margin: 20px 0;
+
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    @media only screen and (min-width: 40em) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    grid-auto-rows: minmax(300px, auto);
+    column-gap: $card-margin;
+    row-gap: $card-margin;
+
+    .feature-card {
+        margin: 0px;
+        height: 100%;
+
+        figure {
+            text-align: center;
+            margin: 0;
+
+            figcaption {
+                text-align: left;
+            }
+        }
+    }
+}
+
+.featured-orgs-grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -0.5em;
+
+    img {
+        flex: 1 0 1em;
+        margin: 0.5em;
+        max-width: calc(33% - 1em);
+    }
+}
+
+.about-grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -0.5em;
+
+    > * {
+        flex: 1 0 1em;
+        margin: 0.5em;
+        min-width: 12rem;
+    }
+}
+
+.align-center {
+    text-align: center;
+}
+
+nav.pagination ul {
+    list-style: none;
+    list-style-type: none;
+    padding: 0;
+    min-height: 1rem;
+
+    li {
+        display: inline-block;
+        &:first-child {
+            float: left;
+        }
+
+        &:last-child {
+            float: right;
+        }
+    }
+}
+
+section.share {
+    div {
+        margin: -0.25em;
+    }
+
+    a.button {
+        margin: 5px 0px;
+        width: 100%;
+    }
+}
+
+article h1 {
+    margin: 0;
+}
+
+table.odd-even {
+    tbody tr:nth-child(odd) {
+        background-color: $dc-light-grey;
+    }
+}

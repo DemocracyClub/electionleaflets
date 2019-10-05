@@ -1,68 +1,59 @@
 {% extends "base.html" %}
 {% block content %}
-  <div class="row">
+  <div class="fukol-grid">
+    <div class="fukol-grid__col fukol-grid__col--60-70">
+      <h1>Analysis team</h1>
+      <p>
+        The ElectionLeaflets.org analysis team check and tidy categorising
+        election leaflets as they come in, making the archive more useful for everyone.
+      </p>
+      <p>
+        So far <strong>{{ number_of_people }} people</strong> have analysed
+        <strong><a href="{% url "analysis_report" %}">{{ leaflets_analysed }} leaflets</a></strong>. Including
+        <strong><a href="{% url "analysis_report" %}">{{ with_party_leaders }} with party leaders</a></strong> on the and,
+        <strong><a href="{% url "analysis_report" %}">{{ with_graph }}</a> <a href="{% url "analysis_report" %}">with {{ with_graph|pluralize:"a graph,graphs" }} on</a></strong>.
+      </p>
+      <p><a href="{% url "report_view" %}">See all numbers</a></p>
+      {% if request.user.is_authenticated %}
+        <h3>Welcome {{request.user.username}}!</h3>
+        <p>
+          <a href="{% url "analysis_start" %}" class="button">Start analysing</a>
+        </p>
+      {% else %}
+        <p>
+          <a href="{% url "account_signup" %}" class="button">Join the team</a>
+          <a href="{% url "account_login" %}" class="button secondary">Sign in</a>
+        </p>
+      {% endif %}
 
-    <div class="columns large-6">
-      <h1></h1>
-          <h1>Analysis team</h1>
-          <p>
-            The ElectionLeaflets.org analysis team check and tidy categorising
-            election leaflets as they come in, making the archive more useful for everyone.
-          </p>
-          <p>
-            So far <strong>{{ number_of_people }} people</strong> have analysed
-            <strong><a href="{% url "analysis_report" %}">{{ leaflets_analysed }} leaflets</a></strong>. Including
-            <strong><a href="{% url "analysis_report" %}">{{ with_party_leaders }} with party leaders</a></strong> on the and,
-            <strong><a href="{% url "analysis_report" %}">{{ with_graph }}</a> <a href="{% url "analysis_report" %}">with {{ with_graph|pluralize:"a graph,graphs" }} on</a></strong>.
-          </p>
-          <p><a href="{% url "report_view" %}">See all numbers</a></p>
-          {% if request.user.is_authenticated %}
-            <h3>Welcome {{request.user.username}}!</h3>
-            <p>
-              <a href="{% url "analysis_start" %}" class="button">Start analysing</a>
-            </p>
-          {% else %}
-            <p>
-              <a href="{% url "account_signup" %}" class="button">Join the team</a>
-              <a href="{% url "account_login" %}" class="button secondary">Sign in</a>
-            </p>
-          {% endif %}
-        </div>
+      <h2>Reports</h2>
+      <ul>
+        <li><a href="{% url "analysis_report" %}">Analysis Overview</a></li>
+        <li><a href="{% url "analysis_report_per_party"%}">Analysis per party</a></li>
+        <li><a href="{% url "constituencies_report" %}">Leaflets by constituency</a></li>
+      </ul>
+    </div>
 
-
-
-        <div class="columns large-6">
-              <h2>Insights and data</h2>
-              <p>
-                If you are a journalist you can <a href="/press/"> join our daily email update</a>.
-                You can also <a href="https://twitter.com/thesc">follow us on Twitter</a> for the latest facts and figures.
-              </p>
-              <h2>Numbers</h2>
-              <ul>
-                <li><a href="{% url "analysis_report" %}">Analysis report</a></li>
-                <li><a href="{% url "analysis_report_per_party"%}">Analysis report per party</a></li>
-                <li><a href="{% url "constituencies_report" %}">Leaflets by constituency</a></li>
-              </ul>
-
-              <h2>League table</h2>
-              <table class="columns large-12">
-                <thead>
-                  <tr>
-                    <th>Volunteer</th>
-                    <th>Contributions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for user in contributing_people %}
-                  <tr>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.edits_count }}</td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-              <p><strong>{{total_contributions}}</strong> in total</p>
-            </div>
+    <div class="fukol-grid__col fukol-grid__col--40-30">
+      <h2>League table</h2>
+      <table class="columns large-12 odd-even">
+        <thead>
+          <tr>
+            <th>Volunteer</th>
+            <th>Contributions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in contributing_people %}
+          <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.edits_count }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p><strong>{{total_contributions}}</strong> in total</p>
+    </div>
 
 
   </div>

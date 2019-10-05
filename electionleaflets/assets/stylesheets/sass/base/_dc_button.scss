@@ -1,0 +1,44 @@
+//
+// Button styles (.buttonNew - [TODO: Refactor buttons])
+//
+//***********************************************************************
+.button {
+    background: $button-background;
+    font-size: 14px;
+    padding: 0.8em 1.5em;
+    margin: 0.5em 0 0;
+    font-family: $sanserif-font;
+    font-weight: normal;
+    color: #fff;
+    border: none;
+    border-bottom: 3px solid $button-background-darker;
+    line-height: 1;
+    display: block;
+    cursor: pointer;
+    overflow: visible;
+    text-decoration: none;
+    transition: all .2s ease-in-out;
+    text-align: center;
+
+    &:hover,
+    &:focus {
+        background-color: $button-background-highlight;
+    }
+}
+    // Link specific
+    a.button { text-decoration: none; display: inline-block; }
+
+    //
+    // Outlined button
+    //
+    .button--outline {
+        border: 2px solid $button-background;
+        color: $button-background;
+        background: #fff;
+
+        &:focus { color: #fff; }
+        &:hover {
+            color: $button-background;
+            background-color: lighten($button-background, 52);
+        }
+    }

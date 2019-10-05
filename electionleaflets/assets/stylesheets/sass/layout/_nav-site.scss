@@ -1,0 +1,87 @@
+//
+// Site navigation (.nav-site)
+//
+//***********************************************************************
+// Wrapper element
+.nav-site-wrap {
+	width: 100%;
+	@include media(tablet) {
+		width: auto;
+	}
+}
+
+	// Mobile: Navigation button
+	a.nav-site-ctrl {
+		// Hide on tablet and above
+		@include media(tablet) {
+			display: none;
+		}
+	}
+
+	// Navigation <ul>
+	.nav-site {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: none;
+		@include media(tablet) {
+			display: flex;
+			align-items: flex-end;
+		}
+	}
+		// Mobile: Navigation visible
+		.nav-site--active {
+			display: block;
+			@include media(tablet) {
+				display: flex;
+			}
+		}
+
+		// Navigation items
+		.nav-site__item {
+			text-align: right;
+			@include media(tablet) {
+				text-align: center;
+			}
+		}
+			.nav-site__item a {
+				font-size: 14px;
+				line-height: 1;
+				padding: 10px 15px;
+				display: block;
+				border-bottom: 2px solid transparent;
+				text-decoration: none;
+				color: #000;
+
+				// Hover styles
+				&:hover {
+					background-color: $menu-background-hover;
+					color: $menu-text-hover;
+					border-bottom: 2px solid $dc-bright-pink;
+				}
+
+				@include media(desktop) {
+					font-size: 16px;
+				}
+			}
+
+			// Active styles
+			.nav-site__item--active { }
+				.nav-site__item--active a {
+					border-bottom:2px solid $dc-bright-pink;
+
+					// Hover styles
+					&:hover {
+						color: #000;
+						background-color: transparent;
+						border-bottom:2px solid $dc-bright-blue;
+					}
+				}
+
+			// Hide 'home' link for mobile/tablet
+			.nav-site__item--home {
+				display: none;
+				@include media(desktop) {
+					display: block;
+				}
+			}

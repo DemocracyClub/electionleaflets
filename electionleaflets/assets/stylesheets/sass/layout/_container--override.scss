@@ -1,0 +1,21 @@
+//
+// 	Container Override (.container)
+//	Refer to _site-wrapper.scss
+//***********************************************************************
+// To increase the width of the site
+// the dc_base container needs to be overridden.
+header, main, footer {
+	> .container { @extend .site-wrapper; }
+}
+
+// Reduce size of article container as we have a wider site now
+main .container > article {
+    @extend .site-wrapper__body-text;
+}
+
+// TODO undo this when we update the design – this undoes the base theme
+// 0.3.6 style
+.container {
+  box-sizing: border-box;
+  overflow:visible;
+}

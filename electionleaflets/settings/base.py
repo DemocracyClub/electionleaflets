@@ -2,6 +2,8 @@ import sys
 from os.path import join, abspath, dirname
 from os import environ
 
+from dc_theme.settings import get_pipeline_settings
+
 # PATH vars
 
 
@@ -38,25 +40,38 @@ DATABASES = {
 TIME_ZONE = 'Europe/London'
 LANGUAGE_CODE = 'en-GB'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 MEDIA_ROOT = root('media', )
 MEDIA_URL = '/media/'
 STATIC_ROOT = root('static')
 STATIC_URL = 'static/'
 STATICFILES_DIRS = (
-    root('media'),
+    root('assets'),
 )
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 AWS_S3_FILE_OVERWRITE = False
+STATICFILES_STORAGE = 's3_lambda_storage.S3StaticStorage'
+STATICFILES_MANIFEST_NAME = environ.get('STATICFILES_MANIFEST_NAME', 'staticfiles.json')
+AWS_STORAGE_BUCKET_NAME = "data.electionleaflets.org"
+AWS_S3_SECURE_URLS = True
+AWS_S3_HOST = 's3-eu-west-1.amazonaws.com'
+AWS_S3_CUSTOM_DOMAIN = "data.electionleaflets.org"
+
+PIPELINE = get_pipeline_settings(
+    extra_css=['stylesheets/styles.scss', ],
+)
 
 STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'pipeline.finders.ManifestFinder',
+    'pipeline.finders.FileSystemFinder',
+    'pipeline.finders.AppDirectoriesFinder',
+    'pipeline.finders.PipelineFinder',
 )
 
 SITE_ID = 1
+SITE_LOGO = 'images/logo.png'
 USE_I18N = False
 USE_L10N = True
 LOGIN_URL = "/"
@@ -114,6 +129,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.twitter',
     'django_extensions',
+    'pipeline',
+    'dc_theme',
+    'django_static_jquery',
 ] + LEAFLET_APPS
 
 if environ.get('SENTRY_DSN', None):
@@ -145,6 +163,7 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 "django.contrib.auth.context_processors.auth",
+                'dc_theme.context_processors.dc_theme_context',
             ]
         }
     }

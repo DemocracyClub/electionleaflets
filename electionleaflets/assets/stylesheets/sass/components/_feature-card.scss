@@ -1,0 +1,44 @@
+//
+// Feature card (.feature-card)
+//
+//***********************************************************************
+
+.feature-card {
+  background-color: white;
+  margin: 20px 0 0;
+  padding: 15px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+
+  h3 {
+    margin: 0 0 6px;
+    font-size: 22px;
+    line-height: 1.2;
+  }
+
+}
+
+.feature-card__icon {
+  font-size: 16px;
+}
+
+// Body area
+.feature-card__body {
+  font-size: 0.9em;
+}
+
+.feature-card__body p {
+  margin: 0 0 0.9em;
+}
+
+// Feature card control link
+.feature-card__link {
+  margin-right: 10px;
+}
+
+//
+//	Background colour modifier
+//
+.feature-card--grey {
+  background-color: #F6F6F6;
+}

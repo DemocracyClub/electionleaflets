@@ -1,143 +1,53 @@
-{% load staticfiles %}
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
-        <meta name="keywords" lang="en" content="election leaflets" />
-        <meta name="description" lang="en" content="Real-time election leaflet monitoring" />
-        <link rel="icon" href="{% static "images/icon.png" %}" type="image/png"/>
-        <link rel="apple-touch-icon-precomposed" href="{% static "images/icon.png" %}" />
+{% extends "dc_base.html" %}
 
-        <title>{% block title %}Real-time #ElectionLeaflet monitoring{% endblock %}  | ElectionLeaflets.org</title>
-        <link rel="stylesheet" media="all" type="text/css" href="{% static "stylesheets/foundation.css" %}" />
-        <link rel="stylesheet" media="all" type="text/css" href="{% static "stylesheets/main.min.css" %}" />
-        <link rel="Shortcut Icon" href="/favicon.ico" type="image/x-icon" />
-        <meta name="theme-color" content="#E67E22">
+{% load pipeline %}
+{% load static %}
 
-        {% block og_tags %}{% endblock og_tags %}
-        {% block extra_head %}{% endblock %}
-    </head>
+{% block extra_site_css %}
+  <link rel="stylesheet" href="{% static "css/styles.css" %}" />
+{% endblock extra_site_css %}
 
-    <body {% block body_class %}{% endblock %}>
-      <header>
-        <nav  class="top-bar" data-topbar role="navigation">
-          <ul class="title-area">
-            <li class="name">
-              <h1>
-                <a href="/">ElectionLeaflets.org</a>
-              </h1>
-            </li>
-            <li class="toggle-topbar">
-              <a href="#">
-                <span></span>
-              </a>
-            </li>
-          </ul>
+{% block site_meta %}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
+<meta name="keywords" lang="en" content="election leaflets" />
+<meta name="description" lang="en" content="Real-time election leaflet monitoring" />
+<title>{% block title %}Real-time #ElectionLeaflet monitoring{% endblock %}  | ElectionLeaflets.org</title>
+{% endblock site_meta %}
 
-          <section class="top-bar-section">
-            <ul class="right">
-              <li>
-                <ul>
-                  <li>
-                      <a href="{% url "analysis" %}">
-                        <span class="mobile-copy">
-                          <i class="fa fa-eye"></i>
-                        </span>
-                        Join the analysis team
-                      </a>
-                  </li>
-                  <li>
-                      <a href="https://democracyclub.org.uk/donate/">
-                        <span class="mobile-copy">
-                          <i class="fa fa-credit-card"></i>
-                        </span>
-                        Donate
-                      </a>
-                  </li>
-                  <li>
-                      <a href="{% url "press" %}">
-                        <span class="mobile-copy">
-                          <i class="fa fa-newspaper-o"></i>
-                        </span>
-                        Press
-                      </a>
-                  </li>
-                  <li>
-                      <a href="{% url "leaflets" %}">
-                        <span class="mobile-copy">
-                          <i class="fa fa-line-chart"></i>
-                        </span>
-                        Latest leaflets
-                      </a>
-                  </li>
-                  <li>
-                      <a href="{% url "upload_leaflet" %}">
-                        <span class="mobile-copy">
-                          <i class="fa fa-camera"></i>
-                          Photograph a leaflet
-                        </span>
-                        <span class="desktop-copy">
-                          <i class="fa fa-upload"></i>
-                          Upload a leaflet
-                        </span>
-                      </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </section>
-        </nav>
-      </header>
+{% block site_menu %}
+<nav class="nav-site-wrap">
+  <ul class="nav-site js-nav-site">
+    <li class="nav-site__item nav-site__item--home{% if request.path == "/" %} nav-site__item--active{% endif %}"><a href="/">Home</a></li>
+    <li class="nav-site__item"><a href="{% url "analysis" %}">Analyse</a></li>
+    <li class="nav-site__item"><a href="https://democracyclub.org.uk/donate/">Donate</a></li>
+    <li class="nav-site__item"><a href="{% url "press" %}">Press</a></li>
+    <li class="nav-site__item"><a href="{% url "leaflets" %}">Latest leaflets</a></li>
+    <li class="nav-site__item"><a href="{% url "upload_leaflet" %}">Add a
+    leaflet</a></li>
+  </ul>
+</nav>
+{% endblock site_menu %}
 
-      <main>
-      </div>
-          {% if messages %}
-            <div data-alert class="alert-box success" tabindex="0" aria-live="assertive" role="dialogalert">
-              {% for message in messages %}
-                {{ message }}
-              {% endfor %}
-            </div>
-          {% endif %}
-          {% if form.errors %}
-            <div data-alert class="alert-box alert">
-              {% for key, value in form.errors.items %}
-                {% for error in value %}
-                  {{error}}
-                {% endfor %}
-              {% endfor %}
-            </div>
-          {% endif %}
-          {% block page_nav %}{% endblock page_nav %}
-          {% block content %}
-          {% endblock %}
-      </main>
-      {% if not hide_footer %}
-        {% include "footer.html" %}
-      {% endif %}
+{% block site_footer %}
+  {% include "footer.html" %}
 
-        <script src="{% static "javascript/jquery.js" %}"></script>
-        <script src="{% static "javascript/modernizr.js" %}"></script>
-        <script src="{% static "javascript/foundation.js" %}"></script>
-        <script> $(document).foundation(); </script> <!--this is bad, but doesnt work when added to app.js-->
-        <script src="{% static "javascript/electionleaflets.main.min.js" %}"></script>
+  <script src="{% static "static_jquery/js/jquery.min.js" %}"></script>
+  <script src="{% static "javascript/app.js" %}"></script>
+  {% block extra_scripts %}{% endblock %}
 
-        {% block extra_scripts %}{% endblock %}
+  {% if request.user.is_staff %}
+    <script src="{% static "javascript/admin.js" %}"></script>
+  {% endif %}
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        {% if request.user.is_staff %}
-          <script src="{% static "javascript/admin.js" %}"></script>
-        {% endif %}
-        <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-60344624-1', 'auto');
+    ga('send', 'pageview');
 
-          ga('create', 'UA-60344624-1', 'auto');
-          ga('send', 'pageview');
-
-        </script>
-
-    </body>
-</html>
+  </script>
+{% endblock site_footer %}
