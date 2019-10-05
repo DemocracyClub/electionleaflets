@@ -2,10 +2,7 @@ import sys
 from os.path import join, abspath, dirname
 from os import environ
 
-from dc_theme.settings import (  # noqa: F401
-    get_pipeline_settings,
-    STATICFILES_FINDERS
-)
+from dc_theme.settings import get_pipeline_settings
 
 # PATH vars
 
@@ -64,6 +61,13 @@ AWS_S3_CUSTOM_DOMAIN = "data.electionleaflets.org"
 
 PIPELINE = get_pipeline_settings(
     extra_css=['stylesheets/styles.scss', ],
+)
+
+STATICFILES_FINDERS = (
+    'pipeline.finders.ManifestFinder',
+    'pipeline.finders.FileSystemFinder',
+    'pipeline.finders.AppDirectoriesFinder',
+    'pipeline.finders.PipelineFinder',
 )
 
 SITE_ID = 1

@@ -1,10 +1,10 @@
 {% extends "dc_base.html" %}
 
 {% load pipeline %}
-{% load staticfiles %}
+{% load static %}
 
 {% block extra_site_css %}
-  {% stylesheet 'styles' %}
+  <link rel="stylesheet" href="{% static "css/styles.css" %}" />
 {% endblock extra_site_css %}
 
 {% block site_meta %}
