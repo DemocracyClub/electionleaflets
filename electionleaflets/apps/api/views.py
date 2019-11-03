@@ -29,10 +29,7 @@ class LeafletPermissions(BasePermission):
     def has_object_permission(self, request, view, obj):
         # Allow unauthenticated users to GET and POST
         # but not PUT, PATCH and DELETE
-        if request.method in ['GET', 'POST']:
-            return True
-        else:
-            return request.user == obj.owner
+        return request.method in ['GET', 'POST']
 
 
 class ReadOnly(BasePermission):
