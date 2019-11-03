@@ -46,7 +46,6 @@ class LeafletImageSerializer(serializers.ModelSerializer):
         model = LeafletImage
         fields = (
             'image',
-            'image_text',
             'image_type',
         )
     image = serializers.ImageField()

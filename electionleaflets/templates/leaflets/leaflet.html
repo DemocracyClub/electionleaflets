@@ -123,7 +123,7 @@
 
 
         <p>
-            The data on this page is available in <a href="http://{{request.META.HTTP_HOST }}{% url "api:leaflet-detail" object.pk%}?format=json">JSON format</a>. The images of this leaflet
+            The data on this page is available in <a href="{% url "api:leaflet-detail" object.pk%}?format=json">JSON format</a>. The images of this leaflet
             should be considered to be in the public domain, in accordance with
             the <a
             href="https://creativecommons.org/publicdomain/zero/1.0/">Public
