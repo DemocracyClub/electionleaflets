@@ -65,8 +65,8 @@ PIPELINE = get_pipeline_settings(
 
 STATICFILES_FINDERS = (
     'pipeline.finders.ManifestFinder',
-    'pipeline.finders.FileSystemFinder',
-    'pipeline.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'pipeline.finders.PipelineFinder',
 )
 
