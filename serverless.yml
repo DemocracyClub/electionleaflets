@@ -50,7 +50,9 @@ package:
     - electionleaflets/apps/**
     - electionleaflets/assets/**
     - electionleaflets/media/**
-    - electionleaflets/settings/**
+    - electionleaflets/settings/__init__.py
+    - electionleaflets/settings/base.py
+    - electionleaflets/settings/zappa.py
     - electionleaflets/templates/**
     - electionleaflets/third_party/**
     - electionleaflets/*
