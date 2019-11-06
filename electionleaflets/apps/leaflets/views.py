@@ -167,19 +167,13 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
 
     def get_form_initial(self, step):
         if step == "people":
-            geo_data = self.get_cleaned_data_for_step('postcode')
-            if not geo_data:
+            from people.devs_dc_helpers import DevsDCAPIHelper
+            api = DevsDCAPIHelper()
+            results = api.postcode_request(self.get_cleaned_data_for_step('postcode')['postcode'])
+            if results.status_code == 200:
+                return {"postcode_results": results}
+            else:
                 return {}
-            people_qs = Person.objects.filter(
-                personconstituencies__constituency=geo_data['constituency'],
-                personconstituencies__election__active=True
-            )
-
-            return {
-                '_people': people_qs,
-                'people': '',
-            }
-        return {}
 
     @property
     def extra_inside_forms(self):

@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from django import forms
 
 from localflavor.gb.forms import GBPostcodeField
@@ -27,29 +29,6 @@ class InsidePageImageForm(ImageForm):
 
 class PostcodeForm(forms.Form):
     postcode = GBPostcodeField(error_messages={'required': 'Please enter a valid UK postcode'})
-    wgs84_lon = forms.CharField(
-        required=False, max_length=100, widget=forms.HiddenInput())
-    wgs84_lat = forms.CharField(
-        required=False, max_length=100, widget=forms.HiddenInput())
-    constituency = forms.CharField(
-        required=False, max_length=255, widget=forms.HiddenInput())
-
-    def clean(self):
-        data = super(PostcodeForm, self).clean()
-        if not data.get('postcode'):
-            raise forms.ValidationError("Please enter a full valid UK postcode")
-
-        postcode = self.cleaned_data['postcode']
-        self.geo_data = geocode(postcode)
-        if not self.geo_data or 'constituency' not in self.geo_data:
-            raise forms.ValidationError("Please enter a full valid UK postcode")
-
-        data['constituency'] = self.geo_data['constituency']
-        data['wgs84_lon'] = self.geo_data['wgs84_lon']
-        data['wgs84_lat'] = self.geo_data['wgs84_lat']
-
-        return data
-
 
 class LeafletDetailsFrom(forms.ModelForm):
     class Meta:
@@ -63,26 +42,43 @@ class LeafletReviewFrom(forms.ModelForm):
         fields = ('reviewed', )
 
 
-class PeopleModelChoiceField(forms.ModelChoiceField):
-    def label_from_instance(self, obj):
-        if obj.current_party:
-            party_name = obj.current_party.party.party_name
-        else:
-            party_name = "Independent"
+class PeopleRadioWidget(forms.RadioSelect):
 
-        return "{0} ({1})".format(
-            obj.name,
-            party_name,
-        )
+    def create_option(self, name, value, label, selected, index, subindex=None,
+                      attrs=None):
+        if not label:
+            label = "Not Listed"
+        else:
+            label = "{0} ({1})".format(
+                label["person"]["name"],
+                label["party"]["party_name"],
+            )
+        return super().create_option(name, value, label, selected, index,
+                                     subindex, attrs)
 
 
 class PeopleForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(PeopleForm, self).__init__(*args, **kwargs)
-        if 'people' in kwargs['initial']:
+        if "postcode_results" in kwargs['initial']:
+            postcode_results = kwargs['initial']["postcode_results"]
+
+            # We have a response, parse each candidacy in to a set
+            # of unique people as people can stand in more than one ballot
+            # for a postcode
+            unique_people = OrderedDict()
+            for date in postcode_results.json()["dates"]:
+                for ballot in date["ballots"]:
+                    for candidacy in ballot["candidates"]:
+                        person_key = "--".join([
+                            str(candidacy['person']['ynr_id']),
+                            candidacy["party"]["party_id"]
+                        ])
+                        unique_people[person_key] = candidacy
+
+            unique_people['not_listed'] = None
             self.fields['people'] = \
-                PeopleModelChoiceField(
-                    queryset=kwargs['initial']['_people'],
-                    widget=forms.RadioSelect,
-                    empty_label="Not listed",
+                forms.ChoiceField(
+                    choices=unique_people.items(),
+                    widget=PeopleRadioWidget,
                     required=False)
