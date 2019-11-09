@@ -53,7 +53,7 @@ class PeopleRadioWidget(forms.RadioSelect):
                 label["person"]["name"],
                 label["party"]["party_name"],
             )
-        return super().create_option(name, value, label, selected, index,
+        return super(PeopleRadioWidget, self).create_option(name, value, label, selected, index,
                                      subindex, attrs)
 
 
