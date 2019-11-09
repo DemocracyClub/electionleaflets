@@ -4,7 +4,7 @@ from django.conf import settings
 
 class DevsDCAPIHelper:
     def __init__(self):
-        self.AUTH_TOKEN = settings.DEVS_DC_AUTH_TOKN
+        self.AUTH_TOKEN = settings.DEVS_DC_AUTH_TOKEN
         self.base_url = "https://developers.democracyclub.org.uk/api/v1"
 
     def make_request(self, endpoint, **params):
