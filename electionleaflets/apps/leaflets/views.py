@@ -1,3 +1,4 @@
+import json
 import os
 import datetime
 import random
@@ -7,6 +8,7 @@ from django.shortcuts import redirect
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib import messages
 from formtools.wizard.views import NamedUrlSessionWizardView
+from django.core.signing import Signer
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.views.generic import (DetailView, ListView, UpdateView,
@@ -289,12 +291,26 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                 leaflet.postcode = form.cleaned_data['postcode']
 
             if form_prefix == "people":
-                person = form.cleaned_data['people']
-                if person:
-                    if person.current_party:
-                        leaflet.publisher_party = person.current_party.party
-                    leaflet.publisher_person = person
-                    leaflet.election = person.current_election
+                if isinstance(form.cleaned_data['people'], unicode) and form.cleaned_data['people'] != '':
+                    signer = Signer()
+                    data = json.loads(signer.unsign(form.cleaned_data['people']))
+                    leaflet.ynr_party_id = data["ynr_party_id"]
+                    leaflet.ynr_party_name = data["ynr_party_name"]
+                    leaflet.ynr_person_id = data["ynr_person_id"]
+                    leaflet.ynr_person_name = data["ynr_person_name"]
+                    leaflet.ballot_id = data["ballot_id"]
+
+                elif isinstance(form.cleaned_data['parties'], unicode) and form.cleaned_data['parties'] != '':
+                    signer = Signer()
+                    leaflet.ynr_party_id, leaflet.ynr_party_name = signer.unsign(form.cleaned_data['parties']).split('--')
+
+                else:
+                    person = form.cleaned_data['people']
+                    if person:
+                        if person.current_party:
+                            leaflet.publisher_party = person.current_party.party
+                        leaflet.publisher_person = person
+                        leaflet.election = person.current_election
 
         leaflet.save()
         messages.success(

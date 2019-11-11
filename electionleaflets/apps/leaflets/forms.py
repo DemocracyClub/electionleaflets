@@ -1,8 +1,10 @@
 # coding=utf-8
 
 from collections import OrderedDict
+import json
 
 from django import forms
+from django.core.signing import Signer
 
 from localflavor.gb.forms import GBPostcodeField
 
@@ -71,7 +73,6 @@ class PeopleForm(forms.Form):
             (102, 'Scottish National Party (SNP)'),
             (7931, 'The Brexit Party'),
             (77, 'Plaid Cymru - The Party of Wales'),
-            (0, 'Not Listed'),
         ],
         'ni': [
             (103, 'Alliance - Alliance Party of Northern Ireland'),
@@ -79,13 +80,14 @@ class PeopleForm(forms.Form):
             (55, 'SDLP (Social Democratic & Labour Party)'),
             (39, 'Sinn Féin'),
             (83, 'Ulster Unionist Party'),
-            (0, 'Not Listed'),
         ]
     }
 
     def __init__(self, *args, **kwargs):
         super(PeopleForm, self).__init__(*args, **kwargs)
         if "postcode_results" in kwargs['initial']:
+            signer = Signer()
+
             postcode_results = kwargs['initial']["postcode_results"].json()
 
             # We have a response, parse each candidacy in to a set
@@ -95,11 +97,18 @@ class PeopleForm(forms.Form):
             for date in postcode_results["dates"]:
                 for ballot in date["ballots"]:
                     for candidacy in ballot["candidates"]:
-                        person_key = "--".join([
-                            str(candidacy['person']['ynr_id']),
-                            candidacy["party"]["party_id"],
-                            ballot['ballot_paper_id'],
-                        ])
+                        # Until we have better live lookup of YNR in EL, we'll
+                        # embed the results in our form fields. Not ideal. We'll
+                        # sign the data so people can't inject garbage into the
+                        # database.
+                        data = {
+                            "ynr_party_id": candidacy["party"]["party_id"],
+                            "ynr_party_name": candidacy["party"]["party_name"],
+                            "ynr_person_id": candidacy["person"]["ynr_id"],
+                            "ynr_person_name": candidacy["person"]["name"],
+                            "ballot_id": ballot['ballot_paper_id'],
+                        }
+                        person_key = signer.sign(json.dumps(data))
                         unique_people[person_key] = candidacy
 
             self.fields['people'] = \
@@ -113,8 +122,14 @@ class PeopleForm(forms.Form):
             else:
                 parties = self.HARDCODED_PARTIES['gb']
 
+            party_options = []
+            for party in parties:
+                party_options.append((signer.sign("party:{0}--{1}".format(party[0], party[1])), party[1]))
+
+            party_options.append((signer.sign("--"), "Not Listed"))
+
             self.fields['parties'] = \
                 forms.ChoiceField(
-                    choices=parties,
+                    choices=party_options,
                     widget=forms.RadioSelect,
                     required=False)
