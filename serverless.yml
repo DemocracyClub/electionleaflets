@@ -20,6 +20,7 @@ provider:
     SENTRY_DSN: ${ssm:election_leaflets_${self:provider.stage}_SENTRY_DSN}
     MAPIT_API_KEY: ${ssm:election_leaflets_${self:provider.stage}_MAPIT_API_KEY}
     MAPIT_API_URL: ${ssm:election_leaflets_${self:provider.stage}_MAPIT_API_URL}
+    DEVS_DC_AUTH_TOKEN: ${ssm:election_leaflets_${self:provider.stage}_DEVS_DC_AUTH_TOKEN}
     SERVERTYPE: AWS Lambda
     STRIP_STAGE_PATH: yes
     STATICFILES_MANIFEST_NAME: staticfiles_${self:provider.stage}.json
