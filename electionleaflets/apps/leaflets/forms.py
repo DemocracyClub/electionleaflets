@@ -1,3 +1,5 @@
+# coding=utf-8
+
 from collections import OrderedDict
 
 from django import forms
@@ -49,7 +51,7 @@ class PeopleRadioWidget(forms.RadioSelect):
         if not label:
             label = "Not Listed"
         else:
-            label = "{0} ({1})".format(
+            label = u"{0} ({1})".format(
                 label["person"]["name"],
                 label["party"]["party_name"],
             )
@@ -58,27 +60,61 @@ class PeopleRadioWidget(forms.RadioSelect):
 
 
 class PeopleForm(forms.Form):
+    # A temporary top-X list of parties per register to show if the candidate
+    # isn't shown. We will eventually create this list based on real data.
+    HARDCODED_PARTIES = {
+        'gb': [
+            (52, 'Conservative and Unionist Party'),
+            (63, 'Green Party'),
+            (53, 'Labour Party'),
+            (90, 'Liberal Democrats'),
+            (102, 'Scottish National Party (SNP)'),
+            (7931, 'The Brexit Party'),
+            (77, 'Plaid Cymru - The Party of Wales'),
+            (0, 'Not Listed'),
+        ],
+        'ni': [
+            (103, 'Alliance - Alliance Party of Northern Ireland'),
+            (70, 'Democratic Unionist Party - D.U.P.'),
+            (55, 'SDLP (Social Democratic & Labour Party)'),
+            (39, 'Sinn Féin'),
+            (83, 'Ulster Unionist Party'),
+            (0, 'Not Listed'),
+        ]
+    }
+
     def __init__(self, *args, **kwargs):
         super(PeopleForm, self).__init__(*args, **kwargs)
         if "postcode_results" in kwargs['initial']:
-            postcode_results = kwargs['initial']["postcode_results"]
+            postcode_results = kwargs['initial']["postcode_results"].json()
 
             # We have a response, parse each candidacy in to a set
             # of unique people as people can stand in more than one ballot
             # for a postcode
             unique_people = OrderedDict()
-            for date in postcode_results.json()["dates"]:
+            for date in postcode_results["dates"]:
                 for ballot in date["ballots"]:
                     for candidacy in ballot["candidates"]:
                         person_key = "--".join([
                             str(candidacy['person']['ynr_id']),
-                            candidacy["party"]["party_id"]
+                            candidacy["party"]["party_id"],
+                            ballot['ballot_paper_id'],
                         ])
                         unique_people[person_key] = candidacy
 
-            unique_people['not_listed'] = None
             self.fields['people'] = \
                 forms.ChoiceField(
                     choices=unique_people.items(),
                     widget=PeopleRadioWidget,
+                    required=False)
+
+            if 'electoral_services' in postcode_results and postcode_results['electoral_services']['council_id'][0:3] == 'N09':
+                parties = self.HARDCODED_PARTIES['ni']
+            else:
+                parties = self.HARDCODED_PARTIES['gb']
+
+            self.fields['parties'] = \
+                forms.ChoiceField(
+                    choices=parties,
+                    widget=forms.RadioSelect,
                     required=False)
