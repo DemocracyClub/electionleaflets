@@ -49,8 +49,6 @@ provider:
 package:
   include:
     - electionleaflets/apps/**
-    - electionleaflets/assets/**
-    - electionleaflets/media/**
     - electionleaflets/settings/__init__.py
     - electionleaflets/settings/base.py
     - electionleaflets/settings/zappa.py
@@ -100,7 +98,7 @@ custom:
 
   scripts:
     hooks:
-      'deploy:createDeploymentArtifacts': env STATICFILES_MANIFEST_NAME=staticfiles_${self:provider.stage}.json pipenv run python manage.py collectstatic --no-input
+      'deploy:createDeploymentArtifacts': env DEPLOYMENT=Yes STATICFILES_MANIFEST_NAME=staticfiles_${self:provider.stage}.json pipenv run python manage.py collectstatic --no-input
 
 plugins:
   - serverless-wsgi

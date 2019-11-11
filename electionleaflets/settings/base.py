@@ -212,11 +212,12 @@ MAPIT_API_URL = environ.get('MAPIT_API_URL', 'https://mapit.mysociety.org')
 
 DEVS_DC_AUTH_TOKEN = environ.get('DEVS_DC_AUTH_TOKEN', None)
 
-# .local.py overrides all the common settings.
-try:
-    from .local import *  # noqa: F401,F403
-except ImportError:
-    pass
+if not environ.get('DEPLOYMENT', None):
+    # .local.py overrides all the common settings.
+    try:
+        from .local import *  # noqa: F401,F403
+    except ImportError:
+        pass
 
 
 # importing test settings file if necessary (TODO chould be done better)
