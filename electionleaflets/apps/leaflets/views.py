@@ -18,7 +18,6 @@ from django.core.files.storage import FileSystemStorage
 from braces.views import StaffuserRequiredMixin
 
 from analysis.forms import QuestionSetForm
-from people.models import Person
 from .models import Leaflet, LeafletImage
 from .forms import (InsidePageImageForm, LeafletDetailsFrom)
 from storages.backends.s3boto3 import S3Boto3Storage

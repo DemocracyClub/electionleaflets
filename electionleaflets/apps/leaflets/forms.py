@@ -8,7 +8,6 @@ from django.core.signing import Signer
 
 from localflavor.gb.forms import GBPostcodeField
 
-from core.helpers import geocode
 from leaflets.models import Leaflet
 
 
@@ -34,6 +33,7 @@ class InsidePageImageForm(ImageForm):
 class PostcodeForm(forms.Form):
     postcode = GBPostcodeField(error_messages={'required': 'Please enter a valid UK postcode'})
 
+
 class LeafletDetailsFrom(forms.ModelForm):
     class Meta:
         model = Leaflet
@@ -58,7 +58,7 @@ class PeopleRadioWidget(forms.RadioSelect):
                 label["party"]["party_name"],
             )
         return super(PeopleRadioWidget, self).create_option(name, value, label, selected, index,
-                                     subindex, attrs)
+                                                            subindex, attrs)
 
 
 class PeopleForm(forms.Form):

@@ -2,6 +2,7 @@ import requests
 
 from django.conf import settings
 
+
 class DevsDCAPIHelper:
     def __init__(self):
         self.AUTH_TOKEN = settings.DEVS_DC_AUTH_TOKEN
