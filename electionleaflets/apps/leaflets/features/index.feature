@@ -173,5 +173,4 @@ Feature: Leaflet uploader
         Then I submit the form with:
           | step_name | postcode          |  action |
           | postcode  | SE22 3DJ          |  submit |
-        Then I should see the url "/leaflets/add/postcode/"
-
+        Then I should see the url "/leaflets/add/people/"

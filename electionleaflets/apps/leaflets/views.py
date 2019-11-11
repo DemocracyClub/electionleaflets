@@ -290,7 +290,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                 leaflet.postcode = form.cleaned_data['postcode']
 
             if form_prefix == "people":
-                if isinstance(form.cleaned_data['people'], unicode) and form.cleaned_data['people'] != '':
+                if "people" in form.cleaned_data and isinstance(form.cleaned_data['people'], unicode) and form.cleaned_data['people'] != '':
                     signer = Signer()
                     data = json.loads(signer.unsign(form.cleaned_data['people']))
                     leaflet.ynr_party_id = data["ynr_party_id"]

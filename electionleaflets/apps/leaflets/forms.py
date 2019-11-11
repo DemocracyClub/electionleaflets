@@ -85,8 +85,9 @@ class PeopleForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(PeopleForm, self).__init__(*args, **kwargs)
+        signer = Signer()
+
         if "postcode_results" in kwargs['initial']:
-            signer = Signer()
 
             postcode_results = kwargs['initial']["postcode_results"].json()
 
@@ -122,14 +123,17 @@ class PeopleForm(forms.Form):
             else:
                 parties = self.HARDCODED_PARTIES['gb']
 
-            party_options = []
-            for party in parties:
-                party_options.append((signer.sign("party:{0}--{1}".format(party[0], party[1])), party[1]))
+        else:
+            parties = self.HARDCODED_PARTIES['gb'] + self.HARDCODED_PARTIES['ni']
 
-            party_options.append((signer.sign("--"), "Not Listed"))
+        party_options = []
+        for party in parties:
+            party_options.append((signer.sign("party:{0}--{1}".format(party[0], party[1])), party[1]))
 
-            self.fields['parties'] = \
-                forms.ChoiceField(
-                    choices=party_options,
-                    widget=forms.RadioSelect,
-                    required=False)
+        party_options.append((signer.sign("--"), "Not Listed"))
+
+        self.fields['parties'] = \
+            forms.ChoiceField(
+                choices=party_options,
+                widget=forms.RadioSelect,
+                required=False)
