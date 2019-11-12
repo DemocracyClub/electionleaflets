@@ -97,20 +97,24 @@ class PeopleForm(forms.Form):
             unique_people = OrderedDict()
             for date in postcode_results["dates"]:
                 for ballot in date["ballots"]:
-                    for candidacy in ballot["candidates"]:
-                        # Until we have better live lookup of YNR in EL, we'll
-                        # embed the results in our form fields. Not ideal. We'll
-                        # sign the data so people can't inject garbage into the
-                        # database.
-                        data = {
-                            "ynr_party_id": candidacy["party"]["party_id"],
-                            "ynr_party_name": candidacy["party"]["party_name"],
-                            "ynr_person_id": candidacy["person"]["ynr_id"],
-                            "ynr_person_name": candidacy["person"]["name"],
-                            "ballot_id": ballot['ballot_paper_id'],
-                        }
-                        person_key = signer.sign(json.dumps(data))
-                        unique_people[person_key] = candidacy
+                    # Dead person's switch to ensure this 1:1 mapping of
+                    # candidacies to leaflets only happens for #GE2019.
+                    # For other ballots, we won't show candidates, just parties.
+                    if ballot["ballot_paper_id"].startswith('parl.') and ballot["ballot_paper_id"].endswith('.2019-12-12'):
+                        for candidacy in ballot["candidates"]:
+                            # Until we have better live lookup of YNR in EL, we'll
+                            # embed the results in our form fields. Not ideal. We'll
+                            # sign the data so people can't inject garbage into the
+                            # database.
+                            data = {
+                                "ynr_party_id": candidacy["party"]["party_id"],
+                                "ynr_party_name": candidacy["party"]["party_name"],
+                                "ynr_person_id": candidacy["person"]["ynr_id"],
+                                "ynr_person_name": candidacy["person"]["name"],
+                                "ballot_id": ballot['ballot_paper_id'],
+                            }
+                            person_key = signer.sign(json.dumps(data))
+                            unique_people[person_key] = candidacy
 
             self.fields['people'] = \
                 forms.ChoiceField(
