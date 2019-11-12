@@ -2,10 +2,20 @@
 {% block heading %}<h1>Step 5: people</h1>{% endblock heading %}
 {% block form %}
 <div>
+    {% if form.people.field.choices %}
       Was the leaflet sent by one of these people?
-      <div class="option-group">
+      <div class="option-group people-list">
         {% for radio in form.people %}
-          <input {% if radio.choice_value == form.people.value %}checked=checked{% endif %} id="{{ radio.id_for_label }}" name="people-people" type="radio" value="{{ radio.choice_value }}">
+          {{ radio.tag }}
+          <label for="{{ radio.id_for_label }}"> {{ radio.choice_label }}</label>
+        {% endfor %}
+      </div>
+    {% endif %}
+      <div class="option-group party-list">
+        {% if form.people.field.choices %}None of the above? <br />{% endif %}
+        Was the leaflet sent by one of these parties?
+        {% for radio in form.parties %}
+          {{ radio.tag }}
           <label for="{{ radio.id_for_label }}"> {{ radio.choice_label }}</label>
         {% endfor %}
       </div>

@@ -1,3 +1,4 @@
+import json
 import os
 import datetime
 import random
@@ -7,6 +8,7 @@ from django.shortcuts import redirect
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib import messages
 from formtools.wizard.views import NamedUrlSessionWizardView
+from django.core.signing import Signer
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.views.generic import (DetailView, ListView, UpdateView,
@@ -16,7 +18,6 @@ from django.core.files.storage import FileSystemStorage
 from braces.views import StaffuserRequiredMixin
 
 from analysis.forms import QuestionSetForm
-from people.models import Person
 from .models import Leaflet, LeafletImage
 from .forms import (InsidePageImageForm, LeafletDetailsFrom)
 from storages.backends.s3boto3 import S3Boto3Storage
@@ -167,19 +168,13 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
 
     def get_form_initial(self, step):
         if step == "people":
-            geo_data = self.get_cleaned_data_for_step('postcode')
-            if not geo_data:
+            from people.devs_dc_helpers import DevsDCAPIHelper
+            api = DevsDCAPIHelper()
+            results = api.postcode_request(self.get_cleaned_data_for_step('postcode')['postcode'])
+            if results.status_code == 200:
+                return {"postcode_results": results}
+            else:
                 return {}
-            people_qs = Person.objects.filter(
-                personconstituencies__constituency=geo_data['constituency'],
-                personconstituencies__election__active=True
-            )
-
-            return {
-                '_people': people_qs,
-                'people': '',
-            }
-        return {}
 
     @property
     def extra_inside_forms(self):
@@ -295,12 +290,26 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                 leaflet.postcode = form.cleaned_data['postcode']
 
             if form_prefix == "people":
-                person = form.cleaned_data['people']
-                if person:
-                    if person.current_party:
-                        leaflet.publisher_party = person.current_party.party
-                    leaflet.publisher_person = person
-                    leaflet.election = person.current_election
+                if "people" in form.cleaned_data and isinstance(form.cleaned_data['people'], unicode) and form.cleaned_data['people'] != '':
+                    signer = Signer()
+                    data = json.loads(signer.unsign(form.cleaned_data['people']))
+                    leaflet.ynr_party_id = data["ynr_party_id"]
+                    leaflet.ynr_party_name = data["ynr_party_name"]
+                    leaflet.ynr_person_id = data["ynr_person_id"]
+                    leaflet.ynr_person_name = data["ynr_person_name"]
+                    leaflet.ballot_id = data["ballot_id"]
+
+                elif isinstance(form.cleaned_data['parties'], unicode) and form.cleaned_data['parties'] != '':
+                    signer = Signer()
+                    leaflet.ynr_party_id, leaflet.ynr_party_name = signer.unsign(form.cleaned_data['parties']).split('--')
+
+                else:
+                    person = form.cleaned_data['people']
+                    if person:
+                        if person.current_party:
+                            leaflet.publisher_party = person.current_party.party
+                        leaflet.publisher_person = person
+                        leaflet.election = person.current_election
 
         leaflet.save()
         messages.success(
