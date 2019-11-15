@@ -93,8 +93,6 @@ class Leaflet(geo_model.Model):
         super(Leaflet, self).save(*args, **kwargs)
 
 
-
-
 class LeafletImage(models.Model):
     ORIENTATION_CHOICES = (
         (1, 'Horizontal (normal)'),
