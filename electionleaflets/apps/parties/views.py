@@ -1,4 +1,5 @@
 from datetime import datetime
+import re
 
 from django.views.generic import DetailView, ListView
 from django.db.models import Count
@@ -24,7 +25,8 @@ class PartyView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(PartyView, self).get_context_data(**kwargs)
-        qs = Leaflet.objects.filter(publisher_party=self.kwargs['pk'])
+        id = re.sub(r'[^0-9]', '', self.kwargs['pk'])
+        qs = Leaflet.objects.filter(publisher_party=self.kwargs['pk']) | Leaflet.objects.filter(ynr_party_id='party:{}'.format(id))
 
         paginator = Paginator(qs, 60)
         page = self.request.GET.get('page')
