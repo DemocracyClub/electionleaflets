@@ -82,9 +82,9 @@ class Leaflet(geo_model.Model):
             "Untitled leaflet"
 
     def get_person(self):
-        if self.ynr_person_id and self.ynr_person_name:
+        if self.ynr_person_id and self.ynr_person_name and not self.publisher_person:
             return {
-                'link': 'https://candidates.democracyclub.org.uk/person/{}'.format(self.ynr_person_id),
+                'link': reverse('person', kwargs={'remote_id': self.ynr_person_id}),
                 'name': self.ynr_person_name
             }
         elif self.publisher_person:
