@@ -2,7 +2,6 @@ import json
 import os
 import datetime
 import random
-import re
 from collections import OrderedDict
 
 from django.shortcuts import redirect
@@ -23,8 +22,6 @@ from .models import Leaflet, LeafletImage
 from .forms import (InsidePageImageForm, LeafletDetailsFrom)
 from people.devs_dc_helpers import DevsDCAPIHelper
 from storages.backends.s3boto3 import S3Boto3Storage
-
-devs_dc_helper = DevsDCAPIHelper()
 
 
 class ImageView(DetailView):
@@ -94,27 +91,10 @@ class LeafletView(DetailView):
             self.request.user
         )
 
-        if self.object.ynr_person_id and self.object.ynr_person_name:
-            context['person_link'] = 'https://candidates.democracyclub.org.uk/person/{}'.format(self.object.ynr_person_id)
-            context['person_name'] = self.object.ynr_person_name
-        elif self.object.publisher_person:
-            context['person_link'] = reverse('person', kwargs={'remote_id': self.object.publisher_person.remote_id})
-            context['person_name'] = self.object.publisher_person.name
+        context['person'] = self.object.get_person()
+        context['party'] = self.object.get_party()
+        context['ballot'] = self.object.get_ballot()
 
-        if self.object.ynr_party_id and self.object.ynr_party_name:
-            pp_id = 'PP{}'.format(re.sub(r'party:', '', self.object.ynr_party_id))
-            context['party_link'] = reverse('party-view', kwargs={'pk': pp_id})
-            context['party_name'] = self.object.ynr_party_name
-        elif self.object.publisher_party:
-            context['party_link'] = reverse('party-view', kwargs={'pk': self.object.publisher_party.pk})
-            context['party_name'] = self.object.publisher_party.party_name
-
-        if self.object.ballot_id:
-            r = devs_dc_helper.ballot_request(self.object.ballot_id)
-            if r.status_code == 200:
-                ballot = r.json()
-                context['ballot_name'] = '{} in {}'.format(ballot['election_title'], ballot['election_type']['name'])
-                context['ballot_link'] = 'https://whocanivotefor.co.uk/elections/{}'.format(self.object.ballot_id)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -194,7 +174,6 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
 
     def get_form_initial(self, step):
         if step == "people":
-            from people.devs_dc_helpers import DevsDCAPIHelper
             api = DevsDCAPIHelper()
             results = api.postcode_request(self.get_cleaned_data_for_step('postcode')['postcode'])
             if results.status_code == 200:

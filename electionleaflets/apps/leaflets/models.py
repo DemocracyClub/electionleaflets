@@ -1,4 +1,5 @@
 from io import BytesIO
+import re
 
 from sorl.thumbnail import ImageField
 from sorl.thumbnail import delete
@@ -9,15 +10,19 @@ from django.db import models
 from django.contrib.gis.db import models as geo_model
 from django.contrib.gis.geos import Point
 from django.core.files.base import ContentFile
+from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
 
 from core.helpers import geocode
 from constituencies.models import Constituency
+from people.devs_dc_helpers import DevsDCAPIHelper
 from people.models import Person
 from elections.models import Election
 from uk_political_parties.models import Party
 
 from . import constants
+
+devs_dc_helper = DevsDCAPIHelper()
 
 
 class Leaflet(geo_model.Model):
@@ -75,6 +80,41 @@ class Leaflet(geo_model.Model):
             return '%s leaflet' % self.publisher_party.party_name
         else:
             "Untitled leaflet"
+
+    def get_person(self):
+        if self.ynr_person_id and self.ynr_person_name:
+            return {
+                'link': 'https://candidates.democracyclub.org.uk/person/{}'.format(self.ynr_person_id),
+                'name': self.ynr_person_name
+            }
+        elif self.publisher_person:
+            return {
+                'link': reverse('person', kwargs={'remote_id': self.publisher_person.remote_id}),
+                'name': self.publisher_person.name
+            }
+
+    def get_party(self):
+        if self.ynr_party_id and self.ynr_party_name:
+            pp_id = 'PP{}'.format(re.sub(r'party:', '', self.ynr_party_id))
+            return {
+                'link': reverse('party-view', kwargs={'pk': pp_id}),
+                'name': self.ynr_party_name
+            }
+        elif self.publisher_party:
+            return {
+                'link': reverse('party-view', kwargs={'pk': self.publisher_party.pk}),
+                'name': self.publisher_party.party_name
+            }
+
+    def get_ballot(self):
+        if self.ballot_id:
+            r = devs_dc_helper.ballot_request(self.ballot_id)
+            if r.status_code == 200:
+                ballot = r.json()
+                return {
+                    'name': '{} in {}'.format(ballot['election_title'], ballot['election_type']['name']),
+                    'link': 'https://whocanivotefor.co.uk/elections/{}'.format(self.ballot_id),
+                }
 
     def geocode(self, postcode):
         data = geocode(postcode)
