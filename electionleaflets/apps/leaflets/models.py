@@ -29,12 +29,12 @@ class Leaflet(geo_model.Model):
     title = models.CharField(blank=True, max_length=765)
     description = models.TextField(blank=True, null=True)
     publisher_party = models.ForeignKey(Party, blank=True, null=True)
-    ynr_party_id = models.CharField(blank=True, null=True, max_length=255)
+    ynr_party_id = models.CharField(blank=True, null=True, max_length=255, db_index=True)
     ynr_party_name = models.CharField(blank=True, null=True, max_length=255)
     publisher_person = models.ForeignKey(Person, blank=True, null=True)
-    ynr_person_id = models.IntegerField(blank=True, null=True)
+    ynr_person_id = models.IntegerField(blank=True, null=True, db_index=True)
     ynr_person_name = models.CharField(blank=True, null=True, max_length=255)
-    ballot_id = models.CharField(blank=True, null=True, max_length=255)
+    ballot_id = models.CharField(blank=True, null=True, max_length=255, db_index=True)
     election = models.ForeignKey(Election, null=True)
     constituency = models.ForeignKey(Constituency, blank=True, null=True)
     imprint = models.TextField(blank=True, null=True)
@@ -91,6 +91,8 @@ class Leaflet(geo_model.Model):
                 self.geocode(self.postcode)
 
         super(Leaflet, self).save(*args, **kwargs)
+
+
 
 
 class LeafletImage(models.Model):
