@@ -52,28 +52,34 @@
           in <a href="{% url "constituency-view"  object.constituency.pk object.constituency.slug %}">{{ object.constituency.name }}</a>
         {% endif %} <br>on {{ object.date_uploaded|date:"l, d M, Y" }}.</p>
 
-        {% if object.publisher_person %}
+        {% if person %}
           <section class="person">
                 <p>
                   Sent by
-                  <a href="{% url "person" object.publisher_person.remote_id %}">
-                    {{object.publisher_person.name}}
+                  <a href="{{person.link}}">
+                    {{person.name}}
                   </a>
                 </p>
           </section>
-
         {% endif %}
 
-        {% if object.publisher_party %}
+        {% if ballot %}
+          <section class="ballot">
+            Candidate for
+            <a href="{{ballot.link}}">
+              {{ballot.name}}
+            </a>
+          </section>
+        {% endif %}
+
+        {% if party %}
           <section class="party">
-              {% if object.publisher_party and object.publisher_party.slug %}
-                <p>
-                  Published by
-                  <a href="{% url "party-view" object.publisher_party.pk object.publisher_party.slug %}">
-                    {{object.publisher_party.party_name}}
-                  </a>
-                </p>
-              {% endif %}
+              <p>
+                Published by
+                <a href="{{party.link}}">
+                  {{party.name}}
+                </a>
+              </p>
           </section>
         {% endif %}
 

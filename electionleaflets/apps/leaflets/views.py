@@ -20,6 +20,8 @@ from braces.views import StaffuserRequiredMixin
 from analysis.forms import QuestionSetForm
 from .models import Leaflet, LeafletImage
 from .forms import (InsidePageImageForm, LeafletDetailsFrom)
+from people.devs_dc_helpers import DevsDCAPIHelper
+from people.models import Person
 from storages.backends.s3boto3 import S3Boto3Storage
 
 
@@ -89,6 +91,11 @@ class LeafletView(DetailView):
             self.object,
             self.request.user
         )
+
+        context['person'] = self.object.get_person()
+        context['party'] = self.object.get_party()
+        context['ballot'] = self.object.get_ballot()
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -168,7 +175,6 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
 
     def get_form_initial(self, step):
         if step == "people":
-            from people.devs_dc_helpers import DevsDCAPIHelper
             api = DevsDCAPIHelper()
             results = api.postcode_request(self.get_cleaned_data_for_step('postcode')['postcode'])
             if results.status_code == 200:
@@ -295,9 +301,18 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     data = json.loads(signer.unsign(form.cleaned_data['people']))
                     leaflet.ynr_party_id = data["ynr_party_id"]
                     leaflet.ynr_party_name = data["ynr_party_name"]
-                    leaflet.ynr_person_id = data["ynr_person_id"]
-                    leaflet.ynr_person_name = data["ynr_person_name"]
                     leaflet.ballot_id = data["ballot_id"]
+
+                    person, _ = Person.objects.get_or_create(
+                        remote_id=data["ynr_person_id"],
+                        source_name='YNR2017',
+                        defaults={
+                            'name': data["ynr_person_name"],
+                            'source_url': 'https://candidates.democracyclub.org.uk/person/{}'.format(data["ynr_person_id"])
+                        }
+                    )
+
+                    leaflet.publisher_person = person
 
                 elif isinstance(form.cleaned_data['parties'], unicode) and form.cleaned_data['parties'] != '':
                     signer = Signer()

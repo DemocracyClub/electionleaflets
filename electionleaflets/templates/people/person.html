@@ -3,31 +3,14 @@
 {% block content %}
   <div class="row">
     <div class="columns large-8">
-      <h1>{{ object.name }} – {{ object.current_party.party.party_name }}</h1>
-      <ul>
-        <li>
-          <a href="https://yournextmp.com/person/{{object.remote_id}}/{{ object.name|slugify }}">
-            Find out more about {{ object.name }} at YourNextMP.com
-          </a>
-        </li>
-        <li>
-          <a href="{% url "constituency-view" object.current_constituency.pk object.current_constituency.name|slugify %}">
-            See more leaflets sent in {{ object.current_constituency.name }}
-          </a>
-        </li>
-        {% if object.current_party %}
-        <li>
-          <a href="{% url "party-view" object.current_party.party.pk object.current_party.party.party_name|slugify %}">
-            See more leaflets sent by {{ object.current_party.party.party_name }}
-          </a>
-        </li>
-        {% endif %}
-      </ul>
+      <h1>{{ object.name }}</h1>
+      <a href="https://whocanivotefor.co.uk/person/{{object.remote_id}}">
+        Find out more about {{ object.name }} on Who Can I Vote For?
+      </a>
       <h2>Leaflets sent by {{ object.name }}</h2>
       {% with person_leaflets as leaflet_list %}
       {% include "leaflets/includes/leaflet_list.html" %}
       {% endwith %}
-
     </div>
   </div>
 
