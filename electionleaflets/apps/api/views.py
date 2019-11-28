@@ -13,7 +13,7 @@ from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 from rest_framework.views import APIView
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.response import Response
 
 
@@ -168,27 +168,30 @@ class FakeBallotObject:
             setattr(self, k, v)
 
 
-class LeafletsByBallotView(ViewSet):
+class LeafletsByBallotView(ReadOnlyModelViewSet):
     queryset = Leaflet.objects.filter(status="live")
     lookup_value_regex = r"(?!\.json$)[^/]+"
     lookup_field = "ballot_id"
 
     def retrieve(self, request, *args, **kwargs):
         qs = self.queryset.filter(ballot_id=kwargs["ballot_id"])
-        data = LeafletMinSerializer(qs, many=True)
-        return Response(data.data)
 
-    def list(self, request):
+        page = self.paginate_queryset(qs)
+        serializer = LeafletMinSerializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
+
+    def list(self, request, *args, **kwargs):
         qs = (
             self.queryset.annotate(count=Count("pk"))
             .values("ballot_id", "count")
             .distinct()
             .exclude(ballot_id=None)
         )
+        page = self.paginate_queryset(qs)
         out = []
-        for ballot in qs:
+        for ballot in page:
 
             out.append(
                 BallotSerializer(FakeBallotObject(ballot), context={"request": request}).data
             )
-        return Response(out)
+        return self.get_paginated_response(out)
