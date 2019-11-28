@@ -109,6 +109,7 @@ class LeafletMinSerializer(serializers.ModelSerializer):
             'date_uploaded',
             'date_delivered',
             'status',
+            'ynr_person_id',
         )
 
 
