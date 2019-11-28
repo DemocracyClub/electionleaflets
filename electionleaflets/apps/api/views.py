@@ -13,11 +13,18 @@ from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 from rest_framework.views import APIView
+from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 
 
-from .serializers import (ConstituencySerializer, PartySerializer,
-                          LeafletMinSerializer, LeafletSerializer, LeafletImageSerializer)
+from .serializers import (
+    ConstituencySerializer,
+    PartySerializer,
+    LeafletMinSerializer,
+    LeafletSerializer,
+    LeafletImageSerializer,
+    BallotSerializer,
+)
 
 
 class StandardResultsSetPagination(LimitOffsetPagination):
@@ -26,11 +33,10 @@ class StandardResultsSetPagination(LimitOffsetPagination):
 
 
 class LeafletPermissions(BasePermission):
-
     def has_object_permission(self, request, view, obj):
         # Allow unauthenticated users to GET and POST
         # but not PUT, PATCH and DELETE
-        return request.method in ['GET', 'POST']
+        return request.method in ["GET", "POST"]
 
 
 class ReadOnly(BasePermission):
@@ -58,12 +64,12 @@ class LeafletViewSet(viewsets.ModelViewSet):
     queryset = Leaflet.objects.all()
     serializer_class = LeafletSerializer
     pagination_class = StandardResultsSetPagination
-    permission_classes = (LeafletPermissions, )
+    permission_classes = (LeafletPermissions,)
 
 
 class LatestByConstituencyView(APIView):
 
-    permission_classes = (ReadOnly, )
+    permission_classes = (ReadOnly,)
 
     def get(self, request, format=None):
         all_constituencies = {}
@@ -72,16 +78,17 @@ class LatestByConstituencyView(APIView):
         for constituency in Constituency.objects.all():
             leaflets = LeafletSerializer(
                 Leaflet.objects.filter(
-                    constituency=constituency,
-                    date_uploaded__gt=TIME_SINCE,
-                )[:LIMIT], many=True).data
+                    constituency=constituency, date_uploaded__gt=TIME_SINCE,
+                )[:LIMIT],
+                many=True,
+            ).data
             all_constituencies[constituency.pk] = leaflets
         return Response(all_constituencies)
 
 
 class LatestByPersonView(APIView):
 
-    permission_classes = (ReadOnly, )
+    permission_classes = (ReadOnly,)
 
     def get(self, request, format=None):
         all_people = {}
@@ -90,27 +97,27 @@ class LatestByPersonView(APIView):
         for person in Person.objects.exclude(leaflet=None):
             leaflets = LeafletMinSerializer(
                 Leaflet.objects.filter(
-                    publisher_person=person,
-                    date_uploaded__gt=TIME_SINCE,
-                )[:LIMIT], many=True, context={'request': request}).data
+                    publisher_person=person, date_uploaded__gt=TIME_SINCE,
+                )[:LIMIT],
+                many=True,
+                context={"request": request},
+            ).data
             all_people[person.remote_id] = leaflets
         return Response(all_people)
 
 
 class StatsView(APIView):
 
-    permission_classes = (ReadOnly, )
+    permission_classes = (ReadOnly,)
 
     def get(self, request, format=None):
-        stats = {
-            'leaflets': {}
-        }
-        stats['leaflets']['total'] = \
-            Leaflet.objects.all().count()
+        stats = {"leaflets": {}}
+        stats["leaflets"]["total"] = Leaflet.objects.all().count()
 
         yesterday = datetime.datetime.now() - datetime.timedelta(hours=24)
-        stats['leaflets']['last_24_hours'] = \
-            Leaflet.objects.filter(date_uploaded__gt=yesterday).count()
+        stats["leaflets"]["last_24_hours"] = Leaflet.objects.filter(
+            date_uploaded__gt=yesterday
+        ).count()
 
         return Response(stats)
 
@@ -119,26 +126,26 @@ def latest(request, format):
     # TODO: Fix this to work properly
     from leaflets.models import Leaflet
 
-    leaflets = Leaflet.objects.order_by('-id').all()[0:20]
+    leaflets = Leaflet.objects.order_by("-id").all()[0:20]
     resp = []
     for leaflet in leaflets:
         d = {}
         if leaflet.constituency_id:
-            d['constituency'] = leaflet.constituency.name
+            d["constituency"] = leaflet.constituency.name
         else:
-            d['constituency'] = 'Unknown'
-        d['constituency'] = str(d['constituency'])
-        d['uploaded_date'] = str(leaflet.date_uploaded)
-        d['delivery_date'] = str(leaflet.date_delivered)
-        d['title'] = escape(leaflet.title)
-        d['description'] = escape(leaflet.description)
+            d["constituency"] = "Unknown"
+        d["constituency"] = str(d["constituency"])
+        d["uploaded_date"] = str(leaflet.date_uploaded)
+        d["delivery_date"] = str(leaflet.date_delivered)
+        d["title"] = escape(leaflet.title)
+        d["description"] = escape(leaflet.description)
         if leaflet.publisher_party_id:
-            d['party'] = escape(leaflet.publisher_party.party_name)
+            d["party"] = escape(leaflet.publisher_party.party_name)
         else:
-            d['party'] = "Unknown"
+            d["party"] = "Unknown"
         i = leaflet.get_first_image()
-        d['image'] = i.image.url
-        d['link'] = leaflet.get_absolute_url()
+        d["image"] = i.image.url
+        d["link"] = leaflet.get_absolute_url()
         resp.append(d)
 
     output = '<?xml version="1.0" ?>\n'
