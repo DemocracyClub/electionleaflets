@@ -110,3 +110,13 @@ class LeafletMinSerializer(serializers.ModelSerializer):
             'date_delivered',
             'status',
         )
+
+
+class BallotSerializer(serializers.Serializer):
+    ballot_id = serializers.CharField()
+    count = serializers.IntegerField()
+    url = serializers.HyperlinkedIdentityField(
+        view_name="api:ballot-detail",
+        lookup_field="ballot_id",
+        lookup_url_kwarg="ballot_id",
+    )

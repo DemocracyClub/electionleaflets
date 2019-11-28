@@ -1,5 +1,6 @@
 import datetime
 
+from django.db.models import Count
 from django.http import HttpResponse
 from django.utils.html import escape
 
@@ -151,4 +152,36 @@ def latest(request, format):
         output += "</leaflet>"
 
     output += "</leaflets>"
-    return HttpResponse(output, content_type='text/xml')
+    return HttpResponse(output, content_type="text/xml")
+
+
+class FakeBallotObject:
+    def __init__(self, ballot_dict):
+        for k, v in ballot_dict.items():
+            setattr(self, k, v)
+
+
+class LeafletsByBallotView(ViewSet):
+    queryset = Leaflet.objects.filter(status="live")
+    lookup_value_regex = r"(?!\.json$)[^/]+"
+    lookup_field = "ballot_id"
+
+    def retrieve(self, request, *args, **kwargs):
+        qs = self.queryset.filter(ballot_id=kwargs["ballot_id"])
+        data = LeafletMinSerializer(qs, many=True)
+        return Response(data.data)
+
+    def list(self, request):
+        qs = (
+            self.queryset.annotate(count=Count("pk"))
+            .values("ballot_id", "count")
+            .distinct()
+            .exclude(ballot_id=None)
+        )
+        out = []
+        for ballot in qs:
+
+            out.append(
+                BallotSerializer(FakeBallotObject(ballot), context={"request": request}).data
+            )
+        return Response(out)

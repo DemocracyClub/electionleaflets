@@ -9,6 +9,7 @@ router.register(r'leaflets', views.LeafletViewSet)
 router.register(r'leafletimages', views.LeafletImageViewSet)
 router.register(r'parties', views.PartyViewSet)
 router.register(r'constituency', views.ConstituencyViewSet)
+router.register(r'ballots', views.LeafletsByBallotView, basename="ballot")
 
 urlpatterns = [
     url(r'^', include(router.urls, namespace='api')),
