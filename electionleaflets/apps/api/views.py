@@ -169,7 +169,7 @@ class FakeBallotObject:
 
 
 class LeafletsByBallotView(ReadOnlyModelViewSet):
-    queryset = Leaflet.objects.filter(status="live")
+    queryset = Leaflet.objects.filter()
     lookup_value_regex = r"(?!\.json$)[^/]+"
     lookup_field = "ballot_id"
 
