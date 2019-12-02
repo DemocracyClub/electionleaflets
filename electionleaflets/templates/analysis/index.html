@@ -19,6 +19,9 @@
         <p>
           <a href="{% url "analysis_start" %}" class="button">Start analysing</a>
         </p>
+        <p>
+          <a href="{% url "analysis_tag_random_candidate" %}" class="button">Tag candidates in recent leaflets</a>
+        </p>
       {% else %}
         <p>
           <a href="{% url "account_signup" %}" class="button">Join the team</a>

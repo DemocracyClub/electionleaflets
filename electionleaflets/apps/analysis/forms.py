@@ -1,7 +1,10 @@
+import json
 from collections import OrderedDict
 
 from django import forms
+from django.core.signing import Signer
 
+from leaflets.forms import PeopleForm
 from .models import LeafletProperties
 
 QUESTIONS = OrderedDict([
@@ -93,3 +96,27 @@ class QuestionSetForm(forms.ModelForm):
                         'value': answer
                     }
                 )
+
+
+class CandidateTaggerForm(PeopleForm):
+    def __init__(self, *args, **kwargs):
+        self.instance = kwargs.pop("instance")
+        super(CandidateTaggerForm, self).__init__(*args, **kwargs)
+
+    def save(self):
+
+        if "people" in self.cleaned_data and self.cleaned_data["people"]:
+            signer = Signer()
+            data = json.loads(signer.unsign(self.cleaned_data["people"]))
+            self.instance.ynr_party_id = data["ynr_party_id"]
+            self.instance.ynr_party_name = data["ynr_party_name"]
+            self.instance.ballot_id = data["ballot_id"]
+            self.instance.publisher_person_id = data["ynr_person_id"]
+        elif self.cleaned_data.get("parties") and self.cleaned_data["parties"]:
+            signer = Signer()
+            (
+                self.instance.ynr_party_id,
+                self.instance.ynr_party_name,
+            ) = signer.unsign(self.cleaned_data["parties"]).split("--")
+
+        self.instance.save()

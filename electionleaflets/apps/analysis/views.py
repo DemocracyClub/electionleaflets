@@ -1,12 +1,15 @@
 import datetime
 
-from django.views.generic import TemplateView, RedirectView
+from django.contrib import messages
+from django.urls import reverse
+from django.views.generic import TemplateView, RedirectView, UpdateView
 from django.db.models import Count
 from django.contrib.auth.models import User
 
+from analysis.forms import CandidateTaggerForm
 from .models import LeafletProperties
 from constituencies.models import Constituency
-from leaflets.models import Leaflet
+from leaflets.models import Leaflet, devs_dc_helper
 from uk_political_parties.models import Party
 
 
@@ -164,3 +167,51 @@ class AnalysisPerPartyReportView(BaseAnalysisReportView):
 
         context['parties'] = parties
         return context
+
+
+class BaseCandidateTaggingMixin:
+    def get_queryset(self):
+        last_30_days = datetime.datetime.now() - datetime.timedelta(days=30)
+        qs = (
+            Leaflet.objects.exclude(postcode="")
+            .filter(publisher_person=None)
+            .filter(date_uploaded__gte=last_30_days)
+        )
+        return qs
+
+
+class TagRandomCandidate(BaseCandidateTaggingMixin, RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        qs = self.get_queryset()
+        if qs.exists():
+            leaflet = self.get_queryset().order_by("?").first()
+            return reverse(
+                "analysis_tag_candidate", kwargs={"leaflet_id": leaflet.pk}
+            )
+        else:
+            messages.success(self.request, "No more candidates lift to tag!")
+            return reverse(
+                "analysis"
+            )
+
+
+class CandidateTagging(UpdateView):
+    pk_url_kwarg = "leaflet_id"
+    model = Leaflet
+    form_class = CandidateTaggerForm
+    template_name = "analysis/candidate_tagging.html"
+
+    def get_initial(self):
+        postcode_results = devs_dc_helper.postcode_request(
+            postcode=self.object.postcode
+        )
+        return {"postcode_results": postcode_results}
+
+    def form_valid(self, form):
+
+        messages.success(self.request, "Thanks for tagging that candidate!")
+        return super(CandidateTagging, self).form_valid(form)
+
+    def get_success_url(self):
+
+        return reverse("analysis_tag_random_candidate")

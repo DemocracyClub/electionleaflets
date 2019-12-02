@@ -4,7 +4,8 @@ from django.views.decorators.cache import cache_page
 
 from .views import (AnalysisHomeView, AnalysisReportView, ReportView,
                     AnalysisStartRedirectView, AnalysisPerPartyReportView,
-                    ConstituencyReportView)
+                    ConstituencyReportView, CandidateTagging,
+                    TagRandomCandidate)
 
 urlpatterns = [
     url(r'^$', AnalysisHomeView.as_view(),
@@ -12,6 +13,11 @@ urlpatterns = [
 
     url(r'^start/$', AnalysisStartRedirectView.as_view(),
         name='analysis_start'),
+    url(r'^tag_candidates/$', TagRandomCandidate.as_view(),
+        name='analysis_tag_random_candidate'),
+
+    url(r'^tag_candidates/(?P<leaflet_id>\d+)$', CandidateTagging.as_view(),
+        name='analysis_tag_candidate'),
 
     url(r'^reports/constituencies/$',
         cache_page(60 * 5)(ConstituencyReportView.as_view()),

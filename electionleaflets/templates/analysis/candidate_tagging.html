@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block content %}
+  <div class="fukol-grid">
+    <div class="fukol-grid__col fukol-grid__col--60-70">
+      {% for image in leaflet.images.all %}
+        {% thumbnail image.image "600" crop="center" as im %}
+        <img src="{{ im.url }}">
+        {% endthumbnail %}
+      {% endfor %}
+
+    </div>
+
+      <aside class="fukol-grid__col fukol-grid__col--40-30">
+      <form class="upload_form" method="POST">
+        {% if form.people.field.choices %}
+          Was the leaflet sent by one of these people?
+          <div class="option-group people-list">
+            {% for radio in form.people %}
+              {{ radio.tag }}
+              <label for="{{ radio.id_for_label }}"> {{ radio.choice_label }}</label>
+            {% endfor %}
+          </div>
+        {% endif %}
+          <div class="option-group party-list">
+            {% if form.people.field.choices %}None of the above? <br />{% endif %}
+            Was the leaflet sent by one of these parties?
+            {% for radio in form.parties %}
+              {{ radio.tag }}
+              <label for="{{ radio.id_for_label }}"> {{ radio.choice_label }}</label>
+            {% endfor %}
+          </div>
+      <button type="submit">Save</button>
+    </form>
+  </aside>
+  </div>
+{% endblock %}
