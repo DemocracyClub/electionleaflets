@@ -305,10 +305,10 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
 
                     person, _ = Person.objects.get_or_create(
                         remote_id=data["ynr_person_id"],
-                        source_name='YNR2017',
                         defaults={
                             'name': data["ynr_person_name"],
-                            'source_url': 'https://candidates.democracyclub.org.uk/person/{}'.format(data["ynr_person_id"])
+                            'source_url': 'https://candidates.democracyclub.org.uk/person/{}'.format(data["ynr_person_id"]),
+                            "source_name": 'YNR2017',
                         }
                     )
 
