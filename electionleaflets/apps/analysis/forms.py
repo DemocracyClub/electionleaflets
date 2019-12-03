@@ -5,6 +5,7 @@ from django import forms
 from django.core.signing import Signer
 
 from leaflets.forms import PeopleForm
+from people.models import Person
 from .models import LeafletProperties
 
 QUESTIONS = OrderedDict([
@@ -111,7 +112,17 @@ class CandidateTaggerForm(PeopleForm):
             self.instance.ynr_party_id = data["ynr_party_id"]
             self.instance.ynr_party_name = data["ynr_party_name"]
             self.instance.ballot_id = data["ballot_id"]
-            self.instance.publisher_person_id = data["ynr_person_id"]
+            person, _ = Person.objects.get_or_create(
+                remote_id=data["ynr_person_id"],
+                defaults={
+                    'name': data["ynr_person_name"],
+                    'source_url': 'https://candidates.democracyclub.org.uk/person/{}'.format(
+                        data["ynr_person_id"]),
+                    "source_name": 'YNR2017',
+                }
+            )
+            self.instance.publisher_person = person
+
         elif self.cleaned_data.get("parties") and self.cleaned_data["parties"]:
             signer = Signer()
             (
