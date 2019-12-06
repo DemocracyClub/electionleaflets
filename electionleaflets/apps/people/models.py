@@ -7,7 +7,7 @@ from elections.models import Election
 
 class Person(models.Model):
     name = models.CharField(blank=False, max_length=255)
-    remote_id = models.CharField(blank=True, max_length=255, null=True)
+    remote_id = models.CharField(blank=True, max_length=255, null=True, unique=True)
     source_url = models.URLField(blank=True, null=True)
     source_name = models.CharField(blank=True, max_length=100)
     image_url = models.URLField(blank=True, null=True)
