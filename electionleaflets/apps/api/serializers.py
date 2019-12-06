@@ -112,6 +112,8 @@ class LeafletMinSerializer(serializers.ModelSerializer):
             'ynr_person_id',
         )
 
+    ynr_person_id = serializers.CharField(source="publisher_person.remote_id")
+
 
 class BallotSerializer(serializers.Serializer):
     ballot_id = serializers.CharField()
