@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.views.decorators.cache import never_cache
 
 from leaflets.views import (ImageView, LatestLeaflets,
                             LeafletView, LeafletUploadWizzard,
@@ -27,8 +28,8 @@ upload_form_wizzard = LeafletUploadWizzard.as_view(
 )
 
 urlpatterns = [
-    url(r'add/(?P<step>.+)/$', upload_form_wizzard, name='upload_step'),
-    url(r'add/', upload_form_wizzard, name='upload_leaflet'),
+    url(r'add/(?P<step>.+)/$', never_cache(upload_form_wizzard), name='upload_step'),
+    url(r'add/', never_cache(upload_form_wizzard), name='upload_leaflet'),
 
     url(r'^full/(?P<pk>\d+)/$', ImageView.as_view(), name='full_image'),
     url(r'^full/(?P<pk>.+)/$', LegacyImageView.as_view(), name='full_image_legacy'),

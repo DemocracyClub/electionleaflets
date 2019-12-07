@@ -196,16 +196,13 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         self.extra_added = True
 
     def get(self, *args, **kwargs):
+        if "reset" in self.request.GET:
+            self.storage.reset()
+            return HttpResponseRedirect("/")
         self._insert_extra_inside_forms()
         return super(LeafletUploadWizzard, self).get(*args, **kwargs)
 
     def post(self, *args, **kwargs):
-
-        # Clear the cache if the user presses cancel
-        if self.request.POST.get('cancel_upload', None):
-            self.storage.reset()
-            return HttpResponseRedirect(reverse('home'))
-
         # Add forms to the form_list that we should have.
         # We need to do this on every request, as the extra forms
         # Aren't stored betweet requests, but are held in the session.
