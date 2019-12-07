@@ -176,6 +176,7 @@ class LeafletImage(models.Model):
         rotated_image = self._correctly_orient_image(image_without_exif)
 
         new_file = BytesIO()
+        rotated_image = rotated_image.convert("RGB")
         rotated_image.save(new_file, 'jpeg')
         file_content = ContentFile(new_file.getvalue())
 
@@ -214,6 +215,7 @@ class LeafletImage(models.Model):
         tmp_image = e.get_image(f)
 
         new_file = BytesIO()
+        tmp_image = tmp_image.convert("RGB")
         tmp_image.save(new_file, 'jpeg')
         file_content = ContentFile(new_file.getvalue())
 
@@ -236,6 +238,7 @@ class LeafletImage(models.Model):
         cropped = im.copy()
         cropped = cropped.crop((x, y, x2, y2))
         new_file = BytesIO()
+        cropped = cropped.convert("RGB")
         cropped.save(new_file, 'jpeg')
         file_content = ContentFile(new_file.getvalue())
         self.image.save(file_name, file_content)
@@ -257,6 +260,7 @@ class LeafletImage(models.Model):
             rotated = im.copy()
             rotated = rotated.rotate(rotate_angle)
             new_file = BytesIO()
+            rotated = rotated.convert("RGB")
             rotated.save(new_file, 'jpeg')
             file_content = ContentFile(new_file.getvalue())
             image_field.save(file_name, file_content)
