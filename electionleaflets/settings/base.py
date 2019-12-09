@@ -206,6 +206,8 @@ THANKYOU_MESSAGES = [
     'Thanks for the leaflet, the election is a tiny bit more transparent!'
 ]
 
+REPORT_EMAIL_SUBJECT = "Leaflet Report"
+
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 MAPIT_API_KEY = environ.get('MAPIT_API_KEY', None)
