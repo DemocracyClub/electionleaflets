@@ -1,0 +1,49 @@
+from sorl.thumbnail.base import ThumbnailBackend
+from sorl.thumbnail.images import ImageFile
+from sorl.thumbnail import default
+
+
+class S3Backend(ThumbnailBackend):
+    def get_thumbnail(self, file_, geometry_string, **options):
+        """
+        Returns thumbnail as an ImageFile instance for file with geometry and
+        options given. All of the thumbnail generation logic is short-circuited
+        as we know that CloudFront will generate the thumbnail for us.
+        """
+
+        if file_:
+            source = ImageFile(file_)
+        else:
+            return None
+
+        for key, value in self.default_options.items():
+            options.setdefault(key, value)
+
+        name = self._get_thumbnail_filename(source, geometry_string, options)
+        thumbnail = ImageFile(name, default.storage)
+        return thumbnail
+
+    def _get_thumbnail_filename(self, source, geometry_string, options):
+        """
+        Returns URLs that match the format of the lambda@edge function
+        that creates the initial thumbnails on S3. This means that we don't
+        need to use the lambda instance the Django app runs on to process
+        thumbnails, as they should already exist.
+        """
+
+        base_url = "thumbs"
+
+        opts = options.copy()
+        for k, v in opts.items():
+            if self.default_options[k] == v:
+                del opts[k]
+
+        url_kwargs = "/".join(["{}={}".format(k, v) for k, v in opts.items()])
+
+        thumb_url = "{base_url}/{geometry_string}/{url_kwargs}/{original_path}".format(
+            base_url=base_url,
+            geometry_string=geometry_string,
+            url_kwargs=url_kwargs,
+            original_path=source.name,
+        )
+        return thumb_url
