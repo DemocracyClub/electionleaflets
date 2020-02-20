@@ -3,15 +3,31 @@ import os
 import datetime
 import random
 from collections import OrderedDict
+import uuid
 
+import boto3
+from botocore.config import Config
+from botocore.exceptions import ClientError
 from django.shortcuts import redirect
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import (
+    HttpResponseRedirect,
+    HttpResponseForbidden,
+    JsonResponse,
+)
 from django.contrib import messages
 from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
 from formtools.wizard.views import NamedUrlSessionWizardView
 from django.core.signing import Signer
 from django.conf import settings
-from django.views.generic import DetailView, ListView, UpdateView, RedirectView
+from django.views.generic import (
+    View,
+    DetailView,
+    ListView,
+    UpdateView,
+    RedirectView,
+)
 from django.views.generic.detail import SingleObjectMixin
 from django.core.files.storage import FileSystemStorage
 from braces.views import StaffuserRequiredMixin
@@ -198,6 +214,11 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             self.storage.reset()
             return HttpResponseRedirect("/")
         self._insert_extra_inside_forms()
+        if not "upload_session_id" in self.storage.extra_data:
+            long_uuid = uuid.uuid4()
+            self.storage.extra_data["upload_session_id"] = hex(
+                int(long_uuid.time_low)
+            )[2:]
         return super(LeafletUploadWizzard, self).get(*args, **kwargs)
 
     def post(self, *args, **kwargs):
@@ -343,3 +364,50 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         )
 
         return redirect(reverse("leaflet", kwargs={"pk": leaflet.pk}))
+
+
+def get_s3_client():
+    return boto3.client(
+        "s3",
+        region_name="eu-west-1",
+        endpoint_url="https://s3-eu-west-1.amazonaws.com",
+        config=Config(s3={"addressing_style": "path"}),
+    )
+
+
+class FileUploadView(View):
+    @method_decorator(csrf_protect)
+    def post(self, request, *args, **kwargs):
+        body = json.loads(request.body)
+        client = get_s3_client()
+        path_key = "{}/{}".format(
+            request.session.session_key, body["upload_session_id"]
+        )
+        resp = {"files": []}
+        for f in body["files"]:
+            bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+            # bucket_name = "js-uploader.electionleaflets.org"
+            # bucket_name = "https://data.electionleaflets.org"
+            object_name = "{}/{}".format("js_uploader_test", path_key)
+            # object_name = path_key
+            fields = {"Content-Type": f["type"]}
+            conditions = [
+                {"Content-Type": f["type"]},
+                ["content-length-range", 0, 20000000],
+            ]
+            expiration = 600  # 10 mins
+            try:
+                post_data = client.generate_presigned_post(
+                    bucket_name,
+                    object_name,
+                    Fields=fields,
+                    Conditions=conditions,
+                    ExpiresIn=expiration,
+                )
+                print(post_data)
+                resp["files"].append(post_data)
+            except ClientError:
+                return JsonResponse(
+                    {"error": "Could not authorize request"}, status=400
+                )
+        return JsonResponse(resp, status=200)

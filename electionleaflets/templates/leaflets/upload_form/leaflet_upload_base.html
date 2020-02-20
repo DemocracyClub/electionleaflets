@@ -7,11 +7,14 @@
 {% block content %}
   <div class="upload_form">
     {% block heading %}{% endblock heading %}
+
     <section>
         <header>
             <form action="" method="post" enctype="multipart/form-data"></form>
         </header>
-        <form action="" method="post" enctype="multipart/form-data">
+        <form action="" method="post" id="file_upload_form" enctype="multipart/form-data">
+        <input type="hidden" value="{{ upload_session_id }}", id="upload_session_id">
+            <div id="error"></div>
             {% csrf_token %}
             {{ wizard.management_form }}
             {% block form %}
@@ -20,7 +23,7 @@
             {% if "inside" in wizard.steps.current  %}
             <button type="submit" class="expand" name="add_extra_inside" value="Submit">Submit and add another page</button>
             {% else %}
-            <button type="submit" class="expand" value="Submit">Submit</button>
+            <button type="submit" class="expand" value="Submit" id="submit">Submit</button>
             {% endif %}
 
             {% if wizard.steps.current != "postcode" and wizard.steps.current != "people" and wizard.steps.current != "front" %}

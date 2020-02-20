@@ -12,6 +12,7 @@ from leaflets.views import (
     AllImageView,
     ImageRotateView,
     LegacyImageView,
+    FileUploadView,
 )
 
 from .forms import (
@@ -44,6 +45,11 @@ urlpatterns = [
         name="upload_step",
     ),
     url(r"add/", never_cache(upload_form_wizzard), name="upload_leaflet"),
+    url(
+        r"file_upload_index/",
+        never_cache(FileUploadView.as_view()),
+        name="file_upload_index",
+    ),
     url(r"^full/(?P<pk>\d+)/$", ImageView.as_view(), name="full_image"),
     url(
         r"^full/(?P<pk>.+)/$",
