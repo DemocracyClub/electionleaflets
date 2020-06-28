@@ -293,7 +293,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                 leaflet.postcode = form.cleaned_data['postcode']
 
             if form_prefix == "people":
-                if "people" in form.cleaned_data and isinstance(form.cleaned_data['people'], unicode) and form.cleaned_data['people'] != '':
+                if "people" in form.cleaned_data and isinstance(form.cleaned_data['people'], str) and form.cleaned_data['people'] != '':
                     signer = Signer()
                     data = json.loads(signer.unsign(form.cleaned_data['people']))
                     leaflet.ynr_party_id = data["ynr_party_id"]
@@ -311,7 +311,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
 
                     leaflet.publisher_person = person
 
-                elif isinstance(form.cleaned_data['parties'], unicode) and form.cleaned_data['parties'] != '':
+                elif isinstance(form.cleaned_data['parties'], str) and form.cleaned_data['parties'] != '':
                     signer = Signer()
                     leaflet.ynr_party_id, leaflet.ynr_party_name = signer.unsign(form.cleaned_data['parties']).split('--')
 

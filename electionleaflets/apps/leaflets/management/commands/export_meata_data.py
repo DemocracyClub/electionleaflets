@@ -81,6 +81,6 @@ class Command(BaseCommand):
                     'election': image.leaflet.election,
                 })
 
-            for k, v in data.items():
+            for k, v in list(data.items()):
                 data[k] = force_text(v, 'utf8')
-            out.writerow({k: v.encode('utf8') for k, v in data.items()})
+            out.writerow({k: v.encode('utf8') for k, v in list(data.items())})

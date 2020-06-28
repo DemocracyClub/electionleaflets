@@ -53,7 +53,7 @@ class PeopleRadioWidget(forms.RadioSelect):
         if not label:
             label = "Not Listed"
         else:
-            label = u"{0} ({1})".format(
+            label = "{0} ({1})".format(
                 label["person"]["name"],
                 label["party"]["party_name"],
             )
@@ -118,7 +118,7 @@ class PeopleForm(forms.Form):
 
             self.fields['people'] = \
                 forms.ChoiceField(
-                    choices=unique_people.items(),
+                    choices=list(unique_people.items()),
                     widget=PeopleRadioWidget,
                     required=False)
 

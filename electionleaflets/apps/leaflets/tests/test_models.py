@@ -51,4 +51,4 @@ class LeafletImageTestCase(TestCase):
         li = LeafletImage(image=image_file, leaflet=l)
         self.assertEqual(li.raw_image.name, '')
         li.save()
-        self.assertRegexpMatches(li.raw_image.name, r"front_test")
+        self.assertRegex(li.raw_image.name, r"front_test")

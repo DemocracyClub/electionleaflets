@@ -152,7 +152,7 @@ def latest(request, format):
     output += "<leaflets>"
     for d in resp:
         output += "<leaflet>"
-        for k, v in d.items():
+        for k, v in list(d.items()):
             output += "<" + k + ">"
             output += v
             output += "</" + k + ">"
@@ -164,7 +164,7 @@ def latest(request, format):
 
 class FakeBallotObject:
     def __init__(self, ballot_dict):
-        for k, v in ballot_dict.items():
+        for k, v in list(ballot_dict.items()):
             setattr(self, k, v)
 
 

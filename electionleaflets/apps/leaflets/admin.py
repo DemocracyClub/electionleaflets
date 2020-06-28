@@ -1,7 +1,7 @@
 from django.contrib import admin
 from leaflets.models import Leaflet, LeafletImage
 
-from admin_widgets import AdminImageMixin
+from .admin_widgets import AdminImageMixin
 from sorl.thumbnail import get_thumbnail
 
 

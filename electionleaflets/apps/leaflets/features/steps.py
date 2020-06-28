@@ -82,18 +82,18 @@ def check_url(step, url):
 @step(r'I submit the form with:')
 def fill_journey(step):
     for form in step.hashes:
-        for k, v in form.copy().items():
+        for k, v in list(form.copy().items()):
             if k not in ['step_name', 'image', 'action']:
                 form["%s-%s" % (form['step_name'], k)] = v
 
-        if 'image' in form.keys() and form['image']:
+        if 'image' in list(form.keys()) and form['image']:
             set_file(step, form['image'])
             form['%s-image' % form['step_name']] = world.data['image']
         form_name = form['step_name']
         form['leaflet_upload_wizzard-current_step'] = form_name
-        if 'action' in form.keys() and form['action']:
+        if 'action' in list(form.keys()) and form['action']:
             form[form['action']] = True
-        if 'people-people' in form.keys():
+        if 'people-people' in list(form.keys()):
             if form['people-people'] == "None":
                 form['people-people'] = ""
 

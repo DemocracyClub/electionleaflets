@@ -115,7 +115,7 @@ def new_key(spec: tuple, key: str) -> str:
     options = spec[1]
 
     option_parts = [str(size)]
-    option_parts.extend(sorted(["=".join(o) for o in options.items()]))
+    option_parts.extend(sorted(["=".join(o) for o in list(options.items())]))
 
     return "thumbs/{}/{}".format("/".join(option_parts), key)
 
@@ -124,7 +124,7 @@ def process_image(image: Image, spec: Tuple[str, dict]) -> Image:
     size = spec[0]
     options = spec[1].copy()
 
-    for key, value in ThumbnailBackend.default_options.items():
+    for key, value in list(ThumbnailBackend.default_options.items()):
         options.setdefault(key, value)
 
     ratio = engine.get_image_ratio(image, options)
