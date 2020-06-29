@@ -1,8 +1,8 @@
-# Electionleaflets
+# ElectionLeaflets
 
-[![Stories in Ready](https://badge.waffle.io/democracyclub/electionleaflets.png?label=ready&title=Ready)](https://waffle.io/democracyclub/electionleaflets)
-[![Build Status](https://travis-ci.org/DemocracyClub/electionleaflets.svg)](https://travis-ci.org/DemocracyClub/electionleaflets)
 [![Coverage Status](https://coveralls.io/repos/DemocracyClub/electionleaflets/badge.svg?branch=master)](https://coveralls.io/r/DemocracyClub/electionleaflets?branch=django_1_7)
+[![CI](https://circleci.com/gh/DemocracyClub/electionleaflets.svg?style=shield)](https://app.circleci.com/pipelines/github/DemocracyClub/electionleaflets)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ### Welcome
 
@@ -14,7 +14,7 @@ In order to speed up this port, we are running the first version using the origi
 
 You'll need some basic requirements installed on your machine, probably through your package manager:
 
-- Python 2.7.x
+- Python 3.8.x
 - Node.JS 7+
 - PostgreSQL
 - PostGIS
