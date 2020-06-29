@@ -35,13 +35,13 @@ class Person(models.Model):
 
 
 class PartyMemberships(models.Model):
-    person = models.ForeignKey(Person)
-    party = models.ForeignKey(Party)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    party = models.ForeignKey(Party, on_delete=models.CASCADE)
     membership_start = models.DateField()
     membership_end = models.DateField(null=True)
 
 
 class PersonConstituencies(models.Model):
-    person = models.ForeignKey(Person)
-    constituency = models.ForeignKey(Constituency)
-    election = models.ForeignKey(Election)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    constituency = models.ForeignKey(Constituency, on_delete=models.CASCADE)
+    election = models.ForeignKey(Election, on_delete=models.CASCADE)

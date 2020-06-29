@@ -43,8 +43,8 @@ class LeafletPropertiesManager(models.Manager):
 
 
 class LeafletProperties(TimeStampedModel):
-    leaflet = models.ForeignKey(Leaflet)
-    user = models.ForeignKey(User)
+    leaflet = models.ForeignKey(Leaflet, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     key = models.CharField(blank=True, max_length=100, db_index=True)
     value = models.CharField(blank=True, max_length=255, db_index=True)
 

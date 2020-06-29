@@ -345,7 +345,7 @@ class legacyLeafletElectionSeq(models.Model):
 
 class legacyLeafletImage(models.Model):
     id = models.IntegerField(primary_key=True)  # AutoField?
-    leaflet = models.ForeignKey(legacyLeaflet, related_name='images')
+    leaflet = models.ForeignKey(legacyLeaflet, related_name='images', on_delete=models.CASCADE)
     image_key = models.CharField(max_length=255)
     sequence = models.IntegerField()
 

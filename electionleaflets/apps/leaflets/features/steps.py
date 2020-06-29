@@ -2,11 +2,10 @@
 import os
 import re
 
+from django.urls import reverse
 from lxml import html
 
 from django.test.client import Client
-from django.core.urlresolvers import reverse
-
 from aloe import before, step, world
 from aloe_django import django_url
 

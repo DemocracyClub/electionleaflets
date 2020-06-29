@@ -1,6 +1,7 @@
 from io import BytesIO
 import re
 
+from django.urls import reverse
 from sorl.thumbnail import ImageField
 from sorl.thumbnail import delete
 import piexif
@@ -10,7 +11,6 @@ from django.db import models
 from django.contrib.gis.db import models as geo_model
 from django.contrib.gis.geos import Point
 from django.core.files.base import ContentFile
-from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
 
 from core.helpers import geocode
@@ -33,15 +33,15 @@ class Leaflet(geo_model.Model):
 
     title = models.CharField(blank=True, max_length=765)
     description = models.TextField(blank=True, null=True)
-    publisher_party = models.ForeignKey(Party, blank=True, null=True)
+    publisher_party = models.ForeignKey(Party, blank=True, null=True, on_delete=models.CASCADE)
     ynr_party_id = models.CharField(blank=True, null=True, max_length=255, db_index=True)
     ynr_party_name = models.CharField(blank=True, null=True, max_length=255)
-    publisher_person = models.ForeignKey(Person, blank=True, null=True)
+    publisher_person = models.ForeignKey(Person, blank=True, null=True, on_delete=models.CASCADE)
     ynr_person_id = models.IntegerField(blank=True, null=True, db_index=True)
     ynr_person_name = models.CharField(blank=True, null=True, max_length=255)
     ballot_id = models.CharField(blank=True, null=True, max_length=255, db_index=True)
-    election = models.ForeignKey(Election, null=True)
-    constituency = models.ForeignKey(Constituency, blank=True, null=True)
+    election = models.ForeignKey(Election, null=True, on_delete=models.CASCADE)
+    constituency = models.ForeignKey(Constituency, blank=True, null=True, on_delete=models.CASCADE)
     imprint = models.TextField(blank=True, null=True)
     postcode = models.CharField(max_length=150, blank=True)
     location = geo_model.PointField(null=True, blank=True)
@@ -53,7 +53,7 @@ class Leaflet(geo_model.Model):
                               null=True, blank=True, max_length=255)
     reviewed = models.BooleanField(default=False)
 
-    objects = geo_model.GeoManager()
+    objects = models.Manager()
 
     def __unicode__(self):
         return self.title
@@ -145,7 +145,7 @@ class LeafletImage(models.Model):
         (8, 'Rotate 270 CW'),
     )
 
-    leaflet = models.ForeignKey(Leaflet, related_name='images')
+    leaflet = models.ForeignKey(Leaflet, related_name='images', on_delete=models.CASCADE)
     image = ImageField(upload_to="leaflets", max_length=255)
     raw_image = ImageField(upload_to="raw_leaflets", blank=True, max_length=255)
     legacy_image_key = models.CharField(max_length=255, blank=True)
@@ -221,9 +221,8 @@ class LeafletImage(models.Model):
 
         self.image.save(self.image.name, file_content, save=False)
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('full_image', (), {'pk': self.pk})
+        return reverse('full_image', (), {'pk': self.pk})
 
     @property
     def dimensions(self):

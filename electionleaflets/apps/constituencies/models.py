@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django_extensions.db.fields import AutoSlugField
 
 
@@ -24,9 +25,8 @@ class Constituency(models.Model):
     def __unicode__(self):
         return self.name
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('constituency-view', (), {
+        return reverse('constituency-view', (), {
                 'pk': self.pk,
                 'ignored_slug': self.slug,
                 })

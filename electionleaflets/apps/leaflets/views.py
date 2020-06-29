@@ -7,9 +7,9 @@ from collections import OrderedDict
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib import messages
+from django.urls import reverse
 from formtools.wizard.views import NamedUrlSessionWizardView
 from django.core.signing import Signer
-from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.views.generic import (DetailView, ListView, UpdateView,
                                   RedirectView)

@@ -84,14 +84,14 @@ ADMIN_MEDIA_PREFIX = '/admin_media/'
 # Don't share this with anybody.
 SECRET_KEY = "elyfryi8on!dmw&8b3j-g0yve4u&%4_6%(tf3*)@#&mq*$yzhf^6"
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'leaflets.middleware.SourceTagMiddleware',
     'django.contrib.admindocs.middleware.XViewMiddleware',
-    'linaro_django_pagination.middleware.PaginationMiddleware',
+    'dj_pagination.middleware.PaginationMiddleware',
 )
 
 ROOT_URLCONF = 'electionleaflets.urls'
@@ -116,7 +116,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.messages',
     'django.contrib.humanize',
-    'linaro_django_pagination',
+    'dj_pagination',
     'rest_framework',
     'sorl.thumbnail',
     'storages',
