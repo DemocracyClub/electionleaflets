@@ -1,7 +1,6 @@
 [pipenv]
 allow_prereleases = true
 
-
 [[source]]
 name = "pypi"
 url = "https://pypi.org/simple"
@@ -75,4 +74,4 @@ django-static-jquery = "==2.1.4"
 setuptools = "==41.0.1"
 faker = "*"
 werkzeug = ">=0.15.3"
-
+black = "*"
