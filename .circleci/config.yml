@@ -57,6 +57,7 @@ jobs:
       - run:
           name: run tests
           command: |
+            pipenv run black --check .
             pipenv run python manage.py test
             pipenv run python manage.py harvest
 
