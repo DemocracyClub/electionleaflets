@@ -8,7 +8,7 @@ from constituencies.models import Constituency
 class Command(BaseCommand):
     def fetch_constituencies(self):
         base_url = "http://mapit.mysociety.org/"
-        req = requests.get(base_url + 'areas/WMC')
+        req = requests.get(base_url + "areas/WMC")
         return req.json()
 
     def clean_constituency(self, constituency):
@@ -19,10 +19,9 @@ class Command(BaseCommand):
         """
 
         cleaned_constituency = {
-            'constituency_id': constituency['id'],
-            'name': constituency['name'],
-            'country_name': constituency['country_name'],
-
+            "constituency_id": constituency["id"],
+            "name": constituency["name"],
+            "country_name": constituency["country_name"],
         }
         return cleaned_constituency
 
@@ -31,5 +30,6 @@ class Command(BaseCommand):
         for constituency_id, constituency in list(constituencies.items()):
             print(constituency)
             Constituency.objects.update_or_create(
-                constituency_id=constituency['id'],
-                defaults=self.clean_constituency(constituency))
+                constituency_id=constituency["id"],
+                defaults=self.clean_constituency(constituency),
+            )

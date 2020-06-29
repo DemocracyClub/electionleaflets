@@ -8,12 +8,9 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('leaflets', '0003_Add orientation and exif data'),
+        ("leaflets", "0003_Add orientation and exif data"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='leafletimage',
-            name='image_text',
-        ),
+        migrations.RemoveField(model_name="leafletimage", name="image_text",),
     ]

@@ -10,27 +10,47 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Constituency',
+            name="Constituency",
             fields=[
-                ('constituency_id', models.CharField(max_length=10, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=765)),
-                ('country_name', models.CharField(max_length=255)),
-                ('alternative_name', models.CharField(blank=True, max_length=765)),
-                ('retired', models.IntegerField(blank=True, null=True)),
-                ('slug', django_extensions.db.fields.AutoSlugField(blank=True, editable=False, max_length=255, populate_from='name', separator='_')),
-                ('count', models.IntegerField(null=True)),
-                ('wikipedia_url', models.CharField(blank=True, max_length=765)),
-                ('url_id', models.CharField(blank=True, max_length=300)),
-                ('guardian_aristotle_id', models.IntegerField(blank=True, null=True)),
-                ('guardian_pa_code', models.IntegerField(blank=True, null=True)),
+                (
+                    "constituency_id",
+                    models.CharField(
+                        max_length=10, primary_key=True, serialize=False
+                    ),
+                ),
+                ("name", models.CharField(max_length=765)),
+                ("country_name", models.CharField(max_length=255)),
+                (
+                    "alternative_name",
+                    models.CharField(blank=True, max_length=765),
+                ),
+                ("retired", models.IntegerField(blank=True, null=True)),
+                (
+                    "slug",
+                    django_extensions.db.fields.AutoSlugField(
+                        blank=True,
+                        editable=False,
+                        max_length=255,
+                        populate_from="name",
+                        separator="_",
+                    ),
+                ),
+                ("count", models.IntegerField(null=True)),
+                ("wikipedia_url", models.CharField(blank=True, max_length=765)),
+                ("url_id", models.CharField(blank=True, max_length=300)),
+                (
+                    "guardian_aristotle_id",
+                    models.IntegerField(blank=True, null=True),
+                ),
+                (
+                    "guardian_pa_code",
+                    models.IntegerField(blank=True, null=True),
+                ),
             ],
-            options={
-                'verbose_name_plural': 'Constituencies',
-            },
+            options={"verbose_name_plural": "Constituencies",},
         ),
     ]

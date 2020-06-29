@@ -10,5 +10,5 @@ class TestFeeds(TestCase):
         [LeafletFactory() for i in range(10)]
 
     def test_latest(self):
-        URL = reverse('latest_feed')
+        URL = reverse("latest_feed")
         self.client.get(URL)

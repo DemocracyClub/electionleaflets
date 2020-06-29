@@ -11,14 +11,19 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('people', '0001_initial'),
-        ('leaflets', '0001_initial'),
+        ("people", "0001_initial"),
+        ("leaflets", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='leaflet',
-            name='publisher_person',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='people.Person'),
+            model_name="leaflet",
+            name="publisher_person",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="people.Person",
+            ),
         ),
     ]

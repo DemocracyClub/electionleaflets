@@ -8,13 +8,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('leaflets', '0006_add_ynr_idxes'),
+        ("leaflets", "0006_add_ynr_idxes"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='leaflet',
-            name='ballot_id',
-            field=models.CharField(blank=True, db_index=True, max_length=255, null=True),
+            model_name="leaflet",
+            name="ballot_id",
+            field=models.CharField(
+                blank=True, db_index=True, max_length=255, null=True
+            ),
         ),
     ]

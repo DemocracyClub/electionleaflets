@@ -11,7 +11,7 @@ class S3StaticStorage(PipelineMixin, ManifestFilesMixin, S3Boto3Storage):
     manifest_name = settings.STATICFILES_MANIFEST_NAME
 
     def __init__(self, *args, **kwargs):
-        kwargs['location'] = settings.STATIC_URL
+        kwargs["location"] = settings.STATIC_URL
         super(S3StaticStorage, self).__init__(*args, **kwargs)
 
     # Temporary fix for https://github.com/jschneier/django-storages/issues/382
@@ -32,7 +32,9 @@ class S3StaticStorage(PipelineMixin, ManifestFilesMixin, S3Boto3Storage):
         content_autoclose.write(content.read())
 
         # Upload the object which will auto close the content_autoclose instance
-        super(S3StaticStorage, self)._save_content(obj, content_autoclose, parameters)
+        super(S3StaticStorage, self)._save_content(
+            obj, content_autoclose, parameters
+        )
 
         # Cleanup if this is fixed upstream our duplicate should always close
         if not content_autoclose.closed:

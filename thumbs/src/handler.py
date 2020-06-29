@@ -100,7 +100,9 @@ def handle_s3(event, context, local=False):
         for spec in SPECS:
             processed = process_image(image, spec)
             key = new_key(spec, r["s3"]["object"]["key"])
-            upload_image(processed, image.format, r["s3"]["bucket"]["name"], key, local)
+            upload_image(
+                processed, image.format, r["s3"]["bucket"]["name"], key, local
+            )
 
 
 def fetch_image(bucket: str, key: str):
@@ -132,7 +134,9 @@ def process_image(image: Image, spec: Tuple[str, dict]) -> Image:
     return engine.create(image, geometry, options)
 
 
-def upload_image(image: Image, format: str, bucket: str, key: str, local: bool = False):
+def upload_image(
+    image: Image, format: str, bucket: str, key: str, local: bool = False
+):
     io = BytesIO()
     image.save(io, format)
     if local:
@@ -156,9 +160,7 @@ if __name__ == "__main__":
                     {
                         "s3": {
                             "bucket": {"name": "data.electionleaflets.org"},
-                            "object": {
-                                "key": "leaflets/image_pX8FVnP.jpg"
-                            },
+                            "object": {"key": "leaflets/image_pX8FVnP.jpg"},
                         }
                     }
                 ]
@@ -167,9 +169,7 @@ if __name__ == "__main__":
             True,
         )
     elif sys.argv[1] == "--cf":
-        key = (
-            "/thumbs/300/crop%3Dtop/leaflets/0439E661-EA19-482F-B11A-454038DE148A.jpeg"
-        )
+        key = "/thumbs/300/crop%3Dtop/leaflets/0439E661-EA19-482F-B11A-454038DE148A.jpeg"
         if sys.argv[2]:
             key = sys.argv[2]
 

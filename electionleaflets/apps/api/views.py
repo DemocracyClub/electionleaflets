@@ -192,6 +192,8 @@ class LeafletsByBallotView(ReadOnlyModelViewSet):
         for ballot in page:
 
             out.append(
-                BallotSerializer(FakeBallotObject(ballot), context={"request": request}).data
+                BallotSerializer(
+                    FakeBallotObject(ballot), context={"request": request}
+                ).data
             )
         return self.get_paginated_response(out)

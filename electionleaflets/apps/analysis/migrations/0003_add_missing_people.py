@@ -14,10 +14,14 @@ def add_missing_people(apps, schema_editor):
             leaflet.publisher_person
         except Person.DoesNotExist:
             try:
-                person = Person.objects.get(remote_id=leaflet.publisher_person_id)
+                person = Person.objects.get(
+                    remote_id=leaflet.publisher_person_id
+                )
             except Person.DoesNotExist:
 
-                url = "https://candidates.democracyclub.org.uk/api/next/people/{}/".format(leaflet.publisher_person_id)
+                url = "https://candidates.democracyclub.org.uk/api/next/people/{}/".format(
+                    leaflet.publisher_person_id
+                )
                 ynr_person_data = requests.get(url).json()
                 person = Person.objects.create(
                     remote_id=leaflet.publisher_person_id,
@@ -30,8 +34,8 @@ def add_missing_people(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('analysis', '0002_auto_20160403_1456'),
-        ('people', '0002_import_ynr_people'),
+        ("analysis", "0002_auto_20160403_1456"),
+        ("people", "0002_import_ynr_people"),
     ]
 
     operations = [

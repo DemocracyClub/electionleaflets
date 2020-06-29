@@ -11,8 +11,8 @@ class Country(models.Model):
         return self.name
 
     class Meta:
-        db_table = 'country'
-        verbose_name_plural = 'Countries'
+        db_table = "country"
+        verbose_name_plural = "Countries"
 
 
 class EmailAlert(models.Model):
@@ -27,8 +27,8 @@ class EmailAlert(models.Model):
     title = models.CharField(max_length=765)
 
     class Meta:
-        db_table = 'email_alert'
-        verbose_name_plural = 'Email alerts'
+        db_table = "email_alert"
+        verbose_name_plural = "Email alerts"
 
 
 class EmailQue(models.Model):
@@ -39,7 +39,7 @@ class EmailQue(models.Model):
     delivery_date = models.DateTimeField()
 
     class Meta:
-        db_table = 'email_que'
+        db_table = "email_que"
 
 
 class ImageQue(models.Model):
@@ -51,11 +51,11 @@ class ImageQue(models.Model):
     uploaded_date = models.DateTimeField()
 
     class Meta:
-        db_table = 'image_que'
+        db_table = "image_que"
 
 
 class ImageQueSeq(models.Model):
     sequence = models.IntegerField(primary_key=True)
 
     class Meta:
-        db_table = 'image_que_seq'
+        db_table = "image_que_seq"

@@ -6,19 +6,23 @@ from django.db import migrations
 
 
 def import_people(apps, _):
-    Leaflet = apps.get_model('leaflets', 'Leaflet')
-    Person = apps.get_model('people', 'Person')
+    Leaflet = apps.get_model("leaflets", "Leaflet")
+    Person = apps.get_model("people", "Person")
 
-    leaflets = Leaflet.objects.filter(ynr_person_id__isnull=False, publisher_person__isnull=True)
+    leaflets = Leaflet.objects.filter(
+        ynr_person_id__isnull=False, publisher_person__isnull=True
+    )
 
     for leaflet in leaflets:
         person, _ = Person.objects.get_or_create(
             remote_id=leaflet.ynr_person_id,
-            source_name='YNR2017',
+            source_name="YNR2017",
             defaults={
-                'name': leaflet.ynr_person_name,
-                'source_url': 'https://candidates.democracyclub.org.uk/person/{}'.format(leaflet.ynr_person_id)
-            }
+                "name": leaflet.ynr_person_name,
+                "source_url": "https://candidates.democracyclub.org.uk/person/{}".format(
+                    leaflet.ynr_person_id
+                ),
+            },
         )
 
         leaflet.publisher_person = person
@@ -28,8 +32,8 @@ def import_people(apps, _):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('leaflets', '0005_add_ynr_ids'),
-        ('people', '0001_initial'),
+        ("leaflets", "0005_add_ynr_ids"),
+        ("people", "0001_initial"),
     ]
 
     operations = [

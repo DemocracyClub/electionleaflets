@@ -4,7 +4,9 @@ from django.db import models
 class Election(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField()
-    country = models.ForeignKey('core.Country', null=True, blank=True, on_delete=models.CASCADE)
+    country = models.ForeignKey(
+        "core.Country", null=True, blank=True, on_delete=models.CASCADE
+    )
 
     live_date = models.DateTimeField()
     dead_date = models.DateTimeField()

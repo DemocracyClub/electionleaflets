@@ -11,20 +11,36 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('core', '__first__'),
+        ("core", "__first__"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Election',
+            name="Election",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=128)),
-                ('description', models.TextField()),
-                ('live_date', models.DateTimeField()),
-                ('dead_date', models.DateTimeField()),
-                ('active', models.BooleanField(default=True)),
-                ('country', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='core.Country')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=128)),
+                ("description", models.TextField()),
+                ("live_date", models.DateTimeField()),
+                ("dead_date", models.DateTimeField()),
+                ("active", models.BooleanField(default=True)),
+                (
+                    "country",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="core.Country",
+                    ),
+                ),
             ],
         ),
     ]

@@ -8,18 +8,30 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('leaflets', '0002_leaflet_publisher_person'),
+        ("leaflets", "0002_leaflet_publisher_person"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='leafletimage',
-            name='exif_data',
+            model_name="leafletimage",
+            name="exif_data",
             field=models.BinaryField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='leafletimage',
-            name='orientation',
-            field=models.PositiveSmallIntegerField(choices=[(1, 'Horizontal (normal)'), (2, 'Mirror horizontal'), (3, 'Rotate 180'), (4, 'Mirror vertical'), (5, 'Mirror horizontal and rotate 270 CW'), (6, 'Rotate 90 CW'), (7, 'Mirror horizontal and rotate 90 CW'), (8, 'Rotate 270 CW')], default=1),
+            model_name="leafletimage",
+            name="orientation",
+            field=models.PositiveSmallIntegerField(
+                choices=[
+                    (1, "Horizontal (normal)"),
+                    (2, "Mirror horizontal"),
+                    (3, "Rotate 180"),
+                    (4, "Mirror vertical"),
+                    (5, "Mirror horizontal and rotate 270 CW"),
+                    (6, "Rotate 90 CW"),
+                    (7, "Mirror horizontal and rotate 90 CW"),
+                    (8, "Rotate 270 CW"),
+                ],
+                default=1,
+            ),
         ),
     ]

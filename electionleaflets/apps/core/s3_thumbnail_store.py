@@ -38,7 +38,9 @@ class S3Backend(ThumbnailBackend):
             if self.default_options[k] == v:
                 del opts[k]
 
-        url_kwargs = "/".join(["{}={}".format(k, v) for k, v in list(opts.items())])
+        url_kwargs = "/".join(
+            ["{}={}".format(k, v) for k, v in list(opts.items())]
+        )
 
         thumb_url = "{base_url}/{geometry_string}/{url_kwargs}/{original_path}".format(
             base_url=base_url,

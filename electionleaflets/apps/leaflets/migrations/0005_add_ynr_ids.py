@@ -8,33 +8,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('leaflets', '0004_remove_leafletimage_image_text'),
+        ("leaflets", "0004_remove_leafletimage_image_text"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='leaflet',
-            name='ballot_id',
+            model_name="leaflet",
+            name="ballot_id",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='leaflet',
-            name='ynr_party_id',
+            model_name="leaflet",
+            name="ynr_party_id",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='leaflet',
-            name='ynr_party_name',
+            model_name="leaflet",
+            name="ynr_party_name",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='leaflet',
-            name='ynr_person_id',
+            model_name="leaflet",
+            name="ynr_person_id",
             field=models.IntegerField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='leaflet',
-            name='ynr_person_name',
+            model_name="leaflet",
+            name="ynr_person_name",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
     ]

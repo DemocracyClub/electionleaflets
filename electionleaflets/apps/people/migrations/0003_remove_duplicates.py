@@ -25,7 +25,9 @@ def remove_dupes(apps, schema_editor):
             collector = NestedObjects(using="default")
             collector.collect([person])
             collected = collector.nested()
-            assert len(collected) < 2 or not any([isinstance(x, Leaflet) for x in collected[1]])
+            assert len(collected) < 2 or not any(
+                [isinstance(x, Leaflet) for x in collected[1]]
+            )
             person.delete()
 
 

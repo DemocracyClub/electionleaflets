@@ -13,19 +13,25 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('analysis', '0001_initial'),
-        ('leaflets', '0001_initial'),
+        ("analysis", "0001_initial"),
+        ("leaflets", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='leafletproperties',
-            name='leaflet',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='leaflets.Leaflet'),
+            model_name="leafletproperties",
+            name="leaflet",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="leaflets.Leaflet",
+            ),
         ),
         migrations.AddField(
-            model_name='leafletproperties',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="leafletproperties",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

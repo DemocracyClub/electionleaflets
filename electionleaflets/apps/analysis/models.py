@@ -21,11 +21,11 @@ class LeafletPropertiesQuerySet(models.QuerySet):
 
     def opposition_mentions_count(self):
         return self.filter(
-            key="has_opposition_leader_photo", value="Yes").count()
+            key="has_opposition_leader_photo", value="Yes"
+        ).count()
 
     def leaflet_type_count(self, leaflet_type):
-        return self.filter(
-            key="leaflet_style", value=leaflet_type).count()
+        return self.filter(key="leaflet_style", value=leaflet_type).count()
 
     def party_logo(self):
         return self.filter(key="has_logo", value="Yes").count()
@@ -34,7 +34,7 @@ class LeafletPropertiesQuerySet(models.QuerySet):
         return self.filter(key="include_graph", value="Yes").count()
 
     def leaflets_analysed(self):
-        return self.order_by().values_list('leaflet').distinct().count()
+        return self.order_by().values_list("leaflet").distinct().count()
 
 
 class LeafletPropertiesManager(models.Manager):
