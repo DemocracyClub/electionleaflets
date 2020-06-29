@@ -4,7 +4,7 @@ service:
 provider:
   name: aws
   stage: ${opt:stage, staging}
-  runtime: python2.7
+  runtime: python3.8
   region: eu-west-1
   memorySize: 1536
   timeout: 30
