@@ -48,10 +48,10 @@ jobs:
       # other common Python testing frameworks include pytest and nose
       # https://pytest.org
       # https://nose.readthedocs.io
+      # TODO: pipenv run flake8 electionleaflets
       - run:
           name: run tests
           command: |
-            pipenv run flake8 electionleaflets
             pipenv run python manage.py test
             pipenv run python manage.py harvest
 
