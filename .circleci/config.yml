@@ -41,7 +41,7 @@ jobs:
       - save_cache:
           key: v2-dependencies-{{ checksum "Pipfile.lock" }}
           paths:
-            - ".venv"
+            - "/home/circleci/.local/share/virtualenvs"
 
       # run tests!
       # this example uses Django's built-in test-runner
