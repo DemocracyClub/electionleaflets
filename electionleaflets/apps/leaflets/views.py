@@ -7,19 +7,18 @@ from collections import OrderedDict
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib import messages
+from django.urls import reverse
 from formtools.wizard.views import NamedUrlSessionWizardView
 from django.core.signing import Signer
-from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.views.generic import (DetailView, ListView, UpdateView,
-                                  RedirectView)
+from django.views.generic import DetailView, ListView, UpdateView, RedirectView
 from django.views.generic.detail import SingleObjectMixin
 from django.core.files.storage import FileSystemStorage
 from braces.views import StaffuserRequiredMixin
 
 from analysis.forms import QuestionSetForm
 from .models import Leaflet, LeafletImage
-from .forms import (InsidePageImageForm, LeafletDetailsFrom)
+from .forms import InsidePageImageForm, LeafletDetailsFrom
 from people.devs_dc_helpers import DevsDCAPIHelper
 from people.models import Person
 from storages.backends.s3boto3 import S3Boto3Storage
@@ -27,7 +26,7 @@ from storages.backends.s3boto3 import S3Boto3Storage
 
 class ImageView(DetailView):
     model = LeafletImage
-    template_name = 'leaflets/full.html'
+    template_name = "leaflets/full.html"
 
 
 class LegacyImageView(SingleObjectMixin, RedirectView):
@@ -45,16 +44,16 @@ class LegacyImageView(SingleObjectMixin, RedirectView):
 class AllImageView(UpdateView):
     model = Leaflet
     form_class = LeafletDetailsFrom
-    template_name = 'leaflets/full_all.html'
+    template_name = "leaflets/full_all.html"
 
 
 class ImageRotateView(StaffuserRequiredMixin, DetailView):
     model = LeafletImage
-    template_name = 'leaflets/image_rotate.html'
+    template_name = "leaflets/image_rotate.html"
 
     def post(self, request, *args, **kwargs):
         image_model = self.get_object()
-        rotation = request.POST.get('rotate')
+        rotation = request.POST.get("rotate")
         print(rotation)
         image_model.rotate(int(rotation))
         return HttpResponseRedirect(image_model.get_absolute_url())
@@ -62,14 +61,14 @@ class ImageRotateView(StaffuserRequiredMixin, DetailView):
 
 class ImageCropView(StaffuserRequiredMixin, DetailView):
     model = LeafletImage
-    template_name = 'leaflets/image_crop.html'
+    template_name = "leaflets/image_crop.html"
 
     def post(self, request, *args, **kwargs):
         image_model = self.get_object()
-        x = int(request.POST.get('x'))
-        y = int(request.POST.get('y'))
-        x2 = int(request.POST.get('x2'))
-        y2 = int(request.POST.get('y2'))
+        x = int(request.POST.get("x"))
+        y = int(request.POST.get("y"))
+        x2 = int(request.POST.get("x2"))
+        y2 = int(request.POST.get("y2"))
 
         image_model.crop(x, y, x2, y2)
         return HttpResponseRedirect(image_model.get_absolute_url())
@@ -77,24 +76,23 @@ class ImageCropView(StaffuserRequiredMixin, DetailView):
 
 class LatestLeaflets(ListView):
     model = Leaflet
-    template_name = 'leaflets/index.html'
+    template_name = "leaflets/index.html"
     paginate_by = 60
 
 
 class LeafletView(DetailView):
-    template_name = 'leaflets/leaflet.html'
+    template_name = "leaflets/leaflet.html"
     model = Leaflet
 
     def get_context_data(self, **kwargs):
         context = super(LeafletView, self).get_context_data(**kwargs)
-        context['analysis_form'] = QuestionSetForm(
-            self.object,
-            self.request.user
+        context["analysis_form"] = QuestionSetForm(
+            self.object, self.request.user
         )
 
-        context['person'] = self.object.get_person()
-        context['party'] = self.object.get_party()
-        context['ballot'] = self.object.get_ballot()
+        context["person"] = self.object.get_person()
+        context["party"] = self.object.get_party()
+        context["ballot"] = self.object.get_ballot()
 
         return context
 
@@ -103,19 +101,17 @@ class LeafletView(DetailView):
             return HttpResponseForbidden()
 
         self.object = self.get_object()
-        form = QuestionSetForm(
-            self.object,
-            self.request.user,
-            request.POST,
-        )
+        form = QuestionSetForm(self.object, self.request.user, request.POST,)
 
         if form.is_valid():
             form.save()
-            if 'save_and_next' in request.POST:
+            if "save_and_next" in request.POST:
                 start_date = datetime.date(2015, 1, 1)
-                next_leaflet = Leaflet.objects.filter(leafletproperties=None)\
-                    .filter(date_uploaded__gt=start_date)\
-                    .order_by('?')
+                next_leaflet = (
+                    Leaflet.objects.filter(leafletproperties=None)
+                    .filter(date_uploaded__gt=start_date)
+                    .order_by("?")
+                )
                 if next_leaflet:
                     url = next_leaflet[0].get_absolute_url()
                     return HttpResponseRedirect(url)
@@ -126,14 +122,14 @@ class LeafletView(DetailView):
 
 def _skip_step_allowed_condition(wizard, step_name):
     extra_data = wizard.storage.extra_data
-    if 'skip_to_postcode' in extra_data and extra_data['skip_to_postcode']:
+    if "skip_to_postcode" in extra_data and extra_data["skip_to_postcode"]:
         must_use = True
         # cleaned_data = wizard.get_cleaned_data_for_step('front') or {}
         # if cleaned_data.get('image'):
         #     must_use = True
 
         cleaned_data = wizard.get_cleaned_data_for_step(step_name) or {}
-        if cleaned_data.get('image'):
+        if cleaned_data.get("image"):
             must_use = True
         else:
             must_use = False
@@ -142,11 +138,11 @@ def _skip_step_allowed_condition(wizard, step_name):
 
 
 def skip_back_allowed(wizard):
-    return _skip_step_allowed_condition(wizard, 'back')
+    return _skip_step_allowed_condition(wizard, "back")
 
 
 def skip_inside_allowed(wizard):
-    return _skip_step_allowed_condition(wizard, 'inside')
+    return _skip_step_allowed_condition(wizard, "inside")
 
 
 class LeafletUploadWizzard(NamedUrlSessionWizardView):
@@ -160,15 +156,16 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         "people": "leaflets/upload_form/people.html",
     }
 
-    if os.environ.get('AWS_SESSION_TOKEN', None):
-        file_storage = S3Boto3Storage(location='leaflets_tmp')
+    if os.environ.get("AWS_SESSION_TOKEN", None):
+        file_storage = S3Boto3Storage(location="leaflets_tmp")
     else:
-        file_storage = FileSystemStorage(location=os.path.join(
-            settings.MEDIA_ROOT, 'images/leaflets_tmp'))
+        file_storage = FileSystemStorage(
+            location=os.path.join(settings.MEDIA_ROOT, "images/leaflets_tmp")
+        )
 
     def get_template_names(self):
-        if self.steps.current.startswith('inside'):
-            step_name = 'inside'
+        if self.steps.current.startswith("inside"):
+            step_name = "inside"
         else:
             step_name = self.steps.current
         return [self.TEMPLATES[step_name]]
@@ -176,23 +173,24 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
     def get_form_initial(self, step):
         if step == "people":
             api = DevsDCAPIHelper()
-            results = api.postcode_request(self.get_cleaned_data_for_step('postcode')['postcode'])
-            if results.status_code == 200:
-                return {"postcode_results": results}
-            else:
-                return {}
+            postcode = self.get_cleaned_data_for_step("postcode")
+            if postcode:
+                results = api.postcode_request(postcode["postcode"])
+                if results.status_code == 200:
+                    return {"postcode_results": results}
+            return {}
 
     @property
     def extra_inside_forms(self):
-        return self.storage.extra_data.get('extra_inside', 0)
+        return self.storage.extra_data.get("extra_inside", 0)
 
     def get_context_data(self, **kwargs):
         context = super(LeafletUploadWizzard, self).get_context_data(**kwargs)
-        context['hide_footer'] = True
+        context["hide_footer"] = True
         return context
 
     def add_extra_inside_forms(self):
-        self.storage.extra_data['extra_inside'] = self.extra_inside_forms + 1
+        self.storage.extra_data["extra_inside"] = self.extra_inside_forms + 1
         self.extra_added = True
 
     def get(self, *args, **kwargs):
@@ -209,24 +207,26 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         self._insert_extra_inside_forms()
 
         # The user has finished uploading all image, move to the postcode form
-        if self.request.POST.get('skip', None):
+        if self.request.POST.get("skip", None):
             if self.request.FILES:
                 form = self.get_form(
-                    data=self.request.POST, files=self.request.FILES)
+                    data=self.request.POST, files=self.request.FILES
+                )
                 if form.is_valid():
                     super(LeafletUploadWizzard, self).post(*args, **kwargs)
             else:
-                if 'extra_inside' in self.storage.extra_data:
-                    self.storage.extra_data['extra_inside'] -= 1
+                if "extra_inside" in self.storage.extra_data:
+                    self.storage.extra_data["extra_inside"] -= 1
             self._insert_extra_inside_forms(force=True)
-            self.storage.extra_data['skip_to_postcode'] = True
-            return self.render_goto_step('postcode')
+            self.storage.extra_data["skip_to_postcode"] = True
+            return self.render_goto_step("postcode")
 
         # If there are more pages, add them to the form_list
         # Validate the form first, though
-        if self.request.POST.get('add_extra_inside', None):
+        if self.request.POST.get("add_extra_inside", None):
             form = self.get_form(
-                data=self.request.POST, files=self.request.FILES)
+                data=self.request.POST, files=self.request.FILES
+            )
             if form.is_valid():
                 self.add_extra_inside_forms()
                 self._insert_extra_inside_forms(force=True)
@@ -254,7 +254,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         form_list.reverse()
 
         for index, (name, form) in enumerate(form_list):
-            if name.startswith('inside'):
+            if name.startswith("inside"):
                 # For every extra inside form in self.extra_inside_forms
                 # add to the form_list
                 for step in range(self.extra_inside_forms):
@@ -275,8 +275,8 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         leaflet = Leaflet()
         leaflet.save()
         for form in form_list:
-            form_prefix = form.prefix.split('-')[0]
-            if form_prefix in ['front', 'back', 'inside']:
+            form_prefix = form.prefix.split("-")[0]
+            if form_prefix in ["front", "back", "inside"]:
                 # Dealing with an image form
                 image_type = None
                 if form.prefix == "front":
@@ -286,16 +286,22 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                 if form.prefix == "inside":
                     image_type = "3_inside"
                 image = LeafletImage(leaflet=leaflet, image_type=image_type)
-                image.image = form.cleaned_data['image']
+                image.image = form.cleaned_data["image"]
                 image.save()
 
             if form_prefix == "postcode":
-                leaflet.postcode = form.cleaned_data['postcode']
+                leaflet.postcode = form.cleaned_data["postcode"]
 
             if form_prefix == "people":
-                if "people" in form.cleaned_data and isinstance(form.cleaned_data['people'], unicode) and form.cleaned_data['people'] != '':
+                if (
+                    "people" in form.cleaned_data
+                    and isinstance(form.cleaned_data["people"], str)
+                    and form.cleaned_data["people"] != ""
+                ):
                     signer = Signer()
-                    data = json.loads(signer.unsign(form.cleaned_data['people']))
+                    data = json.loads(
+                        signer.unsign(form.cleaned_data["people"])
+                    )
                     leaflet.ynr_party_id = data["ynr_party_id"]
                     leaflet.ynr_party_name = data["ynr_party_name"]
                     leaflet.ballot_id = data["ballot_id"]
@@ -303,20 +309,28 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     person, _ = Person.objects.get_or_create(
                         remote_id=data["ynr_person_id"],
                         defaults={
-                            'name': data["ynr_person_name"],
-                            'source_url': 'https://candidates.democracyclub.org.uk/person/{}'.format(data["ynr_person_id"]),
-                            "source_name": 'YNR2017',
-                        }
+                            "name": data["ynr_person_name"],
+                            "source_url": "https://candidates.democracyclub.org.uk/person/{}".format(
+                                data["ynr_person_id"]
+                            ),
+                            "source_name": "YNR2017",
+                        },
                     )
 
                     leaflet.publisher_person = person
 
-                elif isinstance(form.cleaned_data['parties'], unicode) and form.cleaned_data['parties'] != '':
+                elif (
+                    isinstance(form.cleaned_data["parties"], str)
+                    and form.cleaned_data["parties"] != ""
+                ):
                     signer = Signer()
-                    leaflet.ynr_party_id, leaflet.ynr_party_name = signer.unsign(form.cleaned_data['parties']).split('--')
+                    (
+                        leaflet.ynr_party_id,
+                        leaflet.ynr_party_name,
+                    ) = signer.unsign(form.cleaned_data["parties"]).split("--")
 
                 else:
-                    person = form.cleaned_data['people']
+                    person = form.cleaned_data.get("people")
                     if person:
                         if person.current_party:
                             leaflet.publisher_party = person.current_party.party
@@ -325,7 +339,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
 
         leaflet.save()
         messages.success(
-            self.request,
-            random.sample(settings.THANKYOU_MESSAGES, 1)[0])
+            self.request, random.sample(settings.THANKYOU_MESSAGES, 1)[0]
+        )
 
-        return redirect(reverse('leaflet', kwargs={'pk': leaflet.pk}))
+        return redirect(reverse("leaflet", kwargs={"pk": leaflet.pk}))

@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block extra_site_css %}
-  <link rel="stylesheet" href="{% static "css/styles.css" %}" />
+  {% stylesheet 'styles' %}
 {% endblock extra_site_css %}
 
 {% block site_meta %}

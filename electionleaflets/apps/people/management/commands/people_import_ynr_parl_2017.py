@@ -14,12 +14,11 @@ SOURCE = "YNR2017"
 
 
 class Command(BaseCommand):
-
     def handle(self, **options):
         base_url = "https://candidates.democracyclub.org.uk"
         csv_url = "{}/media/candidates-parl.2017-06-08.csv".format(base_url)
         req = requests.get(csv_url, verify=False)
-        req.encoding = 'utf-8'
+        req.encoding = "utf-8"
         csv_data = csv.DictReader(req.text.splitlines())
 
         # Source is always the 2017 General Election
@@ -30,35 +29,26 @@ class Command(BaseCommand):
         )
 
         for line in csv_data:
-            defaults = {
-                'name': line['name']
-            }
+            defaults = {"name": line["name"]}
 
             person, created = Person.objects.update_or_create(
-                remote_id=line['id'],
+                remote_id=line["id"],
                 source_name=SOURCE,
-                source_url="{0}/person/{1}".format(
-                    base_url,
-                    line['id']),
-                defaults=defaults
+                source_url="{0}/person/{1}".format(base_url, line["id"]),
+                defaults=defaults,
             )
 
-            parties = Party.objects.filter(party_name=line['party_name'])
+            parties = Party.objects.filter(party_name=line["party_name"])
             if parties:
                 party = parties[0]
                 PartyMemberships.objects.update_or_create(
                     person=person,
                     party=party,
-                    defaults={
-                        'membership_start': datetime.datetime.now()
-                    }
+                    defaults={"membership_start": datetime.datetime.now()},
                 )
             person.elections.add(election)
 
-            constituency = Constituency.objects.get(
-                name=line['post_label'])
+            constituency = Constituency.objects.get(name=line["post_label"])
             PersonConstituencies.objects.update_or_create(
-                person=person,
-                constituency=constituency,
-                election=election
+                person=person, constituency=constituency, election=election
             )

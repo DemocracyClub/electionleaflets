@@ -8,14 +8,14 @@ jobs:
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-      - image: boffbowsh/circleci-python-geos:2.7.14-3.5.0
+      - image: circleci/python:3.8
         environment:
           RUNNER: circleci
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
-      - image: mdillon/postgis:9.6
+      - image: circleci/postgres:9.6-postgis-ram
         environment:
           POSTGRES_USER: postgres
           PGUSER: postgres
@@ -41,17 +41,23 @@ jobs:
       - save_cache:
           key: v2-dependencies-{{ checksum "Pipfile.lock" }}
           paths:
-            - ".venv"
+            - "/home/circleci/.local/share/virtualenvs"
 
       # run tests!
       # this example uses Django's built-in test-runner
       # other common Python testing frameworks include pytest and nose
       # https://pytest.org
       # https://nose.readthedocs.io
+      # TODO: pipenv run flake8 electionleaflets
+      - run:
+          name: install GDAL
+          command: |
+            sudo apt-get update && sudo apt-get install -y \
+            gdal-bin python-gdal python3-gdal
       - run:
           name: run tests
           command: |
-            pipenv run flake8 electionleaflets
+            pipenv run black --check .
             pipenv run python manage.py test
             pipenv run python manage.py harvest
 

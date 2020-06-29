@@ -19,27 +19,34 @@ class AnalysisHomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AnalysisHomeView, self).get_context_data(**kwargs)
 
-        context['contributing_people'] = User.objects\
-            .exclude(leafletproperties=None)\
-            .annotate(edits_count=Count(
-                'leafletproperties__leaflet',
-                distinct=True))\
-            .order_by('-edits_count')[:10]
+        context["contributing_people"] = (
+            User.objects.exclude(leafletproperties=None)
+            .annotate(
+                edits_count=Count("leafletproperties__leaflet", distinct=True)
+            )
+            .order_by("-edits_count")[:10]
+        )
 
-        context['total_contributions'] = LeafletProperties.objects.all()\
-            .leaflets_analysed()
+        context[
+            "total_contributions"
+        ] = LeafletProperties.objects.all().leaflets_analysed()
 
-        context['number_of_people'] = LeafletProperties.objects\
-            .order_by().values_list('user').distinct().count()
+        context["number_of_people"] = (
+            LeafletProperties.objects.order_by()
+            .values_list("user")
+            .distinct()
+            .count()
+        )
 
-        context['leaflets_analysed'] = LeafletProperties.objects.all()\
-            .leaflets_analysed()
+        context[
+            "leaflets_analysed"
+        ] = LeafletProperties.objects.all().leaflets_analysed()
 
-        context['with_party_leaders'] = LeafletProperties.objects.all()\
-            .leaders_photo_count()
+        context[
+            "with_party_leaders"
+        ] = LeafletProperties.objects.all().leaders_photo_count()
 
-        context['with_graph'] = LeafletProperties.objects.all()\
-            .graphs_count()
+        context["with_graph"] = LeafletProperties.objects.all().graphs_count()
 
         return context
 
@@ -49,9 +56,11 @@ class AnalysisStartRedirectView(RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         start_date = datetime.date(2015, 1, 1)
-        next_leaflet = Leaflet.objects.filter(leafletproperties=None)\
-            .filter(date_uploaded__gt=start_date)\
-            .order_by('?')
+        next_leaflet = (
+            Leaflet.objects.filter(leafletproperties=None)
+            .filter(date_uploaded__gt=start_date)
+            .order_by("?")
+        )
         url = next_leaflet[0].get_absolute_url()
         return url
 
@@ -60,8 +69,7 @@ class ReportViewMixin(object):
     @property
     def leaflet_count(self):
         start_date = datetime.date(2015, 1, 1)
-        return Leaflet.objects.filter(
-            date_uploaded__gt=start_date).count()
+        return Leaflet.objects.filter(date_uploaded__gt=start_date).count()
 
 
 class ReportView(ReportViewMixin, TemplateView):
@@ -70,10 +78,10 @@ class ReportView(ReportViewMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ReportView, self).get_context_data(**kwargs)
         start_date = datetime.date(2015, 1, 1)
-        context['start_date'] = start_date
+        context["start_date"] = start_date
 
         # Get leaflet count
-        context['leaflet_count'] = self.leaflet_count
+        context["leaflet_count"] = self.leaflet_count
 
         return context
 
@@ -85,11 +93,14 @@ class ConstituencyReportView(ReportViewMixin, TemplateView):
         context = super(ConstituencyReportView, self).get_context_data(**kwargs)
 
         # Get per constituency
-        per_constituency = Constituency.objects.filter(
-            leaflet__date_uploaded__gt=datetime.date(2015, 1, 1)).annotate(
-            leaflets_count=Count('leaflet')
-        ).order_by('-leaflets_count')
-        context['per_constituency'] = per_constituency
+        per_constituency = (
+            Constituency.objects.filter(
+                leaflet__date_uploaded__gt=datetime.date(2015, 1, 1)
+            )
+            .annotate(leaflets_count=Count("leaflet"))
+            .order_by("-leaflets_count")
+        )
+        context["per_constituency"] = per_constituency
 
         return context
 
@@ -100,37 +111,29 @@ class BaseAnalysisReportView(ReportViewMixin, TemplateView):
             queryset = self.base_queryset
 
         context = {}
-        context['leaflet_count'] = self.leaflet_count
+        context["leaflet_count"] = self.leaflet_count
 
-        context['leaders_photo_count'] = \
-            queryset.leaders_photo_count()
-        context['leaders_mentions'] = \
-            queryset.leaders_mentions()
-        context['party_logo'] = \
-            queryset.party_logo()
-        context['opposition_photo_count'] = \
-            queryset.opposition_photo_count()
-        context['opposition_mentions_count'] = \
-            queryset.opposition_mentions_count()
-        context['squeeze_messages_count'] = \
-            queryset.squeeze_messages_count()
-        context['graphs_count'] = \
-            queryset.graphs_count()
+        context["leaders_photo_count"] = queryset.leaders_photo_count()
+        context["leaders_mentions"] = queryset.leaders_mentions()
+        context["party_logo"] = queryset.party_logo()
+        context["opposition_photo_count"] = queryset.opposition_photo_count()
+        context[
+            "opposition_mentions_count"
+        ] = queryset.opposition_mentions_count()
+        context["squeeze_messages_count"] = queryset.squeeze_messages_count()
+        context["graphs_count"] = queryset.graphs_count()
 
-        context['type_leaflet_count'] = \
-            queryset.leaflet_type_count('Leaflet')
-        context['type_letter_count'] = \
-            queryset.leaflet_type_count('Letter')
-        context['type_magazine_count'] = \
-            queryset.leaflet_type_count('Magazine')
-        context['type_newsletter_count'] = \
-            queryset.leaflet_type_count('Newsletter')
-        context['type_newspaper_count'] = \
-            queryset.leaflet_type_count('Newspaper')
-        context['type_cv_count'] = \
-            queryset.leaflet_type_count('CV')
-        context['type_survey_count'] = \
-            queryset.leaflet_type_count('Survey')
+        context["type_leaflet_count"] = queryset.leaflet_type_count("Leaflet")
+        context["type_letter_count"] = queryset.leaflet_type_count("Letter")
+        context["type_magazine_count"] = queryset.leaflet_type_count("Magazine")
+        context["type_newsletter_count"] = queryset.leaflet_type_count(
+            "Newsletter"
+        )
+        context["type_newspaper_count"] = queryset.leaflet_type_count(
+            "Newspaper"
+        )
+        context["type_cv_count"] = queryset.leaflet_type_count("CV")
+        context["type_survey_count"] = queryset.leaflet_type_count("Survey")
 
         return context
 
@@ -150,22 +153,26 @@ class AnalysisPerPartyReportView(BaseAnalysisReportView):
     base_queryset = LeafletProperties.objects.all()
 
     def get_context_data(self, **kwargs):
-        context = super(
-            AnalysisPerPartyReportView, self).get_context_data(**kwargs)
+        context = super(AnalysisPerPartyReportView, self).get_context_data(
+            **kwargs
+        )
         parties = []
         for party in Party.objects.filter(
-                leaflet__date_uploaded__gte=datetime.date(2015, 1, 1))\
-                .distinct():
+            leaflet__date_uploaded__gte=datetime.date(2015, 1, 1)
+        ).distinct():
             qs = LeafletProperties.objects.filter(
-                leaflet__publisher_party_id=party.pk)
+                leaflet__publisher_party_id=party.pk
+            )
 
             if qs:
-                parties.append({
-                    'party': party,
-                    'data': self.add_data_to_context(queryset=qs),
-                })
+                parties.append(
+                    {
+                        "party": party,
+                        "data": self.add_data_to_context(queryset=qs),
+                    }
+                )
 
-        context['parties'] = parties
+        context["parties"] = parties
         return context
 
 
@@ -190,9 +197,7 @@ class TagRandomCandidate(BaseCandidateTaggingMixin, RedirectView):
             )
         else:
             messages.success(self.request, "No more candidates lift to tag!")
-            return reverse(
-                "analysis"
-            )
+            return reverse("analysis")
 
 
 class CandidateTagging(UpdateView):

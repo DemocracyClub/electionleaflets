@@ -6,16 +6,16 @@ import os
 register = template.Library()
 
 
-@register.inclusion_tag('leaflets/carousel.html')
+@register.inclusion_tag("leaflets/carousel.html")
 def leaflet_carousel():
-    leaflets = Leaflet.objects.all().order_by('-id')[0:50]
-    return {'MEDIA_URL': settings.MEDIA_URL, 'leaflets': leaflets}
+    leaflets = Leaflet.objects.all().order_by("-id")[0:50]
+    return {"MEDIA_URL": settings.MEDIA_URL, "leaflets": leaflets}
 
 
 @register.simple_tag
 def get_medium_image_from_upload(file_path):
     path = os.path.join(settings.MEDIA_URL, file_path.name)
-    path = path.replace('uploads/', 'uploads/medium/')
+    path = path.replace("uploads/", "uploads/medium/")
     return path
 
 
@@ -39,5 +39,5 @@ def truncatesmart(value, limit=80):
         return value
 
     value = value[:limit]
-    words = value.split(' ')[:-1]
-    return ' '.join(words) + '...'
+    words = value.split(" ")[:-1]
+    return " ".join(words) + "..."

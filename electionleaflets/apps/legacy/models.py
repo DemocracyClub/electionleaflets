@@ -18,7 +18,7 @@ class legacyAuthGroup(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'auth_group'
+        db_table = "auth_group"
 
 
 class legacyAuthGroupPermissions(models.Model):
@@ -28,7 +28,7 @@ class legacyAuthGroupPermissions(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'auth_group_permissions'
+        db_table = "auth_group_permissions"
 
 
 class AuthMessage(models.Model):
@@ -38,7 +38,7 @@ class AuthMessage(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'auth_message'
+        db_table = "auth_message"
 
 
 class legacyAuthPermission(models.Model):
@@ -49,7 +49,7 @@ class legacyAuthPermission(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'auth_permission'
+        db_table = "auth_permission"
 
 
 class legacyAuthUser(models.Model):
@@ -67,7 +67,7 @@ class legacyAuthUser(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'auth_user'
+        db_table = "auth_user"
 
 
 class legacyAuthUserGroups(models.Model):
@@ -77,7 +77,7 @@ class legacyAuthUserGroups(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'auth_user_groups'
+        db_table = "auth_user_groups"
 
 
 class legacyAuthUserUserPermissions(models.Model):
@@ -87,7 +87,7 @@ class legacyAuthUserUserPermissions(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'auth_user_user_permissions'
+        db_table = "auth_user_user_permissions"
 
 
 class legacyBoundariesBoundary(models.Model):
@@ -102,7 +102,7 @@ class legacyBoundariesBoundary(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'boundaries_boundary'
+        db_table = "boundaries_boundary"
 
 
 class legacyCategory(models.Model):
@@ -114,7 +114,7 @@ class legacyCategory(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'category'
+        db_table = "category"
 
 
 class legacyConstituency(models.Model):
@@ -134,7 +134,7 @@ class legacyConstituency(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'constituency'
+        db_table = "constituency"
 
 
 class legacyConstituencySeq(models.Model):
@@ -142,7 +142,7 @@ class legacyConstituencySeq(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'constituency_seq'
+        db_table = "constituency_seq"
 
 
 class legacyConstituencyType(models.Model):
@@ -153,7 +153,7 @@ class legacyConstituencyType(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'constituency_type'
+        db_table = "constituency_type"
 
 
 class legacyContentblock(models.Model):
@@ -163,7 +163,7 @@ class legacyContentblock(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'contentblock'
+        db_table = "contentblock"
 
 
 class legacyCountry(models.Model):
@@ -174,7 +174,7 @@ class legacyCountry(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'country'
+        db_table = "country"
 
 
 class legacyDjangoAdminLog(models.Model):
@@ -189,7 +189,7 @@ class legacyDjangoAdminLog(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'django_admin_log'
+        db_table = "django_admin_log"
 
 
 class legacyDjangoContentType(models.Model):
@@ -200,7 +200,7 @@ class legacyDjangoContentType(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'django_content_type'
+        db_table = "django_content_type"
 
 
 class legacyDjangoSession(models.Model):
@@ -210,7 +210,7 @@ class legacyDjangoSession(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'django_session'
+        db_table = "django_session"
 
 
 class legacyDjangoSite(models.Model):
@@ -220,7 +220,7 @@ class legacyDjangoSite(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'django_site'
+        db_table = "django_site"
 
 
 class legacyEmailAlert(models.Model):
@@ -236,7 +236,7 @@ class legacyEmailAlert(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'email_alert'
+        db_table = "email_alert"
 
 
 class legacyEmailAlertSeq(models.Model):
@@ -244,7 +244,7 @@ class legacyEmailAlertSeq(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'email_alert_seq'
+        db_table = "email_alert_seq"
 
 
 class legacyEmailQue(models.Model):
@@ -256,7 +256,7 @@ class legacyEmailQue(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'email_que'
+        db_table = "email_que"
 
 
 class legacyImageQue(models.Model):
@@ -269,7 +269,7 @@ class legacyImageQue(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'image_que'
+        db_table = "image_que"
 
 
 class legacyImageQueSeq(models.Model):
@@ -277,14 +277,14 @@ class legacyImageQueSeq(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'image_que_seq'
+        db_table = "image_que_seq"
 
 
 class legacyLeaflet(models.Model):
     id = models.IntegerField(primary_key=True)  # AutoField?
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    publisher_party = models.ForeignKey('legacyParty')
+    publisher_party = models.ForeignKey("legacyParty")
     postcode = models.CharField(max_length=50, blank=True)
     lng = models.FloatField()
     lat = models.FloatField()
@@ -297,7 +297,7 @@ class legacyLeaflet(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'leaflet'
+        db_table = "leaflet"
 
 
 class legacyLeafletCategory(models.Model):
@@ -307,7 +307,7 @@ class legacyLeafletCategory(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'leaflet_category'
+        db_table = "leaflet_category"
 
 
 class legacyLeafletCategorySeq(models.Model):
@@ -315,16 +315,16 @@ class legacyLeafletCategorySeq(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'leaflet_category_seq'
+        db_table = "leaflet_category_seq"
 
 
 class legacyLeafletConstituency(models.Model):
-    leaflet = models.ForeignKey('legacyLeaflet')
-    constituency = models.ForeignKey('legacyConstituency')
+    leaflet = models.ForeignKey("legacyLeaflet")
+    constituency = models.ForeignKey("legacyConstituency")
 
     class Meta:
         managed = False
-        db_table = 'leaflet_constituency'
+        db_table = "leaflet_constituency"
 
 
 class legacyLeafletConstituencySeq(models.Model):
@@ -332,7 +332,7 @@ class legacyLeafletConstituencySeq(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'leaflet_constituency_seq'
+        db_table = "leaflet_constituency_seq"
 
 
 class legacyLeafletElectionSeq(models.Model):
@@ -340,18 +340,20 @@ class legacyLeafletElectionSeq(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'leaflet_election__seq'
+        db_table = "leaflet_election__seq"
 
 
 class legacyLeafletImage(models.Model):
     id = models.IntegerField(primary_key=True)  # AutoField?
-    leaflet = models.ForeignKey(legacyLeaflet, related_name='images')
+    leaflet = models.ForeignKey(
+        legacyLeaflet, related_name="images", on_delete=models.CASCADE
+    )
     image_key = models.CharField(max_length=255)
     sequence = models.IntegerField()
 
     class Meta:
         managed = False
-        db_table = 'leaflet_image'
+        db_table = "leaflet_image"
 
 
 class legacyLeafletImageSeq(models.Model):
@@ -359,7 +361,7 @@ class legacyLeafletImageSeq(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'leaflet_image_seq'
+        db_table = "leaflet_image_seq"
 
 
 class legacyLeafletPartyAttack(models.Model):
@@ -369,7 +371,7 @@ class legacyLeafletPartyAttack(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'leaflet_party_attack'
+        db_table = "leaflet_party_attack"
 
 
 class legacyLeafletPartyAttackSeq(models.Model):
@@ -377,7 +379,7 @@ class legacyLeafletPartyAttackSeq(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'leaflet_party_attack_seq'
+        db_table = "leaflet_party_attack_seq"
 
 
 class legacyLeafletSeq(models.Model):
@@ -385,7 +387,7 @@ class legacyLeafletSeq(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'leaflet_seq'
+        db_table = "leaflet_seq"
 
 
 class legacyLeafletTag(models.Model):
@@ -395,7 +397,7 @@ class legacyLeafletTag(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'leaflet_tag'
+        db_table = "leaflet_tag"
 
 
 class legacyLeafletTagSeq(models.Model):
@@ -403,7 +405,7 @@ class legacyLeafletTagSeq(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'leaflet_tag_seq'
+        db_table = "leaflet_tag_seq"
 
 
 class legacyLeafletsUploadsession(models.Model):
@@ -421,7 +423,7 @@ class legacyLeafletsUploadsession(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'leaflets_uploadsession'
+        db_table = "leaflets_uploadsession"
 
 
 class legacyParty(models.Model):
@@ -441,7 +443,7 @@ class legacyParty(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'party'
+        db_table = "party"
 
 
 class legacyPromise(models.Model):
@@ -451,7 +453,7 @@ class legacyPromise(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'promise'
+        db_table = "promise"
 
 
 class legacyRateInteresting(models.Model):
@@ -463,7 +465,7 @@ class legacyRateInteresting(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'rate_interesting'
+        db_table = "rate_interesting"
 
 
 class legacyRateInterestingSeq(models.Model):
@@ -471,7 +473,7 @@ class legacyRateInterestingSeq(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'rate_interesting_seq'
+        db_table = "rate_interesting_seq"
 
 
 class legacyRateType(models.Model):
@@ -481,7 +483,7 @@ class legacyRateType(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'rate_type'
+        db_table = "rate_type"
 
 
 class legacyRateValue(models.Model):
@@ -494,7 +496,7 @@ class legacyRateValue(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'rate_value'
+        db_table = "rate_value"
 
 
 class legacyRateValueSeq(models.Model):
@@ -502,7 +504,7 @@ class legacyRateValueSeq(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'rate_value_seq'
+        db_table = "rate_value_seq"
 
 
 class SouthMigrationhistory(models.Model):
@@ -513,7 +515,7 @@ class SouthMigrationhistory(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'south_migrationhistory'
+        db_table = "south_migrationhistory"
 
 
 class legacyTag(models.Model):
@@ -525,7 +527,7 @@ class legacyTag(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'tag'
+        db_table = "tag"
 
 
 class legacyTagSeq(models.Model):
@@ -533,4 +535,4 @@ class legacyTagSeq(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'tag_seq'
+        db_table = "tag_seq"

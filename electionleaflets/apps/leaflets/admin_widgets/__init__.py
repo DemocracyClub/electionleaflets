@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 import logging
 
 from django import forms
@@ -17,25 +16,26 @@ class AdminImageWidget(forms.ClearableFileInput):
     """
 
     template_with_initial = (
-        '%(clear_template)s <br>'
-        '<label>%(input_text)s: %(input)s</label>'
+        "%(clear_template)s <br>" "<label>%(input_text)s: %(input)s</label>"
     )
-    template_with_clear = '<label>%(clear_checkbox_label)s: %(clear)s</label>'
+    template_with_clear = "<label>%(clear_checkbox_label)s: %(clear)s</label>"
 
     def render(self, name, value, attrs=None, **kwargs):
-        output = super(AdminImageWidget, self).render(name, value, attrs, **kwargs)
-        if value and hasattr(value, 'url'):
-            ext = 'JPEG'
+        output = super(AdminImageWidget, self).render(
+            name, value, attrs, **kwargs
+        )
+        if value and hasattr(value, "url"):
+            ext = "JPEG"
             try:
-                aux_ext = str(value).split('.')
-                if aux_ext[len(aux_ext) - 1].lower() == 'png':
-                    ext = 'PNG'
-                elif aux_ext[len(aux_ext) - 1].lower() == 'gif':
-                    ext = 'GIF'
+                aux_ext = str(value).split(".")
+                if aux_ext[len(aux_ext) - 1].lower() == "png":
+                    ext = "PNG"
+                elif aux_ext[len(aux_ext) - 1].lower() == "gif":
+                    ext = "GIF"
             except Exception:
                 pass
             try:
-                mini = get_thumbnail(value, 'x80', upscale=False, format=ext)
+                mini = get_thumbnail(value, "x80", upscale=False, format=ext)
             except Exception as e:
                 logger.warning("Unable to get the thumbnail", exc_info=e)
             else:

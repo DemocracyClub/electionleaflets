@@ -7,8 +7,10 @@ from localflavor.gb.forms import GBPostcodeField
 
 
 class ConstituencyLookupForm(forms.Form):
-    postcode = GBPostcodeField(label="Search by postcode",
-                               error_messages={'invalid': 'Please enter a full UK postcode'})
+    postcode = GBPostcodeField(
+        label="Search by postcode",
+        error_messages={"invalid": "Please enter a full UK postcode"},
+    )
     location = None
 
     def clean(self):
@@ -16,4 +18,6 @@ class ConstituencyLookupForm(forms.Form):
         pcode = cleaned_data.get("postcode")
         self.location = geocode(pcode)
         if not self.location:
-            raise forms.ValidationError(_("That postcode was not found. Please try another"))
+            raise forms.ValidationError(
+                _("That postcode was not found. Please try another")
+            )

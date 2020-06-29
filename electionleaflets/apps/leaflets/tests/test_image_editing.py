@@ -30,8 +30,8 @@ class TestImageCrop(TestCase):
         Remove testing files after tests are run
         """
         # Make sure we're removing the testing dir
-        if settings.MEDIA_ROOT.endswith('test_media'):
-            for path in ['raw_leaflets', 'leaflets']:
+        if settings.MEDIA_ROOT.endswith("test_media"):
+            for path in ["raw_leaflets", "leaflets"]:
                 full_path = os.path.join(settings.MEDIA_ROOT, path)
                 if os.path.exists(full_path):
                     shutil.rmtree(full_path)

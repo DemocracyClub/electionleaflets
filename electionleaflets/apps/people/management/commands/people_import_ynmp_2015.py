@@ -15,7 +15,6 @@ SOURCE = "YNMP2015"
 
 
 class Command(BaseCommand):
-
     def handle(self, **options):
         csv_url = "https://yournextmp.com/media/candidates.csv"
         req = requests.get(csv_url, verify=False)
@@ -26,34 +25,29 @@ class Command(BaseCommand):
         election = Election.objects.get(name="UK General election 2015")
 
         for line in csv_data:
-            defaults = {
-                'name': line['name']
-            }
+            defaults = {"name": line["name"]}
 
             person, created = Person.objects.update_or_create(
-                remote_id=line['id'],
+                remote_id=line["id"],
                 source_name=SOURCE,
                 source_url="https://yournextmp.com/person/{0}".format(
-                    line['id']),
-                defaults=defaults
+                    line["id"]
+                ),
+                defaults=defaults,
             )
 
             if created:
-                parties = Party.objects.filter(party_name=line['party'])
+                parties = Party.objects.filter(party_name=line["party"])
                 if parties:
                     party = parties[0]
                     PartyMemberships.objects.update_or_create(
                         person=person,
                         party=party,
-                        defaults={
-                            'membership_start': datetime.datetime.now()
-                        }
+                        defaults={"membership_start": datetime.datetime.now()},
                     )
                 person.elections.add(election)
 
-                constituency = Constituency.objects.get(pk=line['mapit_id'])
+                constituency = Constituency.objects.get(pk=line["mapit_id"])
                 PersonConstituencies.objects.update_or_create(
-                    person=person,
-                    constituency=constituency,
-                    election=election
+                    person=person, constituency=constituency, election=election
                 )

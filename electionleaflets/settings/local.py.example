@@ -1,6 +1,7 @@
+from .base import *  # noqa: F401,F403
+
 DEBUG = True
 template_DEBUG = DEBUG
-
 
 THEYWORKFORYOU_API_KEY = 'THEYWORKFORYOU API KEY'
 
@@ -9,14 +10,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'electionleaflets',
-        'USER': 'electionleaflets',
+        'USER': '',
     }
 }
 
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
         'LOCATION': 'el_cache',
     }
 }

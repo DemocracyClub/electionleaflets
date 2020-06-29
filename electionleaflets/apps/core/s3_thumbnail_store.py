@@ -16,7 +16,7 @@ class S3Backend(ThumbnailBackend):
         else:
             return None
 
-        for key, value in self.default_options.items():
+        for key, value in list(self.default_options.items()):
             options.setdefault(key, value)
 
         name = self._get_thumbnail_filename(source, geometry_string, options)
@@ -34,11 +34,13 @@ class S3Backend(ThumbnailBackend):
         base_url = "thumbs"
 
         opts = options.copy()
-        for k, v in opts.items():
+        for k, v in list(opts.items()):
             if self.default_options[k] == v:
                 del opts[k]
 
-        url_kwargs = "/".join(["{}={}".format(k, v) for k, v in opts.items()])
+        url_kwargs = "/".join(
+            ["{}={}".format(k, v) for k, v in list(opts.items())]
+        )
 
         thumb_url = "{base_url}/{geometry_string}/{url_kwargs}/{original_path}".format(
             base_url=base_url,

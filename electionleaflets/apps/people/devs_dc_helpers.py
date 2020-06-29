@@ -10,9 +10,7 @@ class DevsDCAPIHelper:
         self.ballot_cache = {}
 
     def make_request(self, endpoint, **params):
-        default_params = {
-            "auth_token": self.AUTH_TOKEN
-        }
+        default_params = {"auth_token": self.AUTH_TOKEN}
         if params:
             default_params.update(params)
         url = "{}/{}/".format(self.base_url, endpoint)

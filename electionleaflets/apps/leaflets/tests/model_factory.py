@@ -8,4 +8,4 @@ class LeafletFactory(DjangoModelFactory):
     class Meta:
         model = Leaflet
 
-    title = factory.Sequence(lambda n: 'Leaflet %d' % n)
+    title = factory.Sequence(lambda n: "Leaflet %d" % n)

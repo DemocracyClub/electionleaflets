@@ -7,13 +7,17 @@ from elections.models import Election
 
 class Person(models.Model):
     name = models.CharField(blank=False, max_length=255)
-    remote_id = models.CharField(blank=True, max_length=255, null=True, unique=True)
+    remote_id = models.CharField(
+        blank=True, max_length=255, null=True, unique=True
+    )
     source_url = models.URLField(blank=True, null=True)
     source_name = models.CharField(blank=True, max_length=100)
     image_url = models.URLField(blank=True, null=True)
     elections = models.ManyToManyField(Election)
-    parties = models.ManyToManyField(Party, through='PartyMemberships')
-    constituencies = models.ManyToManyField(Constituency, through='PersonConstituencies')
+    parties = models.ManyToManyField(Party, through="PartyMemberships")
+    constituencies = models.ManyToManyField(
+        Constituency, through="PersonConstituencies"
+    )
 
     @property
     def current_party(self):
@@ -28,20 +32,21 @@ class Person(models.Model):
     @property
     def current_constituency(self):
         return self.constituencies.filter(
-            personconstituencies__election=self.current_election)[0]
+            personconstituencies__election=self.current_election
+        )[0]
 
     def __unicode__(self):
         return "%s (%s)" % (self.name, self.remote_id)
 
 
 class PartyMemberships(models.Model):
-    person = models.ForeignKey(Person)
-    party = models.ForeignKey(Party)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    party = models.ForeignKey(Party, on_delete=models.CASCADE)
     membership_start = models.DateField()
     membership_end = models.DateField(null=True)
 
 
 class PersonConstituencies(models.Model):
-    person = models.ForeignKey(Person)
-    constituency = models.ForeignKey(Constituency)
-    election = models.ForeignKey(Election)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    constituency = models.ForeignKey(Constituency, on_delete=models.CASCADE)
+    election = models.ForeignKey(Election, on_delete=models.CASCADE)
