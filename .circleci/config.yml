@@ -50,6 +50,11 @@ jobs:
       # https://nose.readthedocs.io
       # TODO: pipenv run flake8 electionleaflets
       - run:
+          name: install GDAL
+          command: |
+            sudo apt-get update && sudo apt-get install -y \
+            gdal-bin python-gdal python3-gdal
+      - run:
           name: run tests
           command: |
             pipenv run python manage.py test
