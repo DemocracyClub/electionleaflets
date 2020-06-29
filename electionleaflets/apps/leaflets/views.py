@@ -176,11 +176,12 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
     def get_form_initial(self, step):
         if step == "people":
             api = DevsDCAPIHelper()
-            results = api.postcode_request(self.get_cleaned_data_for_step('postcode')['postcode'])
-            if results.status_code == 200:
-                return {"postcode_results": results}
-            else:
-                return {}
+            postcode = self.get_cleaned_data_for_step('postcode')
+            if postcode:
+                results = api.postcode_request(postcode['postcode'])
+                if results.status_code == 200:
+                    return {"postcode_results": results}
+            return {}
 
     @property
     def extra_inside_forms(self):
@@ -316,7 +317,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     leaflet.ynr_party_id, leaflet.ynr_party_name = signer.unsign(form.cleaned_data['parties']).split('--')
 
                 else:
-                    person = form.cleaned_data['people']
+                    person = form.cleaned_data.get('people')
                     if person:
                         if person.current_party:
                             leaflet.publisher_party = person.current_party.party
