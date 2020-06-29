@@ -13,7 +13,7 @@ from core.views import HomeView, MaintenanceView, ReportView, ReportThanksView, 
 MAINTENANCE_MODE = getattr(settings, 'MAINTENANCE_MODE', False)
 if MAINTENANCE_MODE:
     urlpatterns = [
-        url(r'.*', MaintenanceView.as_view(), name='maintenance_view'),
+        re_path(r'.*', MaintenanceView.as_view(), name='maintenance_view'),
     ]
 
 else:
