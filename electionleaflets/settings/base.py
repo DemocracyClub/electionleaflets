@@ -59,7 +59,20 @@ AWS_S3_SECURE_URLS = True
 AWS_S3_HOST = "s3-eu-west-1.amazonaws.com"
 AWS_S3_CUSTOM_DOMAIN = "data.electionleaflets.org"
 
-PIPELINE = get_pipeline_settings(extra_css=["stylesheets/styles.scss",],)
+PIPELINE = get_pipeline_settings(
+    extra_css=[
+        "stylesheets/styles.scss",
+        "stylesheets/vendor/filepond.css",
+        "stylesheets/vendor/filepond-plugin-image-preview.css",
+    ],
+    extra_js=[
+        "javascript/app.js",
+        "javascript/vendor/filepond.js",
+        "javascript/vendor/filepond-plugin-image-exif-orientation.js",
+        "javascript/vendor/filepond-plugin-image-preview.js",
+        "javascript/image_uploader.js",
+    ]
+)
 
 STATICFILES_FINDERS = (
     "pipeline.finders.ManifestFinder",
