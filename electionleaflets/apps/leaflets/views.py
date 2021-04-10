@@ -119,6 +119,9 @@ class LeafletView(DetailView):
 
 class LeafletUploadWizzard(NamedUrlSessionWizardView):
     extra_added = False
+    file_storage = S3Boto3Storage()
+
+    storage_name = "core.storage_helpers.PreUploadedSessionStorage"
 
     TEMPLATES = {
         "images": "leaflets/upload_form/images.html",
@@ -161,6 +164,13 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                 "images",
             ]:
                 # Dealing with an image form
+                uploaded_images = self.storage.get_step_files("images").getlist(
+                    "images-image"
+                )
+                for s3_file in uploaded_images:
+                    image = LeafletImage(leaflet=leaflet)
+                    image.image = s3_file
+                    image.save()
 
             if form_prefix == "postcode":
                 leaflet.postcode = form.cleaned_data["postcode"]
