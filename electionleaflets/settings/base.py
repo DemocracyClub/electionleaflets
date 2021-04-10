@@ -50,7 +50,6 @@ STATICFILES_DIRS = (root("assets"),)
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 AWS_S3_FILE_OVERWRITE = False
-STATICFILES_STORAGE = "s3_lambda_storage.S3StaticStorage"
 STATICFILES_MANIFEST_NAME = environ.get(
     "STATICFILES_MANIFEST_NAME", "staticfiles.json"
 )
