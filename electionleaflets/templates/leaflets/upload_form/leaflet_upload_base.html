@@ -17,16 +17,7 @@
             {% block form %}
             {% endblock form %}
 
-            {% if "inside" in wizard.steps.current  %}
-            <button type="submit" class="expand" name="add_extra_inside" value="Submit">Submit and add another page</button>
-            {% else %}
             <button type="submit" class="expand" value="Submit">Submit</button>
-            {% endif %}
-
-            {% if wizard.steps.current != "postcode" and wizard.steps.current != "people" and wizard.steps.current != "front" %}
-            <button type="submit" class="secondary expand" name="skip" value="Skip">No more pages</button>
-            {% endif %}
-
             <a href="?reset=1" class="link-button expand secondary" style="display:block; text-align:center">Cancel</a>
         </form>
         <p>

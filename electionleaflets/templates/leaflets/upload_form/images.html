@@ -1,0 +1,10 @@
+{% extends "leaflets/upload_form/leaflet_upload_base.html" %}
+
+{% block form %}
+
+<div class="file_input_button">
+  {{ form.image }}
+  {{ form.errors }}
+  {{ form.non_field_errors }}
+</div>
+{% endblock form %}

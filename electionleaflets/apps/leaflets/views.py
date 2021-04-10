@@ -1,8 +1,6 @@
 import json
-import os
 import datetime
 import random
-from collections import OrderedDict
 
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect, HttpResponseForbidden
@@ -13,12 +11,11 @@ from django.core.signing import Signer
 from django.conf import settings
 from django.views.generic import DetailView, ListView, UpdateView, RedirectView
 from django.views.generic.detail import SingleObjectMixin
-from django.core.files.storage import FileSystemStorage
 from braces.views import StaffuserRequiredMixin
 
 from analysis.forms import QuestionSetForm
 from .models import Leaflet, LeafletImage
-from .forms import InsidePageImageForm, LeafletDetailsFrom
+from .forms import LeafletDetailsFrom
 from people.devs_dc_helpers import DevsDCAPIHelper
 from people.models import Person
 from storages.backends.s3boto3 import S3Boto3Storage
@@ -120,54 +117,17 @@ class LeafletView(DetailView):
             return self.render_to_response(self.get_context_data(form=form))
 
 
-def _skip_step_allowed_condition(wizard, step_name):
-    extra_data = wizard.storage.extra_data
-    if "skip_to_postcode" in extra_data and extra_data["skip_to_postcode"]:
-        must_use = True
-        # cleaned_data = wizard.get_cleaned_data_for_step('front') or {}
-        # if cleaned_data.get('image'):
-        #     must_use = True
-
-        cleaned_data = wizard.get_cleaned_data_for_step(step_name) or {}
-        if cleaned_data.get("image"):
-            must_use = True
-        else:
-            must_use = False
-        return must_use
-    return True
-
-
-def skip_back_allowed(wizard):
-    return _skip_step_allowed_condition(wizard, "back")
-
-
-def skip_inside_allowed(wizard):
-    return _skip_step_allowed_condition(wizard, "inside")
-
-
 class LeafletUploadWizzard(NamedUrlSessionWizardView):
     extra_added = False
 
     TEMPLATES = {
-        "front": "leaflets/upload_form/image_front.html",
-        "back": "leaflets/upload_form/image_back.html",
-        "inside": "leaflets/upload_form/image_inside.html",
+        "images": "leaflets/upload_form/images.html",
         "postcode": "leaflets/upload_form/postcode.html",
         "people": "leaflets/upload_form/people.html",
     }
 
-    if os.environ.get("AWS_SESSION_TOKEN", None):
-        file_storage = S3Boto3Storage(location="leaflets_tmp")
-    else:
-        file_storage = FileSystemStorage(
-            location=os.path.join(settings.MEDIA_ROOT, "images/leaflets_tmp")
-        )
-
     def get_template_names(self):
-        if self.steps.current.startswith("inside"):
-            step_name = "inside"
-        else:
-            step_name = self.steps.current
+        step_name = self.steps.current
         return [self.TEMPLATES[step_name]]
 
     def get_form_initial(self, step):
@@ -180,95 +140,16 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     return {"postcode_results": results}
             return {}
 
-    @property
-    def extra_inside_forms(self):
-        return self.storage.extra_data.get("extra_inside", 0)
-
     def get_context_data(self, **kwargs):
         context = super(LeafletUploadWizzard, self).get_context_data(**kwargs)
         context["hide_footer"] = True
         return context
 
-    def add_extra_inside_forms(self):
-        self.storage.extra_data["extra_inside"] = self.extra_inside_forms + 1
-        self.extra_added = True
-
     def get(self, *args, **kwargs):
         if "reset" in self.request.GET:
             self.storage.reset()
             return HttpResponseRedirect("/")
-        self._insert_extra_inside_forms()
         return super(LeafletUploadWizzard, self).get(*args, **kwargs)
-
-    def post(self, *args, **kwargs):
-        # Add forms to the form_list that we should have.
-        # We need to do this on every request, as the extra forms
-        # Aren't stored betweet requests, but are held in the session.
-        self._insert_extra_inside_forms()
-
-        # The user has finished uploading all image, move to the postcode form
-        if self.request.POST.get("skip", None):
-            if self.request.FILES:
-                form = self.get_form(
-                    data=self.request.POST, files=self.request.FILES
-                )
-                if form.is_valid():
-                    super(LeafletUploadWizzard, self).post(*args, **kwargs)
-            else:
-                if "extra_inside" in self.storage.extra_data:
-                    self.storage.extra_data["extra_inside"] -= 1
-            self._insert_extra_inside_forms(force=True)
-            self.storage.extra_data["skip_to_postcode"] = True
-            return self.render_goto_step("postcode")
-
-        # If there are more pages, add them to the form_list
-        # Validate the form first, though
-        if self.request.POST.get("add_extra_inside", None):
-            form = self.get_form(
-                data=self.request.POST, files=self.request.FILES
-            )
-            if form.is_valid():
-                self.add_extra_inside_forms()
-                self._insert_extra_inside_forms(force=True)
-        return super(LeafletUploadWizzard, self).post(*args, **kwargs)
-
-    def _insert_extra_inside_forms(self, force=False):
-        """
-        Adds to self.form_list, inserting an extra 'inside page' form
-        after the last inside page form we have.
-        """
-
-        # We've not added any new forms, so the form list is as set in urls.py
-        if not self.extra_inside_forms:
-            return self.form_list
-
-        # If we've already added the extra forms, don't them again.
-        if self.extra_added and not force:
-            return self.form_list
-
-        # self.form_list is an ordered dict.  Convert it to a list of tuples.
-        form_list = [(k, v) for k, v in list(self.form_list.items())]
-
-        # Reverse the list, so the the first step starting with 'inside'
-        # is the last inside page form.
-        form_list.reverse()
-
-        for index, (name, form) in enumerate(form_list):
-            if name.startswith("inside"):
-                # For every extra inside form in self.extra_inside_forms
-                # add to the form_list
-                for step in range(self.extra_inside_forms):
-                    new_name = "inside-%s" % step
-                    form_list.insert(index, (new_name, InsidePageImageForm))
-                # We're finished going back through the form_list now
-                break
-
-        form_list.reverse()
-        self.form_list = OrderedDict()
-        for k, v in form_list:
-            self.form_list[k] = v
-        self.extra_added = True
-        return self.form_list
 
     def done(self, form_list, **kwargs):
         # Create a new leaflet
@@ -276,18 +157,10 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         leaflet.save()
         for form in form_list:
             form_prefix = form.prefix.split("-")[0]
-            if form_prefix in ["front", "back", "inside"]:
+            if form_prefix in [
+                "images",
+            ]:
                 # Dealing with an image form
-                image_type = None
-                if form.prefix == "front":
-                    image_type = "1_front"
-                if form.prefix == "back":
-                    image_type = "2_back"
-                if form.prefix == "inside":
-                    image_type = "3_inside"
-                image = LeafletImage(leaflet=leaflet, image_type=image_type)
-                image.image = form.cleaned_data["image"]
-                image.save()
 
             if form_prefix == "postcode":
                 leaflet.postcode = form.cleaned_data["postcode"]

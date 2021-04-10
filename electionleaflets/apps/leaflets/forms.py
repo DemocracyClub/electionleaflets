@@ -11,25 +11,12 @@ from localflavor.gb.forms import GBPostcodeField
 from leaflets.models import Leaflet
 
 
-class ImageForm(forms.Form):
+class ImagesForm(forms.Form):
     use_required_attribute = False
     image = forms.ImageField(
-        widget=forms.FileInput(attrs={"accept": "image/*;capture=camera"}),
+        widget=forms.ClearableFileInput(attrs={'multiple': True}),
         error_messages={"required": "Please add a photo or skip this step"},
     )
-
-
-class FrontPageImageForm(ImageForm):
-    pass
-
-
-class BackPageImageForm(ImageForm):
-    pass
-
-
-class InsidePageImageForm(ImageForm):
-    pass
-
 
 class PostcodeForm(forms.Form):
     postcode = GBPostcodeField(
