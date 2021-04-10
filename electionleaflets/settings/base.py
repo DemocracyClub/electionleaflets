@@ -18,7 +18,6 @@ def root(x):
     return join(abspath(PROJECT_ROOT), x)
 
 
-sys.path.insert(0, root("third_party"))
 sys.path.insert(0, root("apps"))
 sys.path.insert(0, "../django-uk-political-parties/")
 
