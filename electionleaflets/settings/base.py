@@ -83,6 +83,7 @@ ADMIN_MEDIA_PREFIX = "/admin_media/"
 SECRET_KEY = "elyfryi8on!dmw&8b3j-g0yve4u&%4_6%(tf3*)@#&mq*$yzhf^6"
 
 MIDDLEWARE = (
+    "s3file.middleware.S3FileMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -130,6 +131,7 @@ INSTALLED_APPS = [
     "pipeline",
     "dc_theme",
     "django_static_jquery",
+    "s3file",
 ] + LEAFLET_APPS
 
 if environ.get("SENTRY_DSN", None):
