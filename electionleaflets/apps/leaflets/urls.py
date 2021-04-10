@@ -25,9 +25,7 @@ named_form_list = [
 ]
 
 upload_form_wizzard = LeafletUploadWizzard.as_view(
-    named_form_list,
-    url_name="upload_step",
-    done_step_name="finished",
+    named_form_list, url_name="upload_step", done_step_name="finished",
 )
 
 urlpatterns = [

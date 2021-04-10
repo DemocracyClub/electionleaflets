@@ -14,9 +14,10 @@ from leaflets.models import Leaflet
 class ImagesForm(forms.Form):
     use_required_attribute = False
     image = forms.ImageField(
-        widget=forms.ClearableFileInput(attrs={'multiple': True}),
+        widget=forms.ClearableFileInput(attrs={"multiple": True}),
         error_messages={"required": "Please add a photo or skip this step"},
     )
+
 
 class PostcodeForm(forms.Form):
     postcode = GBPostcodeField(

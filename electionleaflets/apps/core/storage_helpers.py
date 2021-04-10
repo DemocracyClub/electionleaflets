@@ -14,7 +14,7 @@ class PreUploadedSessionStorage(SessionStorage):
         for step_files in wizard_files.values():
             for file_list in step_files.values():
                 for step_file in file_list:
-                    self._tmp_files.append(step_file['tmp_name'])
+                    self._tmp_files.append(step_file["tmp_name"])
         self.init_data()
 
     def set_step_files(self, step, files):

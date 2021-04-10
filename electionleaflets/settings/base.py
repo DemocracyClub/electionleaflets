@@ -71,7 +71,7 @@ PIPELINE = get_pipeline_settings(
         "javascript/vendor/filepond-plugin-image-exif-orientation.js",
         "javascript/vendor/filepond-plugin-image-preview.js",
         "javascript/image_uploader.js",
-    ]
+    ],
 )
 
 STATICFILES_FINDERS = (
