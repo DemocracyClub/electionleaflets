@@ -7,33 +7,29 @@
 {% block title %}Latest leaflets{% endblock %}
 
 {% block content %}
-  <div class="row">
-    <div class="columns large-12">
-      <h1>Latest leaflets</h1>
-      {% include "leaflets/includes/leaflet_list.html" %}
+<h1>Latest leaflets</h1>
+{% include "leaflets/includes/leaflet_list.html" %}
 
-    {% if is_paginated %}
-      <span class="page-current">
-          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-      </span>
-      <nav class="pagination" role="menu" aria-label="Pagination">
-         <ul>
-          {% if page_obj.has_previous %}
-              <li><a href="{% url "leaflets" %}?page={{page_obj.previous_page_number }}">&laquo; Previous page</a></li>
-          {% endif %}
-          {% if page_obj.has_next %}
-              <li><a href="{% url "leaflets" %}?page={{page_obj.next_page_number }}">Next page &raquo;</a></li>
-          {% endif %}
-         </ul>
-      </nav>
-    {% endif %}
+{% if is_paginated %}
+  <span class="page-current">
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+  </span>
+  <nav class="pagination" role="menu" aria-label="Pagination">
+     <ul>
+      {% if page_obj.has_previous %}
+          <li><a href="{% url "leaflets" %}?page={{page_obj.previous_page_number }}">&laquo; Previous page</a></li>
+      {% endif %}
+      {% if page_obj.has_next %}
+          <li><a href="{% url "leaflets" %}?page={{page_obj.next_page_number }}">Next page &raquo;</a></li>
+      {% endif %}
+     </ul>
+  </nav>
+{% endif %}
 
-    <p>
-      <a href="{% url "latest_feed"  %}">
-        This page is available as an RSS feed.
-      </a>
-    </p>
-  </div>
-</div>
+<p>
+  <a href="{% url "latest_feed"  %}">
+    This page is available as an RSS feed.
+  </a>
+</p>
 
 {% endblock %}

@@ -72,6 +72,12 @@ PIPELINE = get_pipeline_settings(
     ],
 )
 
+import dc_design_system
+
+PIPELINE["SASS_ARGUMENTS"] += (
+        " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
+)
+
 STATICFILES_FINDERS = (
     "pipeline.finders.ManifestFinder",
     "django.contrib.staticfiles.finders.FileSystemFinder",

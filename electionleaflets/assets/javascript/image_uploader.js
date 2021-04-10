@@ -9,6 +9,7 @@
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      form.querySelectorAll('button').setAttribute('disabled', true);
       pond.processFiles().then(function (uploaded_files) {
         const input_name = fileInput.name
         var hiddenS3Input = document.createElement('input');

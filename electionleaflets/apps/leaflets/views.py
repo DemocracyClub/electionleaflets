@@ -25,6 +25,11 @@ class ImageView(DetailView):
     model = LeafletImage
     template_name = "leaflets/full.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["full_width"] = True
+        return context
+
 
 class LegacyImageView(SingleObjectMixin, RedirectView):
     model = LeafletImage

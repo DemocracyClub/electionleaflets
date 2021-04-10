@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <a href="{% url "leaflet" object.leaflet.pk %}">&larr; back to {{ object.leaflet.get_title|default_if_none:"leaflet" }} details</a>
-    <figure>
-        <img src="{{ object.image.url }}" />
-        <figcaption>
-            {{ object.leaflet.get_title|default_if_none:"" }}
-        </figcaption>
-    </figure>
-    {# <a href="{% url "leaflet" leaflet.id %}">&larr; back to details of <em>{{ leaflet.title }}</em></a> #}
+  <div class="ds-text-centered">
+  <p>
+  <a href="{% url "leaflet" object.leaflet.pk %}">&larr; back to
+    {{ object.leaflet.get_title|default_if_none:"leaflet" }} details</a>
+  </p>
+  <img src="{{ object.image.url }}"/>
+  {{ object.leaflet.get_title|default_if_none:"" }}
+  {# <a href="{% url "leaflet" leaflet.id %}">&larr; back to details of <em>{{ leaflet.title }}</em></a> #}
+  </div>
 {% endblock %}

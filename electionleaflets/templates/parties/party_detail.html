@@ -2,8 +2,6 @@
 {% load thumbnail %}
 
 {% block content %}
-  <div class="row">
-    <div class="columns large-12">
       <h1>Election leaflets from {{ object.party_name }}</h1>
       {% if last_leaflet_days >= 45 %}
         <div class="panel">
@@ -55,8 +53,6 @@
             </li>
           </ol>
         {% endif %}
-    </div>
-  </div>
 {% endblock %}
 
 

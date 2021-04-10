@@ -62,7 +62,7 @@ class PeopleForm(forms.Form):
             (53, "Labour Party"),
             (90, "Liberal Democrats"),
             (102, "Scottish National Party (SNP)"),
-            (7931, "The Brexit Party"),
+            (7931, "Reform UK"),
             (77, "Plaid Cymru - The Party of Wales"),
         ],
         "ni": [
@@ -116,7 +116,6 @@ class PeopleForm(forms.Form):
                 widget=PeopleRadioWidget,
                 required=False,
             )
-
             if (
                 "electoral_services" in postcode_results
                 and postcode_results["electoral_services"]["council_id"][0:3]

@@ -1,40 +1,90 @@
-{% extends "dc_base.html" %}
-
 {% load pipeline %}
 {% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="https://DemocracyClub.github.io/design-system/images/favicon.svg">
+    <link rel="stylesheet" href="https://DemocracyClub.github.io/design-system/styles/system.css" />
+    {% block extra_site_css %}
+      {% stylesheet 'styles' %}
+    {% endblock extra_site_css %}
+    {% block site_meta %}
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+      <meta name="mobile-web-app-capable" content="yes" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
+      <meta name="keywords" lang="en" content="election leaflets" />
+      <meta name="description" lang="en" content="Real-time election leaflet monitoring" />
+      <title>{% block title %}Real-time #ElectionLeaflet monitoring{% endblock %} | ElectionLeaflets.org</title>
+    {% endblock site_meta %}
+  </head>
+  <body class="ds-scope" style="margin: 0">
+    <div class="ds-page">
+      <p><a class="ds-skip-link" href="#main">skip to content</a></p>
+      <header class="ds-header">
+        <a class="ds-logo" href="/">
+          <img src="https://DemocracyClub.github.io/design-system/images/logo_icon.svg" alt="" />
+          <span>Election Leaflets</span>
+        </a>
+        <nav>
+          <ul>
+            <li>
+              <a href="{% url "home" %}">Home</a>
+            </li>
+            <li>
+              <a href="{% url "leaflets" %}">Latest leaflets</a>
+            </li>
+            <li>
+              <a href="{% url "upload_leaflet" %}"><strong>Add a leaflet</strong></a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <main id="main" tabindex="-1" class="ds-stack" {% if full_width %}style="max-width:100%"{% endif %}>
+        {% block content %}
 
-{% block extra_site_css %}
-  {% stylesheet 'styles' %}
-{% endblock extra_site_css %}
+        {% endblock %}
+      </main>
+      <footer class="ds-footer">
+        {% block site_footer %}
+          {% include "footer.html" %}
+          {% block extra_scripts %}{% endblock %}
+          {% javascript "scripts" %}
+          {% if request.user.is_staff %}
+            <script src="{% static "javascript/admin.js" %}"></script>
+          {% endif %}
+        {% endblock site_footer %}
+      </footer>
+    </div>
+  </body>
+</html>
 
-{% block site_meta %}
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
-  <meta name="keywords" lang="en" content="election leaflets" />
-  <meta name="description" lang="en" content="Real-time election leaflet monitoring" />
-  <title>{% block title %}Real-time #ElectionLeaflet monitoring{% endblock %}  | ElectionLeaflets.org</title>
-{% endblock site_meta %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 {% block site_menu %}
-<nav class="nav-site-wrap">
-  <ul class="nav-site js-nav-site">
-    <li class="nav-site__item nav-site__item--home{% if request.path == "/" %} nav-site__item--active{% endif %}"><a href="/">Home</a></li>
-    <li class="nav-site__item"><a href="{% url "analysis" %}">Analyse</a></li>
-    <li class="nav-site__item"><a href="https://democracyclub.org.uk/donate/">Donate</a></li>
-    <li class="nav-site__item"><a href="{% url "press" %}">Press</a></li>
-    <li class="nav-site__item"><a href="{% url "leaflets" %}">Latest leaflets</a></li>
-    <li class="nav-site__item"><a href="{% url "upload_leaflet" %}">Add a
-    leaflet</a></li>
-  </ul>
-</nav>
+
 {% endblock site_menu %}
 
-{% block site_footer %}
-  {% include "footer.html" %}
-  {% block extra_scripts %}{% endblock %}
-  {% javascript "scripts" %}
-  {% if request.user.is_staff %}
-    <script src="{% static "javascript/admin.js" %}"></script>
-  {% endif %}
-{% endblock site_footer %}
+

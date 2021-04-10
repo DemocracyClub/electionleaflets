@@ -1,23 +1,32 @@
 {% extends "leaflets/upload_form/leaflet_upload_base.html" %}
-{% block heading %}<h1>Step 5: people</h1>{% endblock heading %}
+{% block heading %}
+  <h1>People & parties</h1>
+
+{% endblock heading %}
 {% block form %}
-<div>
-    {% if form.people.field.choices %}
-      Was the leaflet sent by one of these people?
-      <div class="option-group people-list">
-        {% for radio in form.people %}
+  {% if form.people.field.choices %}
+    <fieldset>
+      <legend>Was the leaflet sent by one of these people?</legend>
+    </fieldset>
+    <ul class="ds-select-list">
+      {% for radio in form.people %}
+        <li>
           {{ radio.tag }}
           <label for="{{ radio.id_for_label }}"> {{ radio.choice_label }}</label>
-        {% endfor %}
-      </div>
-    {% endif %}
-      <div class="option-group party-list">
-        {% if form.people.field.choices %}None of the above? <br />{% endif %}
-        Was the leaflet sent by one of these parties?
-        {% for radio in form.parties %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  {% if form.people.field.choices %}None of the above? <br/>{% endif %}
+  <fieldset>
+    <legend>Was the leaflet sent by one of these parties?</legend>
+    <ul class="ds-select-list">
+      {% for radio in form.parties %}
+        <li>
           {{ radio.tag }}
           <label for="{{ radio.id_for_label }}"> {{ radio.choice_label }}</label>
-        {% endfor %}
-      </div>
-</div>
+        </li>
+      {% endfor %}
+    </ul>
+  </fieldset>
 {% endblock form %}

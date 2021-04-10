@@ -3,10 +3,10 @@
 {% load markdown_deux_tags %}
 
 {% block og_tags %}
-  <meta property="og:site_name" content="ElectionLeaflets.org" />
-  <meta property="og:title" content="{{ object.get_title }}" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="{{ leaflet.get_absolute_url }}" />
+  <meta property="og:site_name" content="ElectionLeaflets.org"/>
+  <meta property="og:title" content="{{ object.get_title }}"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="{{ leaflet.get_absolute_url }}"/>
   <meta name="og:description" content="{{ object.description }}">
 
   <meta name="twitter:card" content="summary_large_image">
@@ -21,147 +21,106 @@
   <meta name="twitter:title" content="{{ object.get_title }}">
   <meta name="twitter:description" content="{{ object.description|markdown|striptags|truncatechars:"200" }}">
   {% if object.location %}
-    <meta property="place:location:latitude"  content="{{ object.location.1 }}" />
-    <meta property="place:location:longitude" content="{{ object.location.0 }}" />
-    <meta property="og:latitude"  content="{{ object.location.1 }}" />
-    <meta property="og:longitude" content="{{ object.location.0 }}" />
+    <meta property="place:location:latitude" content="{{ object.location.1 }}"/>
+    <meta property="place:location:longitude" content="{{ object.location.0 }}"/>
+    <meta property="og:latitude" content="{{ object.location.1 }}"/>
+    <meta property="og:longitude" content="{{ object.location.0 }}"/>
   {% endif %}
   {% for image in object.images.all %}
     {% thumbnail object.images.all.0.image "600" crop="center" as im %}
       {% if forloop.first %}
-        <meta property="og:image" content="{{ im.url }}" />
+        <meta property="og:image" content="{{ im.url }}"/>
       {% endif %}
-      <meta name="twitter:image{{forloop.counter0}}" content="{{ im.url }}">
+      <meta name="twitter:image{{ forloop.counter0 }}" content="{{ im.url }}">
     {% endthumbnail %}
   {% endfor %}
 {% endblock og_tags %}
 
 {% block content %}
-  <div class="fukol-grid">
-    <div class="fukol-grid__col fukol-grid__col--60-70">
-      <article class="feature-card">
-        <h1>
-          {% if object.get_title %}
-            {{ object.get_title }}
-          {% else %}
-            Leaflet #{{object.id}}
-          {% endif %}
-        </h1>
-        <p>This leaflet was spotted by a volunteer
-        {% if object.constituency %}
-          in <a href="{% url "constituency-view"  object.constituency.pk object.constituency.slug %}">{{ object.constituency.name }}</a>
-        {% endif %} <br>on {{ object.date_uploaded|date:"l, d M, Y" }}.</p>
+  <h1>
+    {% if object.get_title %}
+      {{ object.get_title }}
+    {% else %}
+      Leaflet #{{ object.id }}
+    {% endif %}
+  </h1>
+  <p>This leaflet was spotted by a volunteer
+    {% if object.constituency %}
+      in<a href="{% url "constituency-view" object.constituency.pk object.constituency.slug %}">
+      {{ object.constituency.name }}</a>
+    {% endif %}
+    on {{ object.date_uploaded|date:"l, d M, Y" }}.
+  </p>
 
-        {% if person %}
-          <section class="person">
-                <p>
-                  Sent by
-                  <a href="{{person.link}}">
-                    {{person.name}}
-                  </a>
-                </p>
-          </section>
+  {% if person %}
+    <p>
+      Sent by <a href="{{ person.link }}">{{ person.name }}</a>
+    </p>
+  {% endif %}
+
+  {% if ballot %}
+    Candidate for <a href="{{ ballot.link }}">{{ ballot.name }}</a>
+  {% endif %}
+
+  {% if party %}
+    <p>
+      Published by <a href="{{ party.link }}">{{ party.name }}</a>
+    </p>
+  {% endif %}
+
+
+  {% for image in object.images.all %}
+    <figure class="ds-card">
+      <div class="ds-card-image">
+        {% thumbnail image.image "600" crop="center" as im %}
+          <img src="{{ im.url }}" aria-labelledby="page-{{ image.id }}" data-full_image_url="{{ image.image.url }}">
+        {% endthumbnail %}
+      </div>
+      <div class="ds-card-body">
+        <a href="{% url "full_image" image.id %}" class="ds-card-link">
+          image #{{ image.pk }}
+        </a>
+      </div>
+    </figure>
+  {% endfor %}
+
+  {% if object.description %}
+    {{ object.description|markdown }}
+  {% endif %}
+
+
+  {% if object.imprint %}
+    <h3>Promoter and Publisher details</h3>
+    <p>{{ object.imprint }}</p>
+  {% endif %}
+
+  {% if object.tags.all %}
+    <h3>Tags</h3>
+    <ul>
+      {% for t in object.tags.all %}
+        {% if t.slug %}
+          <li><a href="{% url "tag" t.slug %}">{{ t.tag }}</a></li>
         {% endif %}
-
-        {% if ballot %}
-          <section class="ballot">
-            Candidate for
-            <a href="{{ballot.link}}">
-              {{ballot.name}}
-            </a>
-          </section>
-        {% endif %}
-
-        {% if party %}
-          <section class="party">
-              <p>
-                Published by
-                <a href="{{party.link}}">
-                  {{party.name}}
-                </a>
-              </p>
-          </section>
-        {% endif %}
-
-        <section class="leaflet_images" aria-describedby=leaflet_description>
-          {% for image in object.images.all %}
-            <figure>
-              <a href="{% url "full_image"  image.id %}" class="leaflet_link">
-                {% thumbnail image.image "600" crop="center" as im %}
-                <img src="{{ im.url }}" aria-labelledby="page-{{image.id}}" data-full_image_url="{{ image.image.url }}">
-                {% endthumbnail %}
-              </a>
-              <figcaption>
-                {% if image.image_type == "1_front" %}
-                    <span id="page-{{image.id}}">Leaflet Front</span>
-                {% endif %}
-              </figcaption>
-            </figure>
-          {% endfor%}
-        </section>
-
-        <section class="leaflet_information">
-          <div id="leaflet_description">
-          {% if object.description %}
-              {{ object.description|markdown }}
-          {% endif %}
-          </div>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
 
-          {% if object.imprint %}
-            <div id="leaflet_imprint">
-            <h4>Promoter and Publisher details</h4>
-            <p>{{ object.imprint }}</p>
-            </div>
-          {% endif %}
-
-          {% if object.tags.all %}
-            <h4>Tags</h4>
-            <ul>
-                {% for t in object.tags.all %}
-                    {% if t.slug %}
-                        <li><a href="{% url "tag"  t.slug %}">{{t.tag}}</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-          {% endif %}
-        </section>
+  <p>
+    The data on this page is available in <a href="{% url "api:leaflet-detail" object.pk %}?format=json">JSON format</a>.
+    The images of this leaflet
+    should be considered to be in the public domain, in accordance with
+    the <a
+  href="https://creativecommons.org/publicdomain/zero/1.0/">Public
+    Domain Dedication</a>.
+  </p>
 
 
-        <p>
-            The data on this page is available in <a href="{% url "api:leaflet-detail" object.pk%}?format=json">JSON format</a>. The images of this leaflet
-            should be considered to be in the public domain, in accordance with
-            the <a
-            href="https://creativecommons.org/publicdomain/zero/1.0/">Public
-            Domain Dedication</a>.
-        </p>
+  {% include "analysis/includes/analysis_form.html" %}
 
-      </article>
-    </div>
+  <h3>Something wrong with this page?</h3>
+  <p><a href="{% url "report_abuse" object.id %}">Report a problem</a>
+  If there is something wrong with this leaflet please let us know.</p>
 
-    <aside class="fukol-grid__col fukol-grid__col--40-30">
-      {% include "analysis/includes/analysis_form.html" %}
-      <section class="share feature-card feature-card--grey">
-        <h3>Share this leaflet</h3>
-          <a class="button" href="https://twitter.com/intent/tweet?url={{ leaflet.get_absolute_url }}&hashtags=electionleaflet&via=electionspotter">
-            <i class="fa fa-twitter"></i>
-            Tweet this leaflet
-          </a>
-          <a class="button" href="https://www.facebook.com/sharer/sharer.php?u={{ leaflet.get_absolute_url }}&ref=responsive">
-            <i class="fa fa-facebook"></i>
-            Share on Facebook
-          </a>
-      </section>
-
-      <section class="share feature-card feature-card--grey">
-        <h3>Something wrong with this page?</h3>
-          <a href="{% url "report_abuse" object.id %}" class="button alert">
-          Report a problem</a>
-          If someone has uploaded something other than an election leaflet,
-          please let us know.
-
-      </section>
-    </aside>
-  </div>
 
 {% endblock %}

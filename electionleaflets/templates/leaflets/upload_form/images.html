@@ -1,10 +1,13 @@
 {% extends "leaflets/upload_form/leaflet_upload_base.html" %}
 
-{% block form %}
+{% block heading %}
+<h1>Upload a single leaflet</h1>
+  <p>Please photograph or upload a <em>single leaflet</em>.
+    Add an image for each page or side, but please don't upload more than one leaflet at a time.</p>
+{% endblock %}
 
-<div class="file_input_button">
+{% block form %}
   {{ form.image }}
   {{ form.errors }}
   {{ form.non_field_errors }}
-</div>
 {% endblock form %}

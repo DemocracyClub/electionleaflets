@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5c28e4fd554e05371b0cee848467fff0475e191f1e51d712f5bbb863ce8dbdb3"
+            "sha256": "e2ec51d405d70edada1d8778409be96c65649e73f7272758b196558f82845173"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -145,6 +145,10 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'",
             "version": "==0.7.1"
+        },
+        "design-system": {
+            "git": "https://github.com/DemocracyClub/design-system.git",
+            "ref": "ccc67af841a77169c72f0e606d8b8696fd0013da"
         },
         "dj-pagination": {
             "hashes": [
