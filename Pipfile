@@ -83,6 +83,7 @@ urllib3 = "*"
 
 [scripts]
 collectstatic = "python manage.py collectstatic -c --noinput"
+createcachetable = "python manage.py createcachetable"
 pytest = "pytest"
 coveralls = "coveralls"
 migratedb = "python manage.py migrate --noinput"

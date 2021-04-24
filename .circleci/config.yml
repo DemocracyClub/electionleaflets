@@ -131,6 +131,7 @@ jobs:
                  AppDomain='$PUBLIC_FQDN' \
                 "
       - run: pipenv run migratedb
+      - run: pipenv run createcachetable
       - run:
           name: "pipenv run sam deploy # Public access: CDN + DNS"
           no_output_timeout: 20m # CloudFront can take longer than CircleCI's 10m default
