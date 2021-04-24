@@ -4,6 +4,7 @@ from collections import OrderedDict
 import json
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.core.signing import Signer
 
 from localflavor.gb.forms import GBPostcodeField
@@ -21,7 +22,10 @@ class ImagesForm(forms.Form):
 
 class PostcodeForm(forms.Form):
     postcode = GBPostcodeField(
-        error_messages={"required": "Please enter a valid UK postcode"}
+        error_messages={
+            "required": "Please enter a valid UK postcode",
+            "invalid": "Please enter a full UK postcode.",
+        }
     )
 
 

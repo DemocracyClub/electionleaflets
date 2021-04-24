@@ -9,7 +9,7 @@
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      form.querySelectorAll('button').setAttribute('disabled', true);
+      form.querySelector('button').setAttribute('disabled', true);
       pond.processFiles().then(function (uploaded_files) {
         const input_name = fileInput.name
         var hiddenS3Input = document.createElement('input');
@@ -43,8 +43,17 @@
   var fp_options = {
     imagePreviewTransparencyIndicator: 'grid',
     dropOnPage: true,
+    labelIdle: "Take a photo of a leaflet",
     maxFiles: 10,
     instantUpload: false,
+    oninit: function() {
+      document.querySelector(".cta-row").style.display = 'none';
+    },
+    onaddfile: function() {
+      document.querySelector(".cta-row").style.display = '';
+      document.querySelector(".cta-row").querySelector("button").innerText = "Continue";
+      window.pond.labelIdle = "Add another image of this leaflet";
+    },
     server: {
       timeout: 5,
       process: function (fieldName, file, metadata, load, error, progress, abort, transfer, options) {
@@ -100,7 +109,7 @@
   }
 
   const pond = FilePond.create( fileInput, fp_options);
-
+  window.pond = pond;
 
 
 

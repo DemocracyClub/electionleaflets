@@ -69,6 +69,7 @@ PIPELINE = get_pipeline_settings(
         "javascript/vendor/filepond-plugin-image-exif-orientation.js",
         "javascript/vendor/filepond-plugin-image-preview.js",
         "javascript/image_uploader.js",
+        # "javascript/vendor/ImageEditor.js",
     ],
 )
 
@@ -146,7 +147,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.twitter",
     "django_extensions",
     "pipeline",
-    "dc_theme",
+    # "dc_theme",
+    "dc_design_system",
     "django_static_jquery",
     "s3file",
 ] + LEAFLET_APPS
