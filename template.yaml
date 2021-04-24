@@ -99,7 +99,7 @@ Resources:
           APP_IS_BEHIND_CLOUDFRONT: !Ref AppIsBehindCloudFront
           POSTGRES_HOST: !Ref AppPostgresHost
           POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
-          POSTGRES_PASSWORD: !Ref AppPostgresPassword
+          DATABASE_PASS: !Ref AppPostgresPassword
           SAM_LAMBDA_CONFIG_ENV: !Ref AppSamLambdaConfigEnv
           APP_DOMAIN: !Ref AppDomain
       Events:

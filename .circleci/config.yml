@@ -109,7 +109,7 @@ jobs:
       - run: printenv SECRET_KEY | md5sum
       - run: printenv AWS_ACCESS_KEY_ID | md5sum
       - run: sudo apt update && sudo apt install postgresql-client
-      - run: PGPASSWORD=$POSTGRES_PASSWORD createdb --host $POSTGRES_HOST --username postgres $POSTGRES_DATABASE_NAME || true
+      - run: PGPASSWORD=$DATABASE_PASS createdb --host $DATABASE_HOST --username $DATABASE_USER $POSTGRES_DATABASE_NAME || true
       - run:
           name: "pipenv run sam deploy # App: Lambda + API Gateway"
           command: |
@@ -124,9 +124,10 @@ jobs:
                  GitHash='$CIRCLE_SHA1' \
                  AppIsBehindCloudFront=True \
                  AppLogRetentionDays=60 \
-                 AppPostgresHost='$POSTGRES_HOST' \
+                 AppPostgresHost='$DATABASE_HOST' \
                  AppPostgresDatabaseName='$POSTGRES_DATABASE_NAME' \
-                 AppPostgresPassword='$POSTGRES_PASSWORD' \
+                 AppPostgresPassword='$DATABASE_PASS' \
+                 AppPostgresPassword='$DATABASE_USER' \
                  AppSamLambdaConfigEnv='$SAM_LAMBDA_CONFIG_ENV' \
                  AppDomain='$PUBLIC_FQDN' \
                 "
