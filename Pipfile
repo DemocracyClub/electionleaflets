@@ -7,6 +7,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+aws-sam-cli = "*"
 
 [packages]
 boto3 = ">=1.9.0"
@@ -77,3 +78,4 @@ django-s3file = "*"
 design-system = {git = "https://github.com/DemocracyClub/design-system.git", ref = "0.1.2"}
 psycopg2-binary = "*"
 whitenoise = "*"
+urllib3 = "*"
