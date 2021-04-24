@@ -8,8 +8,6 @@ import piexif
 from PIL import Image
 
 from django.db import models
-from django.contrib.gis.db import models as geo_model
-from django.contrib.gis.geos import Point
 from django.core.files.base import ContentFile
 from django.forms.models import model_to_dict
 
@@ -25,7 +23,7 @@ from . import constants
 devs_dc_helper = DevsDCAPIHelper()
 
 
-class Leaflet(geo_model.Model):
+class Leaflet(models.Model):
     def __init__(self, *args, **kwargs):
         super(Leaflet, self).__init__(*args, **kwargs)
         self._initial = model_to_dict(
@@ -55,7 +53,6 @@ class Leaflet(geo_model.Model):
     )
     imprint = models.TextField(blank=True, null=True)
     postcode = models.CharField(max_length=150, blank=True)
-    location = geo_model.PointField(null=True, blank=True)
     name = models.CharField(blank=True, max_length=300)
     email = models.CharField(blank=True, max_length=300)
     date_uploaded = models.DateTimeField(auto_now_add=True)
@@ -149,19 +146,6 @@ class Leaflet(geo_model.Model):
                         self.ballot_id
                     ),
                 }
-
-    def geocode(self, postcode):
-        data = geocode(postcode)
-        if data:
-            self.constituency = data["constituency"]
-            self.location = Point(data["wgs84_lon"], data["wgs84_lat"],)
-
-    def save(self, *args, **kwargs):
-        if self.postcode:
-            if self.postcode != self._initial["postcode"]:
-                self.geocode(self.postcode)
-
-        super(Leaflet, self).save(*args, **kwargs)
 
 
 class LeafletImage(models.Model):
