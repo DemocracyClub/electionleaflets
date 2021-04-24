@@ -13,7 +13,7 @@ version = 0.1
 [staging.deploy]
 [staging.deploy.parameters]
 stack_name = "ElectionLeafletsApp-staging"
-s3_bucket = "elctionleaflets-deployment-artifacts-staging-6jfsds0gj3f"
+s3_bucket = "election-leaflets-deployment-artifacts-staging-238m322"
 s3_prefix = "staging"
 region = "eu-west-2"
 confirm_changeset = false

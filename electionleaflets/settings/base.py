@@ -28,7 +28,7 @@ TEMPLATE_DEBUG = DEBUG
 # DATABASES define in environment specific settings file
 DATABASES = {
     "default": {
-        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": "electionleaflets",
         "USER": "electionleaflets",
     }
@@ -53,8 +53,9 @@ STATICFILES_MANIFEST_NAME = environ.get(
 )
 AWS_STORAGE_BUCKET_NAME = "data.electionleaflets.org"
 AWS_S3_SECURE_URLS = True
-AWS_S3_HOST = "s3-eu-west-1.amazonaws.com"
-AWS_S3_CUSTOM_DOMAIN = "data.electionleaflets.org"
+# AWS_S3_HOST = "s3-eu-west-1.amazonaws.com"
+# AWS_S3_CUSTOM_DOMAIN = "data.electionleaflets.org"
+
 
 PIPELINE = get_pipeline_settings(
     extra_css=[
