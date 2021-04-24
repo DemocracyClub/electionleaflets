@@ -133,17 +133,6 @@ jobs:
                 "
       - run: pipenv run migratedb
       - run:
-          name: printenv PUBLIC_FQDN CERTIFICATE_ARN
-          # These envvars are stored inside CircleCI, which helpfully masks them if they're echoed.
-          command: |
-            #
-            # NB Do *not* copy any of these string values!
-            #  -> In order to make them visible inside CircleCI, a null character
-            #  -> has been inserted between characters 1 and 2, which may have
-            #  -> unintended consequences if you copy & paste them.
-            #
-            printenv PUBLIC_FQDN CERTIFICATE_ARN | sed -E 's/^(.)(.)/\1\x00\2/'
-      - run:
           name: "pipenv run sam deploy # Public access: CDN + DNS"
           no_output_timeout: 20m # CloudFront can take longer than CircleCI's 10m default
           command: |
