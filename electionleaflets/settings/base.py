@@ -19,7 +19,6 @@ def root(x):
 
 
 sys.path.insert(0, root("apps"))
-sys.path.insert(0, "../django-uk-political-parties/")
 
 
 DEBUG = False

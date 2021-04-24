@@ -1,5 +1,4 @@
 (function () {
-
   FilePond.registerPlugin(FilePondPluginImagePreview);
   FilePond.registerPlugin(FilePondPluginImageExifOrientation);
   const fileInput = document.querySelector('input[type="file"]');

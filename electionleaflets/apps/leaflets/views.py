@@ -15,19 +15,21 @@ from braces.views import StaffuserRequiredMixin
 
 from analysis.forms import QuestionSetForm
 from .models import Leaflet, LeafletImage
-from .forms import LeafletDetailsFrom
+from .forms import LeafletDetailsFrom, SingleLeafletImageForm
 from people.devs_dc_helpers import DevsDCAPIHelper
 from people.models import Person
 from storages.backends.s3boto3 import S3Boto3Storage
 
 
-class ImageView(DetailView):
+class ImageView(UpdateView):
     model = LeafletImage
     template_name = "leaflets/full.html"
+    form_class = SingleLeafletImageForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["full_width"] = True
+        # context["image_form"] = SingleLeafletImageForm(instance=self.object)
         return context
 
 

@@ -3,11 +3,131 @@
 {% block content %}
   <div class="ds-text-centered">
   <p>
-  <a href="{% url "leaflet" object.leaflet.pk %}">&larr; back to
-    {{ object.leaflet.get_title|default_if_none:"leaflet" }} details</a>
+    <a href="{% url "leaflet" object.leaflet.pk %}">&larr; back to
+      {{ object.leaflet.get_title|default_if_none:"leaflet" }} details</a>
   </p>
-  <img src="{{ object.image.url }}"/>
-  {{ object.leaflet.get_title|default_if_none:"" }}
-  {# <a href="{% url "leaflet" leaflet.id %}">&larr; back to details of <em>{{ leaflet.title }}</em></a> #}
+    {% if request.user.is_staff %}
+      <div>
+        <button id="edit_leaflet" class="ds-button">Edit image</button>
+      </div>
+    {% endif %}
+  <figure id="full_image">
+    <img src="{{ object.image.url }}" alt="leaflet image"/>
+    <figcaption>{{ object.leaflet.get_title|default_if_none:"" }}</figcaption>
+  </figure>
   </div>
+
+  {% if request.user.is_staff %}
+    <form method="POST" id="upload_form" style="display:none">
+    {{ form.image }}
+    </form>
+  <script src="https://cdn.scaleflex.it/plugins/filerobot-image-editor/3.12.17/filerobot-image-editor.min.js"></script>
+  <script>
+    const uploadForm = document.querySelector("#upload_form");
+    const image_field = uploadForm.querySelector("[name=image]");
+
+    // Utils
+    function dataURItoFile(dataURI, props) {
+      var byteString = atob(dataURI.split(',')[1]);
+      var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+      var ab = new ArrayBuffer(byteString.length);
+      var ia = new Uint8Array(ab);
+      for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+      var blob =  new Blob([ab], {type: mimeString});
+      var file = new File([blob], props.imageName)
+      file.mime_type = mimeString;
+      return file;
+    }
+
+    function parseKeyFromXML (xml_text) {
+      var xml = new window.DOMParser().parseFromString(xml_text, 'text/xml')
+      var tag = xml.getElementsByTagName('Key')[0]
+      return decodeURI(tag.childNodes[0].nodeValue)
+    }
+
+    function openEditor() {
+      const config = {
+        reduceBeforeEdit: {
+          mode: 'manual',
+          widthLimit: 120000,
+          heightLimit: 120000
+        },
+        tools: ['rotate', 'crop', 'shapes'],
+        finishButtonLabel: "Save"
+      };
+
+      const onComplete = function(newUrl) {
+        console.log(newUrl);
+        console.log("newUrl");
+
+      };
+
+      const onBeforeComplete = function(props) {
+
+        const s3Data = new FormData();
+        // Loop over the input field attributes set by S3File
+        // and add them to the FormData
+        Array.from(image_field.attributes).forEach(function (attr) {
+          var name = attr.name
+          if (name.startsWith('data-fields')) {
+            name = name.replace('data-fields-', '')
+            s3Data.append(name, attr.value)
+          }
+        });
+
+        var file = dataURItoFile(props.canvas.toDataURL(), props);
+        console.log(file);
+        s3Data.append('success_action_status', '201');
+        s3Data.append('Content-Type', file.mime_type);
+        s3Data.append('Content-Encoding', 'base64');
+        s3Data.append('file', file);
+        var url = image_field.dataset.url;
+        const request = new XMLHttpRequest();
+        request.open('POST', url);
+
+
+        request.onload = function() {
+          if (request.status >= 200 && request.status < 300) {
+            // the load method accepts either a string (id) or an object
+            var key = parseKeyFromXML(request.responseText);
+            console.log(key);
+            var hiddenS3Input = document.createElement('input');
+            hiddenS3Input.type = 'hidden';
+            hiddenS3Input.name = 's3file';
+            hiddenS3Input.value = JSON.stringify([image_field.name])
+            uploadForm.appendChild(hiddenS3Input);
+            var hiddenFileInput = document.createElement('input')
+            hiddenFileInput.type = 'hidden'
+            hiddenFileInput.name = "image"
+            hiddenFileInput.value = JSON.stringify([key])
+            uploadForm.appendChild(hiddenFileInput)
+            uploadForm.submit();
+          }
+          else {
+            // Can call the error method if something is wrong, should exit after
+            error('oh no');
+          }
+        };
+        request.send(s3Data);
+
+        return false;
+      };
+
+      const ImageEditor = new FilerobotImageEditor(config, {
+        onComplete: onComplete,
+        onBeforeComplete: onBeforeComplete
+      });
+
+      ImageEditor.open('{{ object.raw_image.url }}');
+    };
+
+    const edit_button = document.querySelector("#edit_leaflet");
+    edit_button.addEventListener("click", function(e) {
+      openEditor();
+    });
+
+  </script>
+  {% endif %}
 {% endblock %}

@@ -260,7 +260,7 @@ class LeafletImage(models.Model):
         self.image.save(self.image.name, file_content, save=False)
 
     def get_absolute_url(self):
-        return reverse("full_image", (), {"pk": self.pk})
+        return reverse("full_image", kwargs={"pk": self.pk})
 
     @property
     def dimensions(self):

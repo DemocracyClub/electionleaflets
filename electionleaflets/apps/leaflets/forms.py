@@ -9,7 +9,7 @@ from django.core.signing import Signer
 
 from localflavor.gb.forms import GBPostcodeField
 
-from leaflets.models import Leaflet
+from leaflets.models import Leaflet, LeafletImage
 
 
 class ImagesForm(forms.Form):
@@ -33,6 +33,28 @@ class LeafletDetailsFrom(forms.ModelForm):
     class Meta:
         model = Leaflet
         fields = "__all__"
+
+
+class Base64EncodedFileWidget(forms.ClearableFileInput):
+    """
+    https://github.com/codingjoe/django-s3file/issues/134
+    """
+
+    def get_conditions(self, accept):
+        conditions = super().get_conditions(accept)
+        conditions.append({"Content-Encoding": "base64"})
+        return conditions
+
+    input_type = "hidden"
+    template_name = "django/forms/widgets/input.html"
+
+
+class SingleLeafletImageForm(forms.ModelForm):
+    class Meta:
+        model = LeafletImage
+        fields = ["image"]
+
+    image = forms.ImageField(widget=Base64EncodedFileWidget)
 
 
 class LeafletReviewFrom(forms.ModelForm):
