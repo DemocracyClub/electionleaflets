@@ -67,7 +67,6 @@ else:
         # Administration URLS
         path("admin", admin.site.urls),
         path("accounts", include("allauth.urls")),
-        re_path(r"^dc_base_theme", include("dc_theme.urls")),
         re_path(r"^test", TestView.as_view(), name="test"),
     ]
 

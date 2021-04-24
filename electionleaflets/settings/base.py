@@ -1,10 +1,8 @@
 import sys
-from os.path import join, abspath, dirname
 from os import environ
 
-from dc_theme.settings import get_pipeline_settings
-
 # PATH vars
+from os.path import join, abspath, dirname
 
 
 def here(x):
@@ -56,26 +54,45 @@ AWS_S3_SECURE_URLS = True
 # AWS_S3_HOST = "s3-eu-west-1.amazonaws.com"
 # AWS_S3_CUSTOM_DOMAIN = "data.electionleaflets.org"
 
+PIPELINE = {
+    "COMPILERS": ("pipeline.compilers.sass.SASSCompiler",),
+    "SASS_BINARY": "pysassc",
+    "CSS_COMPRESSOR": "pipeline.compressors.NoopCompressor",
+    "STYLESHEETS": {
+        "styles": {
+            "source_filenames": [
+                "stylesheets/styles.scss",
+                "stylesheets/vendor/filepond.css",
+                "stylesheets/vendor/filepond-plugin-image-preview.css",
+            ],
+            "output_filename": "css/styles.css",
+            "extra_context": {
+                "media": "screen,projection",
+            },
+        },
+    },
+    "JAVASCRIPT": {
+        "app": {
+            "source_filenames": [
+                "javascript/app.js",
+                "javascript/vendor/filepond.js",
+                "javascript/vendor/filepond-plugin-image-exif-orientation.js",
+                "javascript/vendor/filepond-plugin-image-preview.js",
+                "javascript/image_uploader.js",
+                # "javascript/vendor/ImageEditor.js",
+            ],
+            "output_filename": "app.js",
+        }
+    },
+}
 
-PIPELINE = get_pipeline_settings(
-    extra_css=[
-        "stylesheets/styles.scss",
-        "stylesheets/vendor/filepond.css",
-        "stylesheets/vendor/filepond-plugin-image-preview.css",
-    ],
-    extra_js=[
-        "javascript/app.js",
-        "javascript/vendor/filepond.js",
-        "javascript/vendor/filepond-plugin-image-exif-orientation.js",
-        "javascript/vendor/filepond-plugin-image-preview.js",
-        "javascript/image_uploader.js",
-        # "javascript/vendor/ImageEditor.js",
-    ],
-)
+
+PIPELINE["CSS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
+PIPELINE["JS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
 
 import dc_design_system
 
-PIPELINE["SASS_ARGUMENTS"] += (
+PIPELINE["SASS_ARGUMENTS"] = (
         " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
 )
 
@@ -148,7 +165,6 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.twitter",
     "django_extensions",
     "pipeline",
-    # "dc_theme",
     "dc_design_system",
     "django_static_jquery",
     "s3file",
@@ -181,7 +197,6 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 "django.contrib.auth.context_processors.auth",
-                "dc_theme.context_processors.dc_theme_context",
             ]
         },
     }
