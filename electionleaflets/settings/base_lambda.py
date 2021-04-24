@@ -1,10 +1,11 @@
+import os
 from .base import *  # noqa: F401,F403
 
 ALLOWED_HOSTS = ["*"]
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.cdjango.db.backends.postgresql",
+        "ENGINE": "django.db.backends.postgresql",
         "HOST": os.environ.get("DATABASE_HOST"),
         "USER": os.environ.get("DATABASE_USER"),
         "PORT": "5432",
