@@ -1,0 +1,1 @@
+# This file is intentionally left empty so that `sam build` can process this directory successfully.
