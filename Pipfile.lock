@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "2b1104f271b9b991afa3f45d280a4ca68efafee3d52dc26a571dc83d02e7ff78"
+            "sha256": "f327aaa16c5017e80fd9aa06676f4f2b3a8ff1d3d2cc1088500bfa1eff849d17"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -56,6 +56,10 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==20.3.0"
+        },
+        "aws-wsgi": {
+            "git": "https://github.com/DemocracyClub/awsgi.git",
+            "ref": "a5b800373c326e75f705d400c48f7df301409724"
         },
         "black": {
             "hashes": [

@@ -11,6 +11,7 @@ aws-sam-cli = "*"
 
 [packages]
 boto3 = "*"
+aws-wsgi = {ref = "a5b800373c326e75f705d400c48f7df301409724", git = "https://github.com/DemocracyClub/awsgi.git"}
 contextlib2 = "==0.5.5"
 configparser = "==3.5.0"
 cssselect = "==0.9.1"
