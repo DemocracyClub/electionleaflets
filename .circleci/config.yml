@@ -127,7 +127,6 @@ jobs:
                  AppPostgresHost='$DATABASE_HOST' \
                  AppPostgresDatabaseName='$POSTGRES_DATABASE_NAME' \
                  AppPostgresPassword='$DATABASE_PASS' \
-                 AppPostgresPassword='$DATABASE_USER' \
                  AppSamLambdaConfigEnv='$SAM_LAMBDA_CONFIG_ENV' \
                  AppDomain='$PUBLIC_FQDN' \
                 "

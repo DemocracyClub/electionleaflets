@@ -1,5 +1,6 @@
 import sys
 from os import environ
+import os
 
 # PATH vars
 from os.path import join, abspath, dirname
@@ -169,12 +170,28 @@ INSTALLED_APPS = [
     "s3file",
 ] + LEAFLET_APPS
 
-if environ.get("SENTRY_DSN", None):
-    INSTALLED_APPS.append("raven.contrib.django.raven_compat")
-    RAVEN_CONFIG = {
-        "dsn": environ.get("SENTRY_DSN"),
-        "environment": environ.get("SENTRY_ENVIRONMENT", "production"),
-    }
+def setup_sentry(environment=None):
+    SENTRY_DSN = os.environ.get("SENTRY_DSN")
+    if not SENTRY_DSN:
+        return
+
+    if not environment:
+        environment = os.environ["SAM_LAMBDA_CONFIG_ENV"]
+    release = os.environ.get("GIT_HASH", "unknown")
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=1.0,
+        environment=environment,
+        # If you wish to associate users to errors (assuming you are using
+        # django.contrib.auth) you may enable sending PII data.
+        send_default_pii=True,
+        release=release,
+    )
+
 
 
 THUMBNAIL_FORMAT = "PNG"
