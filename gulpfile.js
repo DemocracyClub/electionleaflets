@@ -18,6 +18,10 @@ const packages = {
     css: ["dist/*.css"],
     js: ["dist/*.js"]
   },
+  "filerobot-image-editor": {
+    root_location: "node_modules/filerobot-image-editor/",
+    js: ["dist/*.js"]
+  },
 }
 
 
