@@ -10,7 +10,7 @@ verify_ssl = true
 aws-sam-cli = "*"
 
 [packages]
-boto3 = ">=1.9.0"
+boto3 = "*"
 contextlib2 = "==0.5.5"
 configparser = "==3.5.0"
 cssselect = "==0.9.1"
