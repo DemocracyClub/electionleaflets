@@ -95,6 +95,7 @@ jobs:
       SAM_PUBLIC_CONFIG_ENV: <<parameters.dc-environment>>-public-access
       DC_DEPLOY_NAME: <<parameters.dc-deploy-name>>
       POSTGRES_DATABASE_NAME: <<parameters.dc-deploy-name>>
+      LEAFLET_IMAGES_BUCKET_NAME: "electionleaflets-images-<<parameters.dc-deploy-name>>"
     steps:
       - checkout
       - attach_workspace:
@@ -129,6 +130,7 @@ jobs:
                  AppPostgresPassword='$DATABASE_PASS' \
                  AppSamLambdaConfigEnv='$SAM_LAMBDA_CONFIG_ENV' \
                  AppDomain='$PUBLIC_FQDN' \
+                 AppLeafletImagesBucketName='$LEAFLET_IMAGES_BUCKET_NAME' \
                 "
       - run: pipenv run migratedb
       - run: pipenv run createcachetable

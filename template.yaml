@@ -68,6 +68,10 @@ Parameters:
     Description: "The domain the app is on."
     Type: String
 
+  AppLeafletImagesBucketName:
+    Description: "The S3 bucket to store uploaded leaflets in."
+    Type: String
+
 Resources:
 
   DependenciesLayer:
@@ -102,6 +106,7 @@ Resources:
           DATABASE_PASS: !Ref AppPostgresPassword
           SAM_LAMBDA_CONFIG_ENV: !Ref AppSamLambdaConfigEnv
           APP_DOMAIN: !Ref AppDomain
+          LEAFLET_IMAGES_BUCKET_NAME: !Ref AppLeafletImagesBucketName
       Events:
         HTTPRequests:
           Type: Api
