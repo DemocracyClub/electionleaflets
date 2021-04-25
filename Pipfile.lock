@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "add27220e6a1e113f4cf25d90b70c4dd08164644d996b3594bc852ac261dde4d"
+            "sha256": "b720e14f228c81f79e99a144b58dbc95e8989f0286b099d9cfe15e22890aa3f1"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -16,17 +16,16 @@
     "default": {
         "aloe": {
             "hashes": [
-                "sha256:705734f53bd1c1365ebdb09181854929a269fa35a3ac472f3a99cabb8a20062e"
+                "sha256:d73f69d933600f3ba20c6773df485cc42b5b2e8c274fa3f6798750aedbaf5aa2"
             ],
-            "index": "pypi",
-            "version": "==0.1.16"
+            "version": "==0.2.0"
         },
         "aloe-django": {
             "hashes": [
-                "sha256:729a84e5dbcd3dca5665b8b615cee20070519ee563e15316891736503f1448b7"
+                "sha256:004e752cca48155ed249433a8af9cface938c62d903579e5a722f3bce62ba410"
             ],
             "index": "pypi",
-            "version": "==0.1.3"
+            "version": "==0.2.0"
         },
         "ansicolors": {
             "hashes": [
@@ -758,13 +757,6 @@
                 "sha256:fd45ff9293d9274c5008a2054ecef86a9bfe819a67c7be1afb65e69b405b3042"
             ],
             "version": "==2021.4.4"
-        },
-        "repoze.lru": {
-            "hashes": [
-                "sha256:0429a75e19380e4ed50c0694e26ac8819b4ea7851ee1fc7583c8572db80aff77",
-                "sha256:f77bf0e1096ea445beadd35f3479c5cff2aa1efe604a133e67150bc8630a62ea"
-            ],
-            "version": "==0.7"
         },
         "requests": {
             "hashes": [
