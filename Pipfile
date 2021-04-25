@@ -79,6 +79,7 @@ dc_design_system = {git = "https://github.com/DemocracyClub/design-system.git", 
 psycopg2-binary = "*"
 whitenoise = "*"
 urllib3 = "*"
+libsass = "*"
 
 [scripts]
 collectstatic = "python manage.py collectstatic -c --noinput"

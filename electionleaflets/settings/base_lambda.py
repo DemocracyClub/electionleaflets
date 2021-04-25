@@ -20,6 +20,16 @@ DEFAULT_FROM_EMAIL = "hello@democracyclub.org.uk"
 AWS_SES_REGION_NAME = "eu-west-2"
 AWS_SES_REGION_ENDPOINT = "email.eu-west-2.amazonaws.com"
 
+PIPELINE["PIPELINE_ENABLED"] = True  # noqa
+PIPELINE["PIPELINE_COLLECTOR_ENABLED"] = False  # noqa
+
+WHITENOISE_AUTOREFRESH = False
+WHITENOISE_STATIC_PREFIX = "/static/"
+
+STATIC_URL = WHITENOISE_STATIC_PREFIX
+STATICFILES_STORAGE = "electionleaflets.storages.StaticStorage"
+AWS_DEFAULT_ACL = "public-read"
+
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 AWS_STORAGE_BUCKET_NAME = os.environ.get("LEAFLET_IMAGES_BUCKET_NAME")

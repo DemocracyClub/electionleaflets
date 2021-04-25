@@ -62,18 +62,18 @@ PIPELINE = {
     "STYLESHEETS": {
         "styles": {
             "source_filenames": [
-                "stylesheets/styles.scss",
-                "stylesheets/vendor/filepond.css",
-                "stylesheets/vendor/filepond-plugin-image-preview.css",
+                "scss/styles.scss",
+                "scss/vendor/filepond.css",
+                "scss/vendor/filepond-plugin-image-preview.css",
             ],
-            "output_filename": "css/styles.css",
+            "output_filename": "scss/styles.css",
             "extra_context": {
                 "media": "screen,projection",
             },
         },
     },
     "JAVASCRIPT": {
-        "app": {
+        "scripts": {
             "source_filenames": [
                 "javascript/app.js",
                 "javascript/vendor/filepond.js",
@@ -101,8 +101,13 @@ STATICFILES_FINDERS = (
     "pipeline.finders.ManifestFinder",
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "pipeline.finders.PipelineFinder",
+    'pipeline.finders.CachedFileFinder',
+    'pipeline.finders.PipelineFinder',
+    'pipeline.finders.ManifestFinder',
 )
+
+WHITENOISE_AUTOREFRESH = True
+WHITENOISE_STATIC_PREFIX = "/static/"
 
 SITE_ID = 1
 SITE_LOGO = "images/logo.png"

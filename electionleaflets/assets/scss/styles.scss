@@ -14,6 +14,7 @@
 @import 'partials/_card.scss';
 @import 'partials/_candidate.scss';
 @import 'partials/_table.scss';
+@import 'partials/_language.scss';
 @import 'partials/_header.scss';
 @import 'partials/_subnav.scss';
 @import 'partials/_footer.scss';
@@ -21,9 +22,13 @@
 @import 'partials/_checkbox.scss';
 @import 'partials/_select.scss';
 @import 'partials/_filter.scss';
+@import 'partials/_status.scss';
+@import 'partials/_codeblock.scss';
 @import 'partials/_dark.scss';
 @import 'partials/_page.scss';
 @import 'partials/_utilities.scss';
+@import 'partials/_logo.scss';
+
 @import 'select-list.scss';
 
 // // Generate atomic classes for documentation demos
@@ -36,33 +41,67 @@ $scope: false;
   @include description-lists;
   @include button;
   @include cta;
-  @include card;
-  @include candidate;
   @include cluster;
   @include grid;
-  @include stack;
+  @include sidebar;
+  @include details;
+  @include card;
+  @include candidate;
   @include breadcrumbs;
   @include table;
+  @include language;
+  @include logo;
   @include header;
+  @include subnav;
+  @include footer;
   @include radio;
   @include checkbox;
   @include select;
-  @include select-list;
+  @include filter;
+  @include status;
+  @include codeblock;
 }
 
 @if $scope {
   .ds-scope {
-    font-size: clamp(#{$s1}, 1.5vw, #{$s2});
+    font-size: clamp(#{$s1}, 2vw, #{$s2});
     @include fontMain;
     @include type;
     @include forms;
+    @include stack;
     @include optional-styles;
+    @include dark;
+    @include page;
     @include utilities;
   }
+
+  .ds-scope *,
+  .ds-scope *::before,
+  .ds-scope *::after {
+    box-sizing: border-box;
+  }
 } @else {
+  :root {
+    font-size: clamp(#{$s1}, 2vw, #{$s2});
+    @include fontMain;
+  }
+
+  :root *,
+  :root *::before,
+  :root *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+  }
+
   @include type;
   @include forms;
+  @include stack;
   @include optional-styles;
+  @include dark;
+  @include page;
   @include utilities;
 }
 
@@ -89,4 +128,8 @@ $scope: false;
 .ds-scope ul.filepond--list {
   margin-top:1em;
   margin-bottom:1em;
+}
+
+body {
+  //background-color: red !important;
 }

@@ -7,8 +7,6 @@ import sorl.thumbnail.fields
 
 class Migration(migrations.Migration):
 
-    replaces = [('leaflets', '0001_initial'), ('leaflets', '0002_leaflet_publisher_person'), ('leaflets', '0003_Add orientation and exif data'), ('leaflets', '0004_remove_leafletimage_image_text'), ('leaflets', '0005_add_ynr_ids'), ('leaflets', '0006_add_ynr_idxes'), ('leaflets', '0007_add_ynr_ids'), ('leaflets', '0008_remove_leaflet_location')]
-
     dependencies = [
         ('elections', '0001_initial'),
         ('people', '0001_initial'),
