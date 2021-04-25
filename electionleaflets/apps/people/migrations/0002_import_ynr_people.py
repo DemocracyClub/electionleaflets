@@ -32,7 +32,7 @@ def import_people(apps, _):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("leaflets", "0005_add_ynr_ids"),
+        ("leaflets", "0001_initial"),
         ("people", "0001_initial"),
     ]
 
