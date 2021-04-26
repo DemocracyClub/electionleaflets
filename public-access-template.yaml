@@ -13,6 +13,9 @@ Parameters:
   PublicFqdn:
     Type: String
 
+  LeafletsBucketName:
+    Type: String
+
 Resources:
 
   CloudFrontDistribution:
@@ -87,6 +90,38 @@ Resources:
           ViewerProtocolPolicy: "redirect-to-https"
           MinTTL: '50'
 
+  CloudFrontMediaDistribution:
+    Type: 'AWS::CloudFront::Distribution'
+    Properties:
+      DistributionConfig:
+        Comment: 'Cloudfront Distribution serving leaflet images'
+        Origins:
+          - Id: "ImagesBucket"
+            DomainName: !Join ['', [!Ref LeafletsBucketName, '.s3.amazonaws.com']]
+            CustomOriginConfig:
+              OriginProtocolPolicy: "https-only"
+
+            OriginShield:
+              Enabled: false
+
+        Enabled: true
+        HttpVersion: 'http2'
+        Aliases:
+          - !Sub "images.${PublicFqdn}"
+        PriceClass: "PriceClass_100"
+        ViewerCertificate:
+          AcmCertificateArn: !Ref CertificateArn
+          MinimumProtocolVersion: TLSv1.1_2016
+          SslSupportMethod: sni-only
+
+        DefaultCacheBehavior:
+          AllowedMethods: [ GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE ]
+          TargetOriginId: ImagesBucket
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: "all"
+          ViewerProtocolPolicy: "redirect-to-https"
 
   DnsRecord:
     Type: AWS::Route53::RecordSet
@@ -97,11 +132,26 @@ Resources:
       HostedZoneName: !Sub "${PublicFqdn}."
       Name: !Sub "${PublicFqdn}."
       Type: A
+  ImagesDnsRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontMediaDistribution.DomainName
+        HostedZoneId: Z2FDTNDATAQYW2 # this is an AWS-owned, global singleton required for Aliases to CloudFront
+      HostedZoneName: !Sub "${PublicFqdn}."
+      Name: !Sub "images.${PublicFqdn}."
+      Type: A
 
 Outputs:
   CloudFrontDistributionFqdn:
     Description: "The FQDN of the CloudFront distribution serving this instance."
     Value: !GetAtt CloudFrontDistribution.DomainName
   PublicFqdn:
-    Description: "The EC API's URL."
+    Description: "The Election Leaflets"
     Value: !Sub "https://${PublicFqdn}/"
+  CloudFrontDistributionImagesFqdn:
+    Description: "The FQDN of the CloudFront distribution media host."
+    Value: !GetAtt CloudFrontMediaDistribution.DomainName
+  PublicImagesFqdn:
+    Description: "Images Domain"
+    Value: !Sub "https://images.${PublicFqdn}/"

@@ -147,6 +147,7 @@ jobs:
                  StackNameSuffix=<<parameters.dc-environment>> \
                  CertificateArn=$CERTIFICATE_ARN \
                  PublicFqdn=$PUBLIC_FQDN \
+                 LeafletsBucketName=$LEAFLET_IMAGES_BUCKET_NAME \
                 "
       - run:
           name: "Publish a new Sentry Release"
