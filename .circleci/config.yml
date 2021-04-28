@@ -11,7 +11,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "Pipfile.lock" }}
+            - v2-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
             - v2-dependencies-default
       - run: &install-pipenv sudo pip install -U urllib3 cryptography==3.3.2 pipenv --quiet --no-input
       - run: pipenv install --dev
@@ -21,12 +21,13 @@ jobs:
       - run: npm run build
       - persist_to_workspace:
           root: ~/repo/
-          paths: [ lambda-layers/DependenciesLayer/requirements.txt ]
+          paths:
+            - lambda-layers/DependenciesLayer/requirements.txt
       - save_cache:
           when: on_success
           paths:
             - ~/.local/share/virtualenvs/
-          key: v2-dependencies-{{ checksum "Pipfile.lock" }}
+          key: v2-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
 
   run-tests:
     docker:
@@ -73,9 +74,12 @@ jobs:
       - run: pip install -r lambda-layers/DependenciesLayer/requirements.txt
       - run: make collectstatic
       - run: sam build ${DASH_DASH_DEBUG}
+
       - persist_to_workspace:
           root: ~/repo/
-          paths: [ .aws-sam/build/ ]
+          paths:
+            - .aws-sam/build/
+            - thumbs/.aws-sam/build/
 
   sam_deploy:
     docker:
@@ -135,6 +139,29 @@ jobs:
                 "
       - run: pipenv run migratedb
       - run: pipenv run createcachetable
+      - run: echo $LEAFLET_IMAGES_BUCKET_NAME > thumbs/LEAFLET_IMAGES_BUCKET_NAME
+      - run: make thumbs/requirements.txt
+      - run: pipenv run thumbs_sam_build
+      - run:
+          name: "Deploy thumbs function"
+          command: |
+            pipenv run sam deploy ${DASH_DASH_DEBUG} \
+              --config-file ~/repo/thumbs/${SAM_CONFIG_FILE} \
+              --config-env $SAM_LAMBDA_CONFIG_ENV \
+              --template-file ~/repo/thumbs/.aws-sam/build/ThumbsFunction/template.yml \
+              --region eu-west-2 \
+              --s3-bucket=election-leaflets-deployment-artifacts-staging-238m322
+              
+      - run:
+          name: "Deploy thumbs function to eu-weat-1 for lambda@edge"
+          command: |
+            pipenv run sam deploy ${DASH_DASH_DEBUG} \
+              --config-file ~/repo/thumbs/${SAM_CONFIG_FILE} \
+              --config-env $SAM_LAMBDA_CONFIG_ENV \
+              --template-file ~/repo/thumbs/.aws-sam/build/ThumbsFunction/template.yml \
+              --region us-east-1
+
+
       - run:
           name: "pipenv run sam deploy # Public access: CDN + DNS"
           no_output_timeout: 20m # CloudFront can take longer than CircleCI's 10m default
@@ -147,8 +174,9 @@ jobs:
                  StackNameSuffix=<<parameters.dc-environment>> \
                  CertificateArn=$CERTIFICATE_ARN \
                  PublicFqdn=$PUBLIC_FQDN \
-                 LeafletsBucketName=$LEAFLET_IMAGES_BUCKET_NAME \
-                "
+                 LeafletsBucketName=$LEAFLET_IMAGES_BUCKET_NAME
+              "
+      - run: python thumbs/attach_lambda_triggers.py
       - run:
           name: "Publish a new Sentry Release"
           command: |

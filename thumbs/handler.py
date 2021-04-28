@@ -1,9 +1,11 @@
 import base64
+import os
 from io import BytesIO
 from os.path import basename, dirname, splitext, sep
 from os import makedirs
 import re
 import sys
+sys.path.append("")
 from typing import Tuple
 from urllib.parse import unquote
 
@@ -13,6 +15,7 @@ import django
 from django.conf import settings
 
 settings.configure(THUMBNAIL_KVSTORE="thumbs.PassthruKVStore",)
+BUCKET_NAME = open("LEAFLET_IMAGES_BUCKET_NAME").read().strip()
 django.setup()
 
 from PIL import Image, ImageOps
@@ -61,10 +64,10 @@ def handle_cf(event, context):
 
     path = sep.join(parts)
 
-    image = fetch_image("data.electionleaflets.org", path)
+    image = fetch_image(BUCKET_NAME, path)
     processed = process_image(image, (size, options))
     key = new_key((size, options), path)
-    upload_image(processed, image.format, "data.electionleaflets.org", key)
+    upload_image(processed, image.format, BUCKET_NAME, key)
 
     io = BytesIO()
     processed.save(io, image.format)
@@ -159,7 +162,7 @@ if __name__ == "__main__":
                 "Records": [
                     {
                         "s3": {
-                            "bucket": {"name": "data.electionleaflets.org"},
+                            "bucket": {"name": BUCKET_NAME},
                             "object": {"key": "leaflets/image_pX8FVnP.jpg"},
                         }
                     }

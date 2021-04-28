@@ -5,11 +5,12 @@ export DJANGO_SETTINGS_MODULE?=electionleaflets.settings.base_lambda
 export APP_IS_BEHIND_CLOUDFRONT?=False
 
 .PHONY: all
-all: clean collectstatic lambda-layers/DependenciesLayer/requirements.txt ## Rebuild everything this Makefile knows how to build
+all: clean collectstatic lambda-layers/DependenciesLayer/requirements.txt thumbs/requirements.txt ## Rebuild everything this Makefile knows how to build
 
 .PHONY: clean
 clean: ## Delete any generated static asset or req.txt files and git-restore the rendered API documentation file
 	rm -rf electionleaflets/static_files/ lambda-layers/DependenciesLayer/requirements.txt
+	rm -rf thumbs/requirements.txt
 
 .PHONY: collectstatic
 collectstatic: ## Rebuild the static assets
@@ -18,8 +19,11 @@ collectstatic: ## Rebuild the static assets
 lambda-layers/DependenciesLayer:
 	mkdir -p $@
 
-lambda-layers/DependenciesLayer/requirements.txt: Pipfile Pipfile.lock lambda-layers/DependenciesLayer ## Update the requirements.txt file used to build this Lambda function's DependenciesLayer
+lambda-layers/DependenciesLayer/requirements.txt: Pipfile Pipfile.lock lambda-layers/DependenciesLayer lambda-layers/DependenciesLayer ## Update the requirements.txt file used to build this Lambda function's DependenciesLayer
 	pipenv lock -r | sed "s/^-e //" >lambda-layers/DependenciesLayer/requirements.txt
+
+thumbs/requirements.txt: thumbs/Pipfile thumbs/Pipfile.lock ## Update the requirements.txt file used to build this Lambda function's DependenciesLayer
+	cd thumbs && pipenv lock -r | sed "s/^-e //" >requirements.txt
 
 .PHONY: help
 # gratuitously adapted from https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html

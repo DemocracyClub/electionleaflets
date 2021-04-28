@@ -84,6 +84,7 @@ Resources:
       BuildMethod: python3.8
     RetentionPolicy: Delete
 
+
   ElectionLeafletsFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -118,6 +119,8 @@ Resources:
           Properties:
             Path: /
             Method: ANY
+
+
 
   ElectionLeafletsFunctionLogGroup:
     Type: AWS::Logs::LogGroup
