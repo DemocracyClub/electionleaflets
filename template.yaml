@@ -94,7 +94,7 @@ Resources:
       Layers:
         - !Ref DependenciesLayer
       Runtime: python3.8
-      MemorySize: 192
+      MemorySize: 256
       Environment:
         Variables:
           SECRET_KEY: !Ref AppSecretKey
