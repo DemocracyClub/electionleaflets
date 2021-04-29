@@ -3,6 +3,7 @@ import datetime
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views.decorators.cache import cache_control
 from django.views.generic import FormView, TemplateView, DetailView
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
@@ -15,10 +16,12 @@ from people.models import Person
 from uk_political_parties.models import Party
 
 from .forms import ReportAbuseForm
+from .helpers import CacheControlMixin
 
 
-class HomeView(TemplateView):
+class HomeView(CacheControlMixin, TemplateView):
     template_name = "core/home.html"
+    cache_timeout = 60 * 5
 
     def get_context_data(self, **kwargs):
 

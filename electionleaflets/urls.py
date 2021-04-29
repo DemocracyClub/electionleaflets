@@ -24,7 +24,7 @@ if MAINTENANCE_MODE:
 
 else:
     urlpatterns = [
-        re_path(r"^$", cache_page(60 * 5)(HomeView.as_view()), name="home"),
+        re_path(r"^$", HomeView.as_view(), name="home"),
         re_path(r"^leaflets/", include("leaflets.urls")),
         re_path(r"^parties/", include("parties.urls")),
         re_path(r"^person/", include("people.urls")),

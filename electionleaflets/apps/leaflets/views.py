@@ -14,6 +14,7 @@ from django.views.generic.detail import SingleObjectMixin
 from braces.views import StaffuserRequiredMixin
 
 from analysis.forms import QuestionSetForm
+from core.helpers import CacheControlMixin
 from .models import Leaflet, LeafletImage
 from .forms import LeafletDetailsFrom, SingleLeafletImageForm
 from people.devs_dc_helpers import DevsDCAPIHelper
@@ -21,7 +22,8 @@ from people.models import Person
 from storages.backends.s3boto3 import S3Boto3Storage
 
 
-class ImageView(UpdateView):
+class ImageView(CacheControlMixin, UpdateView):
+    cache_timeout = 60 * 60
     model = LeafletImage
     template_name = "leaflets/full.html"
     form_class = SingleLeafletImageForm
@@ -78,13 +80,15 @@ class ImageCropView(StaffuserRequiredMixin, DetailView):
         return HttpResponseRedirect(image_model.get_absolute_url())
 
 
-class LatestLeaflets(ListView):
+class LatestLeaflets(CacheControlMixin, ListView):
+    cache_timeout = 60 * 60
     model = Leaflet
     template_name = "leaflets/index.html"
     paginate_by = 60
 
 
-class LeafletView(DetailView):
+class LeafletView(CacheControlMixin, DetailView):
+    cache_timeout = 60 * 60
     template_name = "leaflets/leaflet.html"
     model = Leaflet
 
