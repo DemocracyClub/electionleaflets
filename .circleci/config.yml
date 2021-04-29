@@ -176,6 +176,7 @@ jobs:
                  PublicFqdn=$PUBLIC_FQDN \
                  LeafletsBucketName=$LEAFLET_IMAGES_BUCKET_NAME
               "
+      - run: pip install -U boto3 pipenv --quiet --no-input
       - run: python thumbs/attach_lambda_triggers.py
       - run:
           name: "Publish a new Sentry Release"
