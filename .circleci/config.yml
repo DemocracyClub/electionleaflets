@@ -151,7 +151,7 @@ jobs:
               --template-file ~/repo/thumbs/.aws-sam/build/ThumbsFunction/template.yml \
               --region eu-west-2 \
               --s3-bucket=election-leaflets-deployment-artifacts-staging-238m322
-              
+
       - run:
           name: "Deploy thumbs function to eu-weat-1 for lambda@edge"
           command: |

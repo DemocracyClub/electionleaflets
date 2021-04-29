@@ -220,8 +220,8 @@ class LeafletImage(models.Model):
         This is so we don't destroy images, by cropping them too small
         for example.
         """
-        if not self.exif_data and self.exif_data != b"":
-            self._remove_exif_data()
+        # if not self.exif_data and self.exif_data != b"":
+        #     self._remove_exif_data()
 
         super(LeafletImage, self).save(*args, **kwargs)
         if not self.raw_image:

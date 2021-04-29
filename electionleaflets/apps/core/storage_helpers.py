@@ -1,3 +1,4 @@
+from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import UploadedFile
 from django.utils.datastructures import MultiValueDict
 from formtools.wizard.storage import NoFileStorageConfigured
@@ -56,8 +57,8 @@ class PreUploadedSessionStorage(SessionStorage):
                 if (step, field, field_dict["name"]) not in self._files:
                     self._files[
                         (step, field, field_dict["name"])
-                    ] = UploadedFile(
-                        file=self.file_storage.open(tmp_name), **field_dict
+                    ] = ContentFile(
+                        tmp_name
                     )
                 uploaded_file_list.append(
                     self._files[(step, field, field_dict["name"])]

@@ -5,16 +5,25 @@ import json
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
 from django.core.signing import Signer
 
 from localflavor.gb.forms import GBPostcodeField
 
 from leaflets.models import Leaflet, LeafletImage
 
+class S3UploadedImageField(forms.ImageField):
+    def to_python(self, data):
+        if not isinstance(data, ContentFile):
+            return super().to_python(data)
+        content =data.read()
+        data.name = content
+        if content.startswith("tmp/s3file"):
+            return data
 
 class ImagesForm(forms.Form):
     use_required_attribute = False
-    image = forms.ImageField(
+    image = S3UploadedImageField(
         widget=forms.ClearableFileInput(attrs={"multiple": True}),
         error_messages={"required": "Please add a photo or skip this step"},
     )

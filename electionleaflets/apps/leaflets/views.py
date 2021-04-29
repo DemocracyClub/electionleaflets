@@ -174,9 +174,23 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                 uploaded_images = self.storage.get_step_files("images").getlist(
                     "images-image"
                 )
+                bucket = self.storage.file_storage.bucket
                 for s3_file in uploaded_images:
+                    copy_source = {
+                            "Bucket": bucket.name,
+                            "Key": s3_file.name,
+                    }
+                    new_file_name = f"leaflets/{s3_file.name.split('/')[-1]}"
+                    moved_file = bucket.Object(new_file_name)
+                    moved_file.copy(copy_source)
+
+                    new_file_name_raw = f"raw_{new_file_name}"
+                    moved_file_raw = bucket.Object(new_file_name_raw)
+                    moved_file_raw.copy(copy_source)
+
                     image = LeafletImage(leaflet=leaflet)
-                    image.image = s3_file
+                    image.image.name = new_file_name
+                    image.raw_image.name = new_file_name_raw
                     image.save()
 
             if form_prefix == "postcode":
