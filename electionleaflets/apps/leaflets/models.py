@@ -226,7 +226,7 @@ class LeafletImage(models.Model):
         super(LeafletImage, self).save(*args, **kwargs)
         if not self.raw_image:
             self.raw_image.save(self.image.name, self.image.file)
-        self._clean_image()
+        # self._clean_image()
 
     def _clean_image(self):
         from sorl.thumbnail.engines.pil_engine import Engine
