@@ -49,9 +49,6 @@
           {% include "footer.html" %}
           {% block extra_scripts %}{% endblock %}
           {% javascript "scripts" %}
-          {% if request.user.is_staff %}
-            <script src="{% static "javascript/admin.js" %}"></script>
-          {% endif %}
         {% endblock site_footer %}
       </footer>
     </div>
