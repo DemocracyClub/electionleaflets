@@ -180,11 +180,14 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                 )
                 bucket = self.storage.file_storage.bucket
                 for s3_file in uploaded_images:
+                    s3_file.seek(0)
+                    file_path = s3_file.read()
+                    file_name = file_path.split("/")[-1]
                     copy_source = {
                             "Bucket": bucket.name,
-                            "Key": s3_file.name,
+                            "Key": file_path,
                     }
-                    new_file_name = f"leaflets/{s3_file.name.split('/')[-1]}"
+                    new_file_name = f"leaflets/{file_name}"
                     moved_file = bucket.Object(new_file_name)
                     moved_file.copy(copy_source)
 
