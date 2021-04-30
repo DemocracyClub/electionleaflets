@@ -175,13 +175,10 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                 "images",
             ]:
                 # Dealing with an image form
-                uploaded_images = self.storage.get_step_files("images").getlist(
-                    "images-image"
-                )
+                images_text = self.storage.get_step_data("images")['images-image']
+                uploaded_images = json.loads(images_text)
                 bucket = self.storage.file_storage.bucket
-                for s3_file in uploaded_images:
-                    s3_file.seek(0)
-                    file_path = s3_file.read()
+                for file_path in uploaded_images:
                     file_name = file_path.split("/")[-1]
                     copy_source = {
                             "Bucket": bucket.name,
