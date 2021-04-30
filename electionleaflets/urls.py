@@ -65,8 +65,8 @@ else:
             r"^report/(?P<pk>\d+)/$", ReportView.as_view(), name="report_abuse"
         ),
         # Administration URLS
-        path("admin", admin.site.urls),
-        path("accounts", include("allauth.urls")),
+        path("admin/", admin.site.urls),
+        path("accounts/", include("allauth.urls")),
         re_path(r"^test", TestView.as_view(), name="test"),
     ]
 
