@@ -2,6 +2,7 @@ import json
 import datetime
 import random
 
+from django.db import transaction
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib import messages
@@ -165,6 +166,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             return HttpResponseRedirect("/")
         return super(LeafletUploadWizzard, self).get(*args, **kwargs)
 
+    @transaction.atomic
     def done(self, form_list, **kwargs):
         # Create a new leaflet
         leaflet = Leaflet()
@@ -175,14 +177,16 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                 "images",
             ]:
                 # Dealing with an image form
-                images_text = self.storage.get_step_data("images")['images-image']
+                images_text = self.storage.get_step_data("images")[
+                    "images-image"
+                ]
                 uploaded_images = json.loads(images_text)
                 bucket = self.storage.file_storage.bucket
                 for file_path in uploaded_images:
                     file_name = file_path.split("/")[-1]
                     copy_source = {
-                            "Bucket": bucket.name,
-                            "Key": file_path,
+                        "Bucket": bucket.name,
+                        "Key": file_path,
                     }
                     new_file_name = f"leaflets/{file_name}"
                     moved_file = bucket.Object(new_file_name)
