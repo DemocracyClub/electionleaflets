@@ -1,15 +1,15 @@
 {% extends "leaflets/upload_form/leaflet_upload_base.html" %}
 {% block heading %}
-  <h1>People & parties</h1>
+  <h1>Party</h1>
 
 {% endblock heading %}
 {% block form %}
-  {% if form.people.field.choices %}
+  {% if form.party.field.choices %}
     <fieldset>
       <legend>Was the leaflet sent by one of these people?</legend>
 
     <ul class="ds-select-list">
-      {% for radio in form.people %}
+      {% for radio in form.party %}
         <li>
           {{ radio.tag }}
           <label for="{{ radio.id_for_label }}"> {{ radio.choice_label }}</label>

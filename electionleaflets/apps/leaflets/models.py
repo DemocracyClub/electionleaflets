@@ -1,6 +1,7 @@
 from io import BytesIO
 import re
 
+from django.contrib.postgres.fields import JSONField
 from django.urls import reverse
 from sorl.thumbnail import ImageField
 from sorl.thumbnail import delete
@@ -47,6 +48,11 @@ class Leaflet(models.Model):
     ballot_id = models.CharField(
         blank=True, null=True, max_length=255, db_index=True
     )
+
+    ballots = JSONField(default=[])
+    people = JSONField(default={})
+    person_ids = JSONField(default=[])
+
     election = models.ForeignKey(Election, null=True, on_delete=models.CASCADE)
     constituency = models.ForeignKey(
         Constituency, blank=True, null=True, on_delete=models.CASCADE

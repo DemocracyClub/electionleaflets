@@ -6,9 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('people', '0002_import_ynr_people'),
-        ('people', '0004_unique_remote_id'),
+        ("people", "0002_import_ynr_people"),
+        ("people", "0004_unique_remote_id"),
     ]
 
-    operations = [
-    ]
+    operations = []

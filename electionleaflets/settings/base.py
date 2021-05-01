@@ -67,9 +67,7 @@ PIPELINE = {
                 "scss/vendor/filepond-plugin-image-preview.css",
             ],
             "output_filename": "scss/styles.css",
-            "extra_context": {
-                "media": "screen,projection",
-            },
+            "extra_context": {"media": "screen,projection",},
         },
     },
     "JAVASCRIPT": {
@@ -94,16 +92,16 @@ PIPELINE["JS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
 import dc_design_system
 
 PIPELINE["SASS_ARGUMENTS"] = (
-        " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
+    " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
 )
 
 STATICFILES_FINDERS = (
     "pipeline.finders.ManifestFinder",
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    'pipeline.finders.CachedFileFinder',
-    'pipeline.finders.PipelineFinder',
-    'pipeline.finders.ManifestFinder',
+    "pipeline.finders.CachedFileFinder",
+    "pipeline.finders.PipelineFinder",
+    "pipeline.finders.ManifestFinder",
 )
 
 WHITENOISE_AUTOREFRESH = True
@@ -125,7 +123,7 @@ SECRET_KEY = "elyfryi8on!dmw&8b3j-g0yve4u&%4_6%(tf3*)@#&mq*$yzhf^6"
 
 MIDDLEWARE = (
     "s3file.middleware.S3FileMiddleware",
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -175,6 +173,7 @@ INSTALLED_APPS = [
     "s3file",
 ] + LEAFLET_APPS
 
+
 def setup_sentry(environment=None):
     SENTRY_DSN = os.environ.get("SENTRY_DSN")
     if not SENTRY_DSN:
@@ -196,7 +195,6 @@ def setup_sentry(environment=None):
         send_default_pii=True,
         release=release,
     )
-
 
 
 THUMBNAIL_FORMAT = "PNG"

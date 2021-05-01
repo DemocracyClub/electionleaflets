@@ -16,11 +16,13 @@ from .forms import (
     ImagesForm,
     PostcodeForm,
     PeopleForm,
+    PartyForm,
 )
 
 named_form_list = [
     ("images", ImagesForm),
     ("postcode", PostcodeForm),
+    ("party", PartyForm),
     ("people", PeopleForm),
 ]
 

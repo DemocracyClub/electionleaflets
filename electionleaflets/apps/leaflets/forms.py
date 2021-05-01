@@ -99,95 +99,76 @@ class PeopleRadioWidget(forms.RadioSelect):
         )
 
 
-class PeopleForm(forms.Form):
-    # A temporary top-X list of parties per register to show if the candidate
-    # isn't shown. We will eventually create this list based on real data.
-    HARDCODED_PARTIES = {
-        "gb": [
-            (52, "Conservative and Unionist Party"),
-            (63, "Green Party"),
-            (53, "Labour Party"),
-            (90, "Liberal Democrats"),
-            (102, "Scottish National Party (SNP)"),
-            (7931, "Reform UK"),
-            (77, "Plaid Cymru - The Party of Wales"),
-        ],
-        "ni": [
-            (103, "Alliance - Alliance Party of Northern Ireland"),
-            (70, "Democratic Unionist Party - D.U.P."),
-            (55, "SDLP (Social Democratic & Labour Party)"),
-            (39, "Sinn Féin"),
-            (83, "Ulster Unionist Party"),
-        ],
-    }
-
+class PartyForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        super(PeopleForm, self).__init__(*args, **kwargs)
-        signer = Signer()
+        super().__init__(*args, **kwargs)
 
         if "postcode_results" in kwargs["initial"]:
 
-            postcode_results = kwargs["initial"]["postcode_results"].json()
-
-            # We have a response, parse each candidacy in to a set
-            # of unique people as people can stand in more than one ballot
-            # for a postcode
-            unique_people = OrderedDict()
+            postcode_results = kwargs["initial"]["postcode_results"]
+            current_parties = set()
+            signer = Signer()
             for date in postcode_results["dates"]:
                 for ballot in date["ballots"]:
                     # Dead person's switch to ensure this 1:1 mapping of
                     # candidacies to leaflets only happens for #GE2019.
                     # For other ballots, we won't show candidates, just parties.
-                    if ballot["ballot_paper_id"].startswith("parl.") and ballot[
-                        "ballot_paper_id"
-                    ].endswith(".2019-12-12"):
-                        for candidacy in ballot["candidates"]:
-                            # Until we have better live lookup of YNR in EL, we'll
-                            # embed the results in our form fields. Not ideal. We'll
-                            # sign the data so people can't inject garbage into the
-                            # database.
-                            data = {
-                                "ynr_party_id": candidacy["party"]["party_id"],
-                                "ynr_party_name": candidacy["party"][
-                                    "party_name"
-                                ],
-                                "ynr_person_id": candidacy["person"]["ynr_id"],
-                                "ynr_person_name": candidacy["person"]["name"],
-                                "ballot_id": ballot["ballot_paper_id"],
-                            }
-                            person_key = signer.sign(json.dumps(data))
-                            unique_people[person_key] = candidacy
-
-            self.fields["people"] = forms.ChoiceField(
-                choices=list(unique_people.items()),
-                widget=PeopleRadioWidget,
+                    for candidacy in ballot["candidates"]:
+                        party_key = signer.sign(
+                            json.dumps(
+                                {
+                                    "party_id": candidacy["party"]["party_id"],
+                                    "party_name": candidacy["party"][
+                                        "party_name"
+                                    ],
+                                }
+                            )
+                        )
+                        data = (
+                            party_key,
+                            candidacy["party"]["party_name"],
+                        )
+                        current_parties.add(data)
+            self.fields["party"] = forms.ChoiceField(
+                choices=[(None, "Not listed")] + list(current_parties),
+                widget=forms.RadioSelect,
                 required=False,
             )
-            if (
-                "electoral_services" in postcode_results
-                and postcode_results["electoral_services"]["council_id"][0:3]
-                == "N09"
-            ):
-                parties = self.HARDCODED_PARTIES["ni"]
-            else:
-                parties = self.HARDCODED_PARTIES["gb"]
 
-        else:
-            parties = (
-                self.HARDCODED_PARTIES["gb"] + self.HARDCODED_PARTIES["ni"]
+
+def clean_party_id(party_id):
+    party_map = {
+        "joint-party:53-119": ["party:53", "joint-party:53-119"],
+        "party:53": ["party:53", "joint-party:53-119"],
+    }
+    return party_map.get(party_id, [party_id])
+
+
+class PeopleForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        signer = Signer()
+        unsigned_party = json.loads(signer.unsign(kwargs["initial"]["party"]))
+        party = clean_party_id(unsigned_party["party_id"])
+
+        if "postcode_results" in kwargs["initial"]:
+
+            postcode_results = kwargs["initial"]["postcode_results"]
+            current_parties = set()
+
+            for date in postcode_results["dates"]:
+                for ballot in date["ballots"]:
+                    for candidacy in ballot["candidates"]:
+                        candidacy["ballot_paper_id"] = ballot["ballot_paper_id"]
+                        if candidacy["party"]["party_id"] in party:
+                            data = (
+                                signer.sign(json.dumps(candidacy)),
+                                candidacy["person"]["name"],
+                            )
+                            current_parties.add(data)
+            self.fields["people"] = forms.MultipleChoiceField(
+                choices=[(None, "Not listed / general party leaflet")]
+                + list(current_parties),
+                required=False,
+                widget=forms.CheckboxSelectMultiple,
             )
-
-        party_options = []
-        for party in parties:
-            party_options.append(
-                (
-                    signer.sign("party:{0}--{1}".format(party[0], party[1])),
-                    party[1],
-                )
-            )
-
-        party_options.append((signer.sign("--"), "Not Listed"))
-
-        self.fields["parties"] = forms.ChoiceField(
-            choices=party_options, widget=forms.RadioSelect, required=False
-        )
