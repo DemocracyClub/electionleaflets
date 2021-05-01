@@ -13,7 +13,7 @@ jobs:
           keys:
             - v2-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
             - v2-dependencies-default
-      - run: &install-pipenv sudo pip install -U urllib3 cryptography==3.3.2 pipenv --quiet --no-input
+      - run: &install-pipenv sudo pip install -U urllib3 cryptography==3.3.2 pipenv pip --quiet --no-input
       - run: pipenv install --dev
       - run: pipenv check # before save_cache so an insecure cache is never saved
       - run: make lambda-layers/DependenciesLayer/requirements.txt
