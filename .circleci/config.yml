@@ -211,4 +211,17 @@ workflows:
             - run-tests                            # staging should only deploy if tests pass
             - sam_build                       # deploy needs .aws-sam/build/
           context: [ deployment-staging-election-leaflets ]
-          filters: { branches: { only: [ new-file-uploader ] } }
+          filters: { branches: { only: [ master ] } }
+
+      - sam_deploy:
+          name: sam_deploy_production
+          dc-environment: production
+          dc-deploy-name: production
+          dc-django-settings-module: electionleaflets.settings.base_lambda
+          requires:
+            - install_and_update_dependencies # SAM CLI is in the dev package set
+            - run-tests                            # staging should only deploy if tests pass
+            - sam_build                       # deploy needs .aws-sam/build/
+            - sam_deploy_staging
+          context: [ deployment-production-election-leaflets ]
+          filters: { branches: { only: [ master ] } }
