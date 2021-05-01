@@ -1,8 +1,11 @@
+import os
+
 import boto3
 from botocore.exceptions import BotoCoreError
 
-IMAGES_BUCKET_NAME = "electionleaflets-images-staging"
-IMAGES_URL = "images.stage.electionleaflets.org"
+IMAGES_BUCKET_NAME = os.environ.get("LEAFLET_IMAGES_BUCKET_NAME")
+IMAGES_URL = f"images.{os.environ.get('PUBLIC_FQDN')}"
+ENVIRONMENT = os.environ.get("SAM_LAMBDA_CONFIG_ENV")
 
 s3_client = boto3.client("s3", "eu-west-2")
 lambda_client = boto3.client("lambda", "eu-west-2")
@@ -11,17 +14,21 @@ lambda_client = boto3.client("lambda", "eu-west-2")
 def get_thumbs_function(lambda_client):
     for function in lambda_client.list_functions()["Functions"]:
         if function["FunctionName"].startswith(
-            "ElectionLeafletsThumbs-staging"
+            f"ElectionLeafletsThumbs-{ENVIRONMENT}"
         ):
             return function
 
 
+def policy_exists(arn):
+    try:
+        policy =lambda_client.get_policy(FunctionName=function_arn)
+    except:
+        return False
+    return "s3_thumbs" in policy["Policy"]
+
 lambda_function = get_thumbs_function(lambda_client)
 function_arn = lambda_function["FunctionArn"]
-if (
-    "s3_thumbs"
-    not in lambda_client.get_policy(FunctionName=function_arn)["Policy"]
-):
+if not policy_exists(function_arn):
     lambda_client.add_permission(
         FunctionName=function_arn,
         StatementId="s3_thumbs",

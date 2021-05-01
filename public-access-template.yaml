@@ -123,6 +123,20 @@ Resources:
               Forward: "all"
           ViewerProtocolPolicy: "redirect-to-https"
 
+        CacheBehaviors:
+          - AllowedMethods: [ GET, HEAD, OPTIONS ]
+            PathPattern: thumbs/*
+            TargetOriginId: ImagesBucket
+            ForwardedValues:
+              QueryString: true
+              Cookies:
+                Forward: "all"
+              Headers:
+                - Authorization
+                - Origin
+                - Referer
+            ViewerProtocolPolicy: "redirect-to-https"
+
   DnsRecord:
     Type: AWS::Route53::RecordSet
     Properties:
