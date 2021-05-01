@@ -1,10 +1,20 @@
 {% extends "leaflets/upload_form/leaflet_upload_base.html" %}
-{% block heading %}<h1>Step 4: postcode</h1>{% endblock heading %}
+{% block heading %}<h1>Postcode</h1>{% endblock heading %}
 {% block form %}
-<div>
+  <div class="ds-field">
     <label for="id_postcode-postcode">
       What postcode was this leaflet delivered to?
     </label>
     {{form.postcode}}
-</div>
+    {% if form.postcode.errors %}
+      <div role="alert">
+        <div class="ds-error">
+          {% for error in form.postcode.errors %}
+            <span role="img" aria-label="Error">❌</span> {{ error }}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
 {% endblock form %}

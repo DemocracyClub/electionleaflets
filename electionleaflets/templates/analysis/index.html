@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-  <div class="fukol-grid">
-    <div class="fukol-grid__col fukol-grid__col--60-70">
       <h1>Analysis team</h1>
       <p>
         The ElectionLeaflets.org analysis team check and tidy categorising
@@ -35,9 +33,7 @@
         <li><a href="{% url "analysis_report_per_party"%}">Analysis per party</a></li>
         <li><a href="{% url "constituencies_report" %}">Leaflets by constituency</a></li>
       </ul>
-    </div>
 
-    <div class="fukol-grid__col fukol-grid__col--40-30">
       <h2>League table</h2>
       <table class="columns large-12 odd-even">
         <thead>
@@ -56,8 +52,6 @@
         </tbody>
       </table>
       <p><strong>{{total_contributions}}</strong> in total</p>
-    </div>
 
 
-  </div>
 {% endblock %}

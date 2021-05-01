@@ -8,8 +8,6 @@ import piexif
 from PIL import Image
 
 from django.db import models
-from django.contrib.gis.db import models as geo_model
-from django.contrib.gis.geos import Point
 from django.core.files.base import ContentFile
 from django.forms.models import model_to_dict
 
@@ -25,7 +23,7 @@ from . import constants
 devs_dc_helper = DevsDCAPIHelper()
 
 
-class Leaflet(geo_model.Model):
+class Leaflet(models.Model):
     def __init__(self, *args, **kwargs):
         super(Leaflet, self).__init__(*args, **kwargs)
         self._initial = model_to_dict(
@@ -55,7 +53,6 @@ class Leaflet(geo_model.Model):
     )
     imprint = models.TextField(blank=True, null=True)
     postcode = models.CharField(max_length=150, blank=True)
-    location = geo_model.PointField(null=True, blank=True)
     name = models.CharField(blank=True, max_length=300)
     email = models.CharField(blank=True, max_length=300)
     date_uploaded = models.DateTimeField(auto_now_add=True)
@@ -150,19 +147,6 @@ class Leaflet(geo_model.Model):
                     ),
                 }
 
-    def geocode(self, postcode):
-        data = geocode(postcode)
-        if data:
-            self.constituency = data["constituency"]
-            self.location = Point(data["wgs84_lon"], data["wgs84_lat"],)
-
-    def save(self, *args, **kwargs):
-        if self.postcode:
-            if self.postcode != self._initial["postcode"]:
-                self.geocode(self.postcode)
-
-        super(Leaflet, self).save(*args, **kwargs)
-
 
 class LeafletImage(models.Model):
     ORIENTATION_CHOICES = (
@@ -236,13 +220,13 @@ class LeafletImage(models.Model):
         This is so we don't destroy images, by cropping them too small
         for example.
         """
-        if not self.exif_data and self.exif_data != b"":
-            self._remove_exif_data()
+        # if not self.exif_data and self.exif_data != b"":
+        #     self._remove_exif_data()
 
         super(LeafletImage, self).save(*args, **kwargs)
         if not self.raw_image:
             self.raw_image.save(self.image.name, self.image.file)
-        self._clean_image()
+        # self._clean_image()
 
     def _clean_image(self):
         from sorl.thumbnail.engines.pil_engine import Engine
@@ -260,7 +244,7 @@ class LeafletImage(models.Model):
         self.image.save(self.image.name, file_content, save=False)
 
     def get_absolute_url(self):
-        return reverse("full_image", (), {"pk": self.pk})
+        return reverse("full_image", kwargs={"pk": self.pk})
 
     @property
     def dimensions(self):

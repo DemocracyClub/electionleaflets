@@ -24,7 +24,7 @@ if MAINTENANCE_MODE:
 
 else:
     urlpatterns = [
-        re_path(r"^$", cache_page(60 * 5)(HomeView.as_view()), name="home"),
+        re_path(r"^$", HomeView.as_view(), name="home"),
         re_path(r"^leaflets/", include("leaflets.urls")),
         re_path(r"^parties/", include("parties.urls")),
         re_path(r"^person/", include("people.urls")),
@@ -65,9 +65,8 @@ else:
             r"^report/(?P<pk>\d+)/$", ReportView.as_view(), name="report_abuse"
         ),
         # Administration URLS
-        path("admin", admin.site.urls),
-        path("accounts", include("allauth.urls")),
-        re_path(r"^dc_base_theme", include("dc_theme.urls")),
+        path("admin/", admin.site.urls),
+        path("accounts/", include("allauth.urls")),
         re_path(r"^test", TestView.as_view(), name="test"),
     ]
 

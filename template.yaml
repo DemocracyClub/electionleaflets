@@ -1,0 +1,137 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: "EC API app: Lambda, API Gateway"
+
+Globals:
+  Function:
+    Timeout: 80
+  Api:
+    BinaryMediaTypes:
+      - "*/*"
+      - "*/*"
+
+Parameters:
+
+  AppSecretKey:
+    Description: "The SECRET_KEY environment variable passed to the app."
+    Type: String
+
+  AppSentryDSN:
+    Description: "The SENTRY_DSN environment variable passed to the app."
+    Type: String
+
+  GitHash:
+    Description: "The Hash of the git commit that's deployed"
+    Type: String
+
+  AppDjangoSettingsModule:
+    # NB This parameter (and how it reaches the app, and how it's set in
+    # developer and CI-managed deployments) is used in
+    # `docs/new-development-deployment.md` as a reference to demonstrate how to
+    # communicate variables to the app. If you modify this parameter, or remove
+    # it, please update the document so developers aren't left without
+    # guidance!
+    Description: "The DJANGO_SETTINGS_MODULE environment variable passed to the app."
+    Type: String
+
+  AppIsBehindCloudFront:
+    Description: "The APP_IS_BEHIND_CLOUDFRONT environment variable passed to the app, which modifies various path- and host-related settings."
+    Type: String
+    AllowedValues:
+    - "True"
+    - "False"
+    Default: "False"
+
+  AppLogRetentionDays:
+    Description: "The number of days that CloudWatch Logs will keep logs from the app."
+    Type: Number
+    Default: 60
+    AllowedValues: [ 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653 ]
+
+  AppPostgresHost:
+    Description: "The Postgres database host for this deploy."
+    Type: String
+
+  AppPostgresDatabaseName:
+    Description: "The Postgres database name for this deploy."
+    Type: String
+
+  AppPostgresPassword:
+    Description: "The password for the postgres user"
+    Type: String
+
+  AppSamLambdaConfigEnv:
+    Description: "The lambda config environment passed to the app used to init sentry."
+    Type: String
+
+  AppDomain:
+    Description: "The domain the app is on."
+    Type: String
+
+  AppLeafletImagesBucketName:
+    Description: "The S3 bucket to store uploaded leaflets in."
+    Type: String
+
+Resources:
+
+  DependenciesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: ./lambda-layers/DependenciesLayer/
+      CompatibleRuntimes:
+        - python3.8
+    Metadata:
+      BuildMethod: python3.8
+    RetentionPolicy: Delete
+
+
+  ElectionLeafletsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ElectionLeafletsLambdaExecutionRole"
+      CodeUri: .
+      Handler: electionleaflets.lambda_awsgi.lambda_handler
+      Layers:
+        - !Ref DependenciesLayer
+      Runtime: python3.8
+      MemorySize: 256
+      Environment:
+        Variables:
+          SECRET_KEY: !Ref AppSecretKey
+          SENTRY_DSN: !Ref AppSentryDSN
+          GIT_HASH: !Ref GitHash
+          DJANGO_SETTINGS_MODULE: !Ref AppDjangoSettingsModule
+          APP_IS_BEHIND_CLOUDFRONT: !Ref AppIsBehindCloudFront
+          DATABASE_HOST: !Ref AppPostgresHost
+          POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
+          DATABASE_PASS: !Ref AppPostgresPassword
+          SAM_LAMBDA_CONFIG_ENV: !Ref AppSamLambdaConfigEnv
+          APP_DOMAIN: !Ref AppDomain
+          LEAFLET_IMAGES_BUCKET_NAME: !Ref AppLeafletImagesBucketName
+      Events:
+        HTTPRequests:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+        HTTPRequestRoots:
+          Type: Api
+          Properties:
+            Path: /
+            Method: ANY
+
+
+
+  ElectionLeafletsFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: [ ElectionLeafletsFunction ]
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${ElectionLeafletsFunction}
+      RetentionInDays: !Ref AppLogRetentionDays
+
+Outputs:
+  ElectionLeafletsFqdn:
+    Description: "API Gateway endpoint FQDN for EC API function"
+    Value: !Sub "${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com"
+    Export:
+      Name: !Join [ ":", [ !Ref "AWS::StackName", "ElectionLeafletsFqdn" ] ]

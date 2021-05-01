@@ -3,6 +3,7 @@ import datetime
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views.decorators.cache import cache_control
 from django.views.generic import FormView, TemplateView, DetailView
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
@@ -15,33 +16,26 @@ from people.models import Person
 from uk_political_parties.models import Party
 
 from .forms import ReportAbuseForm
+from .helpers import CacheControlMixin
 
 
-class HomeView(TemplateView):
+class HomeView(CacheControlMixin, TemplateView):
     template_name = "core/home.html"
+    cache_timeout = 60 * 5
 
     def get_context_data(self, **kwargs):
 
-        # get leaflet count
-        start_date = datetime.date(2015, 1, 1)
-        leaflet_count = Leaflet.objects.filter(
-            date_uploaded__gt=start_date
-        ).count()
-        last_30_days = Leaflet.objects.filter(
-            date_uploaded__gt=datetime.datetime.now() + datetime.timedelta(-30)
-        ).count()
+        leaflet_count = Leaflet.objects.all().count()
         context = super(HomeView, self).get_context_data(**kwargs)
 
         # get latest leaflets (with titles)
-        latest_leaflets = Leaflet.objects.all()[:9]
+        latest_leaflets = Leaflet.objects.all()[:20]
 
         # update context
         context.update(
             {
                 "leaflet_count": leaflet_count,
-                "start_date": start_date,
                 "latest_leaflets": latest_leaflets,
-                "last_30_days": last_30_days,
             }
         )
 

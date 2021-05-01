@@ -34,7 +34,7 @@ def remove_dupes(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("people", "0002_import_ynr_people"),
+        ("people", "0001_initial"),
     ]
 
     operations = [migrations.RunPython(remove_dupes, migrations.RunPython.noop)]

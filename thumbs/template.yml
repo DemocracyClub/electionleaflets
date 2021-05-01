@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: "EC API app: Lambda, API Gateway"
+
+Globals:
+  Function:
+    Timeout: 30
+  Api:
+    BinaryMediaTypes:
+      - "*/*"
+      - "*/*"
+Resources:
+
+  ThumbsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ElectionLeafletsLambdaExecutionRole"
+      CodeUri: .
+      Handler: handler.handle
+      Runtime: python3.8
+      MemorySize: 192

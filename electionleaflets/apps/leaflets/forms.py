@@ -4,36 +4,53 @@ from collections import OrderedDict
 import json
 
 from django import forms
+from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
 from django.core.signing import Signer
 
 from localflavor.gb.forms import GBPostcodeField
 
-from leaflets.models import Leaflet
+from leaflets.models import Leaflet, LeafletImage
 
 
-class ImageForm(forms.Form):
+class S3UploadedImageField(forms.ImageField):
+    def to_python(self, data):
+        if not isinstance(data, dict):
+            return super().to_python(data)
+        content = data.read()
+        data.name = content
+        if content.startswith("tmp/s3file"):
+            return data
+
+
+class ImagesForm(forms.Form):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if "images-image" in self.data:
+            self.fields["image"] = forms.CharField(max_length=2000)
+        else:
+            self.fields["image"] = S3UploadedImageField(
+                widget=forms.ClearableFileInput(
+                    attrs={
+                        "multiple": True,
+                        "accept": "image/*;capture=camera",
+                        "capture": "camera",
+                    }
+                ),
+                error_messages={
+                    "required": "Please add a photo or skip this step"
+                },
+            )
+
     use_required_attribute = False
-    image = forms.ImageField(
-        widget=forms.FileInput(attrs={"accept": "image/*;capture=camera"}),
-        error_messages={"required": "Please add a photo or skip this step"},
-    )
-
-
-class FrontPageImageForm(ImageForm):
-    pass
-
-
-class BackPageImageForm(ImageForm):
-    pass
-
-
-class InsidePageImageForm(ImageForm):
-    pass
 
 
 class PostcodeForm(forms.Form):
     postcode = GBPostcodeField(
-        error_messages={"required": "Please enter a valid UK postcode"}
+        error_messages={
+            "required": "Please enter a valid UK postcode",
+            "invalid": "Please enter a full UK postcode.",
+        }
     )
 
 
@@ -41,6 +58,28 @@ class LeafletDetailsFrom(forms.ModelForm):
     class Meta:
         model = Leaflet
         fields = "__all__"
+
+
+class Base64EncodedFileWidget(forms.ClearableFileInput):
+    """
+    https://github.com/codingjoe/django-s3file/issues/134
+    """
+
+    def get_conditions(self, accept):
+        conditions = super().get_conditions(accept)
+        conditions.append({"Content-Encoding": "base64"})
+        return conditions
+
+    input_type = "hidden"
+    template_name = "django/forms/widgets/input.html"
+
+
+class SingleLeafletImageForm(forms.ModelForm):
+    class Meta:
+        model = LeafletImage
+        fields = ["image"]
+
+    image = forms.ImageField(widget=Base64EncodedFileWidget)
 
 
 class LeafletReviewFrom(forms.ModelForm):
@@ -74,7 +113,7 @@ class PeopleForm(forms.Form):
             (53, "Labour Party"),
             (90, "Liberal Democrats"),
             (102, "Scottish National Party (SNP)"),
-            (7931, "The Brexit Party"),
+            (7931, "Reform UK"),
             (77, "Plaid Cymru - The Party of Wales"),
         ],
         "ni": [
@@ -128,7 +167,6 @@ class PeopleForm(forms.Form):
                 widget=PeopleRadioWidget,
                 required=False,
             )
-
             if (
                 "electoral_services" in postcode_results
                 and postcode_results["electoral_services"]["council_id"][0:3]

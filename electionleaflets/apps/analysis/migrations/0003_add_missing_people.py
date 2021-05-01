@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("analysis", "0002_auto_20160403_1456"),
-        ("people", "0002_import_ynr_people"),
+        ("people", "0001_initial"),
     ]
 
     operations = [

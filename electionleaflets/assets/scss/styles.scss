@@ -1,0 +1,136 @@
+@import 'partials/_fonts.scss';
+@import 'partials/_variables.scss';
+@import 'partials/_type.scss';
+@import 'partials/_forms.scss';
+@import 'partials/_description-lists.scss';
+@import 'partials/_button.scss';
+@import 'partials/_call-to-action.scss';
+@import 'partials/_details.scss';
+@import 'partials/_stack.scss';
+@import 'partials/_cluster.scss';
+@import 'partials/_grid.scss';
+@import 'partials/_sidebar.scss';
+@import 'partials/_breadcrumbs.scss';
+@import 'partials/_card.scss';
+@import 'partials/_candidate.scss';
+@import 'partials/_table.scss';
+@import 'partials/_language.scss';
+@import 'partials/_header.scss';
+@import 'partials/_subnav.scss';
+@import 'partials/_footer.scss';
+@import 'partials/_radio.scss';
+@import 'partials/_checkbox.scss';
+@import 'partials/_select.scss';
+@import 'partials/_filter.scss';
+@import 'partials/_status.scss';
+@import 'partials/_codeblock.scss';
+@import 'partials/_dark.scss';
+@import 'partials/_page.scss';
+@import 'partials/_utilities.scss';
+@import 'partials/_logo.scss';
+
+@import 'select-list.scss';
+
+// // Generate atomic classes for documentation demos
+@import 'partials/_classes-colors.scss';
+@import 'partials/_classes-scales.scss';
+
+$scope: false;
+
+@mixin optional-styles {
+  @include description-lists;
+  @include button;
+  @include cta;
+  @include cluster;
+  @include grid;
+  @include sidebar;
+  @include details;
+  @include card;
+  @include candidate;
+  @include breadcrumbs;
+  @include table;
+  @include language;
+  @include logo;
+  @include header;
+  @include subnav;
+  @include footer;
+  @include radio;
+  @include checkbox;
+  @include select;
+  @include filter;
+  @include status;
+  @include codeblock;
+  @include select-list;
+}
+
+@if $scope {
+  .ds-scope {
+    font-size: clamp(#{$s1}, 2vw, #{$s2});
+    @include fontMain;
+    @include type;
+    @include forms;
+    @include stack;
+    @include optional-styles;
+    @include dark;
+    @include page;
+    @include utilities;
+  }
+
+  .ds-scope *,
+  .ds-scope *::before,
+  .ds-scope *::after {
+    box-sizing: border-box;
+  }
+} @else {
+  :root {
+    font-size: clamp(#{$s1}, 2vw, #{$s2});
+    @include fontMain;
+  }
+
+  :root *,
+  :root *::before,
+  :root *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  @include type;
+  @include forms;
+  @include stack;
+  @include optional-styles;
+  @include dark;
+  @include page;
+  @include utilities;
+}
+
+
+.ds-scope .ds-page main {
+  //border:1px solid red;
+  margin-top: 0;
+}
+
+
+.ds-scope .filepond--drop-label {
+  border: 0;
+  border-bottom-color: currentcolor;
+  border-bottom-style: none;
+  border-bottom-width: 0px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 1.25rem;
+  padding: 0.625rem 1.25rem;
+  border-bottom: 0.375rem solid #403F41;
+  background-color: #007CAD;
+}
+
+.ds-scope ul.filepond--list {
+  margin-top:1em;
+  margin-bottom:1em;
+}
+
+body {
+  //background-color: red !important;
+}

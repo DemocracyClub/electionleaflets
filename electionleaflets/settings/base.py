@@ -1,10 +1,9 @@
 import sys
-from os.path import join, abspath, dirname
 from os import environ
-
-from dc_theme.settings import get_pipeline_settings
+import os
 
 # PATH vars
+from os.path import join, abspath, dirname
 
 
 def here(x):
@@ -18,9 +17,7 @@ def root(x):
     return join(abspath(PROJECT_ROOT), x)
 
 
-sys.path.insert(0, root("third_party"))
 sys.path.insert(0, root("apps"))
-sys.path.insert(0, "../django-uk-political-parties/")
 
 
 DEBUG = False
@@ -30,7 +27,7 @@ TEMPLATE_DEBUG = DEBUG
 # DATABASES define in environment specific settings file
 DATABASES = {
     "default": {
-        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": "electionleaflets",
         "USER": "electionleaflets",
     }
@@ -48,25 +45,69 @@ STATIC_ROOT = root("static")
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (root("assets"),)
 
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 AWS_S3_FILE_OVERWRITE = False
-STATICFILES_STORAGE = "s3_lambda_storage.S3StaticStorage"
 STATICFILES_MANIFEST_NAME = environ.get(
     "STATICFILES_MANIFEST_NAME", "staticfiles.json"
 )
 AWS_STORAGE_BUCKET_NAME = "data.electionleaflets.org"
 AWS_S3_SECURE_URLS = True
-AWS_S3_HOST = "s3-eu-west-1.amazonaws.com"
-AWS_S3_CUSTOM_DOMAIN = "data.electionleaflets.org"
+# AWS_S3_HOST = "s3-eu-west-1.amazonaws.com"
+# AWS_S3_CUSTOM_DOMAIN = "data.electionleaflets.org"
 
-PIPELINE = get_pipeline_settings(extra_css=["stylesheets/styles.scss",],)
+PIPELINE = {
+    "COMPILERS": ("pipeline.compilers.sass.SASSCompiler",),
+    "SASS_BINARY": "pysassc",
+    "CSS_COMPRESSOR": "pipeline.compressors.NoopCompressor",
+    "STYLESHEETS": {
+        "styles": {
+            "source_filenames": [
+                "scss/styles.scss",
+                "scss/vendor/filepond.css",
+                "scss/vendor/filepond-plugin-image-preview.css",
+            ],
+            "output_filename": "scss/styles.css",
+            "extra_context": {
+                "media": "screen,projection",
+            },
+        },
+    },
+    "JAVASCRIPT": {
+        "scripts": {
+            "source_filenames": [
+                "javascript/app.js",
+                "javascript/vendor/filepond.js",
+                "javascript/vendor/filepond-plugin-image-exif-orientation.js",
+                "javascript/vendor/filepond-plugin-image-preview.js",
+                "javascript/image_uploader.js",
+                # "javascript/vendor/ImageEditor.js",
+            ],
+            "output_filename": "app.js",
+        }
+    },
+}
+
+
+PIPELINE["CSS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
+PIPELINE["JS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
+
+import dc_design_system
+
+PIPELINE["SASS_ARGUMENTS"] = (
+        " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
+)
 
 STATICFILES_FINDERS = (
     "pipeline.finders.ManifestFinder",
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "pipeline.finders.PipelineFinder",
+    'pipeline.finders.CachedFileFinder',
+    'pipeline.finders.PipelineFinder',
+    'pipeline.finders.ManifestFinder',
 )
+
+WHITENOISE_AUTOREFRESH = True
+WHITENOISE_STATIC_PREFIX = "/static/"
 
 SITE_ID = 1
 SITE_LOGO = "images/logo.png"
@@ -83,6 +124,8 @@ ADMIN_MEDIA_PREFIX = "/admin_media/"
 SECRET_KEY = "elyfryi8on!dmw&8b3j-g0yve4u&%4_6%(tf3*)@#&mq*$yzhf^6"
 
 MIDDLEWARE = (
+    "s3file.middleware.S3FileMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -108,7 +151,6 @@ INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    "django.contrib.gis",
     "django.contrib.sessions",
     "django.contrib.sites",
     "django.contrib.staticfiles",
@@ -128,16 +170,33 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.twitter",
     "django_extensions",
     "pipeline",
-    "dc_theme",
+    "dc_design_system",
     "django_static_jquery",
+    "s3file",
 ] + LEAFLET_APPS
 
-if environ.get("SENTRY_DSN", None):
-    INSTALLED_APPS.append("raven.contrib.django.raven_compat")
-    RAVEN_CONFIG = {
-        "dsn": environ.get("SENTRY_DSN"),
-        "environment": environ.get("SENTRY_ENVIRONMENT", "production"),
-    }
+def setup_sentry(environment=None):
+    SENTRY_DSN = os.environ.get("SENTRY_DSN")
+    if not SENTRY_DSN:
+        return
+
+    if not environment:
+        environment = os.environ["SAM_LAMBDA_CONFIG_ENV"]
+    release = os.environ.get("GIT_HASH", "unknown")
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=1.0,
+        environment=environment,
+        # If you wish to associate users to errors (assuming you are using
+        # django.contrib.auth) you may enable sending PII data.
+        send_default_pii=True,
+        release=release,
+    )
+
 
 
 THUMBNAIL_FORMAT = "PNG"
@@ -159,7 +218,6 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 "django.contrib.auth.context_processors.auth",
-                "dc_theme.context_processors.dc_theme_context",
             ]
         },
     }
