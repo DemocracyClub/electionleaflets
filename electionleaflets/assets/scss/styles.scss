@@ -134,3 +134,18 @@ $scope: false;
 body {
   //background-color: red !important;
 }
+
+
+.ds-card {
+  .ds-card-image {
+    position: unset;
+    padding-bottom: unset;
+
+    img {
+      position: unset;
+    }
+  }
+  .ds-card-body {
+    padding: 0 1em;
+  }
+}
