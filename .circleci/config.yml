@@ -127,6 +127,7 @@ jobs:
                  AppDjangoSettingsModule=$DJANGO_SETTINGS_MODULE \
                  AppSecretKey='$SECRET_KEY' \
                  AppSentryDSN='$SENTRY_DSN' \
+                 AppDCAPIToken='$DEVS_DC_AUTH_TOKEN' \
                  GitHash='$CIRCLE_SHA1' \
                  AppIsBehindCloudFront=True \
                  AppLogRetentionDays=60 \

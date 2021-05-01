@@ -21,10 +21,11 @@ def get_thumbs_function(lambda_client):
 
 def policy_exists(arn):
     try:
-        policy =lambda_client.get_policy(FunctionName=function_arn)
+        policy = lambda_client.get_policy(FunctionName=function_arn)
     except:
         return False
     return "s3_thumbs" in policy["Policy"]
+
 
 lambda_function = get_thumbs_function(lambda_client)
 function_arn = lambda_function["FunctionArn"]
@@ -69,7 +70,9 @@ def get_dist(cf_client):
 
 
 dist = get_dist(cf_client)
-version = lambda_client_us.publish_version(FunctionName=lambda_function_us["FunctionName"])
+version = lambda_client_us.publish_version(
+    FunctionName=lambda_function_us["FunctionName"]
+)
 version_arn = version["FunctionArn"]
 config = cf_client.get_distribution_config(Id=dist["Id"])
 config["DistributionConfig"]["CacheBehaviors"]["Items"][0][

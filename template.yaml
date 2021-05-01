@@ -16,6 +16,10 @@ Parameters:
     Description: "The SECRET_KEY environment variable passed to the app."
     Type: String
 
+  AppDCAPIToken:
+    Description: "The DC API Auth token"
+    Type: String
+
   AppSentryDSN:
     Description: "The SENTRY_DSN environment variable passed to the app."
     Type: String
@@ -99,6 +103,7 @@ Resources:
         Variables:
           SECRET_KEY: !Ref AppSecretKey
           SENTRY_DSN: !Ref AppSentryDSN
+          DEVS_DC_AUTH_TOKEN: !Ref AppDCAPIToken
           GIT_HASH: !Ref GitHash
           DJANGO_SETTINGS_MODULE: !Ref AppDjangoSettingsModule
           APP_IS_BEHIND_CLOUDFRONT: !Ref AppIsBehindCloudFront

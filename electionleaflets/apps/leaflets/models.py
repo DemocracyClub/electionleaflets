@@ -49,9 +49,9 @@ class Leaflet(models.Model):
         blank=True, null=True, max_length=255, db_index=True
     )
 
-    ballots = JSONField(default=[])
-    people = JSONField(default={})
-    person_ids = JSONField(default=[])
+    ballots = JSONField(default=list)
+    people = JSONField(default=dict)
+    person_ids = JSONField(default=list)
 
     election = models.ForeignKey(Election, null=True, on_delete=models.CASCADE)
     constituency = models.ForeignKey(
