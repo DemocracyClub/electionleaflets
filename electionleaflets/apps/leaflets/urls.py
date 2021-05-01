@@ -9,7 +9,7 @@ from leaflets.views import (
     ImageCropView,
     AllImageView,
     ImageRotateView,
-    LegacyImageView,
+    LegacyImageView, should_show_person_form,
 )
 
 from .forms import (
@@ -28,6 +28,7 @@ named_form_list = [
 
 upload_form_wizzard = LeafletUploadWizzard.as_view(
     named_form_list, url_name="upload_step", done_step_name="finished",
+    condition_dict={'people': should_show_person_form}
 )
 
 urlpatterns = [

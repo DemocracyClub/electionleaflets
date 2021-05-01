@@ -129,6 +129,11 @@ class LeafletView(CacheControlMixin, DetailView):
             return self.render_to_response(self.get_context_data(form=form))
 
 
+
+def should_show_person_form(wizard):
+    cleaned_data = wizard.get_cleaned_data_for_step('party') or {}
+    return not '"party_id": null' in cleaned_data.get("party", "")
+
 class LeafletUploadWizzard(NamedUrlSessionWizardView):
     extra_added = False
     file_storage = S3Boto3Storage()
@@ -148,26 +153,21 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
 
     def get_form_initial(self, step):
         if step in ["party", "people"]:
-            results = self.storage.extra_data.get("dc-api-results", {})
-            if not results:
-                api = DevsDCAPIHelper()
-                postcode = self.get_cleaned_data_for_step("postcode")
-                if postcode:
-                    results = api.postcode_request(postcode["postcode"])
-                    if results.status_code == 200:
-                        self.storage.extra_data[
-                            "dc-api-results"
-                        ] = results.json()
-                else:
-                    self.storage.extra_data["dc-api-results"] = {}
+            api = DevsDCAPIHelper()
+            postcode = self.get_cleaned_data_for_step("postcode")
+            ret = {}
+            if postcode:
+                results = api.postcode_request(postcode["postcode"])
+                if results.status_code == 200:
+                    self.storage.extra_data[
+                        "dc-api-results"
+                    ] = results.json()
 
-            ret = {
-                "postcode_results": self.storage.extra_data["dc-api-results"]
-            }
-            if step == "people":
-                ret["party"] = self.storage.get_step_data("party")[
-                    "party-party"
-                ]
+                ret["postcode_results"] = self.storage.extra_data["dc-api-results"]
+                if step == "people":
+                    ret["party"] = self.storage.get_step_data("party")[
+                        "party-party"
+                    ]
             return ret
 
     def get_context_data(self, **kwargs):
@@ -237,6 +237,8 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     for person in form.cleaned_data["people"]:
 
                         person_data = json.loads(signer.unsign(person))
+                        if not person_data:
+                            continue
                         leaflet_people[
                             person_data["person"]["ynr_id"]
                         ] = person_data
@@ -262,5 +264,5 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         messages.success(
             self.request, random.sample(settings.THANKYOU_MESSAGES, 1)[0]
         )
-
+        self.storage.reset()
         return redirect(reverse("leaflet", kwargs={"pk": leaflet.pk}))

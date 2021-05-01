@@ -129,8 +129,12 @@ class PartyForm(forms.Form):
                             candidacy["party"]["party_name"],
                         )
                         current_parties.add(data)
+            default_option = [(
+                signer.sign(json.dumps({"party_id": None})),
+                "Not listed",
+            )]
             self.fields["party"] = forms.ChoiceField(
-                choices=[(None, "Not listed")] + list(current_parties),
+                choices=default_option + list(current_parties),
                 widget=forms.RadioSelect,
                 required=False,
             )
@@ -166,9 +170,16 @@ class PeopleForm(forms.Form):
                                 candidacy["person"]["name"],
                             )
                             current_parties.add(data)
+            default_option = [(
+                signer.sign(
+                json.dumps((None))),
+                "Not listed / general party leaflet"
+
+            )]
+
+
             self.fields["people"] = forms.MultipleChoiceField(
-                choices=[(None, "Not listed / general party leaflet")]
-                + list(current_parties),
+                choices=default_option + list(current_parties),
                 required=False,
                 widget=forms.CheckboxSelectMultiple,
             )
