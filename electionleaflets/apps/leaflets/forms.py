@@ -31,11 +31,7 @@ class ImagesForm(forms.Form):
         else:
             self.fields["image"] = S3UploadedImageField(
                 widget=forms.ClearableFileInput(
-                    attrs={
-                        "multiple": True,
-                        "accept": "image/*;capture=camera",
-                        "capture": "camera",
-                    }
+                    attrs={"multiple": True, "accept": "image/*",}
                 ),
                 error_messages={
                     "required": "Please add a photo or skip this step"

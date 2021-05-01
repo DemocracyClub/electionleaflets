@@ -52,13 +52,13 @@
     labelIdle: "Take a photo of a leaflet",
     maxFiles: 10,
     maxParallelUploads: 10,
-    captureMethod: 'camera',
     acceptedFileTypes: "image/*",
     itemInsertLocation: 'after',
     allowMultiple: true,
     instantUpload: false,
     oninit: function() {
       document.querySelector(".cta-row").style.display = 'none';
+      document.querySelector('input[type="file"]').setAttribute('accept', 'image/*');
     },
     onaddfile: function() {
       document.querySelector(".cta-row").style.display = '';
@@ -121,6 +121,7 @@
 
   const pond = FilePond.create( fileInput, fp_options);
   window.pond = pond;
+
 
 
 
