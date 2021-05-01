@@ -13,7 +13,7 @@ version = 0.1
 [production.deploy]
 [production.deploy.parameters]
 stack_name = "ElectionLeafletsThumbs-production"
-s3_bucket = "election-leaflets-deployment-artifacts-production-us-238416"
+s3_bucket = "election-leaflets-deployment-artifacts-production-us-238417"
 s3_prefix = "staging"
 region = "eu-west-2"
 confirm_changeset = false
