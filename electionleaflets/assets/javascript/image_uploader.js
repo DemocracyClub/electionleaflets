@@ -1,4 +1,13 @@
 (function () {
+  // Disable all buttons on submit
+  document.querySelectorAll('form').forEach(function(form) {
+    form.addEventListener('submit', function (e) {
+      form.querySelectorAll('button').forEach(
+        function(button){
+          button.setAttribute('disabled', 'true')
+        })
+    })
+  })
   FilePond.registerPlugin(FilePondPluginImagePreview);
   FilePond.registerPlugin(FilePondPluginImageExifOrientation);
   const fileInput = document.querySelector('input[type="file"]');
@@ -8,7 +17,6 @@
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      form.querySelector('button').setAttribute('disabled', true);
       pond.processFiles().then(function (uploaded_files) {
         const input_name = fileInput.name
         var hiddenS3Input = document.createElement('input');
@@ -29,7 +37,6 @@
         })
         form.submit();
       });
-
     })
   }
 
