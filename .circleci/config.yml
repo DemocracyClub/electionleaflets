@@ -150,7 +150,7 @@ jobs:
               --config-env $SAM_LAMBDA_CONFIG_ENV \
               --template-file ~/repo/thumbs/.aws-sam/build/ThumbsFunction/template.yml \
               --region eu-west-2 \
-              --s3-bucket=election-leaflets-deployment-artifacts-`$SAM_LAMBDA_CONFIG_ENV`-238m322
+              --s3-bucket=$THUMBS_DEPLOY_BUCKET_NAME
 
       - run:
           name: "Deploy thumbs function to eu-weat-1 for lambda@edge"
