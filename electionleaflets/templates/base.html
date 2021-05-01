@@ -40,6 +40,17 @@
         </nav>
       </header>
       <main id="main" tabindex="-1" class="ds-stack" {% if full_width %}style="max-width:100%"{% endif %}>
+        {% if messages %}
+          <aside class="ds-status" aria-label="Status">
+            <ul class="ds-stack">
+            {% for message in messages %}
+              <li class="ds-status-{% if 'error' in message.tags %}error{% else %}success{% endif %}">
+                {{ message }}
+              </li>
+            {% endfor %}
+            </ul>
+          </aside>
+        {% endif %}
         {% block content %}
 
         {% endblock %}
