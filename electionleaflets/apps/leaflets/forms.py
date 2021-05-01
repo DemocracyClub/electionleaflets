@@ -24,15 +24,22 @@ class S3UploadedImageField(forms.ImageField):
 
 
 class ImagesForm(forms.Form):
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         if "images-image" in self.data:
-            self.fields['image'] = forms.CharField(max_length=2000)
+            self.fields["image"] = forms.CharField(max_length=2000)
         else:
-            self.fields['image'] = S3UploadedImageField(
-                widget=forms.ClearableFileInput(attrs={"multiple": True}),
-                error_messages={"required": "Please add a photo or skip this step"},
+            self.fields["image"] = S3UploadedImageField(
+                widget=forms.ClearableFileInput(
+                    attrs={
+                        "multiple": True,
+                        "accept": "image/*;capture=camera",
+                        "capture": "camera",
+                    }
+                ),
+                error_messages={
+                    "required": "Please add a photo or skip this step"
+                },
             )
 
     use_required_attribute = False

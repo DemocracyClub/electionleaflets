@@ -44,6 +44,11 @@
     dropOnPage: true,
     labelIdle: "Take a photo of a leaflet",
     maxFiles: 10,
+    maxParallelUploads: 10,
+    captureMethod: 'camera',
+    acceptedFileTypes: "image/*",
+    itemInsertLocation: 'after',
+    allowMultiple: true,
     instantUpload: false,
     oninit: function() {
       document.querySelector(".cta-row").style.display = 'none';
