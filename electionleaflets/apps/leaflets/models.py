@@ -181,7 +181,7 @@ class LeafletImage(models.Model):
     exif_data = models.BinaryField(null=True, blank=True)
 
     class Meta:
-        ordering = ["image_type"]
+        ordering = ["pk", "image_type"]
 
     def _remove_exif_data(self):
         full_image = Image.open(self.image)
