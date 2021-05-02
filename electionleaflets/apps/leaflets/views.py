@@ -199,6 +199,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                 bucket = self.storage.file_storage.bucket
                 for file_path in uploaded_images:
                     file_name = file_path.split("/")[-1]
+                    file_name = file_name.replace(" ", "-")
                     copy_source = {
                         "Bucket": bucket.name,
                         "Key": file_path,
