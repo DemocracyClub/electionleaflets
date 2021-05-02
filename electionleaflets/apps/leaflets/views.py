@@ -253,7 +253,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     leaflet.people = leaflet_people
                     leaflet.person_ids = list(leaflet_people.keys())
                     leaflet.ballots = [
-                        c["ballot_paper_id"]
+                        c["ballot"]
                         for ynr_id, c in leaflet_people.items()
                     ]
 

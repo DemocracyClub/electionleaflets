@@ -163,7 +163,10 @@ class PeopleForm(forms.Form):
             for date in postcode_results["dates"]:
                 for ballot in date["ballots"]:
                     for candidacy in ballot["candidates"]:
-                        candidacy["ballot_paper_id"] = ballot["ballot_paper_id"]
+                        candidacy["ballot"] = {
+                            "ballot_paper_id": ballot["ballot_paper_id"],
+                            "ballot_title": ballot["ballot_title"]
+                        }
                         if candidacy["party"]["party_id"] in party:
                             data = (
                                 signer.sign(json.dumps(candidacy)),

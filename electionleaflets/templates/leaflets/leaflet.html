@@ -103,7 +103,7 @@
         <dd>
           <ul>
             {% for ballot in object.ballots %}
-              <li><a href="https://whocanivotefor.co.uk/elections/{{ ballot }}">{{ ballot }}</a></li>
+              <li><a href="https://whocanivotefor.co.uk/elections/{{ ballot.ballot_paper_id }}">{{ ballot.ballot_title }}</a></li>
             {% endfor %}
           </ul>
         </dd>
