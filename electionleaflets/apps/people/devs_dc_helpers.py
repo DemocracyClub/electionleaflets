@@ -17,7 +17,21 @@ class DevsDCAPIHelper:
         return requests.get(url, default_params)
 
     def postcode_request(self, postcode):
-        return self.make_request("postcode/{}".format(postcode))
+        """
+        In some cases a postcode can reques an address picker.
+
+        As a hack, because we don't really want the actual address, we just pick
+        the first address whenever we see one. This will cause some errors some
+        times, but not enough for us to worry about at the moment.
+
+        """
+        req = self.make_request(f"postcode/{postcode}")
+        if req.json()["address_picker"] == True:
+            # This postcode is split, just grab the first address and use that.
+            uprn = req.json()["addresses"][0]["slug"]
+            return self.make_request(f"address/{uprn}")
+        return req
+
 
     def ballot_request(self, ballot_paper_id):
         if ballot_paper_id not in self.ballot_cache:
