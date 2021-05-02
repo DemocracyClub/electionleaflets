@@ -1,6 +1,7 @@
 from datetime import datetime
 import re
 
+from django.http import Http404
 from django.views.generic import DetailView, ListView
 from django.db.models import Count, Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -23,13 +24,29 @@ class PartyList(ListView):
 class PartyView(DetailView):
     model = Party
 
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        id = re.sub(r"[^0-9]", "", self.kwargs["pk"])
+        queryset = queryset.filter(
+            Q(party_id=self.kwargs["pk"])
+            | Q(party_id=f"PP{id}")
+        )
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get()
+        except queryset.model.DoesNotExist:
+            raise Http404("No %(verbose_name)s found matching the query" %
+                          {'verbose_name': queryset.model._meta.verbose_name})
+        return obj
+
     def get_context_data(self, **kwargs):
         context = super(PartyView, self).get_context_data(**kwargs)
         id = re.sub(r"[^0-9]", "", self.kwargs["pk"])
         qs = Leaflet.objects.filter(
-            Q(publisher_party=self.kwargs["pk"]) |
-            Q(ynr_party_id=self.kwargs["pk"]) |
-            Q(ynr_party_id=f"party:{id}")
+            Q(publisher_party=self.kwargs["pk"])
+            | Q(ynr_party_id=self.kwargs["pk"])
+            | Q(ynr_party_id=f"party:{id}")
         )
 
         paginator = Paginator(qs, 60)
