@@ -23,6 +23,13 @@ class LeafletAdmin(admin.ModelAdmin):
     list_filter = [
         "status",
     ]
+    exclude = (
+        "election",
+        "publisher_person",
+        "publisher_party",
+        "constituency",
+        "ynr_person_id",
+    )
     search_fields = ["title", "postcode"]
     ordering = ["title"]
     inlines = [
