@@ -2,7 +2,7 @@ from datetime import datetime
 import re
 
 from django.views.generic import DetailView, ListView
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from uk_political_parties.models import Party
@@ -27,8 +27,10 @@ class PartyView(DetailView):
         context = super(PartyView, self).get_context_data(**kwargs)
         id = re.sub(r"[^0-9]", "", self.kwargs["pk"])
         qs = Leaflet.objects.filter(
-            publisher_party=self.kwargs["pk"]
-        ) | Leaflet.objects.filter(ynr_party_id="party:{}".format(id))
+            Q(publisher_party=self.kwargs["pk"]) |
+            Q(ynr_party_id=self.kwargs["pk"]) |
+            Q(ynr_party_id=f"party:{self.kwargs['pk']}")
+        )
 
         paginator = Paginator(qs, 60)
         page = self.request.GET.get("page")

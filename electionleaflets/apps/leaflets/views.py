@@ -99,10 +99,6 @@ class LeafletView(CacheControlMixin, DetailView):
             self.object, self.request.user
         )
 
-        context["person"] = self.object.get_person()
-        context["party"] = self.object.get_party()
-        context["ballot"] = self.object.get_ballot()
-
         return context
 
     def post(self, request, *args, **kwargs):

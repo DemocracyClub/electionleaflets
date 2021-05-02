@@ -44,30 +44,6 @@
       Leaflet #{{ object.id }}
     {% endif %}
   </h1>
-  <p>This leaflet was spotted by a volunteer
-    {% if object.constituency %}
-      in<a href="{% url "constituency-view" object.constituency.pk object.constituency.slug %}">
-      {{ object.constituency.name }}</a>
-    {% endif %}
-    on {{ object.date_uploaded|date:"l, d M, Y" }}.
-  </p>
-
-  {% if person %}
-    <p>
-      Sent by <a href="{{ person.link }}">{{ person.name }}</a>
-    </p>
-  {% endif %}
-
-  {% if ballot %}
-    Candidate for <a href="{{ ballot.link }}">{{ ballot.name }}</a>
-  {% endif %}
-
-  {% if party %}
-    <p>
-      Published by <a href="{{ party.link }}">{{ party.name }}</a>
-    </p>
-  {% endif %}
-
 
   {% for image in object.images.all %}
     <figure class="ds-card">
@@ -106,6 +82,59 @@
   {% endif %}
 
 
+
+  <h2>Leaflet details</h2>
+  <dl class="ds-descriptions">
+    <div>
+      <dt>Uploaded</dt>
+      <dd>{{ object.date_uploaded|date:"l, d M, Y" }}</dd>
+    </div>
+
+
+    <div>
+      <dt>Published by</dt>
+      <dd><a href="{% url "party-view" object.ynr_party_id %}">{{ object.ynr_party_name }}</a></dd>
+    </div>
+    {% if object.ballots %}
+
+
+      <div>
+        <dt>Related elections</dt>
+        <dd>
+          <ul>
+            {% for ballot in object.ballots %}
+              <li><a href="https://whocanivotefor.co.uk/elections/{{ ballot }}">{{ ballot }}</a></li>
+            {% endfor %}
+          </ul>
+        </dd>
+      </div>
+    {% endif %}
+  </dl>
+
+
+  {% if object.people %}
+    <h3>Sent by</h3>
+    <ul class="ds-grid">
+      {% for ynr_id, person in object.people.items %}
+        <li class="ds-candidate">
+          <div class="ds-candidate-body ds-stack-smallest">
+            <h3 class="ds-candidate-name ds-h5">
+              <a href="https://whocanivotefor.co.uk/person/{{ ynr_id }}">{{ person.person.name }}</a>
+            </h3>
+          </div>
+          {% if person.person.photo_url %}
+            <div class="ds-candidate-image">
+              <img src="{{ person.person.photo_url }}" alt="">
+            </div>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+
+
+
   <p>
     The data on this page is available in <a href="{% url "api:leaflet-detail" object.pk %}?format=json">JSON format</a>.
     The images of this leaflet
@@ -120,7 +149,7 @@
 
   <h3>Something wrong with this page?</h3>
   <p><a href="{% url "report_abuse" object.id %}">Report a problem</a>
-  If there is something wrong with this leaflet please let us know.</p>
+    If there is something wrong with this leaflet please let us know.</p>
 
 
 
