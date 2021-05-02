@@ -29,7 +29,7 @@ class PartyView(DetailView):
         qs = Leaflet.objects.filter(
             Q(publisher_party=self.kwargs["pk"]) |
             Q(ynr_party_id=self.kwargs["pk"]) |
-            Q(ynr_party_id=f"party:{self.kwargs['pk']}")
+            Q(ynr_party_id=f"party:{id}")
         )
 
         paginator = Paginator(qs, 60)
