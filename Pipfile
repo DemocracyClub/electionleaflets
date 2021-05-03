@@ -77,6 +77,8 @@ psycopg2-binary = "*"
 whitenoise = "*"
 urllib3 = "*"
 libsass = "*"
+django-debug-toolbar = "*"
+django-filter = "*"
 
 [scripts]
 collectstatic = "python manage.py collectstatic -c --noinput"

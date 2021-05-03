@@ -122,6 +122,7 @@ ADMIN_MEDIA_PREFIX = "/admin_media/"
 SECRET_KEY = "elyfryi8on!dmw&8b3j-g0yve4u&%4_6%(tf3*)@#&mq*$yzhf^6"
 
 MIDDLEWARE = (
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "s3file.middleware.S3FileMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -244,6 +245,9 @@ if not environ.get("DEPLOYMENT", None):
     # .local.py overrides all the common settings.
     try:
         from .local import *  # noqa: F401,F403
+        INTERNAL_IPS = [
+            '127.0.0.1',
+        ]
     except ImportError:
         pass
 
