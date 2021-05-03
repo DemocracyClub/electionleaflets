@@ -7,17 +7,6 @@ from uk_political_parties.models import Party
 from people.models import Person
 
 
-class ConstituencySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Constituency
-        fields = (
-            "pk",
-            "name",
-            "country_name",
-            "slug",
-        )
-
-
 class PartySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Party

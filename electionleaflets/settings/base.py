@@ -160,17 +160,13 @@ INSTALLED_APPS = [
     "storages",
     "uk_political_parties",
     "markdown_deux",
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
-    "allauth.socialaccount.providers.facebook",
-    "allauth.socialaccount.providers.twitter",
     "django_extensions",
     "pipeline",
     "dc_design_system",
     "django_static_jquery",
     "s3file",
+    "debug_toolbar",
+    "django_filters",
 ] + LEAFLET_APPS
 
 
@@ -231,28 +227,6 @@ REST_FRAMEWORK = {
 }
 
 
-AUTHENTICATION_BACKENDS = (
-    # Needed to login by username in Django admin, regardless of `allauth`
-    "django.contrib.auth.backends.ModelBackend",
-    # `allauth` specific authentication methods, such as login by e-mail
-    "allauth.account.auth_backends.AuthenticationBackend",
-)
-
-SOCIALACCOUNT_PROVIDERS = {
-    "google": {
-        "SCOPE": ["https://www.googleapis.com/auth/userinfo.profile"],
-        "AUTH_PARAMS": {"access_type": "online"},
-    },
-    "facebook": {"SCOPE": ["email",]},
-}
-
-LOGIN_REDIRECT_URL = "/"
-
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = True
-SOCIALACCOUNT_AUTO_SIGNUP = True
-
 THANKYOU_MESSAGES = [
     "Thank you so much! Your leaflet has been added to the archive.",
     "Thanks, that's one more towards the target!",
@@ -263,9 +237,6 @@ THANKYOU_MESSAGES = [
 REPORT_EMAIL_SUBJECT = "Leaflet Report"
 
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
-
-MAPIT_API_KEY = environ.get("MAPIT_API_KEY", None)
-MAPIT_API_URL = environ.get("MAPIT_API_URL", "https://mapit.mysociety.org")
 
 DEVS_DC_AUTH_TOKEN = environ.get("DEVS_DC_AUTH_TOKEN", None)
 

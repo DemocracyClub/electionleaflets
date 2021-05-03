@@ -4,15 +4,6 @@
 
   <div class="ds-cluster-center">
     <ul>
-      {% if request.user.is_authenticated %}
-        <li>
-          <a href="{% url "account_logout" %}">Sign out</a>
-        </li>
-      {% else %}
-{#        <li>#}
-{#          <a href="{% url "account_login" %}">Sign in to electionleaflets.org</a>#}
-{#        </li>#}
-      {% endif %}
       <li><a href="{% url "home"  %}">Home</a></li>
       <li>
         <a href="{% url "parties" %}">Parties</a>
