@@ -1,0 +1,22 @@
+{%  extends "base.html" %}
+{% load thumbnail %}
+{% block content %}
+  {% for leaflet in leaflets %}
+    <div class="ds-card">
+    <div class="ds-card-image">
+      <a href="{% url "leaflet_update_publisher_details" leaflet.id %}" class="feature-card ds-card-link">
+        {% thumbnail leaflet.get_first_image.image "350x350" crop="top" as im %}
+          <img src="{{ im.url }}" alt="Thumbnail of leaflet - {{ leaflet.get_title }}">
+        {% endthumbnail %}
+      </a>
+
+    </div>
+    <div class="ds-card-body">
+      {{ leaflet.date_uploaded }}
+    </div>
+    </div>
+
+  {% endfor %}
+
+
+{% endblock %}

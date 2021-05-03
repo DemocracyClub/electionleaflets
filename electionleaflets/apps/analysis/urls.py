@@ -10,7 +10,7 @@ from .views import (
     AnalysisPerPartyReportView,
     ConstituencyReportView,
     CandidateTagging,
-    TagRandomCandidate,
+    TagRandomCandidate, NoCandidatesView,
 )
 
 urlpatterns = [
@@ -47,5 +47,10 @@ urlpatterns = [
         r"^reports/$",
         cache_page(60 * 5)(ReportView.as_view()),
         name="report_view",
+    ),
+    url(
+        r"^leaflets_without_candidates/$",
+        NoCandidatesView.as_view(),
+        name="leaflets_without_candidates",
     ),
 ]

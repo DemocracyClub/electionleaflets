@@ -220,3 +220,14 @@ class CandidateTagging(UpdateView):
     def get_success_url(self):
 
         return reverse("analysis_tag_random_candidate")
+
+
+class NoCandidatesView(TemplateView):
+    template_name = "analysis/no_candidates.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["leaflets"] = Leaflet.objects.filter(
+            people__iexact="{}"
+        ).order_by("-date_uploaded")[:10]
+        return context
