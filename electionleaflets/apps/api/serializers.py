@@ -43,10 +43,20 @@ class LeafletImageSerializer(serializers.ModelSerializer):
 
 class LeafletSerializer(serializers.HyperlinkedModelSerializer):
     images = LeafletImageSerializer(many=True, required=False)
-    constituency = ConstituencySerializer(required=False)
-    publisher_party = PartySerializer(required=False)
-    publisher_person = PersonSerializer(required=False)
+    party = PartySerializer(required=False)
+    people = serializers.SerializerMethodField(
+
+    )
     first_page_thumb = serializers.SerializerMethodField()
+
+    def get_people(self, obj):
+        people = []
+        data = obj.people or {}
+        for ynr_id, person_data in data.items():
+            person_data["person"].pop("email")
+            person_data["person"].pop("photo_url")
+            people.append({ynr_id: person_data})
+        return people
 
     def get_first_page_thumb(self, obj):
         image = obj.get_first_image()
@@ -65,9 +75,8 @@ class LeafletSerializer(serializers.HyperlinkedModelSerializer):
             "pk",
             "title",
             "description",
-            "publisher_party",
-            "publisher_person",
-            "constituency",
+            "party",
+            "people",
             "images",
             "first_page_thumb",
             "date_uploaded",
