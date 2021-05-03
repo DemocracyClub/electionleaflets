@@ -78,6 +78,7 @@ dc_design_system = {git = "https://github.com/DemocracyClub/design-system.git", 
 whitenoise = "*"
 urllib3 = "*"
 libsass = "*"
+django-formtools = "==2.2"
 django-debug-toolbar = "*"
 django-filter = "*"
 
