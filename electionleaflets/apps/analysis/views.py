@@ -7,6 +7,7 @@ from django.db.models import Count
 from django.contrib.auth.models import User
 
 from analysis.forms import CandidateTaggerForm
+from core.helpers import CacheControlMixin
 from .models import LeafletProperties
 from constituencies.models import Constituency
 from leaflets.models import Leaflet, devs_dc_helper
@@ -222,7 +223,8 @@ class CandidateTagging(UpdateView):
         return reverse("analysis_tag_random_candidate")
 
 
-class NoCandidatesView(TemplateView):
+class NoCandidatesView(CacheControlMixin, TemplateView):
+    cache_timeout = 0
     template_name = "analysis/no_candidates.html"
 
     def get_context_data(self, **kwargs):
