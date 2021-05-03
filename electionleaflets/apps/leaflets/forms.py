@@ -2,7 +2,9 @@
 
 from collections import OrderedDict
 import json
+from datetime import timedelta
 
+import requests
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
@@ -186,3 +188,85 @@ class PeopleForm(forms.Form):
                 required=False,
                 widget=forms.CheckboxSelectMultiple,
             )
+
+class UpdatePublisherDetails(forms.ModelForm):
+    class Meta:
+        model = Leaflet
+        fields = (
+            "id",
+        )
+
+    def get_ballot_data_from_ynr(self, instance):
+        """
+
+        :type instance: Leaflet
+        """
+        url = f"https://candidates.democracyclub.org.uk/api/next/ballots/"
+        params = {"for_postcode": instance.postcode}
+        params["election_date_range_after"] = (instance.date_uploaded - timedelta(days=60)).date().isoformat()
+        params["election_date_range_before"] = (instance.date_uploaded + timedelta(days=60)).date().isoformat()
+        req = requests.get(url, params=params)
+        req.raise_for_status()
+        return req.json()["results"]
+
+    def get_parties_from_ballot_data(self, ballot_data):
+        current_parties = set()
+        signer = Signer()
+        for ballot in ballot_data:
+            for candidacy in ballot["candidacies"]:
+                party_key = signer.sign(
+                    json.dumps(
+                        {
+                            "party_id": candidacy["party"]["legacy_slug"],
+                            "party_name": candidacy["party"][
+                                "name"
+                            ],
+                        }
+                    )
+                )
+                data = (
+                    party_key,
+                    candidacy["party"]["name"],
+                )
+                current_parties.add(data)
+        return current_parties
+
+    def get_people_from_ballot_data(self, ballot_data):
+        signer = Signer()
+
+
+        people = set()
+
+        for ballot in ballot_data:
+            for candidacy in ballot["candidacies"]:
+                candidacy["ballot"] = {
+                    "ballot_paper_id": ballot["ballot_paper_id"],
+                    "ballot_title": f'{ballot["election"]["name"]}: {ballot["post"]["label"]}'
+                }
+                data = (
+                    signer.sign(json.dumps(candidacy)),
+                    candidacy["person"]["name"],
+                )
+                people.add(data)
+        return people
+
+
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if not self.instance and not self.instance.postcode:
+            return
+        ballot_data= self.get_ballot_data_from_ynr(self.instance)
+        self.fields["parties"] = forms.ChoiceField(
+            choices=self.get_parties_from_ballot_data(ballot_data),
+            widget=forms.RadioSelect,
+            required=False,
+        )
+
+        self.fields["people"] = forms.MultipleChoiceField(
+            choices=self.get_people_from_ballot_data(ballot_data),
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+        )
+
+    id = forms.CharField(widget=forms.HiddenInput())

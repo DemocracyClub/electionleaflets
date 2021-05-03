@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block content %}
+  <div class="ds-with-sidebar">
+    <div>
+      <div class="ds-sidebar">
+        <form method="POST">
+        {{ form.errors }}
+          {% for field in form.hidden_fields %}
+            {{ field }}
+          {% endfor %}
+          <fieldset>
+            <legend>Party</legend>
+
+            <ul class="ds-select-list" id="parties">
+              {% for radio in form.parties %}
+                <li>
+                  {{ radio.tag }}
+                  <label for="{{ radio.id_for_label }}"> {{ radio.choice_label }}</label>
+                </li>
+              {% endfor %}
+            </ul>
+          </fieldset>
+          <fieldset>
+            <legend>People</legend>
+
+            <ul class="ds-select-list" id="people">
+              {% for radio in form.people %}
+                <li>
+                  {{ radio.tag }}
+                  <label for="{{ radio.id_for_label }}"> {{ radio.choice_label }}</label>
+                </li>
+              {% endfor %}
+            </ul>
+          </fieldset>
+          <button type="submit" class="ds-button">Save</button>
+        </form>
+
+      </div>
+      <div class="ds-not-sidebar">
+        {% for image in object.images.all %}
+          <figure class="ds-card">
+            <div class="ds-card-image">
+              {% thumbnail image.image "600" crop="center" as im %}
+                <img src="{{ im.url }}" aria-labelledby="page-{{ image.id }}" data-full_image_url="{{ image.image.url }}">
+              {% endthumbnail %}
+            </div>
+            <div class="ds-card-body">
+              <a href="{% url "full_image" image.id %}" class="ds-card-link">
+                image #{{ image.pk }}
+              </a>
+            </div>
+          </figure>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <style>
+  main {
+      max-width: 80em !important;
+  }
+  </style>
+<script>
+function filterPeople(selected) {
+  console.log(selected.target.value)
+  var party_json = JSON.parse(selected.target.value.split("}:")[0] + "}")
+  var selected_party_id = party_json.party_id;
+  var people = document.querySelector("#people");
+  people.querySelectorAll("input[name='people']").forEach((input) => {
+    if (input.value.includes(selected_party_id)) {
+      input.parentNode.style.display = 'block';
+    } else {
+      input.parentNode.style.display = 'none';
+      input.checked = false;
+    }
+  });
+}
+
+  var parties_radios = document.querySelector("#parties");
+  console.log(parties_radios)
+  parties_radios.querySelectorAll("input[name='parties']").forEach((input) => {
+    input.addEventListener('change', filterPeople);
+  });
+</script>
+{% endblock %}

@@ -12,12 +12,13 @@ from django.core.signing import Signer
 from django.conf import settings
 from django.views.generic import DetailView, ListView, UpdateView, RedirectView
 from django.views.generic.detail import SingleObjectMixin
-from braces.views import StaffuserRequiredMixin
+from braces.views import StaffuserRequiredMixin, LoginRequiredMixin
 
 from analysis.forms import QuestionSetForm
 from core.helpers import CacheControlMixin
 from .models import Leaflet, LeafletImage
-from .forms import LeafletDetailsFrom, SingleLeafletImageForm
+from .forms import LeafletDetailsFrom, SingleLeafletImageForm, \
+    UpdatePublisherDetails
 from people.devs_dc_helpers import DevsDCAPIHelper
 from people.models import Person
 from storages.backends.s3boto3 import S3Boto3Storage
@@ -263,3 +264,51 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         )
         self.storage.reset()
         return redirect(reverse("leaflet", kwargs={"pk": leaflet.pk}))
+
+
+class LeafletUpdatePublisherView(LoginRequiredMixin, UpdateView):
+    model = Leaflet
+    form_class = UpdatePublisherDetails
+    template_name = "leaflets/leaflet_update_publisher.html"
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+    @transaction.atomic
+    def form_valid(self, form):
+        signer = Signer()
+        leaflet_people = {}
+        for person in form.cleaned_data["people"]:
+
+            person_data = json.loads(signer.unsign(person))
+            if not person_data:
+                continue
+            leaflet_people[
+                person_data["person"]["id"]
+            ] = person_data
+            person, _ = Person.objects.get_or_create(
+                remote_id=person_data["person"]["id"],
+                defaults={
+                    "name": person_data["person"]["name"],
+                    "source_url": "https://candidates.democracyclub.org.uk/person/{}".format(
+                        person_data["person"]["id"]
+                    ),
+                    "source_name": "YNR2017",
+                },
+            )
+
+        self.object.people = leaflet_people
+        self.object.person_ids = list(leaflet_people.keys())
+        self.object.ballots = [
+            c["ballot"]
+            for ynr_id, c in leaflet_people.items()
+        ]
+
+        party_data = json.loads(
+            signer.unsign(form.cleaned_data["parties"])
+        )
+        if party_data["party_id"]:
+            self.object.ynr_party_id = party_data["party_id"]
+            self.object.ynr_party_name = party_data["party_name"]
+
+        return super().form_valid(form)

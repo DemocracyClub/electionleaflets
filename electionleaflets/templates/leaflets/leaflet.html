@@ -6,7 +6,7 @@
   <meta property="og:site_name" content="ElectionLeaflets.org"/>
   <meta property="og:title" content="{{ object.get_title }}"/>
   <meta property="og:type" content="website"/>
-  <meta property="og:url" content="{{ leaflet.get_absolute_url }}"/>
+  <meta property="og:url" content="{{ leaflet.get_full_url }}"/>
   <meta name="og:description" content="{{ object.description }}">
 
   <meta name="twitter:card" content="summary_large_image">
@@ -144,8 +144,12 @@
     Domain Dedication</a>.
   </p>
 
+  {% if request.user.is_authenticated %}
+    <a href="{% url "leaflet_update_publisher_details" pk=object.pk %}" class="ds-cta">
+      Update publisher details</a>
 
-  {% include "analysis/includes/analysis_form.html" %}
+  {% endif %}
+{#  {% include "analysis/includes/analysis_form.html" %}#}
 
   <h3>Something wrong with this page?</h3>
   <p><a href="{% url "report_abuse" object.id %}">Report a problem</a>
