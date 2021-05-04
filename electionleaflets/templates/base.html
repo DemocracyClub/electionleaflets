@@ -30,6 +30,11 @@
             <li>
               <a href="{% url "home" %}">Home</a>
             </li>
+            {% if request.user.is_authenticated %}
+              <li>
+                <a href="{% url "leaflets_without_candidates" %}">Tag</a>
+              </li>
+            {% endif %}
             <li>
               <a href="{% url "leaflets" %}">Latest leaflets</a>
             </li>

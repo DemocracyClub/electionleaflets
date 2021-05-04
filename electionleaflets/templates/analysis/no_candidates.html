@@ -1,6 +1,8 @@
 {%  extends "base.html" %}
 {% load thumbnail %}
 {% block content %}
+  <a class="ds-cta" href="{% url "leaflets_without_candidates" %}">All</a>
+  <a class="ds-cta" href="{% url "leaflets_without_candidates" %}?existing=1">With candidate info</a>
   {% for leaflet in leaflets %}
     <div class="ds-card">
     <div class="ds-card-image">

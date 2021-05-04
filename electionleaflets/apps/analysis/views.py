@@ -229,7 +229,10 @@ class NoCandidatesView(CacheControlMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["leaflets"] = Leaflet.objects.filter(
+        qs = Leaflet.objects.filter(
             people__iexact="{}"
-        ).order_by("-date_uploaded")[:10]
+        )
+        if self.request.GET.get("existing"):
+            qs = qs.exclude(ynr_person_id=None)
+        context["leaflets"] = qs.order_by("-date_uploaded")[:10]
         return context

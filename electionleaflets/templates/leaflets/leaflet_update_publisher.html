@@ -5,6 +5,9 @@
   <div class="ds-with-sidebar">
     <div>
       <div class="ds-sidebar">
+        {% if request.user.is_staff %}
+          <a class='button' href='/admin/leaflets/leaflet/{{ object.id }}/'>Admin</a>
+        {% endif %}
         <form method="POST">
         {{ form.errors }}
           {% for field in form.hidden_fields %}
@@ -39,6 +42,10 @@
 
       </div>
       <div class="ds-not-sidebar">
+        {% if request.user.is_staff %}
+          {{ object.postcode }}
+        {% endif %}
+
         {% for image in object.images.all %}
           <figure class="ds-card">
             <div class="ds-card-image">
