@@ -29,15 +29,16 @@ class PartyView(DetailView):
             queryset = self.get_queryset()
         id = re.sub(r"[^0-9]", "", self.kwargs["pk"])
         queryset = queryset.filter(
-            Q(party_id=self.kwargs["pk"])
-            | Q(party_id=f"PP{id}")
+            Q(party_id=self.kwargs["pk"]) | Q(party_id=f"PP{id}")
         )
         try:
             # Get the single item from the filtered queryset
             obj = queryset.get()
         except queryset.model.DoesNotExist:
-            raise Http404("No %(verbose_name)s found matching the query" %
-                          {'verbose_name': queryset.model._meta.verbose_name})
+            raise Http404(
+                "No %(verbose_name)s found matching the query"
+                % {"verbose_name": queryset.model._meta.verbose_name}
+            )
         return obj
 
     def get_context_data(self, **kwargs):

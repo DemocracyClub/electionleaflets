@@ -10,7 +10,7 @@ from analysis.forms import CandidateTaggerForm
 from core.helpers import CacheControlMixin
 from .models import LeafletProperties
 from constituencies.models import Constituency
-from leaflets.models import Leaflet, devs_dc_helper
+from leaflets.models import Leaflet
 from uk_political_parties.models import Party
 
 
@@ -201,37 +201,13 @@ class TagRandomCandidate(BaseCandidateTaggingMixin, RedirectView):
             return reverse("analysis")
 
 
-class CandidateTagging(UpdateView):
-    pk_url_kwarg = "leaflet_id"
-    model = Leaflet
-    form_class = CandidateTaggerForm
-    template_name = "analysis/candidate_tagging.html"
-
-    def get_initial(self):
-        postcode_results = devs_dc_helper.postcode_request(
-            postcode=self.object.postcode
-        )
-        return {"postcode_results": postcode_results}
-
-    def form_valid(self, form):
-
-        messages.success(self.request, "Thanks for tagging that candidate!")
-        return super(CandidateTagging, self).form_valid(form)
-
-    def get_success_url(self):
-
-        return reverse("analysis_tag_random_candidate")
-
-
 class NoCandidatesView(CacheControlMixin, TemplateView):
     cache_timeout = 0
     template_name = "analysis/no_candidates.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        qs = Leaflet.objects.filter(
-            people__iexact="{}"
-        )
+        qs = Leaflet.objects.filter(people__iexact="{}")
         if self.request.GET.get("existing"):
             qs = qs.exclude(ynr_person_id=None)
         context["leaflets"] = qs.order_by("-date_uploaded")[:10]

@@ -9,6 +9,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.core.signing import Signer
+from django.utils import timezone
 
 from localflavor.gb.forms import GBPostcodeField
 
@@ -101,110 +102,22 @@ class PeopleRadioWidget(forms.RadioSelect):
         )
 
 
-class PartyForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+class YNRBallotDataMixin:
+    def get_date_range(self):
+        start = (timezone.now() - timedelta(days=60)).date().isoformat()
+        end = (timezone.now() + timedelta(days=60)).date().isoformat()
+        return (start, end)
 
-        if "postcode_results" in kwargs["initial"]:
-
-            postcode_results = kwargs["initial"]["postcode_results"]
-            current_parties = set()
-            signer = Signer()
-            for date in postcode_results["dates"]:
-                for ballot in date["ballots"]:
-                    # Dead person's switch to ensure this 1:1 mapping of
-                    # candidacies to leaflets only happens for #GE2019.
-                    # For other ballots, we won't show candidates, just parties.
-                    for candidacy in ballot["candidates"]:
-                        party_key = signer.sign(
-                            json.dumps(
-                                {
-                                    "party_id": candidacy["party"]["party_id"],
-                                    "party_name": candidacy["party"][
-                                        "party_name"
-                                    ],
-                                }
-                            )
-                        )
-                        data = (
-                            party_key,
-                            candidacy["party"]["party_name"],
-                        )
-                        current_parties.add(data)
-            default_option = [(
-                signer.sign(json.dumps({"party_id": None})),
-                "Not listed",
-            )]
-            self.fields["party"] = forms.ChoiceField(
-                choices=default_option + list(current_parties),
-                widget=forms.RadioSelect,
-                required=False,
-            )
-
-
-def clean_party_id(party_id):
-    party_map = {
-        "joint-party:53-119": ["party:53", "joint-party:53-119"],
-        "party:53": ["party:53", "joint-party:53-119"],
-    }
-    return party_map.get(party_id, [party_id])
-
-
-class PeopleForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        signer = Signer()
-        unsigned_party = json.loads(signer.unsign(kwargs["initial"]["party"]))
-        party = clean_party_id(unsigned_party["party_id"])
-
-        if "postcode_results" in kwargs["initial"]:
-
-            postcode_results = kwargs["initial"]["postcode_results"]
-            current_parties = set()
-
-            for date in postcode_results["dates"]:
-                for ballot in date["ballots"]:
-                    for candidacy in ballot["candidates"]:
-                        candidacy["ballot"] = {
-                            "ballot_paper_id": ballot["ballot_paper_id"],
-                            "ballot_title": ballot["ballot_title"]
-                        }
-                        if candidacy["party"]["party_id"] in party:
-                            data = (
-                                signer.sign(json.dumps(candidacy)),
-                                candidacy["person"]["name"],
-                            )
-                            current_parties.add(data)
-            default_option = [(
-                signer.sign(
-                json.dumps((None))),
-                "Not listed / general party leaflet"
-
-            )]
-
-
-            self.fields["people"] = forms.MultipleChoiceField(
-                choices=default_option + list(current_parties),
-                required=False,
-                widget=forms.CheckboxSelectMultiple,
-            )
-
-class UpdatePublisherDetails(forms.ModelForm):
-    class Meta:
-        model = Leaflet
-        fields = (
-            "id",
-        )
-
-    def get_ballot_data_from_ynr(self, instance):
+    def get_ballot_data_from_ynr(self, postcode):
         """
 
         :type instance: Leaflet
         """
         url = f"https://candidates.democracyclub.org.uk/api/next/ballots/"
-        params = {"for_postcode": instance.postcode}
-        params["election_date_range_after"] = (instance.date_uploaded - timedelta(days=60)).date().isoformat()
-        params["election_date_range_before"] = (instance.date_uploaded + timedelta(days=60)).date().isoformat()
+        params = {"for_postcode": postcode}
+        start, end = self.get_date_range()
+        params["election_date_range_after"] = start
+        params["election_date_range_before"] = end
         req = requests.get(url, params=params)
         req.raise_for_status()
         return req.json()["results"]
@@ -218,9 +131,7 @@ class UpdatePublisherDetails(forms.ModelForm):
                     json.dumps(
                         {
                             "party_id": candidacy["party"]["legacy_slug"],
-                            "party_name": candidacy["party"][
-                                "name"
-                            ],
+                            "party_name": candidacy["party"]["name"],
                         }
                     )
                 )
@@ -231,17 +142,18 @@ class UpdatePublisherDetails(forms.ModelForm):
                 current_parties.add(data)
         return current_parties
 
-    def get_people_from_ballot_data(self, ballot_data):
+    def get_people_from_ballot_data(self, ballot_data, party=None):
         signer = Signer()
-
 
         people = set()
 
         for ballot in ballot_data:
             for candidacy in ballot["candidacies"]:
+                if party and not candidacy["party"]["legacy_slug"] in party:
+                    continue
                 candidacy["ballot"] = {
                     "ballot_paper_id": ballot["ballot_paper_id"],
-                    "ballot_title": f'{ballot["election"]["name"]}: {ballot["post"]["label"]}'
+                    "ballot_title": f'{ballot["election"]["name"]}: {ballot["post"]["label"]}',
                 }
                 data = (
                     signer.sign(json.dumps(candidacy)),
@@ -251,12 +163,52 @@ class UpdatePublisherDetails(forms.ModelForm):
         return people
 
 
+class PartyForm(YNRBallotDataMixin, forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not "postcode" in self.initial:
+            return
+        ballot_data = self.get_ballot_data_from_ynr(self.initial["postcode"])
+        self.fields["party"] = forms.ChoiceField(
+            choices=self.get_parties_from_ballot_data(ballot_data),
+            widget=forms.RadioSelect,
+            required=False,
+        )
+
+
+def clean_party_id(party_id):
+    party_map = {
+        "joint-party:53-119": ["party:53", "joint-party:53-119"],
+        "party:53": ["party:53", "joint-party:53-119"],
+    }
+    return party_map.get(party_id, [party_id])
+
+
+class PeopleForm(YNRBallotDataMixin, forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        signer = Signer()
+        unsigned_party = json.loads(signer.unsign(kwargs["initial"]["party"]))
+        party = clean_party_id(unsigned_party["party_id"])
+        ballot_data = self.get_ballot_data_from_ynr(self.initial["postcode"])
+
+        self.fields["people"] = forms.MultipleChoiceField(
+            choices=self.get_people_from_ballot_data(ballot_data, party=party),
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+        )
+
+
+class UpdatePublisherDetails(YNRBallotDataMixin, forms.ModelForm):
+    class Meta:
+        model = Leaflet
+        fields = ("id",)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         if not self.instance and not self.instance.postcode:
             return
-        ballot_data= self.get_ballot_data_from_ynr(self.instance)
+        ballot_data = self.get_ballot_data_from_ynr(self.instance.postcode)
         self.fields["parties"] = forms.ChoiceField(
             choices=self.get_parties_from_ballot_data(ballot_data),
             widget=forms.RadioSelect,
@@ -270,3 +222,16 @@ class UpdatePublisherDetails(forms.ModelForm):
         )
 
     id = forms.CharField(widget=forms.HiddenInput())
+
+    def get_date_range(self):
+        start = (
+            (self.instance.date_uploaded - timedelta(days=60))
+            .date()
+            .isoformat()
+        )
+        end = (
+            (self.instance.date_uploaded + timedelta(days=60))
+            .date()
+            .isoformat()
+        )
+        return (start, end)

@@ -17,9 +17,11 @@ from braces.views import StaffuserRequiredMixin, LoginRequiredMixin
 from analysis.forms import QuestionSetForm
 from core.helpers import CacheControlMixin
 from .models import Leaflet, LeafletImage
-from .forms import LeafletDetailsFrom, SingleLeafletImageForm, \
-    UpdatePublisherDetails
-from people.devs_dc_helpers import DevsDCAPIHelper
+from .forms import (
+    LeafletDetailsFrom,
+    SingleLeafletImageForm,
+    UpdatePublisherDetails,
+)
 from people.models import Person
 from storages.backends.s3boto3 import S3Boto3Storage
 
@@ -126,10 +128,10 @@ class LeafletView(CacheControlMixin, DetailView):
             return self.render_to_response(self.get_context_data(form=form))
 
 
-
 def should_show_person_form(wizard):
-    cleaned_data = wizard.get_cleaned_data_for_step('party') or {}
+    cleaned_data = wizard.get_cleaned_data_for_step("party") or {}
     return not '"party_id": null' in cleaned_data.get("party", "")
+
 
 class LeafletUploadWizzard(NamedUrlSessionWizardView):
     extra_added = False
@@ -150,17 +152,11 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
 
     def get_form_initial(self, step):
         if step in ["party", "people"]:
-            api = DevsDCAPIHelper()
             postcode = self.get_cleaned_data_for_step("postcode")
-            ret = {}
+            if not postcode:
+                return
+            ret = {"postcode": postcode.get("postcode")}
             if postcode:
-                results = api.postcode_request(postcode["postcode"])
-                if results.status_code == 200:
-                    self.storage.extra_data[
-                        "dc-api-results"
-                    ] = results.json()
-
-                ret["postcode_results"] = self.storage.extra_data["dc-api-results"]
                 if step == "people":
                     ret["party"] = self.storage.get_step_data("party")[
                         "party-party"
@@ -238,14 +234,14 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                         if not person_data:
                             continue
                         leaflet_people[
-                            person_data["person"]["ynr_id"]
+                            person_data["person"]["id"]
                         ] = person_data
                         person, _ = Person.objects.get_or_create(
-                            remote_id=person_data["person"]["ynr_id"],
+                            remote_id=person_data["person"]["id"],
                             defaults={
                                 "name": person_data["person"]["name"],
                                 "source_url": "https://candidates.democracyclub.org.uk/person/{}".format(
-                                    person_data["person"]["ynr_id"]
+                                    person_data["person"]["id"]
                                 ),
                                 "source_name": "YNR2017",
                             },
@@ -254,8 +250,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     leaflet.people = leaflet_people
                     leaflet.person_ids = list(leaflet_people.keys())
                     leaflet.ballots = [
-                        c["ballot"]
-                        for ynr_id, c in leaflet_people.items()
+                        c["ballot"] for ynr_id, c in leaflet_people.items()
                     ]
 
         leaflet.save()
@@ -283,9 +278,7 @@ class LeafletUpdatePublisherView(LoginRequiredMixin, UpdateView):
             person_data = json.loads(signer.unsign(person))
             if not person_data:
                 continue
-            leaflet_people[
-                person_data["person"]["id"]
-            ] = person_data
+            leaflet_people[person_data["person"]["id"]] = person_data
             person, _ = Person.objects.get_or_create(
                 remote_id=person_data["person"]["id"],
                 defaults={
@@ -300,13 +293,10 @@ class LeafletUpdatePublisherView(LoginRequiredMixin, UpdateView):
         self.object.people = leaflet_people
         self.object.person_ids = list(leaflet_people.keys())
         self.object.ballots = [
-            c["ballot"]
-            for ynr_id, c in leaflet_people.items()
+            c["ballot"] for ynr_id, c in leaflet_people.items()
         ]
 
-        party_data = json.loads(
-            signer.unsign(form.cleaned_data["parties"])
-        )
+        party_data = json.loads(signer.unsign(form.cleaned_data["parties"]))
         if party_data["party_id"]:
             self.object.ynr_party_id = party_data["party_id"]
             self.object.ynr_party_name = party_data["party_name"]

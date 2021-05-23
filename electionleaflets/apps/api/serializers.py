@@ -44,9 +44,7 @@ class LeafletImageSerializer(serializers.ModelSerializer):
 class LeafletSerializer(serializers.HyperlinkedModelSerializer):
     images = LeafletImageSerializer(many=True, required=False)
     party = PartySerializer(required=False)
-    people = serializers.SerializerMethodField(
-
-    )
+    people = serializers.SerializerMethodField()
     first_page_thumb = serializers.SerializerMethodField()
 
     def get_people(self, obj):

@@ -7,23 +7,23 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('leaflets', '0002_auto_20210501_1607'),
+        ("leaflets", "0002_auto_20210501_1607"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='leaflet',
-            name='ballots',
+            model_name="leaflet",
+            name="ballots",
             field=django.contrib.postgres.fields.jsonb.JSONField(default=list),
         ),
         migrations.AlterField(
-            model_name='leaflet',
-            name='people',
+            model_name="leaflet",
+            name="people",
             field=django.contrib.postgres.fields.jsonb.JSONField(default=dict),
         ),
         migrations.AlterField(
-            model_name='leaflet',
-            name='person_ids',
+            model_name="leaflet",
+            name="person_ids",
             field=django.contrib.postgres.fields.jsonb.JSONField(default=list),
         ),
     ]

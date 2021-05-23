@@ -9,8 +9,8 @@ from .views import (
     AnalysisStartRedirectView,
     AnalysisPerPartyReportView,
     ConstituencyReportView,
-    CandidateTagging,
-    TagRandomCandidate, NoCandidatesView,
+    TagRandomCandidate,
+    NoCandidatesView,
 )
 
 urlpatterns = [
@@ -22,11 +22,6 @@ urlpatterns = [
         r"^tag_candidates/$",
         TagRandomCandidate.as_view(),
         name="analysis_tag_random_candidate",
-    ),
-    url(
-        r"^tag_candidates/(?P<leaflet_id>\d+)$",
-        CandidateTagging.as_view(),
-        name="analysis_tag_candidate",
     ),
     url(
         r"^reports/constituencies/$",

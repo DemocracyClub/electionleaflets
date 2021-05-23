@@ -14,14 +14,11 @@ from django.forms.models import model_to_dict
 
 from core.helpers import geocode
 from constituencies.models import Constituency
-from people.devs_dc_helpers import DevsDCAPIHelper
 from people.models import Person
 from elections.models import Election
 from uk_political_parties.models import Party
 
 from . import constants
-
-devs_dc_helper = DevsDCAPIHelper()
 
 
 class Leaflet(models.Model):
@@ -140,21 +137,6 @@ class Leaflet(models.Model):
                 ),
                 "name": self.publisher_party.party_name,
             }
-
-    def get_ballot(self):
-        if self.ballot_id:
-            r = devs_dc_helper.ballot_request(self.ballot_id)
-            if r.status_code == 200:
-                ballot = r.json()
-                return {
-                    "name": "{} in {}".format(
-                        ballot["election_title"],
-                        ballot["election_type"]["name"],
-                    ),
-                    "link": "https://whocanivotefor.co.uk/elections/{}".format(
-                        self.ballot_id
-                    ),
-                }
 
 
 class LeafletImage(models.Model):
