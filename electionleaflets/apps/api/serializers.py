@@ -51,8 +51,8 @@ class LeafletSerializer(serializers.HyperlinkedModelSerializer):
         people = []
         data = obj.people or {}
         for ynr_id, person_data in data.items():
-            person_data["person"].pop("email")
-            person_data["person"].pop("photo_url")
+            person_data["person"].pop("email", None)
+            person_data["person"].pop("photo_url", None)
             people.append({ynr_id: person_data})
         return people
 
