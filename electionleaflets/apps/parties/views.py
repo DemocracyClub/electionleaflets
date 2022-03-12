@@ -27,9 +27,12 @@ class PartyView(DetailView):
     def get_object(self, queryset=None):
         if queryset is None:
             queryset = self.get_queryset()
-        id = re.sub(r"[^0-9]", "", self.kwargs["pk"])
+        if self.kwargs["pk"].startswith("ynmp"):
+            fixed_id = self.kwargs["pk"]
+        else:
+            fixed_id = "PP"+re.sub(r"[^0-9]", "", self.kwargs["pk"])
         queryset = queryset.filter(
-            Q(party_id=self.kwargs["pk"]) | Q(party_id=f"PP{id}")
+            Q(party_id=self.kwargs["pk"]) | Q(party_id=fixed_id)
         )
         try:
             # Get the single item from the filtered queryset
