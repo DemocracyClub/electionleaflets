@@ -12,6 +12,8 @@ from leaflets.views import (
     LegacyImageView,
     should_show_person_form,
     LeafletUpdatePublisherView,
+    should_show_party_form,
+    should_show_date_form,
 )
 
 from .forms import (
@@ -19,11 +21,13 @@ from .forms import (
     PostcodeForm,
     PeopleForm,
     PartyForm,
+    DateForm,
 )
 
 named_form_list = [
     ("images", ImagesForm),
     ("postcode", PostcodeForm),
+    ("date", DateForm),
     ("party", PartyForm),
     ("people", PeopleForm),
 ]
@@ -32,7 +36,10 @@ upload_form_wizzard = LeafletUploadWizzard.as_view(
     named_form_list,
     url_name="upload_step",
     done_step_name="finished",
-    condition_dict={"people": should_show_person_form},
+    condition_dict={
+        "people": should_show_person_form,
+        "date": should_show_date_form,
+    },
 )
 
 urlpatterns = [

@@ -1,0 +1,21 @@
+{% extends "leaflets/upload_form/leaflet_upload_base.html" %}
+{% block heading %}<h1>Date</h1>{% endblock heading %}
+{% block form %}
+  <div class="ds-field">
+      <fieldset>
+        <legend>
+          Date you received this leaflet
+        </legend>
+        {{form.date}}
+        {% if form.date.errors %}
+          <div role="alert">
+            <div class="ds-error">
+              {% for error in form.date.errors %}
+                <span role="img" aria-label="Error">❌</span> {{ error }}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </fieldset>
+    </div>
+{% endblock form %}

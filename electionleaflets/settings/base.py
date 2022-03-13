@@ -148,6 +148,7 @@ LEAFLET_APPS = [
 
 INSTALLED_APPS = [
     "django.contrib.admin",
+    "django.forms",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -216,6 +217,8 @@ TEMPLATES = [
         },
     }
 ]
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
+
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -244,8 +247,9 @@ if not environ.get("DEPLOYMENT", None):
     # .local.py overrides all the common settings.
     try:
         from .local import *  # noqa: F401,F403
+
         INTERNAL_IPS = [
-            '127.0.0.1',
+            "127.0.0.1",
         ]
     except ImportError:
         pass

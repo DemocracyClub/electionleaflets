@@ -2,6 +2,8 @@
 {% block heading %}<h1>Postcode</h1>{% endblock heading %}
 {% block form %}
   <div class="ds-field">
+  <fieldset>
+  <legend>Postcode</legend>
     <label for="id_postcode-postcode">
       What postcode was this leaflet delivered to?
     </label>
@@ -15,6 +17,20 @@
         </div>
       </div>
     {% endif %}
+  </fieldset>
+  </div>
+  <div class="ds-field">
+    <fieldset>
+      <legend>When did you get this leaflet?</legend>
 
+      <ul class="ds-select-list" id="delivered">
+        {% for radio in form.delivered %}
+          <li>
+            {{ radio.tag }}
+            <label for="{{ radio.id_for_label }}"> {{ radio.choice_label }}</label>
+          </li>
+        {% endfor %}
+      </ul>
+    </fieldset>
   </div>
 {% endblock form %}

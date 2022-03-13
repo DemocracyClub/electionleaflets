@@ -128,9 +128,35 @@ class LeafletView(CacheControlMixin, DetailView):
             return self.render_to_response(self.get_context_data(form=form))
 
 
+def should_show_party_form(wizard):
+    party_form = wizard.get_form("party")
+    postcode_dict = wizard.get_cleaned_data_for_step("postcode")
+
+    if not postcode_dict:
+        return False
+    postcode = postcode_dict.get("postcode")
+    ballot_data = party_form.get_ballot_data_from_ynr(postcode)
+    if not ballot_data:
+        return False
+    return True
+
+
 def should_show_person_form(wizard):
     cleaned_data = wizard.get_cleaned_data_for_step("party") or {}
-    return not '"party_id": null' in cleaned_data.get("party", "")
+    if not cleaned_data:
+        return False
+    if cleaned_data.get("party"):
+        signer = Signer()
+        selected_party = json.loads(signer.unsign(cleaned_data["party"]))
+        return selected_party.get("has_candidates", False)
+
+
+def should_show_date_form(wizard):
+    cleaned_data = wizard.get_cleaned_data_for_step("postcode") or {}
+    if not cleaned_data:
+        return False
+    if cleaned_data.get("delivered") == "before":
+        return True
 
 
 class LeafletUploadWizzard(NamedUrlSessionWizardView):
@@ -142,6 +168,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
     TEMPLATES = {
         "images": "leaflets/upload_form/images.html",
         "postcode": "leaflets/upload_form/postcode.html",
+        "date": "leaflets/upload_form/date.html",
         "party": "leaflets/upload_form/party.html",
         "people": "leaflets/upload_form/people.html",
     }
@@ -156,11 +183,17 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             if not postcode:
                 return
             ret = {"postcode": postcode.get("postcode")}
-            if postcode:
-                if step == "people":
-                    ret["party"] = self.storage.get_step_data("party")[
-                        "party-party"
-                    ]
+            if self.get_cleaned_data_for_step("date"):
+                ret["for_date"] = self.get_cleaned_data_for_step("date")["date"]
+
+            party_data = self.storage.get_step_data("party")
+            if not party_data:
+                return ret
+
+            if step == "people":
+                ret["party"] = self.storage.get_step_data("party")[
+                    "party-party"
+                ]
             return ret
 
     def get_context_data(self, **kwargs):
@@ -213,7 +246,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             if form_prefix == "postcode":
                 leaflet.postcode = form.cleaned_data["postcode"]
 
-            if form_prefix == "party":
+            if form_prefix == "party" and form.cleaned_data["party"]:
                 party_data = json.loads(
                     signer.unsign(form.cleaned_data["party"])
                 )

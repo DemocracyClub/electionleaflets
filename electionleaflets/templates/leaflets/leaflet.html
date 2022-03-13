@@ -90,11 +90,12 @@
       <dd>{{ object.date_uploaded|date:"l, d M, Y" }}</dd>
     </div>
 
-
+    {% if object.ynr_party_id %}
     <div>
       <dt>Published by</dt>
       <dd><a href="{% url "party-view" object.ynr_party_id %}">{{ object.ynr_party_name }}</a></dd>
     </div>
+    {% endif %}
     {% if object.ballots %}
 
 

@@ -1,0 +1,14 @@
+{% spaceless %}
+  <div class="ds-cluster">
+    <div>
+      {% for widget in widget.subwidgets %}
+        <div class="ds-field">
+          <label for="username">
+            {{ widget.attrs.label }}
+          </label>
+        {% include widget.template_name %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endspaceless %}

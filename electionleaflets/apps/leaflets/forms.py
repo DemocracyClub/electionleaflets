@@ -1,18 +1,17 @@
 # coding=utf-8
-
-from collections import OrderedDict
+import datetime
 import json
 from datetime import timedelta
 
 import requests
 from django import forms
 from django.core.exceptions import ValidationError
-from django.core.files.base import ContentFile
 from django.core.signing import Signer
 from django.utils import timezone
 
 from localflavor.gb.forms import GBPostcodeField
 
+from leaflets.fields import DCDateField
 from leaflets.models import Leaflet, LeafletImage
 
 
@@ -45,11 +44,24 @@ class ImagesForm(forms.Form):
 
 
 class PostcodeForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # assign a (computed, I assume) default value to the choice field
+        self.initial["delivered"] = "now"
+
     postcode = GBPostcodeField(
         error_messages={
             "required": "Please enter a valid UK postcode",
             "invalid": "Please enter a full UK postcode.",
         }
+    )
+
+    delivered = forms.ChoiceField(
+        choices=(
+            ("now", "In the last couple of weeks"),
+            ("before", "Some time ago"),
+        ),
+        widget=forms.RadioSelect,
     )
 
 
@@ -103,9 +115,15 @@ class PeopleRadioWidget(forms.RadioSelect):
 
 
 class YNRBallotDataMixin:
+    FOR_DATE = None
+
     def get_date_range(self):
-        start = (timezone.now() - timedelta(days=60)).date().isoformat()
-        end = (timezone.now() + timedelta(days=60)).date().isoformat()
+        for_date = self.FOR_DATE
+        if not for_date:
+            for_date = timezone.now()
+        print(for_date, self.FOR_DATE)
+        start = (for_date - timedelta(days=60)).date().isoformat()
+        end = (for_date + timedelta(days=60)).date().isoformat()
         return (start, end)
 
     def get_ballot_data_from_ynr(self, postcode):
@@ -123,23 +141,41 @@ class YNRBallotDataMixin:
         return req.json()["results"]
 
     def get_parties_from_ballot_data(self, ballot_data):
+        parties = {
+            "party:52": "Conservative and Unionist Party",
+            "party:63": "Green Party",
+            "ynmp-party:2": "Independent",
+            "party:53": "Labour Party",
+            "party:90": "Liberal Democrats",
+            "party:77": "Plaid Cymru - The Party of Wales",
+            "party:102": "Scottish National Party (SNP)",
+        }
+
         current_parties = set()
         signer = Signer()
+        parties_with_candidates = set()
         for ballot in ballot_data:
             for candidacy in ballot["candidacies"]:
-                party_key = signer.sign(
-                    json.dumps(
-                        {
-                            "party_id": candidacy["party"]["legacy_slug"],
-                            "party_name": candidacy["party"]["name"],
-                        }
-                    )
+                parties_with_candidates.add(candidacy["party"]["legacy_slug"])
+                parties[candidacy["party"]["legacy_slug"]] = candidacy["party"][
+                    "name"
+                ]
+
+        for party_id, party_name in parties.items():
+            party_key = signer.sign(
+                json.dumps(
+                    {
+                        "party_id": party_id,
+                        "party_name": party_name,
+                        "has_candidates": party_id in parties_with_candidates,
+                    }
                 )
-                data = (
-                    party_key,
-                    candidacy["party"]["name"],
-                )
-                current_parties.add(data)
+            )
+            data = (
+                party_key,
+                party_name,
+            )
+            current_parties.add(data)
         return current_parties
 
     def get_people_from_ballot_data(self, ballot_data, party=None):
@@ -164,13 +200,21 @@ class YNRBallotDataMixin:
 
 
 class PartyForm(YNRBallotDataMixin, forms.Form):
+
+    party = forms.ChoiceField(
+        choices=[], widget=forms.RadioSelect, required=False,
+    )
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not "postcode" in self.initial:
             return
+
+        self.FOR_DATE = kwargs.get("initial", {}).pop("for_date", None)
         ballot_data = self.get_ballot_data_from_ynr(self.initial["postcode"])
         self.fields["party"] = forms.ChoiceField(
-            choices=self.get_parties_from_ballot_data(ballot_data),
+            choices=list(self.get_parties_from_ballot_data(ballot_data))
+            + [(None, "Party not listed")],
             widget=forms.RadioSelect,
             required=False,
         )
@@ -187,6 +231,7 @@ def clean_party_id(party_id):
 class PeopleForm(YNRBallotDataMixin, forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.FOR_DATE = kwargs.get("initial", {}).pop("for_date", None)
         signer = Signer()
         unsigned_party = json.loads(signer.unsign(kwargs["initial"]["party"]))
         party = clean_party_id(unsigned_party["party_id"])
@@ -197,6 +242,10 @@ class PeopleForm(YNRBallotDataMixin, forms.Form):
             required=False,
             widget=forms.CheckboxSelectMultiple,
         )
+
+
+class DateForm(forms.Form):
+    date = DCDateField(required=False)
 
 
 class UpdatePublisherDetails(YNRBallotDataMixin, forms.ModelForm):
