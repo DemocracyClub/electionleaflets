@@ -28,8 +28,8 @@ class HomeView(CacheControlMixin, TemplateView):
         leaflet_count = Leaflet.objects.all().count()
         context = super(HomeView, self).get_context_data(**kwargs)
 
-        # get latest leaflets (with titles)
-        latest_leaflets = Leaflet.objects.all()[:20]
+        # get the latest leaflets (with titles)
+        latest_leaflets = Leaflet.objects.all().prefetch_related("images")[:20]
 
         # update context
         context.update(
