@@ -260,7 +260,7 @@
         },
         "django-uk-political-parties": {
             "git": "https://github.com/DemocracyClub/django-uk-political-parties.git",
-            "ref": "be60d2464d42290e9a748554aedb23680144e12a"
+            "ref": "86ffa51f8306858c379c9de5be2f4bdb24b3a910"
         },
         "djangorestframework": {
             "hashes": [
