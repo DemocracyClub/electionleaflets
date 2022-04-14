@@ -17,7 +17,7 @@ class StandardResultsSetPagination(LimitOffsetPagination):
 class LeafletFilter(filters.FilterSet):
     class Meta:
         model = Leaflet
-        fields = ["date_uploaded"]
+        fields = {"date_uploaded": ["gt", "exact"]}
 
     def ballot_filter(self, queryset, name, value):
         return queryset.filter(ballots__contains=[{"ballot_paper_id": value}])
