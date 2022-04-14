@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "dd808bfee710e9a00858d32e03987ec6bce33e67b282a1d293f085d8d5558f3d"
+            "sha256": "15e8ce2f21303dfc2fe261e50e2fe9bf0924998cbd212952fa7a255c785d4bb9"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -101,11 +101,11 @@
         },
         "click": {
             "hashes": [
-                "sha256:24e1a4a9ec5bf6299411369b208c1df2188d9eb8d916302fe6bf03faed227f1e",
-                "sha256:479707fe14d9ec9a0757618b7a100a0ae4c4e236fac5b7f80ca68028141a1a72"
+                "sha256:6a7a62563bbfabfda3a38f3023a1db4a35978c0abd76f6c9605ecd6554d6d9b1",
+                "sha256:8458d7b1287c5fb128c90e23381cf99dcde74beaf6c7ff6384ce84d6fe090adb"
             ],
-            "markers": "python_version >= '3.7'",
-            "version": "==8.1.2"
+            "index": "pypi",
+            "version": "==8.0.4"
         },
         "colorama": {
             "hashes": [
@@ -237,11 +237,11 @@
         },
         "django-ses": {
             "hashes": [
-                "sha256:0c11df1fd51e631ce70ccc2faf676f2538f433516bd04e7eca20d815885a0bac",
-                "sha256:f2d1aa805bfbbc4d5e73e4a0e7399287bac426b45689e3fd15810793986a89ed"
+                "sha256:0cbc20c312320c0e7e93badd3dbdb892675f95a4673fb55ee78bdd49729e4fed",
+                "sha256:84f3f9db35d7fd8429b794245bec6b024d7570ba245aa42a4e78707c4d2ce2a9"
             ],
             "index": "pypi",
-            "version": "==3.0.1"
+            "version": "==2.6.0"
         },
         "django-static-jquery": {
             "hashes": [
@@ -1155,11 +1155,11 @@
         },
         "click": {
             "hashes": [
-                "sha256:24e1a4a9ec5bf6299411369b208c1df2188d9eb8d916302fe6bf03faed227f1e",
-                "sha256:479707fe14d9ec9a0757618b7a100a0ae4c4e236fac5b7f80ca68028141a1a72"
+                "sha256:6a7a62563bbfabfda3a38f3023a1db4a35978c0abd76f6c9605ecd6554d6d9b1",
+                "sha256:8458d7b1287c5fb128c90e23381cf99dcde74beaf6c7ff6384ce84d6fe090adb"
             ],
-            "markers": "python_version >= '3.7'",
-            "version": "==8.1.2"
+            "index": "pypi",
+            "version": "==8.0.4"
         },
         "cookiecutter": {
             "hashes": [
