@@ -72,7 +72,7 @@ setuptools = "==62.1.0"
 faker = "*"
 werkzeug = ">=0.15.3"
 black = "==19.10b0"
-django-s3file = "*"
+django-s3file = "==5.4.0"
 psycopg2-binary = "*"
 dc_design_system = {git = "https://github.com/DemocracyClub/design-system.git", ref = "0.1.2"}
 whitenoise = "*"
