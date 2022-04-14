@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c80a6c91539261c5ce969e26c027bb105a5bbcb994bf330610185115c09d149d"
+            "sha256": "dd808bfee710e9a00858d32e03987ec6bce33e67b282a1d293f085d8d5558f3d"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -1062,29 +1062,29 @@
         },
         "aws-lambda-builders": {
             "hashes": [
-                "sha256:221f50d7a36c1fe4a8495a1acfff3cf539ef528310c76cfe2341e250817ceb74",
-                "sha256:96e16fb9d860c91484daef296445fbc856a951dc8c35523882695d33cb177c2d",
-                "sha256:c9f4a284b856c43e18e47aeb28c4ee6b702d632953b03ef4fe2fb24fd6cc99e5"
+                "sha256:0bfe880e49e7dddbf23415c2591d37039f59fa2994babab261ef5bf404707f8d",
+                "sha256:d622550c93d2678b76af34f72c8059e5f5841489ea0ea9da2d57ba9af6be87a9",
+                "sha256:ee6277e0132f50e729ba840230cbc27589f0c6d752f6d4f3f956dd4a582ff3d7"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==1.14.0"
+            "version": "==1.13.0"
         },
         "aws-sam-cli": {
             "hashes": [
-                "sha256:58674d3451042b7b0cc29007dbf30a82f5507e346fb5b8498b46b0c1beeacaa9",
-                "sha256:fb72accde99d1d5260a7ebaa33e9634461c5a96733ca67f82af22d2cde4fe7fc"
+                "sha256:76cb71935522ed6c0035b2fcefd047d94b4a6ce1dcf8a3e5547083b5cbdbef13",
+                "sha256:ff422aecb49e10658be7f4cfc743be5cba7fb8330ea6a3c0526d1c172f75b76d"
             ],
             "index": "pypi",
-            "version": "==1.46.0"
+            "version": "==1.40.1"
         },
         "aws-sam-translator": {
             "hashes": [
-                "sha256:40a6dd5a0aba32c7b38b0f5c54470396acdcd75e4b64251b015abdf922a18b5f",
-                "sha256:bf321ab62aa1731d3e471fd55de6f5d1ab07dfc169cd254aa523dd9ad30246f9",
-                "sha256:cd4761c01902e5103e60202373275886e59edcc778edf18ca22d380059ed44e7"
+                "sha256:31875e4f639511f506d0c757a2a50756bd846440724079e867aafb12c534ac23",
+                "sha256:4f5d3d5d0567fe728e75c5c8dff599f7c88313b3b8e85b9b17a2c00cb046b2e4",
+                "sha256:8a7976c0ee2fca004a590e17d3551a49c8d8ba14ed0cb3674ea270d41d0dcd5b"
             ],
             "markers": "python_version >= '3.7' and python_version != '4.0' and python_version <= '4.0'",
-            "version": "==1.45.0"
+            "version": "==1.42.0"
         },
         "binaryornot": {
             "hashes": [

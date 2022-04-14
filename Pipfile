@@ -7,7 +7,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-aws-sam-cli = "*"
+aws-sam-cli = "==1.40.1"
 
 [packages]
 boto3 = "*"
