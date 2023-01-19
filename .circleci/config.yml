@@ -9,6 +9,8 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
+      - run: python --version
+      - run: node --version
       - restore_cache:
           keys:
             - v2-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
