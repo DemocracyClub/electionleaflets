@@ -20,7 +20,7 @@ lambda-layers/DependenciesLayer:
 	mkdir -p $@
 
 lambda-layers/DependenciesLayer/requirements.txt: Pipfile Pipfile.lock lambda-layers/DependenciesLayer lambda-layers/DependenciesLayer ## Update the requirements.txt file used to build this Lambda function's DependenciesLayer
-	pipenv lock -r | sed "s/^-e //" >lambda-layers/DependenciesLayer/requirements.txt
+	pipenv requirements | sed "s/^-e //" >lambda-layers/DependenciesLayer/requirements.txt
 
 thumbs/requirements.txt: thumbs/Pipfile thumbs/Pipfile.lock ## Update the requirements.txt file used to build this Lambda function's DependenciesLayer
 	cd thumbs && pipenv lock -r | sed "s/^-e //" >requirements.txt
