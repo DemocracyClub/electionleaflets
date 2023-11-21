@@ -23,7 +23,7 @@ lambda-layers/DependenciesLayer/requirements.txt: Pipfile Pipfile.lock lambda-la
 	pipenv requirements | sed "s/^-e //" >lambda-layers/DependenciesLayer/requirements.txt
 
 thumbs/requirements.txt: thumbs/Pipfile thumbs/Pipfile.lock ## Update the requirements.txt file used to build this Lambda function's DependenciesLayer
-	cd thumbs && pipenv lock -r | sed "s/^-e //" >requirements.txt
+	cd thumbs && pipenv requirements | sed "s/^-e //" >requirements.txt
 
 .PHONY: help
 # gratuitously adapted from https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
