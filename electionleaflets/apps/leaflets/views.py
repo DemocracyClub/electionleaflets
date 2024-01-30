@@ -230,7 +230,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                         "Bucket": bucket.name,
                         "Key": file_path,
                     }
-                    new_file_name = f"leaflets/{file_name}"
+                    new_file_name = f"leaflets/{leaflet.pk}/{file_name}"
                     moved_file = bucket.Object(new_file_name)
                     moved_file.copy(copy_source)
 
