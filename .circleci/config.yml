@@ -41,9 +41,12 @@ jobs:
             - v2-dependencies-{{ checksum "Pipfile.lock" }}
             - v2-dependencies-default
       - run: *install-pipenv
-#      - run:
-#          command: pipenv run black-check
-#          name: Black
+      - run:
+          name: Ruff lint
+          command: pipenv run ruff-check
+      - run:
+          name: Ruff format
+          command: pipenv run ruff-format
       - run: pipenv run collectstatic
 #      - run:
 #          command: pipenv run pytest --flakes

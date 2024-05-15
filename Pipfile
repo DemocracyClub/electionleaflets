@@ -6,7 +6,6 @@ name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
-
 [packages]
 boto3 = "*"
 aws-wsgi = { git = "https://github.com/DemocracyClub/awsgi.git"}
@@ -58,3 +57,9 @@ pytest = "pytest"
 coveralls = "coveralls"
 migratedb = "python manage.py migrate --noinput"
 thumbs_sam_build = "bash -c 'cd thumbs && sam build'"
+ruff-check = "ruff  ."
+ruff-format = "ruff  format ."
+
+
+[dev-packages]
+ruff = "*"

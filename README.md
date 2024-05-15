@@ -2,7 +2,6 @@
 
 [![Coverage Status](https://coveralls.io/repos/DemocracyClub/electionleaflets/badge.svg?branch=master)](https://coveralls.io/r/DemocracyClub/electionleaflets?branch=django_1_7)
 [![CI](https://circleci.com/gh/DemocracyClub/electionleaflets.svg?style=shield)](https://app.circleci.com/pipelines/github/DemocracyClub/electionleaflets)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ### Welcome
 
