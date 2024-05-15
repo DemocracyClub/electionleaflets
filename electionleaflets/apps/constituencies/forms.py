@@ -1,8 +1,6 @@
+from core.helpers import geocode
 from django import forms
 from django.utils.translation import ugettext as _
-
-from core.helpers import geocode
-
 from localflavor.gb.forms import GBPostcodeField
 
 

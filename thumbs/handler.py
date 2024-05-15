@@ -1,31 +1,26 @@
 import base64
-import os
-from io import BytesIO
-from os.path import basename, dirname, splitext, sep
-from os import makedirs
 import re
 import sys
+from io import BytesIO
+from os import makedirs
+from os.path import dirname, sep
 
 sys.path.append("")
 from typing import Tuple
 from urllib.parse import unquote
 
 import boto3
-
 import django
 from django.conf import settings
-
-settings.configure(THUMBNAIL_KVSTORE="thumbs.PassthruKVStore",)
-BUCKET_NAME = open("LEAFLET_IMAGES_BUCKET_NAME").read().strip()
-django.setup()
-
-from PIL import Image, ImageOps
-from sorl.thumbnail import get_thumbnail
-from sorl.thumbnail import conf as sorl_conf
+from PIL import Image
 from sorl.thumbnail.base import ThumbnailBackend
 from sorl.thumbnail.engines import pil_engine
-from sorl.thumbnail.parsers import parse_crop, parse_geometry
+from sorl.thumbnail.parsers import parse_geometry
 
+settings.configure(THUMBNAIL_KVSTORE="thumbs.PassthruKVStore", )
+with open("LEAFLET_IMAGES_BUCKET_NAME") as f:
+    BUCKET_NAME = f.read().strip()
+django.setup()
 
 client = boto3.client("s3")
 engine = pil_engine.Engine()
@@ -34,8 +29,7 @@ engine = pil_engine.Engine()
 def handle(event, context):
     if "s3" in event["Records"][0]:
         return handle_s3(event, context)
-    elif "cf" in event["Records"][0]:
-        return handle_cf(event, context)
+    return handle_cf(event, context)
 
 
 def handle_cf(event, context):
@@ -139,7 +133,7 @@ def process_image(image: Image, spec: Tuple[str, dict]) -> Image:
 
 
 def upload_image(
-    image: Image, format: str, bucket: str, key: str, local: bool = False
+        image: Image, format: str, bucket: str, key: str, local: bool = False
 ):
     io = BytesIO()
     image.save(io, format)

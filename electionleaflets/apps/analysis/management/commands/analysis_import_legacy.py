@@ -1,11 +1,10 @@
+import csv
 import os
 import re
-import csv
-
-from django.core.management.base import BaseCommand
-from django.conf import settings
 
 from analysis.models import LeafletProperties
+from django.conf import settings
+from django.core.management.base import BaseCommand
 from leaflets.models import Leaflet
 
 
@@ -46,7 +45,7 @@ class Command(BaseCommand):
     SURVEY_VALUES = [re.compile("^survey.*"), re.compile("^newpaper.*")]
 
     def _is_match(self, value, match_list):
-        return set([x.match(value) for x in match_list if x.match(value)])
+        return {x.match(value) for x in match_list if x.match(value)}
 
     def clean_value(self, value):
         value = value.lower().strip()
@@ -86,7 +85,9 @@ class Command(BaseCommand):
             os.path.abspath(settings.PROJECT_ROOT),
             "apps/analysis/legacy_data.csv",
         )
-        for line in csv.DictReader(open(csv_path)):
+        with open(csv_path) as csvfile:
+            reader = csv.DictReader(csvfile)
+        for line in reader:
             leaflet_id = line["Leaflet Link"].strip("/").split("/")[-1].strip()
             if not leaflet_id:
                 continue

@@ -1,6 +1,6 @@
+from constituencies.models import Constituency
 from django import template
 from django.conf import settings
-from constituencies.models import Constituency
 
 register = template.Library()
 

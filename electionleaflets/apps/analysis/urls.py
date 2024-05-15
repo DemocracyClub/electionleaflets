@@ -1,16 +1,15 @@
 from django.conf.urls import url
 from django.views.decorators.cache import cache_page
 
-
 from .views import (
     AnalysisHomeView,
-    AnalysisReportView,
-    ReportView,
-    AnalysisStartRedirectView,
     AnalysisPerPartyReportView,
+    AnalysisReportView,
+    AnalysisStartRedirectView,
     ConstituencyReportView,
-    TagRandomCandidate,
     NoCandidatesView,
+    ReportView,
+    TagRandomCandidate,
 )
 
 urlpatterns = [

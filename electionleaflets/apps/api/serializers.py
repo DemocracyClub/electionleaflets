@@ -1,10 +1,8 @@
+from leaflets.models import Leaflet, LeafletImage
+from people.models import Person
 from rest_framework import serializers
 from sorl.thumbnail import get_thumbnail
-
-from leaflets.models import Leaflet, LeafletImage
-from constituencies.models import Constituency
 from uk_political_parties.models import Party
-from people.models import Person
 
 
 class PartySerializer(serializers.HyperlinkedModelSerializer):
@@ -60,6 +58,7 @@ class LeafletSerializer(serializers.HyperlinkedModelSerializer):
         image = obj.get_first_image()
         if image:
             return get_thumbnail(obj.get_first_image().image, "350").url
+        return None
 
     def validate(self, data):
         if not data.get("status") or not data.get("images"):
@@ -91,6 +90,7 @@ class LeafletMinSerializer(serializers.ModelSerializer):
         image = obj.get_first_image()
         if image:
             return get_thumbnail(obj.get_first_image().image, "350").url
+        return None
 
     class Meta:
         model = Leaflet

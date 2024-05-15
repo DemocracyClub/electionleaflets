@@ -1,10 +1,12 @@
-from django.views.generic import DetailView, ListView, FormView
+from datetime import datetime
+
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Count
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.generic import DetailView, FormView, ListView
 from leaflets.models import Leaflet
+
 from .forms import ConstituencyLookupForm
 from .models import Constituency
-from datetime import datetime
 
 
 class ConstituencyView(DetailView):
@@ -17,11 +19,10 @@ class ConstituencyView(DetailView):
         paginator = Paginator(qs, 60)
         page = self.request.GET.get("page")
 
-        if not page or page == 1:
-            if qs:
-                context["last_leaflet_days"] = (
-                    datetime.now() - qs[0].date_uploaded
-                ).days
+        if (not page or page == 1) and qs:
+            context["last_leaflet_days"] = (
+                datetime.now() - qs[0].date_uploaded
+            ).days
 
         try:
             context["constituency_leaflets"] = paginator.page(page)

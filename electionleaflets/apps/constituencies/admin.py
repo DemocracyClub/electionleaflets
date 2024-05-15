@@ -1,5 +1,5 @@
-from django.contrib import admin
 from constituencies.models import Constituency
+from django.contrib import admin
 
 
 class ConstituencyOptions(admin.ModelAdmin):

@@ -1,6 +1,6 @@
+from sorl.thumbnail import default
 from sorl.thumbnail.base import ThumbnailBackend
 from sorl.thumbnail.images import ImageFile
-from sorl.thumbnail import default
 
 
 class S3Backend(ThumbnailBackend):
@@ -20,8 +20,7 @@ class S3Backend(ThumbnailBackend):
             options.setdefault(key, value)
 
         name = self._get_thumbnail_filename(source, geometry_string, options)
-        thumbnail = ImageFile(name, default.storage)
-        return thumbnail
+        return ImageFile(name, default.storage)
 
     def _get_thumbnail_filename(self, source, geometry_string, options):
         """
@@ -42,10 +41,9 @@ class S3Backend(ThumbnailBackend):
             ["{}={}".format(k, v) for k, v in list(opts.items())]
         )
 
-        thumb_url = "{base_url}/{geometry_string}/{url_kwargs}/{original_path}".format(
+        return "{base_url}/{geometry_string}/{url_kwargs}/{original_path}".format(
             base_url=base_url,
             geometry_string=geometry_string,
             url_kwargs=url_kwargs,
             original_path=source.name,
         )
-        return thumb_url

@@ -1,9 +1,12 @@
+import contextlib
+import os
 import sys
 from os import environ
-import os
 
 # PATH vars
-from os.path import join, abspath, dirname
+from os.path import abspath, dirname, join
+
+import dc_design_system
 
 
 def here(x):
@@ -19,7 +22,6 @@ def root(x):
 
 sys.path.insert(0, root("apps"))
 
-
 DEBUG = False
 template_DEBUG = DEBUG
 TEMPLATE_DEBUG = DEBUG
@@ -33,13 +35,12 @@ DATABASES = {
     }
 }
 
-
 TIME_ZONE = "Europe/London"
 LANGUAGE_CODE = "en-GB"
 
 ALLOWED_HOSTS = ["*"]
 
-MEDIA_ROOT = root("media",)
+MEDIA_ROOT = root("media", )
 MEDIA_URL = "/media/"
 STATIC_ROOT = root("static")
 STATIC_URL = "/static/"
@@ -67,7 +68,7 @@ PIPELINE = {
                 "scss/vendor/filepond-plugin-image-preview.css",
             ],
             "output_filename": "scss/styles.css",
-            "extra_context": {"media": "screen,projection",},
+            "extra_context": {"media": "screen,projection", },
         },
     },
     "JAVASCRIPT": {
@@ -85,14 +86,11 @@ PIPELINE = {
     },
 }
 
-
 PIPELINE["CSS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
 PIPELINE["JS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
 
-import dc_design_system
-
 PIPELINE["SASS_ARGUMENTS"] = (
-    " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
+        " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
 )
 
 STATICFILES_FINDERS = (
@@ -147,29 +145,29 @@ LEAFLET_APPS = [
 ]
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
-    "django.forms",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.sites",
-    "django.contrib.staticfiles",
-    "django.contrib.messages",
-    "django.contrib.humanize",
-    "dj_pagination",
-    "rest_framework",
-    "sorl.thumbnail",
-    "storages",
-    "uk_political_parties",
-    "markdown_deux",
-    "django_extensions",
-    "pipeline",
-    "dc_design_system",
-    "django_static_jquery",
-    "s3file",
-    "debug_toolbar",
-    "django_filters",
-] + LEAFLET_APPS
+                     "django.contrib.admin",
+                     "django.forms",
+                     "django.contrib.auth",
+                     "django.contrib.contenttypes",
+                     "django.contrib.sessions",
+                     "django.contrib.sites",
+                     "django.contrib.staticfiles",
+                     "django.contrib.messages",
+                     "django.contrib.humanize",
+                     "dj_pagination",
+                     "rest_framework",
+                     "sorl.thumbnail",
+                     "storages",
+                     "uk_political_parties",
+                     "markdown_deux",
+                     "django_extensions",
+                     "pipeline",
+                     "dc_design_system",
+                     "django_static_jquery",
+                     "s3file",
+                     "debug_toolbar",
+                     "django_filters",
+                 ] + LEAFLET_APPS
 
 
 def setup_sentry(environment=None):
@@ -197,11 +195,10 @@ def setup_sentry(environment=None):
 THUMBNAIL_FORMAT = "PNG"
 THUMBNAIL_KVSTORE = "sorl.thumbnail.kvstores.cached_db_kvstore.KVStore"
 
-
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [root("templates"),],
+        "DIRS": [root("templates"), ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -219,7 +216,6 @@ TEMPLATES = [
 ]
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
-
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
@@ -228,7 +224,6 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "api.helpers.LargerPageNumberPagination",
 }
-
 
 THANKYOU_MESSAGES = [
     "Thank you so much! Your leaflet has been added to the archive.",
@@ -254,10 +249,7 @@ if not environ.get("DEPLOYMENT", None):
     except ImportError:
         pass
 
-
-# importing test settings file if necessary (TODO chould be done better)
+# importing test settings file if necessary (TODO could be done better)
 if len(sys.argv) > 1 and sys.argv[1] in ["test", "harvest"]:
-    try:
+    with contextlib.suppress(ImportError):
         from .testing import *  # noqa: F401,F403
-    except ImportError:
-        pass

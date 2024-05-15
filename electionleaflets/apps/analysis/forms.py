@@ -3,9 +3,9 @@ from collections import OrderedDict
 
 from django import forms
 from django.core.signing import Signer
-
 from leaflets.forms import PeopleForm
 from people.models import Person
+
 from .models import LeafletProperties
 
 QUESTIONS = OrderedDict(

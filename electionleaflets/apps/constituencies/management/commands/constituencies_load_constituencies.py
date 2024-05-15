@@ -1,8 +1,6 @@
 import requests
-
-from django.core.management.base import BaseCommand
-
 from constituencies.models import Constituency
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
@@ -18,12 +16,11 @@ class Command(BaseCommand):
         this app doesn't support the full JSON provided yet.
         """
 
-        cleaned_constituency = {
+        return {
             "constituency_id": constituency["id"],
             "name": constituency["name"],
             "country_name": constituency["country_name"],
         }
-        return cleaned_constituency
 
     def handle(self, **options):
         constituencies = self.fetch_constituencies()

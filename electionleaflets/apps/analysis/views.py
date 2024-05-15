@@ -1,17 +1,16 @@
 import datetime
 
-from django.contrib import messages
-from django.urls import reverse
-from django.views.generic import TemplateView, RedirectView, UpdateView
-from django.db.models import Count
-from django.contrib.auth.models import User
-
-from analysis.forms import CandidateTaggerForm
-from core.helpers import CacheControlMixin
-from .models import LeafletProperties
 from constituencies.models import Constituency
+from core.helpers import CacheControlMixin
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.db.models import Count
+from django.urls import reverse
+from django.views.generic import RedirectView, TemplateView
 from leaflets.models import Leaflet
 from uk_political_parties.models import Party
+
+from .models import LeafletProperties
 
 
 class AnalysisHomeView(TemplateView):
@@ -62,8 +61,7 @@ class AnalysisStartRedirectView(RedirectView):
             .filter(date_uploaded__gt=start_date)
             .order_by("?")
         )
-        url = next_leaflet[0].get_absolute_url()
-        return url
+        return next_leaflet[0].get_absolute_url()
 
 
 class ReportViewMixin(object):
@@ -180,12 +178,11 @@ class AnalysisPerPartyReportView(BaseAnalysisReportView):
 class BaseCandidateTaggingMixin:
     def get_queryset(self):
         last_30_days = datetime.datetime.now() - datetime.timedelta(days=30)
-        qs = (
+        return (
             Leaflet.objects.exclude(postcode="")
             .filter(publisher_person=None)
             .filter(date_uploaded__gte=last_30_days)
         )
-        return qs
 
 
 class TagRandomCandidate(BaseCandidateTaggingMixin, RedirectView):
@@ -196,9 +193,8 @@ class TagRandomCandidate(BaseCandidateTaggingMixin, RedirectView):
             return reverse(
                 "analysis_tag_candidate", kwargs={"leaflet_id": leaflet.pk}
             )
-        else:
-            messages.success(self.request, "No more candidates lift to tag!")
-            return reverse("analysis")
+        messages.success(self.request, "No more candidates lift to tag!")
+        return reverse("analysis")
 
 
 class NoCandidatesView(CacheControlMixin, TemplateView):

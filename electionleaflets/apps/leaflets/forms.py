@@ -1,18 +1,14 @@
 # coding=utf-8
-import datetime
 import json
 from datetime import timedelta
 
 import requests
 from django import forms
-from django.core.exceptions import ValidationError
 from django.core.signing import Signer
 from django.utils import timezone
-
-from localflavor.gb.forms import GBPostcodeField
-
 from leaflets.fields import DCDateField
 from leaflets.models import Leaflet, LeafletImage
+from localflavor.gb.forms import GBPostcodeField
 
 
 class S3UploadedImageField(forms.ImageField):
@@ -23,6 +19,7 @@ class S3UploadedImageField(forms.ImageField):
         data.name = content
         if content.startswith("tmp/s3file"):
             return data
+        return None
 
 
 class ImagesForm(forms.Form):
@@ -131,7 +128,7 @@ class YNRBallotDataMixin:
 
         :type instance: Leaflet
         """
-        url = f"https://candidates.democracyclub.org.uk/api/next/ballots/"
+        url = "https://candidates.democracyclub.org.uk/api/next/ballots/"
         params = {"for_postcode": postcode}
         start, end = self.get_date_range()
         params["election_date_range_after"] = start
@@ -185,7 +182,7 @@ class YNRBallotDataMixin:
 
         for ballot in ballot_data:
             for candidacy in ballot["candidacies"]:
-                if party and not candidacy["party"]["legacy_slug"] in party:
+                if party and candidacy["party"]["legacy_slug"] not in party:
                     continue
                 candidacy["ballot"] = {
                     "ballot_paper_id": ballot["ballot_paper_id"],
@@ -207,7 +204,7 @@ class PartyForm(YNRBallotDataMixin, forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if not "postcode" in self.initial:
+        if "postcode" not in self.initial:
             return
 
         self.FOR_DATE = kwargs.get("initial", {}).pop("for_date", None)

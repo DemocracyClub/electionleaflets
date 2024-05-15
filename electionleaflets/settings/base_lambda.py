@@ -1,4 +1,5 @@
 import os
+
 from .base import *  # noqa: F401,F403
 
 ALLOWED_HOSTS = ["*"]
@@ -51,4 +52,4 @@ THUMBNAIL_BACKEND = "core.s3_thumbnail_store.S3Backend"
 CSRF_TRUSTED_ORIGINS = [".electionleaflets.org"]
 USE_X_FORWARDED_HOST = True
 
-setup_sentry()
+setup_sentry()  # noqa

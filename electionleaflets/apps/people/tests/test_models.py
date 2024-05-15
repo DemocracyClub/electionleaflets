@@ -1,13 +1,10 @@
-from django.test import TestCase
-
 import factory
-from factory.django import DjangoModelFactory
-
-from uk_political_parties.models import Party
 from constituencies.models import Constituency
-
+from django.test import TestCase
 from elections.models import Election
-from people.models import Person, PartyMemberships, PersonConstituencies
+from factory.django import DjangoModelFactory
+from people.models import PartyMemberships, Person, PersonConstituencies
+from uk_political_parties.models import Party
 
 
 class YNMPPeopleFactory(DjangoModelFactory):

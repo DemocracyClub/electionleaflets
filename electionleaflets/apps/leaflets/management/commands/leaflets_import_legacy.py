@@ -2,14 +2,12 @@
 import os
 import re
 
-from django.core.management.base import BaseCommand
+from constituencies.models import Constituency
 from django.conf import settings
 from django.core.files import File
-
-from legacy.models import legacyLeaflet
-
+from django.core.management.base import BaseCommand
 from leaflets.models import Leaflet, LeafletImage
-from constituencies.models import Constituency
+from legacy.models import legacyLeaflet
 from uk_political_parties.models import Party
 
 
@@ -40,19 +38,20 @@ class Command(BaseCommand):
 
             if os.path.exists(image_path):
                 print("Exists")
-                f = open(image_path, "r")
-                data["image"] = File(f)
+                with open(image_path, "r") as f:
+                    data["image"] = File(f)
             else:
                 image_path = os.path.join(
                     settings.IMAGE_LOCAL_CACHE, "large", key
                 )
                 if os.path.exists(image_path):
                     print("Exists")
-                    f = open(image_path, "r")
-                    data["image"] = File(f)
+                    with open(image_path, "r") as f:
+                        data["image"] = File(f)
                 else:
                     print("Doesn't exist")
             return data
+        return None
 
     def clean_constituency(self, con):
         con_name = con.constituency.name
@@ -87,17 +86,14 @@ class Command(BaseCommand):
             postcode = re.sub(r"[^\x00-\x7F]+", " ", postcode)
             postcode = re.sub("^[A-Z0-9\s]", "", postcode)
             postcode = postcode.strip()
-        except:
-            import ipdb
-
-            ipdb.set_trace()
+        except Exception:
+            return postcode
         return postcode
 
     def handle(self, **options):
         for legacy_leaflet in legacyLeaflet.objects.all():
-            if not legacy_leaflet.date_uploaded:
-                if legacy_leaflet.date_delivered:
-                    legacy_leaflet.date_uploaded = legacy_leaflet.date_delivered
+            if not legacy_leaflet.date_uploaded and legacy_leaflet.date_delivered:
+                legacy_leaflet.date_uploaded = legacy_leaflet.date_delivered
 
             if legacy_leaflet.date_uploaded:
                 if not bool(legacy_leaflet.publisher_party_id):

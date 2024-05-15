@@ -1,8 +1,8 @@
 from django.contrib import admin
 from leaflets.models import Leaflet, LeafletImage
+from sorl.thumbnail import get_thumbnail
 
 from .admin_widgets import AdminImageMixin
-from sorl.thumbnail import get_thumbnail
 
 
 class LeafletImageInline(AdminImageMixin, admin.TabularInline):
@@ -62,6 +62,7 @@ class LeafletImageOptions(AdminImageMixin, admin.ModelAdmin):
         if obj.image:
             thumb = get_thumbnail(obj.image, "100x100", crop="center")
             return "<img src='%s'>" % thumb.url
+        return None
 
     thumbnail.allow_tags = True
 

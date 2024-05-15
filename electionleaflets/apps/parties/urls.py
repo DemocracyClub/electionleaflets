@@ -1,6 +1,5 @@
 from django.conf.urls import url
 from django.views.decorators.cache import cache_page
-
 from parties.views import PartyList, PartyView
 
 urlpatterns = [

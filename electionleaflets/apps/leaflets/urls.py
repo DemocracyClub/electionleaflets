@@ -1,27 +1,25 @@
 from django.conf.urls import url
 from django.views.decorators.cache import never_cache
-
 from leaflets.views import (
+    AllImageView,
+    ImageCropView,
+    ImageRotateView,
     ImageView,
     LatestLeaflets,
-    LeafletView,
-    LeafletUploadWizzard,
-    ImageCropView,
-    AllImageView,
-    ImageRotateView,
-    LegacyImageView,
-    should_show_person_form,
     LeafletUpdatePublisherView,
-    should_show_party_form,
+    LeafletUploadWizzard,
+    LeafletView,
+    LegacyImageView,
     should_show_date_form,
+    should_show_person_form,
 )
 
 from .forms import (
-    ImagesForm,
-    PostcodeForm,
-    PeopleForm,
-    PartyForm,
     DateForm,
+    ImagesForm,
+    PartyForm,
+    PeopleForm,
+    PostcodeForm,
 )
 
 named_form_list = [

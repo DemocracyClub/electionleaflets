@@ -1,21 +1,18 @@
 import debug_toolbar
-from django.conf import settings
-from django.contrib import admin
-from django.conf.urls.static import static
-from django.urls import path, re_path, include
-from django.views.generic import TemplateView
-from django.views.decorators.cache import cache_page
-
-admin.autodiscover()
-
 from api import feeds  # noqa: E402
 from core.views import (
     HomeView,
     MaintenanceView,
-    ReportView,
     ReportThanksView,
-    TestView,
-)  # noqa: E402
+    ReportView,
+)
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import include, path, re_path
+from django.views.generic import TemplateView
+
+admin.autodiscover()
 
 MAINTENANCE_MODE = getattr(settings, "MAINTENANCE_MODE", False)
 if MAINTENANCE_MODE:

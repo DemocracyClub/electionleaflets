@@ -1,19 +1,16 @@
 import requests
-
 from django.core.management.base import BaseCommand
-
 from uk_political_parties.models import Party, PartyEmblem
 
 
 class Command(BaseCommand):
     def clean_party(self, party_id, party):
-        cleaned_party = {
+        return {
             "party_id": party_id,
             "party_name": party["name"],
             "registered_date": party["date_registered"],
             "register": party["register"],
         }
-        return cleaned_party
 
     def handle(self, **options):
         base_url = "https://candidates.democracyclub.org.uk"

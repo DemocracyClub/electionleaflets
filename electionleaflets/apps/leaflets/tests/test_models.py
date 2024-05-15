@@ -1,10 +1,9 @@
 import responses
-
 from django.test import TestCase
-
 from leaflets.models import Leaflet, LeafletImage
-from .helpers import get_test_image
+
 from .data import MAPIT_POSTCODE_RETURN
+from .helpers import get_test_image
 
 
 class LeafletTestCase(TestCase):
@@ -53,19 +52,19 @@ class LeafletTestCase(TestCase):
             status=200,
             content_type="application/json",
         )
-        l = Leaflet()
-        l.geocode("SE228DJ")
-        self.assertEqual(l.constituency.name, "Camberwell and Peckham")
-        self.assertEqual(l.location.x, -0.0824797738988752)
-        self.assertEqual(l.location.y, 51.4599323104553)
+        leaflet = Leaflet()
+        leaflet.geocode("SE228DJ")
+        self.assertEqual(leaflet.constituency.name, "Camberwell and Peckham")
+        self.assertEqual(leaflet.location.x, -0.0824797738988752)
+        self.assertEqual(leaflet.location.y, 51.4599323104553)
 
 
 class LeafletImageTestCase(TestCase):
     def test_raw_image_field(self):
-        l = Leaflet()
-        l.save()
+        leaflet = Leaflet()
+        leaflet.save()
         image_file = get_test_image()
-        li = LeafletImage(image=image_file, leaflet=l)
+        li = LeafletImage(image=image_file, leaflet=leaflet)
         self.assertEqual(li.raw_image.name, "")
         li.save()
         self.assertRegex(li.raw_image.name, r"front_test")

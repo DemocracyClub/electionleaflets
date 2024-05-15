@@ -1,6 +1,5 @@
 from django.test import TestCase
 from django.urls import reverse
-
 from leaflets.tests.model_factory import LeafletFactory
 
 

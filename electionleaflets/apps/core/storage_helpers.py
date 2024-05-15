@@ -1,9 +1,4 @@
-from django.core.files.base import ContentFile
-from django.core.files.uploadedfile import UploadedFile
-from django.utils.datastructures import MultiValueDict
-from formtools.wizard.storage import NoFileStorageConfigured
 from formtools.wizard.storage.session import SessionStorage
-from storages.backends.s3boto3 import S3Boto3StorageFile
 
 
 class PreUploadedSessionStorage(SessionStorage):

@@ -1,8 +1,7 @@
 from django.core.management.base import BaseCommand
+from leaflets.models import LeafletImage
 from sorl.thumbnail import get_thumbnail
 from tqdm import tqdm
-
-from leaflets.models import LeafletImage
 
 
 class Command(BaseCommand):
@@ -13,5 +12,5 @@ class Command(BaseCommand):
             try:
                 get_thumbnail(leaflet_image.image, "350").url
                 get_thumbnail(leaflet_image.image, "100x100", crop="center").url
-            except:
+            except Exception:
                 pass

@@ -1,7 +1,6 @@
 import os
 
 import boto3
-from botocore.exceptions import BotoCoreError
 
 IMAGES_BUCKET_NAME = os.environ.get("LEAFLET_IMAGES_BUCKET_NAME")
 IMAGES_URL = f"images.{os.environ.get('PUBLIC_FQDN')}"
@@ -17,12 +16,13 @@ def get_thumbs_function(lambda_client):
             f"ElectionLeafletsThumbs-{ENVIRONMENT}"
         ):
             return function
+    return None
 
 
 def policy_exists(arn):
     try:
         policy = lambda_client.get_policy(FunctionName=function_arn)
-    except:
+    except Exception:
         return False
     return "s3_thumbs" in policy["Policy"]
 
@@ -67,6 +67,7 @@ def get_dist(cf_client):
     for dist in cf_client.list_distributions()["DistributionList"]["Items"]:
         if IMAGES_URL in dist["Aliases"]["Items"]:
             return dist
+    return None
 
 
 dist = get_dist(cf_client)
