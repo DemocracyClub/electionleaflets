@@ -27,9 +27,9 @@ class AnalysisHomeView(TemplateView):
             .order_by("-edits_count")[:10]
         )
 
-        context[
-            "total_contributions"
-        ] = LeafletProperties.objects.all().leaflets_analysed()
+        context["total_contributions"] = (
+            LeafletProperties.objects.all().leaflets_analysed()
+        )
 
         context["number_of_people"] = (
             LeafletProperties.objects.order_by()
@@ -38,13 +38,13 @@ class AnalysisHomeView(TemplateView):
             .count()
         )
 
-        context[
-            "leaflets_analysed"
-        ] = LeafletProperties.objects.all().leaflets_analysed()
+        context["leaflets_analysed"] = (
+            LeafletProperties.objects.all().leaflets_analysed()
+        )
 
-        context[
-            "with_party_leaders"
-        ] = LeafletProperties.objects.all().leaders_photo_count()
+        context["with_party_leaders"] = (
+            LeafletProperties.objects.all().leaders_photo_count()
+        )
 
         context["with_graph"] = LeafletProperties.objects.all().graphs_count()
 
@@ -116,9 +116,9 @@ class BaseAnalysisReportView(ReportViewMixin, TemplateView):
         context["leaders_mentions"] = queryset.leaders_mentions()
         context["party_logo"] = queryset.party_logo()
         context["opposition_photo_count"] = queryset.opposition_photo_count()
-        context[
-            "opposition_mentions_count"
-        ] = queryset.opposition_mentions_count()
+        context["opposition_mentions_count"] = (
+            queryset.opposition_mentions_count()
+        )
         context["squeeze_messages_count"] = queryset.squeeze_messages_count()
         context["graphs_count"] = queryset.graphs_count()
 

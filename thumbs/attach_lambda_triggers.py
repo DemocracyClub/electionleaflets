@@ -48,7 +48,10 @@ response = s3_client.put_bucket_notification_configuration(
                 "Filter": {
                     "Key": {
                         "FilterRules": [
-                            {"Name": "prefix", "Value": "leaflets/",},
+                            {
+                                "Name": "prefix",
+                                "Value": "leaflets/",
+                            },
                             {"Name": "Suffix", "Value": ""},
                         ]
                     }

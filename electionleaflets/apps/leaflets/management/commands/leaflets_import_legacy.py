@@ -92,7 +92,10 @@ class Command(BaseCommand):
 
     def handle(self, **options):
         for legacy_leaflet in legacyLeaflet.objects.all():
-            if not legacy_leaflet.date_uploaded and legacy_leaflet.date_delivered:
+            if (
+                not legacy_leaflet.date_uploaded
+                and legacy_leaflet.date_delivered
+            ):
                 legacy_leaflet.date_uploaded = legacy_leaflet.date_delivered
 
             if legacy_leaflet.date_uploaded:

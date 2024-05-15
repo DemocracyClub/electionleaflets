@@ -97,7 +97,8 @@ class QuestionSetForm(forms.ModelForm):
             {
                 "form_name": forms.CharField(widget=forms.HiddenInput),
                 "leaflet_pk": forms.CharField(
-                    widget=forms.HiddenInput, required=False,
+                    widget=forms.HiddenInput,
+                    required=False,
                 ),
             }
         )
@@ -137,7 +138,6 @@ class CandidateTaggerForm(PeopleForm):
         super(CandidateTaggerForm, self).__init__(*args, **kwargs)
 
     def save(self):
-
         if "people" in self.cleaned_data and self.cleaned_data["people"]:
             signer = Signer()
             data = json.loads(signer.unsign(self.cleaned_data["people"]))

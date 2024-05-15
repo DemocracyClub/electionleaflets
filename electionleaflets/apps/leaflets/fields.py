@@ -28,7 +28,6 @@ class DayMonthYearWidget(MultiWidget):
 
 
 class DCDateField(forms.MultiValueField):
-
     widget = DayMonthYearWidget
 
     def __init__(self, *args, **kwargs):
@@ -44,7 +43,7 @@ class DCDateField(forms.MultiValueField):
             error_messages=error_messages,
             fields=fields,
             require_all_fields=True,
-            **kwargs
+            **kwargs,
         )
         self.field_class = "form-date"
 

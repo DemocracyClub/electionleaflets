@@ -40,7 +40,9 @@ LANGUAGE_CODE = "en-GB"
 
 ALLOWED_HOSTS = ["*"]
 
-MEDIA_ROOT = root("media", )
+MEDIA_ROOT = root(
+    "media",
+)
 MEDIA_URL = "/media/"
 STATIC_ROOT = root("static")
 STATIC_URL = "/static/"
@@ -68,7 +70,9 @@ PIPELINE = {
                 "scss/vendor/filepond-plugin-image-preview.css",
             ],
             "output_filename": "scss/styles.css",
-            "extra_context": {"media": "screen,projection", },
+            "extra_context": {
+                "media": "screen,projection",
+            },
         },
     },
     "JAVASCRIPT": {
@@ -90,7 +94,7 @@ PIPELINE["CSS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
 PIPELINE["JS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
 
 PIPELINE["SASS_ARGUMENTS"] = (
-        " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
+    " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
 )
 
 STATICFILES_FINDERS = (
@@ -145,29 +149,29 @@ LEAFLET_APPS = [
 ]
 
 INSTALLED_APPS = [
-                     "django.contrib.admin",
-                     "django.forms",
-                     "django.contrib.auth",
-                     "django.contrib.contenttypes",
-                     "django.contrib.sessions",
-                     "django.contrib.sites",
-                     "django.contrib.staticfiles",
-                     "django.contrib.messages",
-                     "django.contrib.humanize",
-                     "dj_pagination",
-                     "rest_framework",
-                     "sorl.thumbnail",
-                     "storages",
-                     "uk_political_parties",
-                     "markdown_deux",
-                     "django_extensions",
-                     "pipeline",
-                     "dc_design_system",
-                     "django_static_jquery",
-                     "s3file",
-                     "debug_toolbar",
-                     "django_filters",
-                 ] + LEAFLET_APPS
+    "django.contrib.admin",
+    "django.forms",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.sites",
+    "django.contrib.staticfiles",
+    "django.contrib.messages",
+    "django.contrib.humanize",
+    "dj_pagination",
+    "rest_framework",
+    "sorl.thumbnail",
+    "storages",
+    "uk_political_parties",
+    "markdown_deux",
+    "django_extensions",
+    "pipeline",
+    "dc_design_system",
+    "django_static_jquery",
+    "s3file",
+    "debug_toolbar",
+    "django_filters",
+] + LEAFLET_APPS
 
 
 def setup_sentry(environment=None):
@@ -198,7 +202,9 @@ THUMBNAIL_KVSTORE = "sorl.thumbnail.kvstores.cached_db_kvstore.KVStore"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [root("templates"), ],
+        "DIRS": [
+            root("templates"),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

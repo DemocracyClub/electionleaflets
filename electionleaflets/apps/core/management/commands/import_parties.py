@@ -30,6 +30,7 @@ class Command(BaseCommand):
                 if org["emblems"]:
                     for emblem in org["emblems"]:
                         PartyEmblem.objects.update_or_create(
-                            party_id=party_id, emblem_url=emblem["image"],
+                            party_id=party_id,
+                            emblem_url=emblem["image"],
                         )
             url = results.get("next", None)

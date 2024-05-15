@@ -11,10 +11,9 @@ from uk_political_parties.models import Party
 
 class PartyList(ListView):
     def get_queryset(self):
-
-        return Party.objects.annotate(
-            num_leaflets=Count("leaflet")
-        ).order_by("-num_leaflets", "party_name")
+        return Party.objects.annotate(num_leaflets=Count("leaflet")).order_by(
+            "-num_leaflets", "party_name"
+        )
 
     template_name = "parties/party_list.html"
 

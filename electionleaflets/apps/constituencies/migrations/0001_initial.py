@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = []
@@ -51,6 +50,8 @@ class Migration(migrations.Migration):
                     models.IntegerField(blank=True, null=True),
                 ),
             ],
-            options={"verbose_name_plural": "Constituencies",},
+            options={
+                "verbose_name_plural": "Constituencies",
+            },
         ),
     ]

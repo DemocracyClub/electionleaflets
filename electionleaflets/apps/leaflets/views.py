@@ -109,7 +109,11 @@ class LeafletView(CacheControlMixin, DetailView):
             return HttpResponseForbidden()
 
         self.object = self.get_object()
-        form = QuestionSetForm(self.object, self.request.user, request.POST,)
+        form = QuestionSetForm(
+            self.object,
+            self.request.user,
+            request.POST,
+        )
 
         if form.is_valid():
             form.save()
@@ -257,19 +261,16 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     leaflet.ynr_party_name = party_data["party_name"]
 
             if form_prefix == "people" and (
-                    "people" in form.cleaned_data
-                    and isinstance(form.cleaned_data["people"], list)
-                    and form.cleaned_data["people"] != ""
+                "people" in form.cleaned_data
+                and isinstance(form.cleaned_data["people"], list)
+                and form.cleaned_data["people"] != ""
             ):
                 leaflet_people = {}
                 for person in form.cleaned_data["people"]:
-
                     person_data = json.loads(signer.unsign(person))
                     if not person_data:
                         continue
-                    leaflet_people[
-                        person_data["person"]["id"]
-                    ] = person_data
+                    leaflet_people[person_data["person"]["id"]] = person_data
                     person, _ = Person.objects.get_or_create(
                         remote_id=person_data["person"]["id"],
                         defaults={
@@ -308,7 +309,6 @@ class LeafletUpdatePublisherView(LoginRequiredMixin, UpdateView):
         signer = Signer()
         leaflet_people = {}
         for person in form.cleaned_data["people"]:
-
             person_data = json.loads(signer.unsign(person))
             if not person_data:
                 continue

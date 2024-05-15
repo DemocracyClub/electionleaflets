@@ -33,10 +33,7 @@ class Command(BaseCommand):
             "reviewed",
         ]
         with open("/tmp/meta_data.csv", "w") as csvfile:
-
-            out = csv.DictWriter(
-                csvfile, fieldnames=fieldnames
-            )
+            out = csv.DictWriter(csvfile, fieldnames=fieldnames)
         out.writeheader()
         for image in LeafletImage.objects.all():
             data = {
@@ -76,7 +73,9 @@ class Command(BaseCommand):
                 )
             if image.leaflet.election:
                 data.update(
-                    {"election": image.leaflet.election, }
+                    {
+                        "election": image.leaflet.election,
+                    }
                 )
 
             for k, v in list(data.items()):

@@ -30,7 +30,10 @@ class ImagesForm(forms.Form):
         else:
             self.fields["image"] = S3UploadedImageField(
                 widget=forms.ClearableFileInput(
-                    attrs={"multiple": True, "accept": "image/*",}
+                    attrs={
+                        "multiple": True,
+                        "accept": "image/*",
+                    }
                 ),
                 error_messages={
                     "required": "Please add a photo or skip this step"
@@ -104,7 +107,8 @@ class PeopleRadioWidget(forms.RadioSelect):
             label = "Not Listed"
         else:
             label = "{0} ({1})".format(
-                label["person"]["name"], label["party"]["party_name"],
+                label["person"]["name"],
+                label["party"]["party_name"],
             )
         return super(PeopleRadioWidget, self).create_option(
             name, value, label, selected, index, subindex, attrs
@@ -197,9 +201,10 @@ class YNRBallotDataMixin:
 
 
 class PartyForm(YNRBallotDataMixin, forms.Form):
-
     party = forms.ChoiceField(
-        choices=[], widget=forms.RadioSelect, required=False,
+        choices=[],
+        widget=forms.RadioSelect,
+        required=False,
     )
 
     def __init__(self, *args, **kwargs):

@@ -17,7 +17,9 @@ from sorl.thumbnail.base import ThumbnailBackend
 from sorl.thumbnail.engines import pil_engine
 from sorl.thumbnail.parsers import parse_geometry
 
-settings.configure(THUMBNAIL_KVSTORE="thumbs.PassthruKVStore", )
+settings.configure(
+    THUMBNAIL_KVSTORE="thumbs.PassthruKVStore",
+)
 with open("LEAFLET_IMAGES_BUCKET_NAME") as f:
     BUCKET_NAME = f.read().strip()
 django.setup()
@@ -133,7 +135,7 @@ def process_image(image: Image, spec: Tuple[str, dict]) -> Image:
 
 
 def upload_image(
-        image: Image, format: str, bucket: str, key: str, local: bool = False
+    image: Image, format: str, bucket: str, key: str, local: bool = False
 ):
     io = BytesIO()
     image.save(io, format)

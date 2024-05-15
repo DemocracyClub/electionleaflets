@@ -30,7 +30,6 @@ def import_people(apps, _):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("leaflets", "0001_initial"),
         ("people", "0001_initial"),
