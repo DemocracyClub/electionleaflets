@@ -40,7 +40,7 @@ class LeafletFilter(filters.FilterSet):
 
 
 class LeafletViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Leaflet.objects.all().prefetch_related("images")
+    queryset = Leaflet.objects.all().filter(status="live").prefetch_related("images")
     serializer_class = LeafletSerializer
     pagination_class = StandardResultsSetPagination
     filter_backends = (filters.DjangoFilterBackend,)
