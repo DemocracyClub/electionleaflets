@@ -65,6 +65,7 @@ class Leaflet(models.Model):
         null=True,
         blank=True,
         max_length=255,
+        default="draft",
     )
     reviewed = models.BooleanField(default=False)
 
