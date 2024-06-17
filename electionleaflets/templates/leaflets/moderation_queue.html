@@ -10,7 +10,7 @@
                 <div class="ds-grid" style="--gridCellMin: 20ch; --gridGap: 3rem;">
                     {% for image in leaflet.images.all %}
                         <span>
-                           {% thumbnail leaflet.get_first_image.image "350x350" as im %}
+                           {% thumbnail image.image "350x350" as im %}
                                <img src="{{ im.url }}">
                            {% endthumbnail %}
                         </span>
