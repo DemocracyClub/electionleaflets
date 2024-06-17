@@ -335,3 +335,15 @@ class LeafletUpdatePublisherView(LoginRequiredMixin, UpdateView):
             self.object.ynr_party_name = party_data["party_name"]
 
         return super().form_valid(form)
+
+
+class LeafletModeration(ListView):
+    queryset = Leaflet.objects.filter(status="draft")[:10]
+    template_name = "leaflets/moderation_queue.html"
+
+
+    def post(self, request):
+        leaflet = Leaflet.objects.get(pk=self.request.POST.get("leaflet"))
+        leaflet.status = "live"
+        leaflet.save()
+        return HttpResponseRedirect(reverse("moderate"))

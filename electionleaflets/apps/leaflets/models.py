@@ -67,6 +67,7 @@ class Leaflet(models.Model):
         max_length=255,
         default="draft",
     )
+    modified = models.DateTimeField(auto_now=True)
     reviewed = models.BooleanField(default=False)
 
     objects = models.Manager()

@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 
 from leaflets.views import (
@@ -13,7 +14,7 @@ from leaflets.views import (
     should_show_person_form,
     LeafletUpdatePublisherView,
     should_show_party_form,
-    should_show_date_form,
+    should_show_date_form, LeafletModeration,
 )
 
 from .forms import (
@@ -65,4 +66,5 @@ urlpatterns = [
         name="leaflet_update_publisher_details",
     ),
     url(r"^$", LatestLeaflets.as_view(), name="leaflets"),
+    url(r"^moderate$", login_required(LeafletModeration.as_view()), name="moderate"),
 ]

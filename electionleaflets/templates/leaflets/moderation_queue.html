@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block content %}
+    {% for leaflet in object_list %}
+        <div class="ds-card">
+            <div class="ds-card-body">
+                <h2 class="ds-h3"><a href="{{ leaflet.get_absolute_url }}">{{ leaflet.pk }}</a></h2>
+                <p><a href="/admin/leaflets/leaflet/{{ leaflet.id }}/">Admin</a></p>
+                <div class="ds-grid" style="--gridCellMin: 20ch; --gridGap: 3rem;">
+                    {% for image in leaflet.images.all %}
+                        <span>
+                           {% thumbnail leaflet.get_first_image.image "350x350" as im %}
+                               <img src="{{ im.url }}">
+                           {% endthumbnail %}
+                        </span>
+                    {% endfor %}
+
+                </div>
+                <div class="ds-grid" style="--gridCellMin: 20ch; --gridGap: 3rem;">
+                    {% if leaflet.people %}
+                        <div>
+                            {% for ynr_id, person in leaflet.people.items %}
+                                <p>
+                                    <a href="https://whocanivotefor.co.uk/person/{{ ynr_id }}">{{ person.person.name }}</a>
+                                </p>
+                                {% if person.person.photo_url %}
+                                    <div class="ds-candidate-image">
+                                        <img src="{{ person.person.photo_url }}" alt="">
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                    {% endif %}
+
+                    {% if leaflet.ynr_party_id %}
+                        <p>
+                            <a href="{% url "party-view" leaflet.ynr_party_id %}">{{ leaflet.ynr_party_name }}</a>
+                        </p>
+                    {% endif %}
+                </div>
+                <form method="post">
+                    <input type="hidden" value="{{ leaflet.pk }}" name="leaflet">
+                    <button class="ds-button">Make live</button>
+                </form>
+                <br>
+            </div>
+        </div>
+    {% empty %}
+        <p>Nothing to do</p>
+    {% endfor %}
+
+{% endblock %}
