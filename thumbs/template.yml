@@ -8,7 +8,6 @@ Globals:
   Api:
     BinaryMediaTypes:
       - "*/*"
-      - "*/*"
 Resources:
 
   ThumbsFunction:
