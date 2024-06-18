@@ -66,5 +66,5 @@ urlpatterns = [
         name="leaflet_update_publisher_details",
     ),
     url(r"^$", LatestLeaflets.as_view(), name="leaflets"),
-    url(r"^moderate$", login_required(LeafletModeration.as_view()), name="moderate"),
+    url(r"^moderate$", never_cache(login_required(LeafletModeration.as_view())), name="moderate"),
 ]
