@@ -5,16 +5,18 @@ orbs:
 jobs:
   install_and_update_dependencies:
     docker:
-      - image: circleci/python:3.8.6-node
+      - image: cimg/python:3.8-node
     working_directory: ~/repo
     steps:
       - checkout
+      - run: python --version
+      - run: node --version
       - restore_cache:
           keys:
             - v2-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
             - v2-dependencies-default
-      - run: &install-pipenv sudo pip install -U urllib3 cryptography==3.3.2 pipenv pip --quiet --no-input
-      - run: sudo pip uninstall -y poetry
+      - run: &install-pipenv pip install -U urllib3 cryptography==3.3.2 pipenv pip --quiet --no-input
+      - run: pip uninstall -y poetry
       - run: pipenv install --dev
       - run: pipenv check # before save_cache so an insecure cache is never saved
       - run: make lambda-layers/DependenciesLayer/requirements.txt
@@ -32,7 +34,7 @@ jobs:
 
   run-tests:
     docker:
-      - image: circleci/python:3.8.6
+      - image: cimg/python:3.8-node
     working_directory: ~/repo
     steps:
       - checkout
@@ -84,7 +86,7 @@ jobs:
 
   sam_deploy:
     docker:
-      - image: circleci/python:3.8.6
+      - image: cimg/python:3.8.6
     working_directory: ~/repo/
     parameters:
       dc-environment:
