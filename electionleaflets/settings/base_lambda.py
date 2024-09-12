@@ -52,3 +52,11 @@ CSRF_TRUSTED_ORIGINS = [".electionleaflets.org"]
 USE_X_FORWARDED_HOST = True
 
 setup_sentry()
+
+# importing test settings file if necessary (TODO chould be done better)
+if len(sys.argv) > 1 and sys.argv[1] in ["test", "harvest"]:
+    try:
+        from .testing import *  # noqa: F401,F403
+    except ImportError:
+        pass
+
