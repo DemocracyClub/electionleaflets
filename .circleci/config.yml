@@ -1,23 +1,34 @@
 version: 2.1
 
 orbs:
-  python: circleci/python@0.2.1
+  python: circleci/python@2.1.1
+
 jobs:
   install_and_update_dependencies:
     docker:
-      - image: circleci/python:3.8.6-node
+      - image: cimg/python:3.8.6-node
     working_directory: ~/repo
     steps:
       - checkout
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
-            - v2-dependencies-default
-      - run: &install-pipenv sudo pip install -U urllib3 cryptography==3.3.2 pipenv pip --quiet --no-input
-      - run: sudo pip uninstall -y poetry
-      - run: pipenv install --dev
-      - run: pipenv check # before save_cache so an insecure cache is never saved
+            - v3-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
+            - v3-dependencies-default
+      # Ensure pip and pipenv are installed
+      - run:
+          name: Install pipenv
+          command: |
+            python -m pip install --upgrade pip urllib3 cryptography==3.3.2 --quiet --no-input
+            pip install pipenv
+      - run: pip uninstall -y poetry
+      # Ensure that pipenv will create the virtual environment in the project directory
+      - run:
+          name: Set up virtual environment
+          command: |
+            export PIPENV_VENV_IN_PROJECT=1
+            pipenv install --dev
       - run: make lambda-layers/DependenciesLayer/requirements.txt
+      - run: pipenv run collectstatic
       - run: npm install
       - run: npm run build
       - persist_to_workspace:
@@ -28,35 +39,38 @@ jobs:
           when: on_success
           paths:
             - ~/.local/share/virtualenvs/
-          key: v2-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
-
+          key: v3-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
   run-tests:
     docker:
-      - image: circleci/python:3.8.6
+      - image: cimg/python:3.8
+        environment:
+          CIRCLECI: true
+          PGHOST: 127.0.0.1
+      - image: cimg/postgres:16.3
+        environment:
+          POSTGRES_USER: electionleaflets
+          POSTGRES_DB: electionleaflets
     working_directory: ~/repo
+
     steps:
       - checkout
+
+      # Download and cache dependencies
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "Pipfile.lock" }}
-            - v2-dependencies-default
-      - run: *install-pipenv
-#      - run:
-#          command: pipenv run black-check
-#          name: Black
-      - run: pipenv run collectstatic
-#      - run:
-#          command: pipenv run pytest --flakes
-#          name: Flakes
-#      - run:
-#          command: pipenv run pytest --junitxml=test-results/junit.xml --cov
-#          name: Run Tests
-#      - run: |
-#          if [ -n "$COVERALLS_REPO_TOKEN" ]; then
-#            pipenv run coveralls
-#          else
-#            echo "skipping coverage for forked PR"
-#          fi
+            - v3-dependencies-{{ checksum "Pipfile.lock" }}
+      
+      # Install dependencies
+      - run:
+          name: Install dependencies with pipenv
+          command: |
+            export PIPENV_VENV_IN_PROJECT=1
+            pipenv install --dev 
+      # Run your tests
+      - run:
+          name: Run tests
+          command: |
+            pipenv run pytest
       - store_artifacts:
           path: test-results
           destination: test-results
@@ -73,7 +87,6 @@ jobs:
           at: ~/repo/
       - run: pip install --upgrade pip
       - run: pip install -r lambda-layers/DependenciesLayer/requirements.txt
-      - run: make collectstatic
       - run: sam build ${DASH_DASH_DEBUG}
 
       - persist_to_workspace:
@@ -84,7 +97,7 @@ jobs:
 
   sam_deploy:
     docker:
-      - image: circleci/python:3.8.6
+      - image: cimg/python:3.8.6
     working_directory: ~/repo/
     parameters:
       dc-environment:
@@ -108,10 +121,10 @@ jobs:
           at: ~/repo/
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "Pipfile.lock" }}
-            - v2-dependencies-default
-      - run: *install-pipenv
-
+            - v3-dependencies-{{ checksum "Pipfile.lock" }}
+            - v3-dependencies-default
+      - run: pip install -U pip pipenv --quiet --no-input
+      - run: pipenv run pipenv shell
       - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE SAM_LAMBDA_CONFIG_ENV SAM_PUBLIC_CONFIG_ENV
       - run: printenv SECRET_KEY | md5sum
       - run: printenv AWS_ACCESS_KEY_ID | md5sum
