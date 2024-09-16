@@ -1,29 +1,14 @@
-from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
+from django.urls import re_path
 from django.views.decorators.cache import never_cache
+from leaflets.views import (AllImageView, ImageCropView, ImageRotateView,
+                            ImageView, LatestLeaflets, LeafletModeration,
+                            LeafletUpdatePublisherView, LeafletUploadWizzard,
+                            LeafletView, LegacyImageView,
+                            should_show_date_form, should_show_party_form,
+                            should_show_person_form)
 
-from leaflets.views import (
-    ImageView,
-    LatestLeaflets,
-    LeafletView,
-    LeafletUploadWizzard,
-    ImageCropView,
-    AllImageView,
-    ImageRotateView,
-    LegacyImageView,
-    should_show_person_form,
-    LeafletUpdatePublisherView,
-    should_show_party_form,
-    should_show_date_form, LeafletModeration,
-)
-
-from .forms import (
-    ImagesForm,
-    PostcodeForm,
-    PeopleForm,
-    PartyForm,
-    DateForm,
-)
+from .forms import DateForm, ImagesForm, PartyForm, PeopleForm, PostcodeForm
 
 named_form_list = [
     ("images", ImagesForm),
@@ -44,27 +29,27 @@ upload_form_wizzard = LeafletUploadWizzard.as_view(
 )
 
 urlpatterns = [
-    url(
+    re_path(
         r"add/(?P<step>.+)/$",
         never_cache(upload_form_wizzard),
         name="upload_step",
     ),
-    url(r"add/", never_cache(upload_form_wizzard), name="upload_leaflet"),
-    url(r"^full/(?P<pk>\d+)/$", ImageView.as_view(), name="full_image"),
-    url(
+    re_path(r"add/", never_cache(upload_form_wizzard), name="upload_leaflet"),
+    re_path(r"^full/(?P<pk>\d+)/$", ImageView.as_view(), name="full_image"),
+    re_path(
         r"^full/(?P<pk>.+)/$",
         LegacyImageView.as_view(),
         name="full_image_legacy",
     ),
-    url(r"^(?P<pk>\d+)/images/$", AllImageView.as_view(), name="all_images"),
-    url(r"^crop/(?P<pk>.+)/$", ImageCropView.as_view(), name="crop"),
-    url(r"^rotate/(?P<pk>.+)/$", ImageRotateView.as_view(), name="rotate"),
-    url(r"^(?P<pk>\d+)/$", LeafletView.as_view(), name="leaflet"),
-    url(
+    re_path(r"^(?P<pk>\d+)/images/$", AllImageView.as_view(), name="all_images"),
+    re_path(r"^crop/(?P<pk>.+)/$", ImageCropView.as_view(), name="crop"),
+    re_path(r"^rotate/(?P<pk>.+)/$", ImageRotateView.as_view(), name="rotate"),
+    re_path(r"^(?P<pk>\d+)/$", LeafletView.as_view(), name="leaflet"),
+    re_path(
         r"^(?P<pk>\d+)/update_publisher/$",
         LeafletUpdatePublisherView.as_view(),
         name="leaflet_update_publisher_details",
     ),
-    url(r"^$", LatestLeaflets.as_view(), name="leaflets"),
-    url(r"^moderate$", never_cache(login_required(LeafletModeration.as_view())), name="moderate"),
+    re_path(r"^$", LatestLeaflets.as_view(), name="leaflets"),
+    re_path(r"^moderate$", login_required(LeafletModeration.as_view()), name="moderate"),
 ]

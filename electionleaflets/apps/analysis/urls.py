@@ -1,49 +1,42 @@
-from django.conf.urls import url
+from django.urls import re_path
 from django.views.decorators.cache import cache_page
 
-
-from .views import (
-    AnalysisHomeView,
-    AnalysisReportView,
-    ReportView,
-    AnalysisStartRedirectView,
-    AnalysisPerPartyReportView,
-    ConstituencyReportView,
-    TagRandomCandidate,
-    NoCandidatesView,
-)
+from .views import (AnalysisHomeView, AnalysisPerPartyReportView,
+                    AnalysisReportView, AnalysisStartRedirectView,
+                    ConstituencyReportView, NoCandidatesView, ReportView,
+                    TagRandomCandidate)
 
 urlpatterns = [
-    url(r"^$", AnalysisHomeView.as_view(), name="analysis"),
-    url(
+    re_path(r"^$", AnalysisHomeView.as_view(), name="analysis"),
+    re_path(
         r"^start/$", AnalysisStartRedirectView.as_view(), name="analysis_start"
     ),
-    url(
+    re_path(
         r"^tag_candidates/$",
         TagRandomCandidate.as_view(),
         name="analysis_tag_random_candidate",
     ),
-    url(
+    re_path(
         r"^reports/constituencies/$",
         cache_page(60 * 5)(ConstituencyReportView.as_view()),
         name="constituencies_report",
     ),
-    url(
+    re_path(
         r"^reports/analysis/$",
         cache_page(60 * 5)(AnalysisReportView.as_view()),
         name="analysis_report",
     ),
-    url(
+    re_path(
         r"^reports/analysis/per_party/$",
         cache_page(60 * 5)(AnalysisPerPartyReportView.as_view()),
         name="analysis_report_per_party",
     ),
-    url(
+    re_path(
         r"^reports/$",
         cache_page(60 * 5)(ReportView.as_view()),
         name="report_view",
     ),
-    url(
+    re_path(
         r"^leaflets_without_candidates/$",
         NoCandidatesView.as_view(),
         name="leaflets_without_candidates",
