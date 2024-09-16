@@ -6,14 +6,15 @@ orbs:
 jobs:
   install_and_update_dependencies:
     docker:
-      - image: cimg/python:3.10-node
+      - image: cimg/python:3.12-node
     working_directory: ~/repo
+    executor: python/default
     steps:
       - checkout
       - restore_cache:
           keys:
-            - v3-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
-            - v3-dependencies-default
+            - v4-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
+            - v4-dependencies-default
       # Ensure pip and pipenv are installed
       - run:
           name: Install pipenv
@@ -39,10 +40,10 @@ jobs:
           when: on_success
           paths:
             - ~/.local/share/virtualenvs/
-          key: v3-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
+          key: v4-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
   run-tests:
     docker:
-      - image: cimg/python:3.10
+      - image: cimg/python:3.12
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
@@ -58,7 +59,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v3-dependencies-{{ checksum "Pipfile.lock" }}
+            - v4-dependencies-{{ checksum "Pipfile.lock" }}
       
       # Install dependencies
       - run:
@@ -79,7 +80,7 @@ jobs:
 
   sam_build:
     docker:
-      - image: amazon/aws-sam-cli-build-image-python3.10:latest
+      - image: public.ecr.aws/sam/build-python3.12:latest
     working_directory: ~/repo
     steps:
       - checkout
@@ -87,7 +88,7 @@ jobs:
           at: ~/repo/
       - run: pip install --upgrade pip
       - run: pip install -r lambda-layers/DependenciesLayer/requirements.txt
-      - run: sam build ${DASH_DASH_DEBUG}
+      - run: sam build ${DASH_DASH_DEBUG} --cached
 
       - persist_to_workspace:
           root: ~/repo/
@@ -97,7 +98,7 @@ jobs:
 
   sam_deploy:
     docker:
-      - image: cimg/python:3.10.6
+      - image: cimg/python:3.12.4-node
     working_directory: ~/repo/
     parameters:
       dc-environment:
@@ -121,8 +122,8 @@ jobs:
           at: ~/repo/
       - restore_cache:
           keys:
-            - v3-dependencies-{{ checksum "Pipfile.lock" }}
-            - v3-dependencies-default
+            - v4-dependencies-{{ checksum "Pipfile.lock" }}
+            - v4-dependencies-default
       - run: pip install -U pip pipenv --quiet --no-input
       - run: pipenv run pipenv shell
       - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE SAM_LAMBDA_CONFIG_ENV SAM_PUBLIC_CONFIG_ENV
