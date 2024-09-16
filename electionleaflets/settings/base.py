@@ -161,7 +161,7 @@ INSTALLED_APPS = [
     "sorl.thumbnail",
     "storages",
     "uk_political_parties",
-    "markdown_deux",
+    "markdown",
     "django_extensions",
     "pipeline",
     "dc_design_system",
