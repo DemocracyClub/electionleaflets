@@ -14,16 +14,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="leaflet",
             name="ballots",
-            field=django.contrib.postgres.fields.jsonb.JSONField(default=list),
+            field=django.db.models.JSONField(default=list),
         ),
         migrations.AlterField(
             model_name="leaflet",
             name="people",
-            field=django.contrib.postgres.fields.jsonb.JSONField(default=dict),
+            field=django.db.models.JSONField(default=dict),
         ),
         migrations.AlterField(
             model_name="leaflet",
             name="person_ids",
-            field=django.contrib.postgres.fields.jsonb.JSONField(default=list),
+            field=django.db.models.JSONField(default=list),
         ),
     ]

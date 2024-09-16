@@ -14,16 +14,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="leaflet",
             name="ballots",
-            field=django.contrib.postgres.fields.jsonb.JSONField(default=[]),
+            field=django.db.models.JSONField(default=[]),
         ),
         migrations.AddField(
             model_name="leaflet",
             name="people",
-            field=django.contrib.postgres.fields.jsonb.JSONField(default={}),
+            field=django.db.models.JSONField(default={}),
         ),
         migrations.AddField(
             model_name="leaflet",
             name="person_ids",
-            field=django.contrib.postgres.fields.jsonb.JSONField(default=[]),
+            field=django.db.models.JSONField(default=[]),
         ),
     ]
