@@ -1,12 +1,10 @@
-from django.conf.urls import include, url
-
-from rest_framework import routers
-
 from api import views
+from django.urls import include, re_path
+from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r"leaflets", views.LeafletViewSet)
 
 urlpatterns = [
-    url(r"^", include((router.urls, "api"))),
+    re_path(r"^", include((router.urls, "api"))),
 ]
