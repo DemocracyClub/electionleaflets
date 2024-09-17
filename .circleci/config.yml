@@ -18,8 +18,7 @@ jobs:
       - run:
           name: Install pipenv
           command: |
-            python -m pip install --upgrade pip urllib3 cryptography==3.3.2 --quiet --no-input
-            pip install pipenv
+            pip install --upgrade pipenv pip --quiet --no-input
       - run: pip uninstall -y poetry
       # Ensure that pipenv will create the virtual environment in the project directory
       - run:
