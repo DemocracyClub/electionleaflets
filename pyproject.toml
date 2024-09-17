@@ -7,7 +7,4 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
-[tool.black]
-line-length = 80
-
 DJANGO_SETTINGS_MODULE = "electionleaflets.settings.base"
