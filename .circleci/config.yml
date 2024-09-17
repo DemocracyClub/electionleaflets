@@ -87,6 +87,7 @@ jobs:
           at: ~/repo/
       - run: pip install --upgrade pip
       - run: pip install -r lambda-layers/DependenciesLayer/requirements.txt
+      - run: make collectstatic
       - run: sam build ${DASH_DASH_DEBUG}
 
       - persist_to_workspace:
