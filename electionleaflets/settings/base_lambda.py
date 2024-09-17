@@ -31,6 +31,8 @@ STATICFILES_STORAGE = "electionleaflets.storages.StaticStorage"
 AWS_DEFAULT_ACL = "public-read"
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+MEDIA_ROOT = MEDIA_ROOT = root("test_media",)  # noqa: F405
+
 
 AWS_STORAGE_BUCKET_NAME = os.environ.get("LEAFLET_IMAGES_BUCKET_NAME")
 AWS_S3_SECURE_URLS = True
@@ -52,11 +54,3 @@ CSRF_TRUSTED_ORIGINS = [".electionleaflets.org"]
 USE_X_FORWARDED_HOST = True
 
 setup_sentry()
-
-# importing test settings file if necessary (TODO chould be done better)
-if len(sys.argv) > 1 and sys.argv[1] in ["test", "harvest"]:
-    try:
-        from .testing import *  # noqa: F401,F403
-    except ImportError:
-        pass
-
