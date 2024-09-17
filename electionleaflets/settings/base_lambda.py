@@ -3,7 +3,7 @@ import os
 from django.urls import set_urlconf
 from .base import *  # noqa: F401,F403
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [os.environ.get('APP_DOMAIN')]
 
 DATABASES = {
     "default": {
