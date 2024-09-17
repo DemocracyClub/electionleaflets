@@ -18,14 +18,3 @@ class LeafletTestCase(TestCase):
         )
 
         self.assertEqual(leaflet._initial["status"], "draft")
-
-
-# class LeafletImageTestCase(TestCase):
-#     def test_raw_image_field(self):
-#         l = Leaflet()
-#         l.save()
-#         image_file = get_test_image()
-#         li = LeafletImage(image=image_file, leaflet=l)
-#         self.assertEqual(li.raw_image.name, "")
-#         li.save()
-#         self.assertRegex(li.raw_image.name, r"front_test")
