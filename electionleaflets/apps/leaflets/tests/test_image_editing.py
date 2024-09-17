@@ -1,6 +1,7 @@
-import shutil
 import os
+import shutil
 
+from django.conf import settings
 from django.test import TestCase
 from django.conf import settings
 

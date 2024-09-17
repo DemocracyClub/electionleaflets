@@ -6,7 +6,7 @@ DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 STATICFILES_STORAGE = "django.core.files.storage.FileSystemStorage"
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
 
-MEDIA_ROOT = MEDIA_ROOT = root("test_media",)  # noqa: F405
+MEDIA_ROOT = root("test_media",)  # noqa: F405
 
 if os.environ.get("RUNNER") == "travis":
     DATABASES = {
