@@ -10,11 +10,13 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
-            - v2-dependencies-default
-      - run: &install-pipenv sudo pip install -U urllib3 cryptography==3.3.2 pipenv pip --quiet --no-input
-      - run: sudo pip uninstall -y poetry
-      - run: pipenv install --dev
+            - v3-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
+            - v3-dependencies-default
+      - run: pip install pipenv==2024.0.1
+      - run: pipenv --version
+      - run: pipenv run pip install -U urllib3==2.2.2 cryptography==3.3.2 pip --quiet --no-input
+      - run: pipenv run pip uninstall -y poetry
+      - run: pipenv sync --dev
       - run: pipenv check # before save_cache so an insecure cache is never saved
       - run: make lambda-layers/DependenciesLayer/requirements.txt
       - run: npm install
@@ -37,12 +39,12 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "Pipfile.lock" }}
-            - v2-dependencies-default
-      - run: *install-pipenv
+            - v3-dependencies-{{ checksum "Pipfile.lock" }}
+            - v3-dependencies-default
 #      - run:
 #          command: pipenv run black-check
 #          name: Black
+      - run: pipenv sync --dev
       - run: pipenv run collectstatic
 #      - run:
 #          command: pipenv run pytest --flakes
@@ -110,9 +112,8 @@ jobs:
           at: ~/repo/
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "Pipfile.lock" }}
-            - v2-dependencies-default
-      - run: *install-pipenv
+            - v3-dependencies-{{ checksum "Pipfile.lock" }}
+            - v3-dependencies-default
 
       - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE SAM_LAMBDA_CONFIG_ENV SAM_PUBLIC_CONFIG_ENV
       - run: printenv SECRET_KEY | md5sum
@@ -182,7 +183,9 @@ jobs:
                  PublicFqdn=$PUBLIC_FQDN \
                  LeafletsBucketName=$LEAFLET_IMAGES_BUCKET_NAME
               "
-      - run: pip install -U boto3 pipenv --quiet --no-input
+      - run: pipenv --version
+      - run: pip install pipenv==2024.0.1 --quiet --no-input
+      - run: pip install -U boto3 --quiet --no-input
       - run: python thumbs/attach_lambda_triggers.py
       - run:
           name: "Publish a new Sentry Release"
