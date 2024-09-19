@@ -1,11 +1,10 @@
 version: 2.1
-
 orbs:
-  python: circleci/python@0.2.1
+  python: circleci/python@2.1.1
 jobs:
   install_and_update_dependencies:
     docker:
-      - image: circleci/python:3.8.6-node
+      - image: cimg/python:3.8.6-node
     working_directory: ~/repo
     steps:
       - checkout
@@ -28,11 +27,11 @@ jobs:
           when: on_success
           paths:
             - ~/.local/share/virtualenvs/
-          key: v2-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
+          key: v3-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
 
   run-tests:
     docker:
-      - image: circleci/python:3.8.6
+      - image: cimg/python:3.8.6
     working_directory: ~/repo
     steps:
       - checkout
@@ -72,19 +71,22 @@ jobs:
       - attach_workspace:
           at: ~/repo/
       - run: pip install --upgrade pip
+      - run: pip install -r deploy-requirements.txt
       - run: pip install -r lambda-layers/DependenciesLayer/requirements.txt
       - run: make collectstatic
       - run: sam build ${DASH_DASH_DEBUG}
+      - run: python manage.py collectstatic --noinput --clear
 
       - persist_to_workspace:
           root: ~/repo/
           paths:
             - .aws-sam/build/
             - thumbs/.aws-sam/build/
+            - lambda-layers/DependenciesLayer/requirements.txt
 
   sam_deploy:
     docker:
-      - image: circleci/python:3.8.6
+      - image: cimg/python:3.8.6
     working_directory: ~/repo/
     parameters:
       dc-environment:
@@ -139,6 +141,7 @@ jobs:
                  AppDomain='$PUBLIC_FQDN' \
                  AppLeafletImagesBucketName='$LEAFLET_IMAGES_BUCKET_NAME' \
                 "
+      - run: pipenv run makemigrations 
       - run: pipenv run migratedb
       - run: pipenv run createcachetable
       - run: printenv LEAFLET_IMAGES_BUCKET_NAME
@@ -214,7 +217,7 @@ workflows:
             - run-tests                            # staging should only deploy if tests pass
             - sam_build                       # deploy needs .aws-sam/build/
           context: [ deployment-staging-election-leaflets ]
-          filters: { branches: { only: [ master ] } }
+          filters: { branches: { only: [ master, staticfiles-on-stage ] } }
 
       - sam_deploy:
           name: sam_deploy_production
