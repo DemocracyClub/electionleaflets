@@ -31,6 +31,8 @@ jobs:
       - persist_to_workspace:
           root: ~/repo/
           paths:
+            - .aws-sam/build/
+            - thumbs/.aws-sam/build/
             - lambda-layers/DependenciesLayer/requirements.txt
       - save_cache:
           when: on_success
@@ -82,14 +84,13 @@ jobs:
       - attach_workspace:
           at: ~/repo/
       - run: pip install --upgrade pip
+      - run: pip install -r deploy-requirements.txt
       - run: pip install -r lambda-layers/DependenciesLayer/requirements.txt
       - run: sam build ${DASH_DASH_DEBUG}
 
       - persist_to_workspace:
           root: ~/repo/
-          paths:
-            - .aws-sam/build/
-            - thumbs/.aws-sam/build/
+          paths: [ .aws-sam/build/, thumbs/.aws-sam/build/ ]
 
   sam_deploy:
     docker:
@@ -120,6 +121,7 @@ jobs:
             - v3-dependencies-{{ checksum "Pipfile.lock" }}
             - v3-dependencies-default
       - run: pip install -U pip pipenv --quiet --no-input
+      - run: pip install -r deploy-requirements.txt
       - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE SAM_LAMBDA_CONFIG_ENV SAM_PUBLIC_CONFIG_ENV
       - run: printenv SECRET_KEY | md5sum
       - run: printenv AWS_ACCESS_KEY_ID | md5sum
