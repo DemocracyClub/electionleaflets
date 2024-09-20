@@ -48,7 +48,7 @@ CACHES = {
 THUMBNAIL_KVSTORE = "sorl.thumbnail.kvstores.cached_db_kvstore.KVStore"
 THUMBNAIL_BACKEND = "core.s3_thumbnail_store.S3Backend"
 
-CSRF_TRUSTED_ORIGINS = [".electionleaflets.org"]
+CSRF_TRUSTED_ORIGINS = ["https://electionleaflets.org"]
 USE_X_FORWARDED_HOST = True
 
 setup_sentry()

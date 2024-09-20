@@ -1,21 +1,18 @@
-from io import BytesIO
 import re
+from io import BytesIO
 
-from django.contrib.postgres.fields import JSONField
-from django.urls import reverse
-from sorl.thumbnail import ImageField
-from sorl.thumbnail import delete
 import piexif
-from PIL import Image
-
-from django.db import models
-from django.core.files.base import ContentFile
-from django.forms.models import model_to_dict
-
-from core.helpers import geocode
 from constituencies.models import Constituency
-from people.models import Person
+from core.helpers import geocode
+from django.core.files.base import ContentFile
+from django.db import models
+from django.db.models import JSONField
+from django.forms.models import model_to_dict
+from django.urls import reverse
 from elections.models import Election
+from people.models import Person
+from PIL import Image
+from sorl.thumbnail import ImageField, delete
 from uk_political_parties.models import Party
 
 from . import constants

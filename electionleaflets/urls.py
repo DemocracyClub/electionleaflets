@@ -4,18 +4,13 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.urls import path, re_path, include
 from django.views.generic import TemplateView
-from django.views.decorators.cache import cache_page
+
+from electionleaflets.apps.api.feeds import ConstituencyFeed, LatestLeafletsFeed
+from electionleaflets.apps.core.views import HomeView, MaintenanceView, ReportThanksView, ReportView
 
 admin.autodiscover()
 
-from api import feeds  # noqa: E402
-from core.views import (
-    HomeView,
-    MaintenanceView,
-    ReportView,
-    ReportThanksView,
-    TestView,
-)  # noqa: E402
+
 
 MAINTENANCE_MODE = getattr(settings, "MAINTENANCE_MODE", False)
 if MAINTENANCE_MODE:
@@ -34,11 +29,11 @@ else:
         re_path(r"^api/", include("api.urls")),
         # Feeds
         re_path(
-            r"^feeds/latest/$", feeds.LatestLeafletsFeed(), name="latest_feed"
+            r"^feeds/latest/$", LatestLeafletsFeed(), name="latest_feed"
         ),
         re_path(
             r"^feeds/constituency/(?P<cons_slug>[\w_\-\.]+)/$",
-            feeds.ConstituencyFeed(),
+            ConstituencyFeed(),
             name="constituency_feed",
         ),
         # Individual urls

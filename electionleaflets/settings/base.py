@@ -24,6 +24,8 @@ DEBUG = False
 template_DEBUG = DEBUG
 TEMPLATE_DEBUG = DEBUG
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 # DATABASES define in environment specific settings file
 DATABASES = {
     "default": {
@@ -140,10 +142,10 @@ WSGI_APPLICATION = "electionleaflets.wsgi.application"
 LEAFLET_APPS = [
     "core",
     "leaflets",
-    "constituencies",
     "analysis",
     "elections",
     "people",
+    "constituencies",
 ]
 
 INSTALLED_APPS = [
