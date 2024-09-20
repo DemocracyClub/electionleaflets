@@ -13,4 +13,4 @@ six = "*"
 django = "==2.2.27"
 
 [requires]
-python_version = "3.7"
+python_version = "3.12"

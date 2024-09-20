@@ -82,6 +82,9 @@ flask = "==2.3.2"
 certifi = "*"
 markdown = "*"
 
+[requires]
+python_version = "3.12"
+
 [scripts]
 collectstatic = "python manage.py collectstatic -c --noinput"
 createcachetable = "python manage.py createcachetable"
