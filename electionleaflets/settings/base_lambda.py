@@ -1,4 +1,6 @@
 import os
+
+from django.urls import set_urlconf
 from .base import *  # noqa: F401,F403
 
 ALLOWED_HOSTS = ["*"]
@@ -28,6 +30,12 @@ WHITENOISE_STATIC_PREFIX = "/static/"
 
 STATIC_URL = WHITENOISE_STATIC_PREFIX
 STATICFILES_STORAGE = "electionleaflets.storages.StaticStorage"
+STATICFILES_DIRS = (root("assets"),)
+STATIC_ROOT = root("static")
+MEDIA_ROOT = root("media",)
+MEDIA_URL = "/media/"
+set_urlconf(ROOT_URLCONF)
+
 AWS_DEFAULT_ACL = "public-read"
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
