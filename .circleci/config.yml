@@ -121,9 +121,25 @@ jobs:
           at: ~/repo/
       - restore_cache:
           keys:
-            - v3-dependencies-{{ checksum "Pipfile.lock" }}
-            - v3-dependencies-default
-      - run: pip install -U pip pipenv --quiet --no-input
+            - v5-dependencies-{{ checksum "Pipfile.lock" }}
+            - v5-dependencies-default
+      - run:
+          name: Install pipenv
+          command: |
+            pip install --upgrade pipenv==2024.0.1 pip --quiet --no-input
+      - run: pipenv sync --dev
+      - run:
+          name: Check requirements
+          command: |
+            which make
+            pipenv run which make
+            echo $PATH
+            pipenv run echo $PATH
+            make --version
+            pipenv --venv
+            python --version
+            pipenv run python -m django --version
+            echo $DJANGO_SETTINGS_MODULE
       - run: pip install -r deploy-requirements.txt
       - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE SAM_LAMBDA_CONFIG_ENV SAM_PUBLIC_CONFIG_ENV
       - run: printenv SECRET_KEY | md5sum
@@ -133,7 +149,7 @@ jobs:
       - run:
           name: "pipenv run sam deploy # App: Lambda + API Gateway"
           command: |
-            pipenv run sam deploy ${DASH_DASH_DEBUG} \
+            sam deploy ${DASH_DASH_DEBUG} \
               --config-file ~/repo/${SAM_CONFIG_FILE} \
               --config-env $SAM_LAMBDA_CONFIG_ENV \
               --template-file ~/repo/.aws-sam/build/template.yaml \
@@ -227,7 +243,7 @@ workflows:
             - run-tests                            # staging should only deploy if tests pass
             - sam_build                       # deploy needs .aws-sam/build/
           context: [ deployment-staging-election-leaflets ]
-          filters: { branches: { only: [ master ] } }
+          filters: { branches: { only: [ master] } }
 
       - sam_deploy:
           name: sam_deploy_production
