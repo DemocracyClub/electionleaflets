@@ -6,11 +6,11 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-Pillow = ">=6.0,<10.0"
+Pillow = "==10.4.0"
 boto3 = "*"
 sorl-thumbnail = "*"
 six = "*"
-django = "==2.2.27"
+django = "==4.2.15"
 
 [requires]
-python_version = "3.7"
+python_version = "3.12.5"
