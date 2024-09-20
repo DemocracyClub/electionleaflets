@@ -29,12 +29,14 @@ jobs:
       - run: pipenv run collectstatic
       - run: npm install
       - run: npm run build
+      - run: pipenv run collectstatic
       - persist_to_workspace:
           root: ~/repo/
           paths:
             - .aws-sam/build/
             - thumbs/.aws-sam/build/
             - lambda-layers/DependenciesLayer/requirements.txt
+            - electionleaflets/static/
       - save_cache:
           when: on_success
           paths:
