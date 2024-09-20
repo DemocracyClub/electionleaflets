@@ -19,7 +19,7 @@ jobs:
       - run:
           name: Install pipenv
           command: |
-            pip install --upgrade pipenv pip --quiet --no-input
+            pip install --upgrade pipenv==2024.0.1 pip --quiet --no-input
       - run: pip uninstall -y poetry
       - run:
           name: Set up virtual environment
@@ -193,7 +193,7 @@ jobs:
                  PublicFqdn=$PUBLIC_FQDN \
                  LeafletsBucketName=$LEAFLET_IMAGES_BUCKET_NAME
               "
-      - run: pip install -U boto3 pipenv --quiet --no-input
+      - run: pip install -U boto3 pipenv==2024.0.1 --quiet --no-input
       - run: python thumbs/attach_lambda_triggers.py
       - run:
           name: "Publish a new Sentry Release"
