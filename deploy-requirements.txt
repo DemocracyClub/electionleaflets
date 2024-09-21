@@ -2,5 +2,5 @@ aws-sam-cli==1.115.0
 urllib3==2.2.3
 Django==4.2.15
 git+https://github.com/DemocracyClub/design-system.git
-git+https://github.com/DemocracyClub/awsgi.git@a5b800373c326e75f705d400c48f7df301409724
+git+https://github.com/DemocracyClub/awsgi.git
 sentry_sdk==2.14.0
