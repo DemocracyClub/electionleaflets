@@ -129,6 +129,7 @@ jobs:
           command: |
             pip install --upgrade pipenv==2024.0.1 pip --quiet --no-input
       - run: pipenv sync --dev
+      - run: pip install -r deploy-requirements.txt
       - run:
           name: Check requirements
           command: |
@@ -141,7 +142,7 @@ jobs:
             python --version
             pipenv run python -m django --version
             echo $DJANGO_SETTINGS_MODULE
-      - run: pip install -r deploy-requirements.txt
+            pipenv run pip freeze
       - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE SAM_LAMBDA_CONFIG_ENV SAM_PUBLIC_CONFIG_ENV
       - run: printenv SECRET_KEY | md5sum
       - run: printenv AWS_ACCESS_KEY_ID | md5sum
