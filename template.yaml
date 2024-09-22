@@ -93,7 +93,7 @@ Resources:
     Properties:
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ElectionLeafletsLambdaExecutionRole"
       CodeUri: .
-      Handler: electionleaflets.lambda_awsgi.lambda_handler
+      Handler: electionleaflets.lambda_awsgi.handler
       Layers:
         - !Ref DependenciesLayer
       Runtime: python3.12
