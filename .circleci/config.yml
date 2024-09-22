@@ -191,7 +191,7 @@ jobs:
               --s3-bucket=$THUMBS_DEPLOY_BUCKET_NAME
 
       - run:
-          name: "Deploy thumbs function to eu-weat-1 for lambda@edge"
+          name: "Deploy thumbs function to eu-west-1 for lambda@edge"
           command: |
             pipenv run sam deploy ${DASH_DASH_DEBUG} \
               --config-file ~/repo/thumbs/${SAM_CONFIG_FILE} \
