@@ -98,7 +98,6 @@ PIPELINE["SASS_ARGUMENTS"] = (
 )
 
 STATICFILES_FINDERS = (
-    "pipeline.finders.ManifestFinder",
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
     "pipeline.finders.CachedFileFinder",
