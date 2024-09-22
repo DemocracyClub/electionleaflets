@@ -8,7 +8,7 @@ SITE_ROOT = dirname(dirname(abspath(__file__)))
 path.append(SITE_ROOT)
 
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "electionleaflets.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "electionleaflets.settings.base_lambda")
 
 
 application = get_wsgi_application()
