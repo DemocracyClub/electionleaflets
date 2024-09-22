@@ -16,7 +16,7 @@ django-braces = "*"
 django-extensions = "==3.1.5"
 django-localflavor = "*"
 django-markdown-deux = "==1.0.5"
-django-storages = "*"
+django-storages = "1.13.2"
 django-uk-political-parties = {git = "https://github.com/DemocracyClub/django-uk-political-parties.git"}
 djangorestframework = ">=3.9.1"
 durationpy = "==0.4"

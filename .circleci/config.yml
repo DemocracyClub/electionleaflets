@@ -179,7 +179,8 @@ jobs:
       - run: echo $LEAFLET_IMAGES_BUCKET_NAME > thumbs/LEAFLET_IMAGES_BUCKET_NAME
       - run: make thumbs/requirements.txt
       - run: pipenv run thumbs_sam_build
-      - run: pipenv run sam validate
+      - run: pipenv run sam validate --region eu-west-2
+
       - run:
           name: "Deploy thumbs function"
           command: |
