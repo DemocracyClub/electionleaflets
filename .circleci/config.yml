@@ -93,8 +93,11 @@ jobs:
 
       - persist_to_workspace:
           root: ~/repo/
-          paths: [ .aws-sam/build/, thumbs/.aws-sam/build/ ]
-
+          paths:
+            - .aws-sam/build/
+            - thumbs/.aws-sam/build/
+            - lambda-layers/DependenciesLayer/requirements.txt
+            - electionleaflets/static/
   sam_deploy:
     docker:
       - image: cimg/python:3.12
