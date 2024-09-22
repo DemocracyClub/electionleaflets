@@ -47,6 +47,9 @@ AWS_S3_CUSTOM_DOMAIN = f"images.{os.environ.get('APP_DOMAIN')}"
 AWS_S3_USE_SSL = False
 AWS_S3_REGION_NAME = "eu-west-2"
 
+WSGI_APPLICATION = "electionleaflets.wsgi.application"
+
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
