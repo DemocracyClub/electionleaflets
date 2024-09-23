@@ -81,7 +81,7 @@ jobs:
 
   sam_build:
     docker:
-      - image: cimg/python:3.12.5
+      - image: public.ecr.aws/sam/build-python3.12:1.124.0-20240911233354
     working_directory: ~/repo
     steps:
       - checkout
