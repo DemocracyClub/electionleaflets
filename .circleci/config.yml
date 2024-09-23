@@ -30,6 +30,7 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: pipenv run collectstatic
+      - run: find electionleaflets/static | sed 's|[^/]*/|  |g'
       - persist_to_workspace:
           root: ~/repo/
           paths:
