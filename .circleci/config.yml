@@ -29,8 +29,7 @@ jobs:
       - run: pipenv run collectstatic
       - run: npm install
       - run: npm run build
-      - run: pipenv run collectstatic
-      - run: find electionleaflets/static | sed 's|[^/]*/|  |g'
+      - run: DJANGO_SETTINGS_MODULE=electionleaflets.settings.base_lambda pipenv run collectstatic
       - persist_to_workspace:
           root: ~/repo/
           paths:
