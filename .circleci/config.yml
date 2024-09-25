@@ -89,6 +89,7 @@ jobs:
           at: ~/repo/
       - run: pip install --upgrade pip
       - run: pip install -r deploy-requirements.txt
+      - run: pip list
       - run: pip install -r lambda-layers/DependenciesLayer/requirements.txt
       - run: sam build ${DASH_DASH_DEBUG}
 
@@ -133,6 +134,7 @@ jobs:
             pip install --upgrade pipenv==2024.0.1 pip --quiet --no-input
       - run: pipenv sync --dev
       - run: pip install -r deploy-requirements.txt
+      - run: pip list
       - run:
           name: Check requirements
           command: |
