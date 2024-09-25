@@ -25,7 +25,7 @@ jobs:
           name: Set up virtual environment
           command: |
             pipenv sync --dev
-      - run: pip install -r deploy-requirements.txt
+      - run: pip list
       - run: make lambda-layers/DependenciesLayer/requirements.txt
       - run: pipenv run collectstatic
       - run: npm install
@@ -250,7 +250,7 @@ workflows:
             - run-tests                            # staging should only deploy if tests pass
             - sam_build                       # deploy needs .aws-sam/build/
           context: [ deployment-staging-election-leaflets ]
-          filters: { branches: { only: [ master, upgrades202409-part2 ] } }
+          filters: { branches: { only: [ master, upgrades202409-part3 ] } }
 
       - sam_deploy:
           name: sam_deploy_production
