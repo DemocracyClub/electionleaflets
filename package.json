@@ -2,7 +2,7 @@
   "name": "electionleaflets",
   "version": "0.0.1",
   "engines": {
-    "node": "> 7"
+    "node": ">=18"
   },
   "scripts": {
     "build": "gulp"

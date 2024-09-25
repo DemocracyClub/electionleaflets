@@ -15,7 +15,7 @@ In order to speed up this port, we are running the first version using the origi
 You'll need some basic requirements installed on your machine, probably through your package manager:
 
 - Python 3.12.x
-- Node.js
+- Node.js 18+
 - PostgreSQL
 - PostGIS
 - Redis
