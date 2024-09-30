@@ -79,6 +79,7 @@ click = "*"
 flask = "==2.3.2"
 certifi = "*"
 Markdown = "*"
+playwright = "*"
 
 [requires]
 python_version = "3.12"
