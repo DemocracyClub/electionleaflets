@@ -5,7 +5,8 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "gulp"
+    "build": "gulp",
+    "test": "playwright test"
   },
   "dependencies": {
     "filepond": "4.26.1",
@@ -15,5 +16,9 @@
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
     "gulp-concat": "^2.6.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.2",
+    "@types/node": "^22.7.4"
   }
 }
