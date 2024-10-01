@@ -232,21 +232,33 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     return redirect(reverse("upload_leaflet"))
                 
                 uploaded_images = json.loads(images_text)
-                bucket = self.storage.file_storage.bucket
+                
+                storage_backend = getattr(settings, 'DEFAULT_FILE_STORAGE')
+                if storage_backend == 'django.core.files.storage.FileSystemStorage':
+                    # use local file storage set in local.py
+                    bucket = getattr(settings, 'DEFAULT_FILE_STORAGE') 
+                else:
+                    bucket = self.storage.file_storage.bucket
+                
                 for file_path in uploaded_images:
                     file_name = file_path.split("/")[-1]
                     file_name = file_name.replace(" ", "-")
-                    copy_source = {
-                        "Bucket": bucket.name,
-                        "Key": file_path,
-                    }
+                    if storage_backend == 'django.core.files.storage.FileSystemStorage':
+                        copy_source = file_path
+                    else:
+                        copy_source = {
+                            "Bucket": bucket.name,
+                            "Key": file_path,
+                        }
+                        
                     new_file_name = f"leaflets/{leaflet.pk}/{file_name}"
-                    moved_file = bucket.Object(new_file_name)
-                    moved_file.copy(copy_source)
-
+                    if storage_backend != 'django.core.files.storage.FileSystemStorage':
+                        moved_file = bucket.Object(new_file_name)
+                        moved_file.copy(copy_source)
+                        new_file_name_raw = f"raw_{new_file_name}"
+                        moved_file_raw = bucket.Object(new_file_name_raw)
+                        moved_file_raw.copy(copy_source)
                     new_file_name_raw = f"raw_{new_file_name}"
-                    moved_file_raw = bucket.Object(new_file_name_raw)
-                    moved_file_raw.copy(copy_source)
 
                     image = LeafletImage(leaflet=leaflet)
                     image.image.name = new_file_name
