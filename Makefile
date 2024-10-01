@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 
 export SECRET_KEY?=badf00d
-export DJANGO_SETTINGS_MODULE?=electionleaflets.settings.base_lambda
+export DJANGO_SETTINGS_MODULE?=electionleaflets.settings
 export APP_IS_BEHIND_CLOUDFRONT?=False
 
 .PHONY: all

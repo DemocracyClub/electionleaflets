@@ -24,6 +24,8 @@ DEBUG = False
 template_DEBUG = DEBUG
 TEMPLATE_DEBUG = DEBUG
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 # DATABASES define in environment specific settings file
 DATABASES = {
     "default": {
@@ -96,7 +98,6 @@ PIPELINE["SASS_ARGUMENTS"] = (
 )
 
 STATICFILES_FINDERS = (
-    "pipeline.finders.ManifestFinder",
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
     "pipeline.finders.CachedFileFinder",
@@ -140,10 +141,10 @@ WSGI_APPLICATION = "electionleaflets.wsgi.application"
 LEAFLET_APPS = [
     "core",
     "leaflets",
-    "constituencies",
     "analysis",
     "elections",
     "people",
+    "constituencies",
 ]
 
 INSTALLED_APPS = [
@@ -161,7 +162,7 @@ INSTALLED_APPS = [
     "sorl.thumbnail",
     "storages",
     "uk_political_parties",
-    "markdown_deux",
+    "markdown",
     "django_extensions",
     "pipeline",
     "dc_design_system",

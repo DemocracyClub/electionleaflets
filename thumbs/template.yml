@@ -16,5 +16,5 @@ Resources:
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ElectionLeafletsLambdaExecutionRole"
       CodeUri: .
       Handler: handler.handle
-      Runtime: python3.8
+      Runtime: python3.12
       MemorySize: 192

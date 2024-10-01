@@ -6,19 +6,20 @@ orbs:
 jobs:
   install_and_update_dependencies:
     docker:
-      - image: cimg/python:3.8.6-node
+      - image: cimg/python:3.12-node
     working_directory: ~/repo
+    executor: python/default
     steps:
       - checkout
       - restore_cache:
           keys:
-            - v3-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
-            - v3-dependencies-default
+            - v6-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
+            - v6-dependencies-default
       # Ensure pip and pipenv are installed
       - run:
           name: Install pipenv
           command: |
-            pip install --upgrade pipenv pip --quiet --no-input
+            pip install --upgrade pipenv==2024.0.1 pip --quiet --no-input
       - run: pip uninstall -y poetry
       - run:
           name: Set up virtual environment
@@ -28,18 +29,22 @@ jobs:
       - run: pipenv run collectstatic
       - run: npm install
       - run: npm run build
+      - run: DJANGO_SETTINGS_MODULE=electionleaflets.settings.base_lambda pipenv run collectstatic
       - persist_to_workspace:
           root: ~/repo/
           paths:
+            - .aws-sam/build/
+            - thumbs/.aws-sam/build/
             - lambda-layers/DependenciesLayer/requirements.txt
+            - electionleaflets/static/
       - save_cache:
           when: on_success
           paths:
             - ~/.local/share/virtualenvs/
-          key: v3-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
+          key: v6-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
   run-tests:
     docker:
-      - image: cimg/python:3.8
+      - image: cimg/python:3.12
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
@@ -55,7 +60,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v3-dependencies-{{ checksum "Pipfile.lock" }}
+            - v6-dependencies-{{ checksum "Pipfile.lock" }}
       
       # Install dependencies
       - run:
@@ -75,13 +80,14 @@ jobs:
 
   sam_build:
     docker:
-      - image: amazon/aws-sam-cli-build-image-python3.8:latest
+      - image: public.ecr.aws/sam/build-python3.12
     working_directory: ~/repo
     steps:
       - checkout
       - attach_workspace:
           at: ~/repo/
       - run: pip install --upgrade pip
+      - run: pip install -r deploy-requirements.txt
       - run: pip install -r lambda-layers/DependenciesLayer/requirements.txt
       - run: sam build ${DASH_DASH_DEBUG}
 
@@ -90,10 +96,11 @@ jobs:
           paths:
             - .aws-sam/build/
             - thumbs/.aws-sam/build/
-
+            - lambda-layers/DependenciesLayer/requirements.txt
+            - electionleaflets/static/
   sam_deploy:
     docker:
-      - image: cimg/python:3.8.6
+      - image: cimg/python:3.12
     working_directory: ~/repo/
     parameters:
       dc-environment:
@@ -117,9 +124,14 @@ jobs:
           at: ~/repo/
       - restore_cache:
           keys:
-            - v3-dependencies-{{ checksum "Pipfile.lock" }}
-            - v3-dependencies-default
-      - run: pip install -U pip pipenv --quiet --no-input
+            - v6-dependencies-{{ checksum "Pipfile.lock" }}
+            - v6-dependencies-default
+      - run:
+          name: Install pipenv
+          command: |
+            pip install --upgrade pipenv==2024.0.1 pip --quiet --no-input
+      - run: pipenv sync --dev
+      - run: pip install -r deploy-requirements.txt
       - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE SAM_LAMBDA_CONFIG_ENV SAM_PUBLIC_CONFIG_ENV
       - run: printenv SECRET_KEY | md5sum
       - run: printenv AWS_ACCESS_KEY_ID | md5sum
@@ -128,7 +140,7 @@ jobs:
       - run:
           name: "pipenv run sam deploy # App: Lambda + API Gateway"
           command: |
-            pipenv run sam deploy ${DASH_DASH_DEBUG} \
+            sam deploy ${DASH_DASH_DEBUG} \
               --config-file ~/repo/${SAM_CONFIG_FILE} \
               --config-env $SAM_LAMBDA_CONFIG_ENV \
               --template-file ~/repo/.aws-sam/build/template.yaml \
@@ -153,6 +165,8 @@ jobs:
       - run: echo $LEAFLET_IMAGES_BUCKET_NAME > thumbs/LEAFLET_IMAGES_BUCKET_NAME
       - run: make thumbs/requirements.txt
       - run: pipenv run thumbs_sam_build
+      - run: pipenv run sam validate --region eu-west-2
+
       - run:
           name: "Deploy thumbs function"
           command: |
@@ -164,7 +178,7 @@ jobs:
               --s3-bucket=$THUMBS_DEPLOY_BUCKET_NAME
 
       - run:
-          name: "Deploy thumbs function to eu-weat-1 for lambda@edge"
+          name: "Deploy thumbs function to eu-west-1 for lambda@edge"
           command: |
             pipenv run sam deploy ${DASH_DASH_DEBUG} \
               --config-file ~/repo/thumbs/${SAM_CONFIG_FILE} \
@@ -187,7 +201,7 @@ jobs:
                  PublicFqdn=$PUBLIC_FQDN \
                  LeafletsBucketName=$LEAFLET_IMAGES_BUCKET_NAME
               "
-      - run: pip install -U boto3 pipenv --quiet --no-input
+      - run: pip install -U boto3 pipenv==2024.0.1 --quiet --no-input
       - run: python thumbs/attach_lambda_triggers.py
       - run:
           name: "Publish a new Sentry Release"
