@@ -12,6 +12,7 @@ RE_DATE = re.compile(r"(\d{4})-(\d\d?)-(\d\d?)$")
 
 class DayMonthYearWidget(MultiWidget):
     template_name = "leaflets/includes/dc_date_widget.html"
+    widgets_names = ["day", "month", "year"]
 
     def __init__(self, attrs=None):
         self.widgets = [
