@@ -20,7 +20,6 @@ jobs:
           name: Install pipenv
           command: |
             pip install --upgrade pipenv==2024.0.1 pip --quiet --no-input
-      - run: pipenv run pipenv verify
       - run:
           name: Set up virtual environment
           command: |
@@ -62,12 +61,10 @@ jobs:
           keys:
             - v6-dependencies-{{ checksum "Pipfile.lock" }}
       
-      # Install dependencies
-      - run:
-          name: Install dependencies with pipenv
-          command: |
-            pipenv sync --dev 
-      # Run your tests
+      - run: pipenv run pipenv verify
+      - run: pipenv run python manage.py check
+      - run: pipenv run python manage.py makemigrations --check
+      # Run tests
       - run:
           name: Run tests
           command: |
@@ -130,7 +127,6 @@ jobs:
           name: Install pipenv
           command: |
             pip install --upgrade pipenv==2024.0.1 pip --quiet --no-input
-      - run: pipenv sync --dev
       - run: pip install -r deploy-requirements.txt
       - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE SAM_LAMBDA_CONFIG_ENV SAM_PUBLIC_CONFIG_ENV
       - run: printenv SECRET_KEY | md5sum
