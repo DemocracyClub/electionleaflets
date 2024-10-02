@@ -6,7 +6,7 @@ register = template.Library()
 
 
 @register.filter(name="markdown")
-def markdown(text):
+def markdown_filter(text):
     return mark_safe(markdown.markdown(text))
 
 
