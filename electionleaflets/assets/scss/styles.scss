@@ -124,6 +124,9 @@ $scope: false;
   padding: 0.625rem 1.25rem;
   border-bottom: 0.375rem solid #403F41;
   background-color: #007CAD;
+  label {
+    color: #fff;
+  }
 }
 
 .ds-scope ul.filepond--list {
