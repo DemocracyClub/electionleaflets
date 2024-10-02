@@ -62,8 +62,12 @@ jobs:
             - v6-dependencies-{{ checksum "Pipfile.lock" }}
       
       - run: pipenv run pipenv verify
+
       - run: pipenv run python manage.py check
-      - run: pipenv run python manage.py makemigrations --check
+
+      # TODO: enable this once we drop uk_political_parties package
+      #- run: pipenv run python manage.py makemigrations --check
+
       # Run tests
       - run:
           name: Run tests
