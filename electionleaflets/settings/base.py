@@ -180,7 +180,7 @@ def setup_sentry(environment=None):
         return
 
     if not environment:
-        environment = os.environ["SAM_LAMBDA_CONFIG_ENV"]
+        environment = os.environ["DC_ENVIRONMENT"]
     release = os.environ.get("GIT_HASH", "unknown")
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
