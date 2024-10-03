@@ -221,6 +221,16 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                 images_text = self.storage.get_step_data("images")[
                     "images-image"
                 ]
+                try:
+                    uploaded_images = json.loads(images_text)
+                except json.JSONDecodeError:
+                    messages.error(
+                        self.request,
+                        "There was an error processing the leaflet images. Please ensure Javascript is enabled and try again.",
+                    )
+                    leaflet.delete()
+                    return redirect(reverse("upload_leaflet"))
+                
                 uploaded_images = json.loads(images_text)
                 bucket = self.storage.file_storage.bucket
                 for file_path in uploaded_images:
