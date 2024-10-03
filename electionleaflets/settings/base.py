@@ -170,6 +170,7 @@ INSTALLED_APPS = [
     "s3file",
     "debug_toolbar",
     "django_filters",
+    "dc_utils",
 ] + LEAFLET_APPS
 
 
