@@ -133,6 +133,7 @@ MIDDLEWARE = (
     "leaflets.middleware.SourceTagMiddleware",
     "django.contrib.admindocs.middleware.XViewMiddleware",
     "dj_pagination.middleware.PaginationMiddleware",
+    "dc_utils.middleware.BasicAuthMiddleware",
 )
 
 ROOT_URLCONF = "electionleaflets.urls"
@@ -242,6 +243,12 @@ THANKYOU_MESSAGES = [
 REPORT_EMAIL_SUBJECT = "Leaflet Report"
 
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
+
+# Allowlist of URLs that should be ignored by dc_utils BasicAuthMiddleware
+BASIC_AUTH_ALLOWLIST = [
+    "/api",
+    "/api/*",
+]
 
 DEVS_DC_AUTH_TOKEN = environ.get("DEVS_DC_AUTH_TOKEN", None)
 
