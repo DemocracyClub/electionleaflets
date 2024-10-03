@@ -5,7 +5,7 @@ from botocore.exceptions import BotoCoreError
 
 IMAGES_BUCKET_NAME = os.environ.get("LEAFLET_IMAGES_BUCKET_NAME")
 IMAGES_URL = f"images.{os.environ.get('PUBLIC_FQDN')}"
-ENVIRONMENT = os.environ.get("SAM_LAMBDA_CONFIG_ENV")
+ENVIRONMENT = os.environ.get("DC_ENVIRONMENT")
 
 s3_client = boto3.client("s3", "eu-west-2")
 lambda_client = boto3.client("lambda", "eu-west-2")
