@@ -18,8 +18,11 @@ class LeafletTestCase(TestCase):
         )
 
         self.assertEqual(leaflet._initial["status"], "draft")
-
-
+         
+    def test_markdown_error(self):
+        leaflet = Leaflet.objects.create(title="Test Leaflet", description=None)
+        response = self.client.get(leaflet.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
 
 class LeafletImageTestCase(TestCase):
     @skip("fix me after python and django upgrade")
