@@ -20,7 +20,7 @@ jobs:
           name: Install pipenv
           command: |
             pip install --upgrade pipenv==2024.0.1 pip --quiet --no-input
-      - run: pip uninstall -y poetry
+      - run: pipenv run pipenv verify
       - run:
           name: Set up virtual environment
           command: |
