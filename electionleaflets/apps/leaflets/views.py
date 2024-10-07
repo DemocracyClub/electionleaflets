@@ -208,7 +208,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         return super(LeafletUploadWizzard, self).get(*args, **kwargs)
 
     
-    def copy_file(bucket, file_path, new_file_name):
+    def copy_file(self, bucket, file_path, new_file_name):
         copy_source = {
             "Bucket": bucket.name,
             "Key": file_path,
