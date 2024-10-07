@@ -13,8 +13,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v6-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
-            - v6-dependencies-default
+            - v7-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
+            - v7-dependencies-default
       # Ensure pip and pipenv are installed
       - run:
           name: Install pipenv
@@ -40,7 +40,7 @@ jobs:
           when: on_success
           paths:
             - ~/.local/share/virtualenvs/
-          key: v6-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
+          key: v7-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
   run-tests:
     docker:
       - image: cimg/python:3.12
@@ -59,7 +59,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v6-dependencies-{{ checksum "Pipfile.lock" }}
+            - v7-dependencies-{{ checksum "Pipfile.lock" }}
       
       - run: pipenv run pipenv verify
 
@@ -125,8 +125,8 @@ jobs:
           at: ~/repo/
       - restore_cache:
           keys:
-            - v6-dependencies-{{ checksum "Pipfile.lock" }}
-            - v6-dependencies-default
+            - v7-dependencies-{{ checksum "Pipfile.lock" }}
+            - v7-dependencies-default
       - run:
           name: Install pipenv
           command: |
