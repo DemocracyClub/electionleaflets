@@ -183,9 +183,12 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             if not postcode:
                 return
             ret = {"postcode": postcode.get("postcode")}
-            if self.get_cleaned_data_for_step("date"):
-                ret["for_date"] = self.get_cleaned_data_for_step("date")["date"]
-
+            try:
+                date = self.get_cleaned_data_for_step("date")["date"]
+            except (KeyError, TypeError):
+                date = datetime.datetime.now()
+            ret["for_date"] = date
+            
             party_data = self.storage.get_step_data("party")
             if not party_data:
                 return ret
@@ -207,6 +210,16 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             return HttpResponseRedirect("/")
         return super(LeafletUploadWizzard, self).get(*args, **kwargs)
 
+    
+    def copy_file(self, bucket, file_path, new_file_name):
+        copy_source = {
+            "Bucket": bucket.name,
+            "Key": file_path,
+        }
+        moved_file = bucket.Object(new_file_name)
+        moved_file.copy(copy_source)
+        return moved_file
+                    
     @transaction.atomic
     def done(self, form_list, **kwargs):
         # Create a new leaflet
@@ -230,23 +243,22 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     )
                     leaflet.delete()
                     return redirect(reverse("upload_leaflet"))
-                
-                uploaded_images = json.loads(images_text)
-                bucket = self.storage.file_storage.bucket
+
                 for file_path in uploaded_images:
                     file_name = file_path.split("/")[-1]
                     file_name = file_name.replace(" ", "-")
-                    copy_source = {
-                        "Bucket": bucket.name,
-                        "Key": file_path,
-                    }
-                    new_file_name = f"leaflets/{leaflet.pk}/{file_name}"
-                    moved_file = bucket.Object(new_file_name)
-                    moved_file.copy(copy_source)
+                    
+                    storage_backend = getattr(settings, 'DEFAULT_FILE_STORAGE')
+                    bucket = self.storage.file_storage.bucket
 
-                    new_file_name_raw = f"raw_{new_file_name}"
-                    moved_file_raw = bucket.Object(new_file_name_raw)
-                    moved_file_raw.copy(copy_source)
+                    new_file_name = f"leaflets/{leaflet.pk}/{file_name}"
+
+                    if storage_backend != 'django.core.files.storage.FileSystemStorage':
+                        moved_file = self.copy_file(bucket, file_path, new_file_name)
+                        new_file_name_raw = f"raw_{new_file_name}"
+                        moved_file_raw = self.copy_file(bucket, file_path, new_file_name_raw)
+                    else:
+                        new_file_name_raw = f"raw_{new_file_name}"
 
                     image = LeafletImage(leaflet=leaflet)
                     image.image.name = new_file_name
