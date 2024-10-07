@@ -9,3 +9,4 @@ TEST_RUNNER = "django.test.runner.DiscoverRunner"
 MEDIA_ROOT = root("test_media",)  # noqa: F405
 
 INSTALLED_APPS.append("aloe_django")  # noqa: F405
+YNR_API_KEY = "testing"

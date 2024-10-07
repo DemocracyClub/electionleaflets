@@ -1,7 +1,9 @@
+import os
 import requests
 
 from django.core.management.base import BaseCommand
 
+from django.conf import settings
 from uk_political_parties.models import Party, PartyEmblem
 
 
@@ -17,10 +19,12 @@ class Command(BaseCommand):
 
     def handle(self, **options):
         base_url = "https://candidates.democracyclub.org.uk"
-        url = "{}/api/next/parties/".format(base_url)
+        auth_token = getattr(settings, 'YNR_API_KEY')
+        params = {"auth_token": auth_token}
+        url = "{}/api/next/parties".format(base_url)
 
         while url:
-            req = requests.get(url)
+            req = requests.get(url, params=params)
             results = req.json()
             organizations = results["results"]
             for org in organizations:
