@@ -240,8 +240,6 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     )
                     leaflet.delete()
                     return redirect(reverse("upload_leaflet"))
-                
-                uploaded_images = json.loads(images_text)
 
                 for file_path in uploaded_images:
                     file_name = file_path.split("/")[-1]
