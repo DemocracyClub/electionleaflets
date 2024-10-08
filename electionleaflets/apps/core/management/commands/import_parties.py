@@ -25,18 +25,26 @@ class Command(BaseCommand):
 
         while url:
             req = requests.get(url, params=params)
-            results = req.json()
-            organizations = results["results"]
-            for org in organizations:
-                party_id = org["ec_id"]
-                print(party_id, org["name"])
-                (party_obj, created) = Party.objects.update_or_create(
-                    party_id=party_id, defaults=self.clean_party(party_id, org)
-                )
+            try:
+                results = req.json()
+            except requests.exceptions.JSONDecodeError:
+                print("Failed to decode JSON response")
+                break
+            try: 
+                organizations = results["results"]
+                for org in organizations:
+                    party_id = org["ec_id"]
+                    print(party_id, org["name"])
+                    (party_obj, created) = Party.objects.update_or_create(
+                        party_id=party_id, defaults=self.clean_party(party_id, org)
+                    )
 
-                if org["emblems"]:
-                    for emblem in org["emblems"]:
-                        PartyEmblem.objects.update_or_create(
-                            party_id=party_id, emblem_url=emblem["image"],
-                        )
+                    if org["emblems"]:
+                        for emblem in org["emblems"]:
+                            PartyEmblem.objects.update_or_create(
+                                party_id=party_id, emblem_url=emblem["image"],
+                            )
+            except KeyError:
+                print(results)
+                break
             url = results.get("next", None)
