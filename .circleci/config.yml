@@ -74,7 +74,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            pipenv run test
+            pipenv run pytest --cov=electionleaflets --cov-report=html --cov-report=xml
       - store_artifacts:
           path: test-results
           destination: test-results

@@ -81,6 +81,10 @@ certifi = "*"
 Markdown = "*"
 dc-django-utils = {file = "https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/7.0.1.tar.gz"}
 playwright = "==1.48.0"
+pytest-django = "*"
+pytest = "*"
+pytest-playwright = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.12"
