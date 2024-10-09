@@ -1,45 +1,47 @@
-import responses
-from unittest import skip
-from django.test import TestCase
-
+import pytest
+from django.urls import reverse
 from leaflets.models import Leaflet, LeafletImage
 from uk_political_parties.models import Party
 from .helpers import get_test_image
 from .data import MAPIT_POSTCODE_RETURN
 
+@pytest.fixture
+def leaflet():
+    return Leaflet.objects.create(title="Test Leaflet", description=None)
 
-class LeafletTestCase(TestCase):
-    fixtures = ["constituencies"]
+@pytest.fixture
+def party():
+    return Party.objects.create(party_name="Labour Party")
 
-    def test_model_initial(self):
-        leaflet = Leaflet()
-        self.assertEqual(
-            leaflet._initial,
-            {'id': None, 'title': '', 'description': None, 'publisher_party': None, 'ynr_party_id': None, 'ynr_party_name': None, 'publisher_person': None, 'ynr_person_id': None, 'ynr_person_name': None, 'ballot_id': None, 'ballots': [], 'people': {}, 'person_ids': [], 'election': None, 'constituency': None, 'imprint': None, 'postcode': '', 'name': '', 'email': '', 'date_delivered': None, 'status': 'draft', 'reviewed': False},
-        )
+@pytest.mark.django_db
+def test_model_initial():
+    leaflet = Leaflet()
+    assert leaflet._initial == {
+        'id': None, 'title': '', 'description': None, 'publisher_party': None, 'ynr_party_id': None, 'ynr_party_name': None, 'publisher_person': None, 'ynr_person_id': None, 'ynr_person_name': None, 'ballot_id': None, 'ballots': [], 'people': {}, 'person_ids': [], 'election': None, 'constituency': None, 'imprint': None, 'postcode': '', 'name': '', 'email': '', 'date_delivered': None, 'status': 'draft', 'reviewed': False
+    }
+    assert leaflet._initial["status"] == "draft"
 
-        self.assertEqual(leaflet._initial["status"], "draft")
-         
-    def test_markdown_error(self):
-        leaflet = Leaflet.objects.create(title="Test Leaflet", description=None)
-        response = self.client.get(leaflet.get_absolute_url())
-        self.assertEqual(response.status_code, 200)
-        
-    def test_redirect_to_leaflet(self):
-        party = Party.objects.create(party_name="Labour Party") 
-        leaflet = Leaflet.objects.create(title="Test Leaflet", description=None, ynr_party_id="party:1", ynr_party_name="Labour Party", publisher_party=party)
-        response = self.client.get(leaflet.get_absolute_url())
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Test Leaflet")
-        self.assertContains(response, "Labour Party")
-    
+@pytest.mark.django_db
+def test_markdown_error(client, leaflet):
+    response = client.get(leaflet.get_absolute_url())
+    assert response.status_code == 200
 
-# class LeafletImageTestCase(TestCase):
-#     def test_raw_image_field(self):
-#         l = Leaflet()
-#         l.save()
-#         image_file = get_test_image()
-#         li = LeafletImage(image=image_file, leaflet=l)
-#         self.assertEqual(li.raw_image.name, "")
-#         li.save()
-#         self.assertRegex(li.raw_image.name, r"front_test")
+@pytest.mark.django_db
+def test_leaflet_detail(client, party):
+    leaflet = Leaflet.objects.create(
+        title="Test Leaflet", description=None, ynr_party_id="party:1", ynr_party_name="Labour Party", publisher_party=party
+    )
+    response = client.get(leaflet.get_absolute_url())
+    assert response.status_code == 200
+    assert "Test Leaflet" in response.content.decode()
+    assert "Labour Party" in response.content.decode()
+
+@pytest.mark.django_db
+def test_raw_image_field():
+    l = Leaflet()
+    l.save()
+    image_file = get_test_image()
+    li = LeafletImage(image=image_file, leaflet=l)
+    assert li.raw_image.name == ""
+    li.save()
+    assert li.raw_image.name.startswith("front_test")

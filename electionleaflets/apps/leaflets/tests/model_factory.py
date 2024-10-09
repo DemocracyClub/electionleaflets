@@ -9,3 +9,4 @@ class LeafletFactory(DjangoModelFactory):
         model = Leaflet
 
     title = factory.Sequence(lambda n: "Leaflet %d" % n)
+    description = "test description"
