@@ -14,23 +14,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
   <meta name="keywords" lang="en" content="election leaflets" />
   <meta name="description" lang="en" content="Real-time election leaflet monitoring" />
+  {% block og_tags %}{% endblock og_tags %}
 {% endblock page_meta %}
 
-{% block og_tags %}{% endblock og_tags %}
-<body class="ds-scope" style="margin: 0">
-  <noscript>
-      <div class="ds-status-error">
-          JavaScript is disabled in your browser. Please enable JavaScript to upload leaflets.
-      </div>
-  </noscript>
-
 {% block header_base%}
+  <noscript>
+    <div class="ds-status-error">
+        JavaScript is disabled in your browser. Please enable JavaScript to upload leaflets.
+    </div>
+  </noscript>
   <header class="ds-header">
     <a class="ds-logo" href="/">
       <img src="https://DemocracyClub.github.io/design-system/images/logo_icon.svg" alt="" />
       <span>Election Leaflets</span>
     </a>
     {% block site_menu %}
+    
       <nav>
         <ul>
           <li>
@@ -57,18 +56,17 @@
 {% endblock header_base%}
 
 {% block messages %}
-
-    <aside class="ds-status messages" aria-label="Status">
-      <ul class="ds-stack">
-        {% if messages %}
-          {% for message in messages %}
-            <li class="ds-status-message{% if 'error' in message.tags %}error{% else %}success{% endif %}">
-              {{ message }}
-            </li>
-          {% endfor %}
-        {% endif %}
-      </ul>
-    </aside>
+  <aside class="ds-status messages" aria-label="Status">
+    <ul class="ds-stack">
+      {% if messages %}
+        {% for message in messages %}
+          <li class="ds-status-message{% if 'error' in message.tags %}error{% else %}success{% endif %}">
+            {{ message }}
+          </li>
+        {% endfor %}
+      {% endif %}
+    </ul>
+  </aside>
 {% endblock messages %}
 
 {% block content %}
