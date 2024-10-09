@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "58c86cfa36763c0532c83544c96bb8ac8feeec917e93e3a672c295f035603007"
+            "sha256": "3ef9706ba4eee4601bc6fea24b0a00dd6e99ce62531dd144ec7236db2331e6d8"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -89,20 +89,20 @@
         },
         "boto3": {
             "hashes": [
-                "sha256:33735b9449cd2ef176531ba2cb2265c904a91244440b0e161a17da9d24a1e6d1",
-                "sha256:586524b623e4fbbebe28b604c6205eb12f263cc4746bccb011562d07e217a4cb"
+                "sha256:a5b00f8b82dce62870759f04861747944da834d64a64355970120c475efdafc0",
+                "sha256:e1f36f8be453505cebcc3da178ea081b2a06c0e5e1cdee774f1067599b8d9c3e"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==1.35.36"
+            "version": "==1.35.42"
         },
         "botocore": {
             "hashes": [
-                "sha256:354ec1b766f0029b5d6ff0c45d1a0f9e5007b7d2f3ec89bcdd755b208c5bc797",
-                "sha256:64241c778bf2dc863d93abab159e14024d97a926a5715056ef6411418cb9ead3"
+                "sha256:05af0bb8b9cea7ce7bc589c332348d338a21b784e9d088a588fd10ec145007ff",
+                "sha256:af348636f73dc24b7e2dc760a34d08c8f2f94366e9b4c78d877307b128abecef"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==1.35.36"
+            "version": "==1.35.42"
         },
         "certifi": {
             "hashes": [
@@ -338,6 +338,9 @@
             ],
             "version": "==7.0.1"
         },
+        "dc-django-utils": {
+            "file": "https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/7.0.1.tar.gz"
+        },
         "dj-pagination": {
             "hashes": [
                 "sha256:1de28af33acafe1898e2d9c80a0669b492f582ec711c13864eff00e9b16479b8",
@@ -512,12 +515,12 @@
         },
         "faker": {
             "hashes": [
-                "sha256:8760fbb34564fbb2f394345eef24aec5b8f6506b6cfcefe8195ed66dd1032bdb",
-                "sha256:e8a15fd1b0f72992b008f5ea94c70d3baa0cb51b0d5a0e899c17b1d1b23d2771"
+                "sha256:37b5ab951f7367ea93edb865120e9717a7a649d6a4b223f1e4a47a8a20d9e85f",
+                "sha256:be0e548352c1be6f6d9c982003848a0d305868f160bb1fb7f945acffc347e676"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==30.3.0"
+            "version": "==30.6.0"
         },
         "fixtures": {
             "hashes": [
@@ -1291,6 +1294,13 @@
             ],
             "version": "==0.1.0"
         },
+        "pytest": {
+            "hashes": [
+                "sha256:b473069cd9d8799366505b4586938ebfeb67d9df8b400bae3200297422530aff",
+                "sha256:d7404ab89518a37851e6be28fd71ce7890098674de8c67d9161e648bf6be3b98"
+            ],
+            "version": "==0.1.0"
+        },
         "python-dateutil": {
             "hashes": [
                 "sha256:78e73e19c63f5b20ffa567001531680d939dc042bf7850431877645523c66709",
@@ -1652,12 +1662,12 @@
         },
         "sentry-sdk": {
             "hashes": [
-                "sha256:49139c31ebcd398f4f6396b18910610a0c1602f6e67083240c33019d1f6aa30c",
-                "sha256:90f733b32e15dfc1999e6b7aca67a38688a567329de4d6e184154a73f96c6892"
+                "sha256:625955884b862cc58748920f9e21efdfb8e0d4f98cca4ab0d3918576d5b606ad",
+                "sha256:dd0a05352b78ffeacced73a94e86f38b32e2eae15fff5f30ca5abb568a72eacf"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.6'",
-            "version": "==2.16.0"
+            "version": "==2.17.0"
         },
         "setuptools": {
             "hashes": [
