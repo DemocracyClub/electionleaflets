@@ -246,16 +246,16 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     file_name = file_name.replace(" ", "-")
                     
                     storage_backend = getattr(settings, 'DEFAULT_FILE_STORAGE')
-                    bucket = self.storage.file_storage.bucket
 
                     new_file_name = f"leaflets/{leaflet.pk}/{file_name}"
 
-                    if storage_backend != 'django.core.files.storage.FileSystemStorage':
+                    if storage_backend == 'django.core.files.storage.FileSystemStorage':
+                        new_file_name_raw = f"raw_{new_file_name}"
+                    else:
+                        bucket = self.storage.file_storage.bucket
                         moved_file = self.copy_file(bucket, file_path, new_file_name)
                         new_file_name_raw = f"raw_{new_file_name}"
-                        moved_file_raw = self.copy_file(bucket, file_path, new_file_name_raw)
-                    else:
-                        new_file_name_raw = f"raw_{new_file_name}"
+                        moved_file_raw = self.copy_file(bucket, file_path, new_file_name_raw) 
 
                     image = LeafletImage(leaflet=leaflet)
                     image.image.name = new_file_name
