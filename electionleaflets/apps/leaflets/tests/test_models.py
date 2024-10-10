@@ -1,9 +1,7 @@
 import pytest
-from django.urls import reverse
 from leaflets.models import Leaflet, LeafletImage
-from uk_political_parties.models import Party
 from .helpers import get_test_image
-from .data import MAPIT_POSTCODE_RETURN
+from uk_political_parties.models import Party 
 
 @pytest.fixture
 def leaflet():
