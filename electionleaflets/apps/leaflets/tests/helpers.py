@@ -7,8 +7,7 @@ from leaflets.models import Leaflet, LeafletImage
 
 
 def get_test_image():
-    return os.path.join(settings.MEDIA_ROOT, "test_images/front_test.jpg")
-
+    return os.path.join("electionleaflets", "test_media", "test_images", "test_leaflet.jpeg")
 
 def create_dummy_leaflets(number=1):
     for i in range(number):
