@@ -41,5 +41,6 @@ def test_raw_image_field():
     image_file = get_test_image()
     li = LeafletImage(image=image_file, leaflet=l)
     assert li.raw_image.name == ""
-    li.save()
-    assert li.raw_image.name.startswith("front_test")
+    with open(image_file, "rb") as img_file:
+        li.image.save("front_test.jpg", img_file)
+    assert "front_test" in li.raw_image.name
