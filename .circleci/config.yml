@@ -72,7 +72,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            pipenv run test
+            pipenv run pytest
       - store_artifacts:
           path: test-results
           destination: test-results
