@@ -1,112 +1,75 @@
+{% extends "dc_base.html" %}
 {% load pipeline %}
 {% load static %}
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/svg+xml" href="https://DemocracyClub.github.io/design-system/images/favicon.svg">
-    {% block extra_site_css %}
-      {% stylesheet 'styles' %}
-    {% endblock extra_site_css %}
-    {% block site_meta %}
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-      <meta name="mobile-web-app-capable" content="yes" />
-      <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
-      <meta name="keywords" lang="en" content="election leaflets" />
-      <meta name="description" lang="en" content="Real-time election leaflet monitoring" />
-      <title>{% block title %}Real-time #ElectionLeaflet monitoring{% endblock %} | ElectionLeaflets.org</title>
-    {% endblock site_meta %}
-    {% block og_tags %}{% endblock og_tags %}
-  </head>
-  <body class="ds-scope" style="margin: 0">
-    <noscript>
-        <div class="ds-status-error">
-            JavaScript is disabled in your browser. Please enable JavaScript to upload leaflets.
-        </div>
-    </noscript>
-  
-    <div class="ds-page">
-      <p><a class="ds-skip-link" href="#main">skip to content</a></p>
-      <header class="ds-header">
-        <a class="ds-logo" href="/">
-          <img src="https://DemocracyClub.github.io/design-system/images/logo_icon.svg" alt="" />
-          <span>Election Leaflets</span>
-        </a>
-        <nav>
-          <ul>
-            <li>
-              <a href="{% url "home" %}">Home</a>
-            </li>
-            {% if request.user.is_authenticated %}
-              <li>
-                <a href="{% url "leaflets_without_candidates" %}">Tag</a>
-              </li>
-              <li>
-                <a href="{% url "moderate" %}">Mod Queue</a>
-              </li>
-            {% endif %}
-            <li>
-              <a href="{% url "leaflets" %}">Latest leaflets</a>
-            </li>
-            <li>
-              <a href="{% url "upload_leaflet" %}">Add a leaflet</a>
-            </li>
-          </ul>
-        </nav>
-      </header>
-      <main id="main" tabindex="-1" class="ds-stack" {% if full_width %}style="max-width:100%"{% endif %}>
-        {% if messages %}
-          <aside class="ds-status" aria-label="Status">
-            <ul class="ds-stack">
-            {% for message in messages %}
-              <li class="ds-status-{% if 'error' in message.tags %}error{% else %}success{% endif %}">
-                {{ message }}
-              </li>
-            {% endfor %}
-            </ul>
-          </aside>
-        {% endif %}
-        {% block content %}
 
-        {% endblock %}
-      </main>
-      <footer class="ds-footer">
-        {% block site_footer %}
-          {% include "footer.html" %}
-          {% block extra_scripts %}{% endblock %}
-          {% javascript "scripts" %}
-        {% endblock site_footer %}
-      </footer>
+{% block extra_site_css %}
+  {% stylesheet 'styles' %}
+{% endblock extra_site_css %}
+
+{% block base_title %}{% block page_title %}Real-time #ElectionLeaflet monitoring{% endblock page_title %} |ElectionLeaflets.org {% endblock base_title %}
+
+{% block page_meta %}
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
+  <meta name="keywords" lang="en" content="election leaflets" />
+  <meta name="description" lang="en" content="Real-time election leaflet monitoring" />
+  {% block og_tags %}{% endblock og_tags %}
+{% endblock page_meta %}
+
+{% block header_base%}
+  <noscript>
+    <div class="ds-status-error">
+        JavaScript is disabled in your browser. Please enable JavaScript to upload leaflets.
     </div>
-  </body>
-</html>
+  </noscript>
+  <header class="ds-header">
+    <a class="ds-logo" href="/">
+      <img src="https://DemocracyClub.github.io/design-system/images/logo_icon.svg" alt="" />
+      <span>Election Leaflets</span>
+    </a>
+    {% block site_menu %}
+    
+      <nav>
+        <ul>
+          <li>
+            <a href="{% url "home" %}">Home</a>
+          </li>
+          {% if request.user.is_authenticated %}
+          <li>
+            <a href="{% url "leaflets_without_candidates" %}">Tag</a>
+          </li>
+          <li>
+            <a href="{% url "moderate" %}">Mod Queue</a>
+          </li>
+          {% endif %}
+          <li>
+            <a href="{% url "leaflets" %}">Latest leaflets</a>
+          </li>
+          <li>
+            <a href="{% url "upload_leaflet" %}">Add a leaflet</a>
+          </li>
+        </ul>
+      </nav>
+    {% endblock site_menu %}
+  </header>
+{% endblock header_base%}
 
+{% block messages %}
+  <aside class="ds-status messages" aria-label="Status">
+    <ul class="ds-stack">
+      {% if messages %}
+        {% for message in messages %}
+          <li class="ds-status-message{% if 'error' in message.tags %}error{% else %}success{% endif %}">
+            {{ message }}
+          </li>
+        {% endfor %}
+      {% endif %}
+    </ul>
+  </aside>
+{% endblock messages %}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{% block site_menu %}
-
-{% endblock site_menu %}
+{% block content %}
+{% endblock %}
 
 

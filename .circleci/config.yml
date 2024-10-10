@@ -114,7 +114,7 @@ jobs:
     environment:
       DJANGO_SETTINGS_MODULE: "<<parameters.dc-django-settings-module>>"
       SAM_CONFIG_FILE: samconfig.toml.d/ci-<<parameters.dc-environment>>.toml
-      SAM_LAMBDA_CONFIG_ENV: <<parameters.dc-environment>>
+      DC_ENVIRONMENT: <<parameters.dc-environment>>
       SAM_PUBLIC_CONFIG_ENV: <<parameters.dc-environment>>-public-access
       DC_DEPLOY_NAME: <<parameters.dc-deploy-name>>
       POSTGRES_DATABASE_NAME: <<parameters.dc-deploy-name>>
@@ -132,7 +132,7 @@ jobs:
           command: |
             pip install --upgrade pipenv==2024.0.1 pip --quiet --no-input
       - run: pip install -r deploy-requirements.txt
-      - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE SAM_LAMBDA_CONFIG_ENV SAM_PUBLIC_CONFIG_ENV
+      - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE DC_ENVIRONMENT SAM_PUBLIC_CONFIG_ENV
       - run: printenv SECRET_KEY | md5sum
       - run: printenv AWS_ACCESS_KEY_ID | md5sum
       - run: sudo apt update && sudo apt install postgresql-client
@@ -142,7 +142,7 @@ jobs:
           command: |
             sam deploy ${DASH_DASH_DEBUG} \
               --config-file ~/repo/${SAM_CONFIG_FILE} \
-              --config-env $SAM_LAMBDA_CONFIG_ENV \
+              --config-env $DC_ENVIRONMENT \
               --template-file ~/repo/.aws-sam/build/template.yaml \
               --parameter-overrides " \
                  AppDjangoSettingsModule=$DJANGO_SETTINGS_MODULE \
@@ -155,7 +155,7 @@ jobs:
                  AppPostgresHost='$DATABASE_HOST' \
                  AppPostgresDatabaseName='$POSTGRES_DATABASE_NAME' \
                  AppPostgresPassword='$DATABASE_PASS' \
-                 AppSamLambdaConfigEnv='$SAM_LAMBDA_CONFIG_ENV' \
+                 AppDCEnvironment='$DC_ENVIRONMENT' \
                  AppDomain='$PUBLIC_FQDN' \
                  AppLeafletImagesBucketName='$LEAFLET_IMAGES_BUCKET_NAME' \
                 "
@@ -172,7 +172,7 @@ jobs:
           command: |
             pipenv run sam deploy ${DASH_DASH_DEBUG} \
               --config-file ~/repo/thumbs/${SAM_CONFIG_FILE} \
-              --config-env $SAM_LAMBDA_CONFIG_ENV \
+              --config-env $DC_ENVIRONMENT \
               --template-file ~/repo/thumbs/.aws-sam/build/ThumbsFunction/template.yml \
               --region eu-west-2 \
               --s3-bucket=$THUMBS_DEPLOY_BUCKET_NAME
@@ -182,7 +182,7 @@ jobs:
           command: |
             pipenv run sam deploy ${DASH_DASH_DEBUG} \
               --config-file ~/repo/thumbs/${SAM_CONFIG_FILE} \
-              --config-env $SAM_LAMBDA_CONFIG_ENV \
+              --config-env $DC_ENVIRONMENT \
               --template-file ~/repo/thumbs/.aws-sam/build/ThumbsFunction/template.yml \
               --region us-east-1
 
