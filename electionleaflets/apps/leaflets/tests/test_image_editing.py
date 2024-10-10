@@ -15,10 +15,10 @@ def leaflet_image():
 @pytest.mark.django_db
 class TestImageEditing:
     def test_dimensions(self, leaflet_image):
-        assert leaflet_image.dimensions == (419, 300)
+        assert leaflet_image.dimensions == (3024, 4032)
         
     def test_crop(self, leaflet_image):
-        assert leaflet_image.dimensions == (419, 300)
+        assert leaflet_image.dimensions == (3024, 4032)
         x = 12
         y = 7
         x2 = 100
