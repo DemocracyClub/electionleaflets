@@ -47,9 +47,6 @@ class ElectionFactory(DjangoModelFactory):
     dead_date = "2110-5-6"
 
 
-# GLOBAL_ELECTION = ElectionFactory(create=False)
-
-
 class PartyMembershipsFactory(DjangoModelFactory):
     class Meta:
         model = PartyMemberships
