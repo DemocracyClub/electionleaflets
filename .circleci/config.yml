@@ -155,7 +155,6 @@ jobs:
                  AppPostgresHost='$DATABASE_HOST' \
                  AppPostgresDatabaseName='$POSTGRES_DATABASE_NAME' \
                  AppPostgresPassword='$DATABASE_PASS' \
-                 AppDCEnvironment='$DC_ENVIRONMENT' \
                  AppDomain='$PUBLIC_FQDN' \
                  AppLeafletImagesBucketName='$LEAFLET_IMAGES_BUCKET_NAME' \
                 "
