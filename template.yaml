@@ -64,10 +64,9 @@ Parameters:
     Description: "The password for the postgres user"
     Type: String
 
-  AppDCEnvironment:
-    Default: DC_ENVIRONMENT
-    Description: "The DC_ENVIRONMENT environment variable passed to the app."
-    Type: AWS::SSM::Parameter::Value<String>
+  AppSamLambdaConfigEnv:
+    Description: "The lambda config environment passed to the app used to init sentry."
+    Type: String
 
   AppDomain:
     Description: "The domain the app is on."
@@ -110,7 +109,7 @@ Resources:
           DATABASE_HOST: !Ref AppPostgresHost
           POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
           DATABASE_PASS: !Ref AppPostgresPassword
-          DC_ENVIRONMENT: !Ref AppDCEnvironment
+          SAM_LAMBDA_CONFIG_ENV: !Ref AppSamLambdaConfigEnv
           APP_DOMAIN: !Ref AppDomain
           LEAFLET_IMAGES_BUCKET_NAME: !Ref AppLeafletImagesBucketName
       Events:
