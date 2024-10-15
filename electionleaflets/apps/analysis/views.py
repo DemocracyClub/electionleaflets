@@ -194,7 +194,7 @@ class TagRandomCandidate(BaseCandidateTaggingMixin, RedirectView):
         if qs.exists():
             leaflet = self.get_queryset().order_by("?").first()
             return reverse(
-                "analysis_tag_candidate", kwargs={"leaflet_id": leaflet.pk}
+                "analysis_tag_random_candidate", kwargs={"leaflet_id": leaflet.pk}
             )
         else:
             messages.success(self.request, "No more candidates lift to tag!")
