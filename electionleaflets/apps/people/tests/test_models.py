@@ -1,100 +1,57 @@
-from django.test import TestCase
-
-import factory
-from factory.django import DjangoModelFactory
-
-from uk_political_parties.models import Party
-from constituencies.models import Constituency
-
-from elections.models import Election
+import pytest
 from people.models import Person, PartyMemberships, PersonConstituencies
+from constituencies.models import Constituency
+from uk_political_parties.models import Party
+from elections.models import Election
+
+@pytest.fixture
+def person():
+    return Person.objects.create(name="John Doe")
+
+@pytest.fixture
+def party():
+    return Party.objects.create(party_name="Test Party")
+
+@pytest.fixture
+def constituency():
+    return Constituency.objects.create(name="Test Constituency")
+
+@pytest.fixture
+def election():
+    return Election.objects.create(name="Test Election", live_date="2023-01-01", dead_date="2023-01-01")
 
 
-class YNMPPeopleFactory(DjangoModelFactory):
-    class Meta:
-        model = Person
+@pytest.mark.django_db
+def test_create_party_membership(person, party):
+    membership = PartyMemberships.objects.create(person=person, party=party, membership_start="2023-01-01")
+    assert membership.person == person
+    assert membership.party == party
+    assert membership.membership_start == "2023-01-01"
+    assert membership.membership_end is None
 
-    source_name = "YNMP"
-    name = factory.Sequence(lambda n: "user %d" % n)
-    remote_id = factory.Sequence(lambda n: "%d" % n)
-    source_url = factory.Sequence(
-        lambda n: "http://yournextmp.com/person/%d/" % n
-    )
+@pytest.mark.django_db
+def test_create_person_constituency(person, constituency, election):
+    person_constituency = PersonConstituencies.objects.create(person=person, constituency=constituency, election=election)
+    assert person_constituency.person == person
+    assert person_constituency.constituency == constituency
+    assert person_constituency.election == election
 
+@pytest.mark.django_db
+def test_person_current_party(person, party):
+    PartyMemberships.objects.create(person=person, party=party, membership_start="2023-01-01")
+    assert person.current_party.party == party
 
-class PartyFactory(DjangoModelFactory):
-    class Meta:
-        model = Party
+@pytest.mark.django_db
+def test_person_current_election(person, election):
+    person.elections.add(election)
+    assert person.current_election == election
 
-    party_id = factory.Sequence(lambda n: "PP%d" % n)
-    party_name = factory.Sequence(lambda n: "Party %d" % n)
+@pytest.mark.django_db
+def test_person_current_constituency(person, constituency, election):
+    PersonConstituencies.objects.create(person=person, constituency=constituency, election=election)
+    person.elections.add(election)
+    assert person.current_constituency == constituency
 
-
-class ConstituencyFactory(DjangoModelFactory):
-    class Meta:
-        model = Constituency
-
-    constituency_id = factory.Sequence(lambda n: str(n))
-    name = factory.Sequence(lambda n: "Constituency %d" % n)
-
-
-class ElectionFactory(DjangoModelFactory):
-    class Meta:
-        model = Election
-
-    name = factory.Sequence(lambda n: "Election %d" % n)
-    live_date = "2010-5-6"
-    dead_date = "2110-5-6"
-
-
-class PartyMembershipsFactory(DjangoModelFactory):
-    class Meta:
-        model = PartyMemberships
-
-    person = factory.SubFactory(YNMPPeopleFactory)
-    party = factory.SubFactory(PartyFactory)
-    membership_start = "2001-06-7"
-
-
-class PersonConstituenciesFactory(DjangoModelFactory):
-    class Meta:
-        model = PersonConstituencies
-
-    person = factory.SubFactory(YNMPPeopleFactory)
-    constituency = factory.SubFactory(ConstituencyFactory)
-    election = factory.SubFactory(ElectionFactory)
-
-
-class PersonWithRelations(YNMPPeopleFactory):
-    parties = factory.RelatedFactory(PartyMembershipsFactory, "person")
-    constituencies = factory.RelatedFactory(
-        PersonConstituenciesFactory, "person"
-    )
-
-    @factory.post_generation
-    def elections(self, create, extracted, **kwargs):
-        if not create:
-            return
-
-        if extracted:
-            for election in extracted:
-                self.elections.add(election)
-
-
-class TestModels(TestCase):
-    def setUp(self):
-        self.person1 = PersonWithRelations()
-        self.person1.elections.add(
-            self.person1.constituencies.all()[0]
-            .personconstituencies_set.all()[0]
-            .election
-        )
-
-    def test_current_party(self):
-        self.assertEqual(self.person1.current_party.pk, 3)
-
-    def test_current_election(self):
-        self.assertEqual(self.person1.current_election.pk, 2)
-
-    def test_current_constituency(self):
-        self.assertEqual(self.person1.current_constituency.pk, "0")
+@pytest.mark.django_db
+def test_person_unicode(person):
+    assert str(person.name) == "John Doe"
