@@ -39,8 +39,15 @@ class PartyView(DetailView):
             obj = queryset.get()
         except queryset.model.DoesNotExist:
             raise Http404(
-                "No %(verbose_name)s found matching the query"
-                % {"verbose_name": queryset.model._meta.verbose_name}
+            "No %(verbose_name)s found matching the query"
+            % {"verbose_name": queryset.model._meta.verbose_name}
+            )
+        except queryset.model.MultipleObjectsReturned:
+            # show the first one
+            obj = queryset.first()
+            raise Http404(
+            "Multiple %(verbose_name)s found matching the query"
+            % {"verbose_name": queryset.model._meta.verbose_name}
             )
         return obj
 
