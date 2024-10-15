@@ -7,8 +7,9 @@
 {% endblock extra_site_css %}
 
 {% block base_title %}{% block page_title %}Real-time #ElectionLeaflet monitoring{% endblock page_title %} |ElectionLeaflets.org {% endblock base_title %}
+{% block extra_site_js %}{% javascript "scripts" %}{% endblock %}
 
-{% block page_meta %}
+{% block page_meta%}
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
@@ -17,7 +18,7 @@
   {% block og_tags %}{% endblock og_tags %}
 {% endblock page_meta %}
 
-{% block header_base%}
+{% block header_base %}
   <noscript>
     <div class="ds-status-error">
         JavaScript is disabled in your browser. Please enable JavaScript to upload leaflets.
