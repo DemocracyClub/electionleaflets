@@ -70,24 +70,4 @@ The app is deployed to AWS using the [Serverless
 Framework](https://serverless.com/). This manages resources in AWS Lambda and
 AWS API Gateway.
 
-To deploy:
-
-1. Install `serverless` with `npm install -g serverless`
-2. Install plugins with `npm install`
-3. Deploy to `staging` with `sls deploy --stage=staging`
-4. Test at https://staging.electionleaflets.org/
-5. Deploy to production with `sls deploy --stage=production`
-
-We use this now instead of Zappa for a few reasons:
-
-- Zappa seems to now be unsupported.
-- `sls` has become the industry standard and has a good plugin ecosystem.
-- `sls` will manage domains and CloudFront distributions for us.
-
-The main differences are:
-
-- `sls` stores secrets in AWS SSM Parameter Store, instead of a JSON file in S3.
-  Manage these in the [Parameter Store
-  Console](https://eu-west-1.console.aws.amazon.com/systems-manager/parameters).
-- `sls` uses API Gateway to manage CloudFront distributions. This means the
-  distributions will not show in the CloudFront console.
+The app is deployed through CircleCI. The staging deployment is triggered by temporarily adding the current branch to context in the sam-deploy job. The production deployment is triggered by merging to master.
