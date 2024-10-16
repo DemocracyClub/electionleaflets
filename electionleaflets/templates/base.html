@@ -61,7 +61,7 @@
     <ul class="ds-stack">
       {% if messages %}
         {% for message in messages %}
-          <li class="ds-status-message{% if 'error' in message.tags %}error{% else %}success{% endif %}">
+          <li class="ds-status-{% if 'error' in message.tags %}error{% else %}success{% endif %}">
             {{ message }}
           </li>
         {% endfor %}
