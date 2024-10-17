@@ -3,6 +3,11 @@ version: 2.1
 orbs:
   python: circleci/python@2.2.0
 
+executors:
+  pw-jammy-development:
+    docker:
+      - image: mcr.microsoft.com/playwright/python:v1.47.0-noble
+
 jobs:
   install_and_update_dependencies:
     docker:
