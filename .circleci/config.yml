@@ -24,7 +24,7 @@ jobs:
           name: Set up virtual environment
           command: |
             pipenv sync --dev
-      - run: pipenv run playwright install-deps 
+      - run: pipenv run playwright install --with-deps chromium
       - run: make lambda-layers/DependenciesLayer/requirements.txt
       - run: npm install
       - run: npm run build
@@ -69,6 +69,7 @@ jobs:
       #- run: pipenv run python manage.py makemigrations --check
 
       # Run tests
+      - run: pipenv run playwright install --with-deps chromium
       - run:
           name: Run tests
           command: |
