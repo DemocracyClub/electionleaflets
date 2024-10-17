@@ -73,7 +73,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            pipenv run pytest
+            DJANGO_SETTINGS_MODULE=electionleaflets.settings.testing pipenv run pytest 
       - store_artifacts:
           path: test-results
           destination: test-results
