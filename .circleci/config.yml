@@ -1,7 +1,12 @@
 version: 2.1
 
 orbs:
-  python: circleci/python@2.1.1
+  python: circleci/python@2.2.0
+
+executors:
+  pw-jammy-development:
+    docker:
+      - image: mcr.microsoft.com/playwright/python:v1.47.0-noble
 
 jobs:
   install_and_update_dependencies:
@@ -13,8 +18,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v7-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
-            - v7-dependencies-default
+            - v8-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
+            - v8-dependencies-default
       # Ensure pip and pipenv are installed
       - run:
           name: Install pipenv
@@ -24,8 +29,8 @@ jobs:
           name: Set up virtual environment
           command: |
             pipenv sync --dev
+      - run: pipenv run playwright install --with-deps chromium
       - run: make lambda-layers/DependenciesLayer/requirements.txt
-      - run: pipenv run collectstatic
       - run: npm install
       - run: npm run build
       - run: DJANGO_SETTINGS_MODULE=electionleaflets.settings.base_lambda pipenv run collectstatic
@@ -40,10 +45,10 @@ jobs:
           when: on_success
           paths:
             - ~/.local/share/virtualenvs/
-          key: v7-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
+          key: v8-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
   run-tests:
     docker:
-      - image: cimg/python:3.12
+      - image: cimg/python:3.12-browsers
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
@@ -59,7 +64,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v7-dependencies-{{ checksum "Pipfile.lock" }}
+            - v8-dependencies-{{ checksum "Pipfile.lock" }}
       
       - run: pipenv run pipenv verify
 
@@ -69,10 +74,11 @@ jobs:
       #- run: pipenv run python manage.py makemigrations --check
 
       # Run tests
+      - run: pipenv run playwright install --with-deps chromium
       - run:
           name: Run tests
           command: |
-            pipenv run test
+            DJANGO_SETTINGS_MODULE=electionleaflets.settings.testing pipenv run pytest 
       - store_artifacts:
           path: test-results
           destination: test-results
@@ -125,8 +131,8 @@ jobs:
           at: ~/repo/
       - restore_cache:
           keys:
-            - v7-dependencies-{{ checksum "Pipfile.lock" }}
-            - v7-dependencies-default
+            - v8-dependencies-{{ checksum "Pipfile.lock" }}
+            - v8-dependencies-default
       - run:
           name: Install pipenv
           command: |
@@ -235,7 +241,7 @@ workflows:
             - run-tests                            # staging should only deploy if tests pass
             - sam_build                       # deploy needs .aws-sam/build/
           context: [ deployment-staging-election-leaflets ]
-          filters: { branches: { only: [ master ] } }
+          filters: { branches: { only: [ master, hotfix/fix-staging-uploads ] } }
 
       - sam_deploy:
           name: sam_deploy_production
