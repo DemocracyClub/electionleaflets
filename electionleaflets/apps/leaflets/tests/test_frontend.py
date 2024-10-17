@@ -6,11 +6,13 @@ from playwright.sync_api import Page, expect
 
 class TestLeafletUpload():
 	@pytest.fixture(autouse=True)
-	def setup_method(self, page: Page):
+	def setup_method(self, page: Page, live_server):
 		self.page = page
+		self.live_server = live_server
 
 	def navigate_to_home_page(self):
-		self.page.goto("http://127.0.0.1:8000/")
+		
+		self.page.goto(self.live_server.url)
 
 	def get_test_image(self, leaflet_file_path="apps/leaflets/tests/test_images/front_test.jpg"):
 		project_root = Path(settings.PROJECT_ROOT).resolve()
@@ -18,10 +20,10 @@ class TestLeafletUpload():
 
 	def navigate_to_upload_page(self):
 		upload_link = self.page.get_by_role('link', name='Upload a leaflet')
-		upload_link.click()
-		expect(self.page).to_have_url('http://127.0.0.1:8000/leaflets/add/images/')
+		upload_link.click(timeout=60000)
+		expect(self.page).to_have_url(f'{self.live_server.url}/leaflets/add/images/')
 		take_photo_link = self.page.get_by_label('Take a photo of a leaflet')
-		take_photo_link.click()
+		take_photo_link.click(timeout=60000)
 
 	def upload_leaflet(self):
 		self.navigate_to_home_page()
@@ -35,7 +37,7 @@ class TestLeafletUpload():
 		self.navigate_to_home_page()
 		self.navigate_to_upload_page()
 		files = self.get_test_image()
-		self.page.set_input_files(selector='input[type="file"]', files=files)	
+		self.page.set_input_files(selector='input[type="file"]', files=files)    
 		add_another_image = self.page.get_by_text('Add another image')
 		add_another_image.click()
 		self.page.set_input_files(selector='input[type="file"]', files=files)
@@ -76,8 +78,8 @@ class TestLeafletUpload():
 		self.select_time_and_submit()
 		self.select_party_and_submit()
 		id = self.page.url.split('/')[-2]
-		expect(self.page).to_have_url('http://127.0.0.1:8000/leaflets/{}/'.format(id))
-		expect(self.page.locator('h1')).to_have_text('Leaflet #{}'.format(id))
+		expect(self.page).to_have_url(f'{self.live_server.url}/leaflets/{id}/')
+		expect(self.page.locator('h1')).to_have_text(f'Leaflet #{id}')
 		expect(self.page.locator('h2')).to_have_text('Leaflet details')
 
 	def test_upload_leaflet_with_invalid_postcode(self):
@@ -95,8 +97,7 @@ class TestLeafletUpload():
 		self.select_time_and_submit()
 		self.select_party_and_submit()
 		id = self.page.url.split('/')[-2]
-		expect(self.page).to_have_url('http://127.0.0.1:8000/leaflets/{}/'.format(id))
+		expect(self.page).to_have_url(f'{self.live_server.url}/leaflets/{id}/')
 		labour_party_link = self.page.get_by_role('link', name='Green Party')
 		labour_party_link.click()
 		expect(self.page.locator('h1')).to_have_text('Election leaflets from Green Party')
-
