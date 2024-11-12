@@ -24,7 +24,6 @@ else:
         re_path(r"^leaflets/", include("leaflets.urls")),
         re_path(r"^parties/", include("parties.urls")),
         re_path(r"^person/", include("people.urls")),
-        re_path(r"^constituencies/", include("constituencies.urls")),
         re_path(r"^api/", include("api.urls")),
         # Feeds
         re_path(
@@ -77,7 +76,7 @@ class HomePageRedirectView(RedirectView):
 
 
 redirect_urls = (
-re_path(r"^analysis", HomePageRedirectView.as_view(), name="analysis"),
+    re_path(r"^analysis", HomePageRedirectView.as_view(), name="analysis"),
     re_path(
         r"^start/$", HomePageRedirectView.as_view(), name="analysis_start"
     ),
@@ -110,6 +109,16 @@ re_path(r"^analysis", HomePageRedirectView.as_view(), name="analysis"),
         r"^leaflets_without_candidates/$",
         HomePageRedirectView.as_view(),
         name="leaflets_without_candidates",
+    ),
+    re_path(
+        r"^constituencies/$",
+        HomePageRedirectView.as_view(),
+        name="constituencies",
+    ),
+    re_path(
+        r"^constituencies/(?P<pk>[^/]+)(?:/(?P<ignored_slug>.*))?$",
+        HomePageRedirectView.as_view(),
+        name="constituency-view",
     ),
 )
 
