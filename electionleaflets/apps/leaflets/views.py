@@ -14,7 +14,6 @@ from django.views.generic import DetailView, ListView, UpdateView, RedirectView
 from django.views.generic.detail import SingleObjectMixin
 from braces.views import StaffuserRequiredMixin, LoginRequiredMixin
 
-from analysis.forms import QuestionSetForm
 from core.helpers import CacheControlMixin
 from .models import Leaflet, LeafletImage
 from .forms import (
