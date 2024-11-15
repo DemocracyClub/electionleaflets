@@ -2,6 +2,7 @@
 import datetime
 import json
 from datetime import timedelta
+from urllib.parse import urljoin
 
 import requests
 from django import forms
@@ -132,7 +133,7 @@ class YNRBallotDataMixin:
 
         :type instance: Leaflet
         """
-        url = f"https://candidates.democracyclub.org.uk/api/next/ballots/"
+        url = urljoin(settings.YNR_BASE_URL, "/api/next/ballots/")
         auth_token = getattr(settings, 'YNR_API_KEY')
         params = {"for_postcode": postcode, "auth_token": auth_token}
         start, end = self.get_date_range()

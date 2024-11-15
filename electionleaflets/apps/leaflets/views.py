@@ -1,6 +1,7 @@
 import json
 import datetime
 import random
+from urllib.parse import urljoin
 
 from django.db import transaction
 from django.shortcuts import redirect
@@ -294,8 +295,9 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                             remote_id=person_data["person"]["id"],
                             defaults={
                                 "name": person_data["person"]["name"],
-                                "source_url": "https://candidates.democracyclub.org.uk/person/{}".format(
-                                    person_data["person"]["id"]
+                                "source_url": urljoin(
+                                    settings.YNR_BASE_URL,
+                                    f"/person/{person_data['person']['id']}"
                                 ),
                                 "source_name": "YNR2017",
                             },
@@ -337,8 +339,9 @@ class LeafletUpdatePublisherView(LoginRequiredMixin, UpdateView):
                 remote_id=person_data["person"]["id"],
                 defaults={
                     "name": person_data["person"]["name"],
-                    "source_url": "https://candidates.democracyclub.org.uk/person/{}".format(
-                        person_data["person"]["id"]
+                    "source_url": urljoin(
+                        settings.YNR_BASE_URL,
+                        f"/person/{person_data['person']['id']}"
                     ),
                     "source_name": "YNR2017",
                 },

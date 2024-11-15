@@ -244,6 +244,8 @@ REPORT_EMAIL_SUBJECT = "Leaflet Report"
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
 
 DEVS_DC_AUTH_TOKEN = environ.get("DEVS_DC_AUTH_TOKEN", None)
+YNR_API_KEY = None
+YNR_BASE_URL = "https://candidates.democracyclub.org.uk"
 
 if not environ.get("DEPLOYMENT", None):
     # .local.py overrides all the common settings.
