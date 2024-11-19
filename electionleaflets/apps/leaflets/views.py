@@ -96,38 +96,6 @@ class LeafletView(CacheControlMixin, DetailView):
     template_name = "leaflets/leaflet.html"
     model = Leaflet
 
-    def get_context_data(self, **kwargs):
-        context = super(LeafletView, self).get_context_data(**kwargs)
-        context["analysis_form"] = QuestionSetForm(
-            self.object, self.request.user
-        )
-
-        return context
-
-    def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated():
-            return HttpResponseForbidden()
-
-        self.object = self.get_object()
-        form = QuestionSetForm(self.object, self.request.user, request.POST,)
-
-        if form.is_valid():
-            form.save()
-            if "save_and_next" in request.POST:
-                start_date = datetime.date(2015, 1, 1)
-                next_leaflet = (
-                    Leaflet.objects.filter(leafletproperties=None)
-                    .filter(date_uploaded__gt=start_date)
-                    .order_by("?")
-                )
-                if next_leaflet:
-                    url = next_leaflet[0].get_absolute_url()
-                    return HttpResponseRedirect(url)
-            return HttpResponseRedirect(self.object.get_absolute_url())
-        else:
-            return self.render_to_response(self.get_context_data(form=form))
-
-
 def should_show_party_form(wizard):
     party_form = wizard.get_form("party")
     postcode_dict = wizard.get_cleaned_data_for_step("postcode")

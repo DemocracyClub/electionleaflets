@@ -2,11 +2,11 @@
 {% load thumbnail %}
 
 {% block content %}
-      <h1>Election leaflets from {{ object.party_name }}</h1>
+      <h1>Election leaflets from {{ party_name }}</h1>
       {% if last_leaflet_days >= 45 %}
         <div class="panel">
           <p>
-          We haven't seen any leaflets from {{object.party_name}} for {{last_leaflet_days}} days!
+          We haven't seen any leaflets from {{party_name}} for {{last_leaflet_days}} days!
           Please help by tracking some down and photographing them.</p>
         </div>
       {% endif %}
@@ -30,7 +30,7 @@
           </nav>
         {% else %}
           <p>
-            We don't have <em>any</em> leaflets for {{ object.party_name }}. That won't do.
+            We don't have <em>any</em> leaflets for {{ party_name }}. That won't do.
             They must have some right?
           </p>
           <p>
@@ -39,7 +39,7 @@
           </p>
           <ol>
             <li>
-              <a href="https://twitter.com/intent/tweet?url={{ request.get_host }}/{% url "party-view"  party.pk party.slug %}&text=Can anyone help find an election leaflet by {{object.party_name}}&hashtags=electionleaflet&via=electionspotter">
+              <a href="https://twitter.com/intent/tweet?url={{ request.get_host }}/{% url "party-view"  party.pk party.slug %}&text=Can anyone help find an election leaflet by {{party_name}}&hashtags=electionleaflet&via=electionspotter">
                 Put a call out on Twitter or tweet the party directly
               </a>
             </li>
@@ -54,5 +54,3 @@
           </ol>
         {% endif %}
 {% endblock %}
-
-
