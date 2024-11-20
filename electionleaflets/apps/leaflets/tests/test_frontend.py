@@ -6,10 +6,30 @@ from playwright.sync_api import Page, expect
 from leaflets.tests.data import LOCAL_BALLOT_WITH_CANDIDATES
 
 
+def console_handler(message):
+    """
+    Called when the console receives a message, and raises the message unless
+    it's a content warning. We don't mind about 3rd party package warnings
+    as they're typically an artifact of the test server rather than an actual
+    error.
+
+    We also ignore any 3rd party assets that can't be loaded because the
+    test environment isn't connected to the internet.
+
+    """
+    if "Third-party cookie will be blocked" in message.text:
+        return
+    if "net::ERR_INTERNET_DISCONNECTED" in message.text:
+        return
+    assert not message.text, f"Found browser console output: {message.text}: {message.location}"
+
+
 class TestLeafletUpload():
     @pytest.fixture(autouse=True)
     def setup_method(self, page: Page, live_server, mock_get_ballot_data_from_ynr):
         self.page = page
+        # Raise if the console contains errors
+        self.page.on("console", console_handler)
         self.live_server = live_server
         self.mock_get_ballot_data_from_ynr = mock_get_ballot_data_from_ynr
 
