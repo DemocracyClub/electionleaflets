@@ -90,7 +90,7 @@ pytest-cov = "*"
 python_version = "3.12"
 
 [scripts]
-collectstatic = "python manage.py collectstatic -c --noinput"
+collectstatic = "python manage.py collectstatic --noinput"
 createcachetable = "python manage.py createcachetable"
 coveralls = "coveralls"
 migratedb = "python manage.py migrate --noinput"

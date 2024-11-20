@@ -5,7 +5,6 @@ import os
 # PATH vars
 from os.path import join, abspath, dirname
 
-
 def here(x):
     return join(abspath(dirname(__file__)), x)
 
@@ -105,7 +104,6 @@ STATICFILES_FINDERS = (
     "pipeline.finders.ManifestFinder",
 )
 
-WHITENOISE_AUTOREFRESH = True
 WHITENOISE_STATIC_PREFIX = "/static/"
 
 SITE_ID = 1
@@ -123,9 +121,9 @@ ADMIN_MEDIA_PREFIX = "/admin_media/"
 SECRET_KEY = "elyfryi8on!dmw&8b3j-g0yve4u&%4_6%(tf3*)@#&mq*$yzhf^6"
 
 MIDDLEWARE = (
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "s3file.middleware.S3FileMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -247,7 +245,7 @@ DEVS_DC_AUTH_TOKEN = environ.get("DEVS_DC_AUTH_TOKEN", None)
 YNR_API_KEY = None
 YNR_BASE_URL = "https://candidates.democracyclub.org.uk"
 
-if not environ.get("DEPLOYMENT", None):
+if not "testing" in environ.get("DJANGO_SETTINGS_MODULE", ""):
     # .local.py overrides all the common settings.
     try:
         from .local import *  # noqa: F401,F403

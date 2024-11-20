@@ -26,17 +26,15 @@ jobs:
             pipenv sync --dev
       - run: pipenv run playwright install --with-deps chromium
       - run: make lambda-layers/DependenciesLayer/requirements.txt
-      - run: pipenv run collectstatic
       - run: npm install
       - run: npm run build
-      - run: DJANGO_SETTINGS_MODULE=electionleaflets.settings.base_lambda pipenv run collectstatic
+      - run: pipenv run collectstatic --settings electionleaflets.settings.testing
       - persist_to_workspace:
           root: ~/repo/
           paths:
-            - .aws-sam/build/
-            - thumbs/.aws-sam/build/
             - lambda-layers/DependenciesLayer/requirements.txt
             - electionleaflets/static/
+            - electionleaflets/assets/
       - save_cache:
           when: on_success
           paths:
@@ -56,12 +54,12 @@ jobs:
 
     steps:
       - checkout
-
+      - attach_workspace:
+            at: ~/repo/
       # Download and cache dependencies
       - restore_cache:
           keys:
             - v8-dependencies-{{ checksum "Pipfile.lock" }}
-      
       - run: pipenv run pipenv verify
 
       - run: pipenv run python manage.py check
