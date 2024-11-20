@@ -2,7 +2,7 @@ import os
 from .base import *  # noqa: F403
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
-DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+DEFAULT_FILE_STORAGE = "electionleaflets.storages.TempUploadLocalMediaStorage"
 STATICFILES_STORAGE = "electionleaflets.storages.StaticStorage"
 
 MEDIA_ROOT = root("test_media",)  # noqa: F405

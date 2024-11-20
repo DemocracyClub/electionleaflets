@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from leaflets.models import Leaflet, LeafletImage
 from .helpers import get_test_image
@@ -44,3 +46,41 @@ def test_raw_image_field():
     with open(image_file, "rb") as img_file:
         li.image.save("front_test.jpg", img_file)
     assert "front_test" in li.raw_image.name
+
+
+def test_save_leaflet_image_from_temp_file(db):
+
+    leaflet_image = LeafletImage()
+    with pytest.raises(ValueError) as e_info:
+       leaflet_image.set_image_from_temp_file("/not/a/path")
+    assert str(e_info.value) == ("Parent Leaflet instance needs to be saved "
+                                 "before a LeafletImage can be created")
+
+
+def test_image_moved_from_temp_upload(db):
+    leaflet = Leaflet()
+    leaflet.save()
+    leaflet.refresh_from_db()
+    leaflet_image = LeafletImage(leaflet=leaflet)
+    leaflet_image.set_image_from_temp_file("test_images/test_leaflet.jpeg")
+    leaflet_image.save()
+    leaflet_image.refresh_from_db()
+
+    path = Path(leaflet_image.image.storage.base_location) / f"leaflets/{leaflet.pk}/test-leaflet.jpeg"
+    assert str(path) == leaflet_image.image.path
+
+def test_image_moved_from_temp_upload_s3_backend(db, settings, s3_bucket, s3_client):
+    settings.DEFAULT_FILE_STORAGE = "electionleaflets.storages.TempUploadS3MediaStorage"
+    leaflet = Leaflet()
+    leaflet.save()
+    leaflet.refresh_from_db()
+    leaflet_image = LeafletImage(leaflet=leaflet)
+    s3_client.put_object(Key="test_images/test_leaflet.jpeg", Body="", Bucket=settings.AWS_STORAGE_BUCKET_NAME)
+    leaflet_image.set_image_from_temp_file("test_images/test_leaflet.jpeg")
+    leaflet_image.save()
+    leaflet_image.refresh_from_db()
+
+    key = f"leaflets/{leaflet.pk}/test-leaflet.jpeg"
+
+    assert s3_client.head_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=key)
+    assert str(key) == leaflet_image.image.file.name

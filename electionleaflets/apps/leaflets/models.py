@@ -1,7 +1,13 @@
+import os.path
 import re
 from io import BytesIO
+from pathlib import Path
 
 import piexif
+from django.core.files import File
+from django.core.files.storage import default_storage
+from slugify import slugify
+
 from constituencies.models import Constituency
 from core.helpers import geocode
 from django.core.files.base import ContentFile
@@ -9,6 +15,8 @@ from django.db import models
 from django.db.models import JSONField
 from django.forms.models import model_to_dict
 from django.urls import reverse
+
+from electionleaflets.storages import TempUploadBaseMixin
 from elections.models import Election
 from people.models import Person
 from PIL import Image
@@ -153,7 +161,7 @@ class LeafletImage(models.Model):
     leaflet = models.ForeignKey(
         Leaflet, related_name="images", on_delete=models.CASCADE
     )
-    image = ImageField(upload_to="leaflets", max_length=255)
+    image = ImageField(max_length=255)
     raw_image = ImageField(upload_to="raw_leaflets", blank=True, max_length=255)
     legacy_image_key = models.CharField(max_length=255, blank=True)
     image_type = models.CharField(
@@ -276,3 +284,38 @@ class LeafletImage(models.Model):
             file_content = ContentFile(new_file.getvalue())
             image_field.save(file_name, file_content)
             delete(self.image, delete_file=False)
+
+    def set_image_from_temp_file(self, temp_file):
+        """
+        As part of the leaflet upload process we save images to
+        a temporary location when accepting files in the wizard.
+
+        When we make a Leaflet and LeafletImages we need to move the
+        files from the temp location to the live location.
+
+        In production this is done using two S3 buckets. We do this
+        so that we can set up triggers on the 'live' bucket for making
+        thumbnails etc, and have a scratch bucket for random uploads.
+
+        In dev we do the same sort of thing except both files are local.
+
+        The logic for this is defined in the storage backends.
+
+        For this to work, we need a storage backend that uses an implementation
+        of `TempUploadBaseMixin`.
+
+        This is a helper function for driving those backends.
+
+        """
+
+        if not self.leaflet_id:
+            raise ValueError("Parent Leaflet instance needs to be saved "
+                             "before a LeafletImage can be created")
+
+        if not isinstance(default_storage, TempUploadBaseMixin):
+            raise ValueError("Storage class needs to use `TempUploadBaseMixin`")
+        file_name, ext = os.path.basename(temp_file).rsplit(".")
+        target_file_path = Path(f"leaflets/{self.leaflet.pk}/{slugify(file_name)}.{ext}")
+
+        default_storage.save_from_temp_upload(temp_file, target_file_path)
+        self.image.name = str(target_file_path)

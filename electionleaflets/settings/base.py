@@ -46,7 +46,7 @@ STATIC_ROOT = root("static")
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (root("assets"),)
 
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+DEFAULT_FILE_STORAGE = "electionleaflets.storages.TempUploadLocalMediaStorage"
 AWS_S3_FILE_OVERWRITE = False
 STATICFILES_MANIFEST_NAME = environ.get(
     "STATICFILES_MANIFEST_NAME", "staticfiles.json"

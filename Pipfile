@@ -23,7 +23,6 @@ enum34 = "==1.1.6"
 fixtures = "==3.0.0"
 flake8 = "==3.8.3"
 funcsigs = "==1.0.2"
-futures = "==3.1.1"
 dj-pagination = "==2.4.0"
 linecache2 = "==1.0.0"
 lxml = "*"
@@ -85,6 +84,7 @@ pytest-django = "*"
 pytest = "*"
 pytest-playwright = "*"
 pytest-cov = "*"
+moto = "*"
 
 [requires]
 python_version = "3.12"
@@ -97,5 +97,3 @@ migratedb = "python manage.py migrate --noinput"
 makemigrations = "python manage.py makemigrations"
 thumbs_sam_build = "bash -c 'cd thumbs && sam build'"
 test = "bash -c 'DJANGO_SETTINGS_MODULE=electionleaflets.settings.testing python manage.py test'"
-
-[dev-packages]

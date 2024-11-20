@@ -3,6 +3,7 @@ import datetime
 import random
 from urllib.parse import urljoin
 
+from django.core.files.storage import default_storage
 from django.db import transaction
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect, HttpResponseForbidden
@@ -179,14 +180,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         return super(LeafletUploadWizzard, self).get(*args, **kwargs)
 
     
-    def copy_file(self, bucket, file_path, new_file_name):
-        copy_source = {
-            "Bucket": bucket.name,
-            "Key": file_path,
-        }
-        moved_file = bucket.Object(new_file_name)
-        moved_file.copy(copy_source)
-        return moved_file
+
                     
     @transaction.atomic
     def done(self, form_list, **kwargs):
@@ -213,24 +207,8 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     return redirect(reverse("upload_leaflet"))
 
                 for file_path in uploaded_images:
-                    file_name = file_path.split("/")[-1]
-                    file_name = file_name.replace(" ", "-")
-                    
-                    storage_backend = getattr(settings, 'DEFAULT_FILE_STORAGE')
-
-                    new_file_name = f"leaflets/{leaflet.pk}/{file_name}"
-
-                    if storage_backend == "storages.backends.s3boto3.S3Boto3Storage":
-                        bucket = self.storage.file_storage.bucket
-                        moved_file = self.copy_file(bucket, file_path, new_file_name)
-                        new_file_name_raw = f"raw_{new_file_name}"
-                        moved_file_raw = self.copy_file(bucket, file_path, new_file_name_raw) 
-                    else:
-                        new_file_name_raw = f"raw_{new_file_name}"
-                        
                     image = LeafletImage(leaflet=leaflet)
-                    image.image.name = new_file_name
-                    image.raw_image.name = new_file_name_raw
+                    image.set_image_from_temp_file(file_path)
                     image.save()
 
             if form_prefix == "postcode":
