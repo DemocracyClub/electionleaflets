@@ -48,7 +48,7 @@ jobs:
           PGHOST: 127.0.0.1
       - image: cimg/postgres:16.3
         environment:
-          POSTGRES_USER: electionleaflets
+          POSTGRES_USER: circleci
           POSTGRES_DB: electionleaflets
     working_directory: ~/repo
 
