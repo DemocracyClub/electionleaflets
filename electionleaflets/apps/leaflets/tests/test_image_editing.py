@@ -4,7 +4,7 @@ import pytest
 
 from electionleaflets import settings
 from leaflets.models import Leaflet, LeafletImage
-from .helpers import create_dummy_leaflets, get_test_image
+from .helpers import create_dummy_leaflets
 
 
 @pytest.fixture
@@ -15,10 +15,10 @@ def leaflet_image():
 @pytest.mark.django_db
 class TestImageEditing:
     def test_dimensions(self, leaflet_image):
-        assert leaflet_image.dimensions == (3024, 4032)
+        assert leaflet_image.dimensions == (419, 300)
         
     def test_crop(self, leaflet_image):
-        assert leaflet_image.dimensions == (3024, 4032)
+        assert leaflet_image.dimensions == (419, 300)
         x = 12
         y = 7
         x2 = 100

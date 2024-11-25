@@ -1,3 +1,4 @@
+from pathlib import Path
 from unittest.mock import patch
 
 import boto3
@@ -5,6 +6,27 @@ import pytest
 from django.core.files.storage import default_storage
 
 from moto import mock_aws
+
+TEST_IMAGE_LOCATION = Path(__file__).parent / "test_images/front_test.jpg"
+
+
+
+@pytest.fixture()
+def uploaded_temp_file():
+    """
+    The application uploads images to a temp location before
+    moving them to the final location and saving the LeafletImage model.
+
+    This fixture gives us a file in a temp media location, as if it had just
+    been uploaded.
+
+    :return:
+    """
+
+    path = "test-leaflet.jpeg"
+    with default_storage.open(path, 'wb') as f:
+        f.write(TEST_IMAGE_LOCATION.read_bytes())
+    return path
 
 @pytest.fixture
 def mock_get_ballot_data_from_ynr():

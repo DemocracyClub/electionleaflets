@@ -2,8 +2,10 @@ from pathlib import Path
 
 import pytest
 from leaflets.models import Leaflet, LeafletImage
-from .helpers import get_test_image
-from uk_political_parties.models import Party 
+from uk_political_parties.models import Party
+
+from leaflets.tests.conftest import TEST_IMAGE_LOCATION
+
 
 @pytest.fixture
 def leaflet():
@@ -40,10 +42,9 @@ def test_leaflet_detail(client, party):
 def test_raw_image_field():
     l = Leaflet()
     l.save()
-    image_file = get_test_image()
-    li = LeafletImage(image=image_file, leaflet=l)
+    li = LeafletImage(leaflet=l)
     assert li.raw_image.name == ""
-    with open(image_file, "rb") as img_file:
+    with TEST_IMAGE_LOCATION.open("rb") as img_file:
         li.image.save("front_test.jpg", img_file)
     assert "front_test" in li.raw_image.name
 
@@ -57,12 +58,12 @@ def test_save_leaflet_image_from_temp_file(db):
                                  "before a LeafletImage can be created")
 
 
-def test_image_moved_from_temp_upload(db):
+def test_image_moved_from_temp_upload(db, uploaded_temp_file):
     leaflet = Leaflet()
     leaflet.save()
     leaflet.refresh_from_db()
     leaflet_image = LeafletImage(leaflet=leaflet)
-    leaflet_image.set_image_from_temp_file("test_images/test_leaflet.jpeg")
+    leaflet_image.set_image_from_temp_file(uploaded_temp_file)
     leaflet_image.save()
     leaflet_image.refresh_from_db()
 
