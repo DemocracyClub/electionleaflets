@@ -11,3 +11,4 @@ build-backend = "setuptools.build_meta"
 DJANGO_SETTINGS_MODULE = "electionleaflets.settings.testing"
 python_files = ["test_*.py", "*_test.py"]
 addopts = "--reuse-db --tb=short -p no:warnings"
+django_debug_mode = true
