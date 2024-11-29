@@ -307,13 +307,17 @@ class LeafletImage(models.Model):
         """
 
         if not self.leaflet_id:
-            raise ValueError("Parent Leaflet instance needs to be saved "
-                             "before a LeafletImage can be created")
+            raise ValueError(
+                "Parent Leaflet instance needs to be saved "
+                "before a LeafletImage can be created"
+            )
 
         if not isinstance(default_storage, TempUploadBaseMixin):
             raise ValueError("Storage class needs to use `TempUploadBaseMixin`")
         file_name, ext = os.path.basename(temp_file).rsplit(".")
-        target_file_path = Path(f"leaflets/{self.leaflet.pk}/{slugify(file_name)}.{ext}")
+        target_file_path = Path(
+            f"leaflets/{self.leaflet.pk}/{slugify(file_name)}.{ext}"
+        )
 
         default_storage.save_from_temp_upload(temp_file, target_file_path)
         self.image.name = str(target_file_path)

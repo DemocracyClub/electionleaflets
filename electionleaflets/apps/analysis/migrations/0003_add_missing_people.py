@@ -17,7 +17,6 @@ def add_missing_people(apps, schema_editor):
                     remote_id=leaflet.publisher_person_id
                 )
             except Person.DoesNotExist:
-
                 url = "https://candidates.democracyclub.org.uk/api/next/people/{}/".format(
                     leaflet.publisher_person_id
                 )
@@ -31,7 +30,6 @@ def add_missing_people(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("analysis", "0002_auto_20160403_1456"),
         ("people", "0001_initial"),

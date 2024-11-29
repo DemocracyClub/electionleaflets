@@ -26,6 +26,7 @@ class LatestLeafletsFeed(Feed):
             d = "{0} – {1}".format(d, item.images.all()[0].image.url)
         return d
 
+
 class ConstituencyFeed(Feed):
     def get_object(self, request, cons_slug):
         obj = get_object_or_404(Constituency, slug=cons_slug)

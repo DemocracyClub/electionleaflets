@@ -96,6 +96,7 @@ class LeafletView(CacheControlMixin, DetailView):
     template_name = "leaflets/leaflet.html"
     model = Leaflet
 
+
 def should_show_party_form(wizard):
     party_form = wizard.get_form("party")
     postcode_dict = wizard.get_cleaned_data_for_step("postcode")
@@ -122,6 +123,7 @@ def should_show_date_form(wizard):
     if not cleaned_data:
         return False
     return cleaned_data.get("delivered") == "before"
+
 
 class LeafletUploadWizzard(NamedUrlSessionWizardView):
     extra_added = False
@@ -152,7 +154,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             except (KeyError, TypeError):
                 date = datetime.datetime.now()
             ret["for_date"] = date
-            
+
             party_data = self.storage.get_step_data("party")
             if not party_data:
                 return ret
@@ -175,9 +177,6 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             return HttpResponseRedirect("/")
         return super(LeafletUploadWizzard, self).get(*args, **kwargs)
 
-    
-
-                    
     @transaction.atomic
     def done(self, form_list, **kwargs):
         # Create a new leaflet
@@ -218,37 +217,35 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     leaflet.ynr_party_id = party_data["party_id"]
                     leaflet.ynr_party_name = party_data["party_name"]
 
-            if (form_prefix == "people" and
-                    "people" in form.cleaned_data
-                    and isinstance(form.cleaned_data["people"], list)
-                    and form.cleaned_data["people"] != ""
-                ):
-                    leaflet_people = {}
-                    for person in form.cleaned_data["people"]:
+            if (
+                form_prefix == "people"
+                and "people" in form.cleaned_data
+                and isinstance(form.cleaned_data["people"], list)
+                and form.cleaned_data["people"] != ""
+            ):
+                leaflet_people = {}
+                for person in form.cleaned_data["people"]:
+                    person_data = json.loads(signer.unsign(person))
+                    if not person_data:
+                        continue
+                    leaflet_people[person_data["person"]["id"]] = person_data
+                    person, _ = Person.objects.get_or_create(
+                        remote_id=person_data["person"]["id"],
+                        defaults={
+                            "name": person_data["person"]["name"],
+                            "source_url": urljoin(
+                                settings.YNR_BASE_URL,
+                                f"/person/{person_data['person']['id']}",
+                            ),
+                            "source_name": "YNR2017",
+                        },
+                    )
 
-                        person_data = json.loads(signer.unsign(person))
-                        if not person_data:
-                            continue
-                        leaflet_people[
-                            person_data["person"]["id"]
-                        ] = person_data
-                        person, _ = Person.objects.get_or_create(
-                            remote_id=person_data["person"]["id"],
-                            defaults={
-                                "name": person_data["person"]["name"],
-                                "source_url": urljoin(
-                                    settings.YNR_BASE_URL,
-                                    f"/person/{person_data['person']['id']}"
-                                ),
-                                "source_name": "YNR2017",
-                            },
-                        )
-
-                    leaflet.people = leaflet_people
-                    leaflet.person_ids = list(leaflet_people.keys())
-                    leaflet.ballots = [
-                        c["ballot"] for ynr_id, c in leaflet_people.items()
-                    ]
+                leaflet.people = leaflet_people
+                leaflet.person_ids = list(leaflet_people.keys())
+                leaflet.ballots = [
+                    c["ballot"] for ynr_id, c in leaflet_people.items()
+                ]
 
         leaflet.save()
         messages.success(
@@ -271,7 +268,6 @@ class LeafletUpdatePublisherView(LoginRequiredMixin, UpdateView):
         signer = Signer()
         leaflet_people = {}
         for person in form.cleaned_data["people"]:
-
             person_data = json.loads(signer.unsign(person))
             if not person_data:
                 continue
@@ -282,7 +278,7 @@ class LeafletUpdatePublisherView(LoginRequiredMixin, UpdateView):
                     "name": person_data["person"]["name"],
                     "source_url": urljoin(
                         settings.YNR_BASE_URL,
-                        f"/person/{person_data['person']['id']}"
+                        f"/person/{person_data['person']['id']}",
                     ),
                     "source_name": "YNR2017",
                 },
@@ -305,7 +301,6 @@ class LeafletUpdatePublisherView(LoginRequiredMixin, UpdateView):
 class LeafletModeration(ListView):
     queryset = Leaflet.objects.filter(status="draft")[:10]
     template_name = "leaflets/moderation_queue.html"
-
 
     def post(self, request):
         leaflet = Leaflet.objects.get(pk=self.request.POST.get("leaflet"))

@@ -17,10 +17,7 @@ class StandardResultsSetPagination(LimitOffsetPagination):
 class LeafletFilter(filters.FilterSet):
     class Meta:
         model = Leaflet
-        fields = {
-            "date_uploaded": ["gt", "exact"],
-            "modified": ["gt", "exact"]
-        }
+        fields = {"date_uploaded": ["gt", "exact"], "modified": ["gt", "exact"]}
 
     def ballot_filter(self, queryset, name, value):
         return queryset.filter(ballots__contains=[{"ballot_paper_id": value}])
@@ -43,7 +40,9 @@ class LeafletFilter(filters.FilterSet):
 
 
 class LeafletViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Leaflet.objects.all().filter(status="live").prefetch_related("images")
+    queryset = (
+        Leaflet.objects.all().filter(status="live").prefetch_related("images")
+    )
     serializer_class = LeafletSerializer
     pagination_class = StandardResultsSetPagination
     filter_backends = (filters.DjangoFilterBackend,)

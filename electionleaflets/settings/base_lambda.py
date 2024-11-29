@@ -4,7 +4,7 @@ from django.urls import set_urlconf
 
 from .base import *  # noqa: F401,F403
 
-ALLOWED_HOSTS = [os.environ.get('APP_DOMAIN')]
+ALLOWED_HOSTS = [os.environ.get("APP_DOMAIN")]
 
 DATABASES = {
     "default": {
@@ -33,7 +33,9 @@ STATIC_URL = WHITENOISE_STATIC_PREFIX
 STATICFILES_STORAGE = "electionleaflets.storages.StaticStorage"
 STATICFILES_DIRS = (root("assets"),)  # noqa: F405
 STATIC_ROOT = root("static")  # noqa: F405
-MEDIA_ROOT = root("media",)  # noqa: F405
+MEDIA_ROOT = root(  # noqa: F405
+    "media",
+)
 MEDIA_URL = "/media/"
 set_urlconf(ROOT_URLCONF)  # noqa: F405
 

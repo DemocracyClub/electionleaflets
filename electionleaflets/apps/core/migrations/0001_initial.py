@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = []
@@ -61,7 +60,9 @@ class Migration(migrations.Migration):
                 ("postcode", models.CharField(max_length=60)),
                 ("delivery_date", models.DateTimeField()),
             ],
-            options={"db_table": "email_que",},
+            options={
+                "db_table": "email_que",
+            },
         ),
         migrations.CreateModel(
             name="ImageQue",
@@ -76,7 +77,9 @@ class Migration(migrations.Migration):
                 ("image_key", models.CharField(blank=True, max_length=765)),
                 ("uploaded_date", models.DateTimeField()),
             ],
-            options={"db_table": "image_que",},
+            options={
+                "db_table": "image_que",
+            },
         ),
         migrations.CreateModel(
             name="ImageQueSeq",
@@ -86,6 +89,8 @@ class Migration(migrations.Migration):
                     models.IntegerField(primary_key=True, serialize=False),
                 ),
             ],
-            options={"db_table": "image_que_seq",},
+            options={
+                "db_table": "image_que_seq",
+            },
         ),
     ]

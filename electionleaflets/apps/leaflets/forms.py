@@ -32,7 +32,9 @@ class ImagesForm(forms.Form):
         else:
             self.fields["image"] = S3UploadedImageField(
                 widget=forms.ClearableFileInput(
-                    attrs={"accept": "image/*",}
+                    attrs={
+                        "accept": "image/*",
+                    }
                 ),
                 error_messages={
                     "required": "Please add a photo or skip this step"
@@ -106,7 +108,8 @@ class PeopleRadioWidget(forms.RadioSelect):
             label = "Not Listed"
         else:
             label = "{0} ({1})".format(
-                label["person"]["name"], label["party"]["party_name"],
+                label["person"]["name"],
+                label["party"]["party_name"],
             )
         return super(PeopleRadioWidget, self).create_option(
             name, value, label, selected, index, subindex, attrs
@@ -131,7 +134,7 @@ class YNRBallotDataMixin:
         :type instance: Leaflet
         """
         url = urljoin(settings.YNR_BASE_URL, "/api/next/ballots/")
-        auth_token = getattr(settings, 'YNR_API_KEY')
+        auth_token = getattr(settings, "YNR_API_KEY")
         params = {"for_postcode": postcode, "auth_token": auth_token}
         start, end = self.get_date_range()
         params["election_date_range_after"] = start
@@ -200,9 +203,10 @@ class YNRBallotDataMixin:
 
 
 class PartyForm(YNRBallotDataMixin, forms.Form):
-
     party = forms.ChoiceField(
-        choices=[], widget=forms.RadioSelect, required=False,
+        choices=[],
+        widget=forms.RadioSelect,
+        required=False,
     )
 
     def __init__(self, *args, **kwargs):

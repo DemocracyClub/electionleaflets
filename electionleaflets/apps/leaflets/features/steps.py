@@ -20,7 +20,10 @@ def add_constituency(step, name):
     Constituency.objects.get_or_create(
         slug="camberwell_and_peckham",
         pk="65913",
-        defaults={"name": "Camberwell and Peckham", "country_name": "England",},
+        defaults={
+            "name": "Camberwell and Peckham",
+            "country_name": "England",
+        },
     )
 
 
@@ -88,8 +91,11 @@ def fill_journey(step):
         form["leaflet_upload_wizzard-current_step"] = form_name
         if "action" in list(form.keys()) and form["action"]:
             form[form["action"]] = True
-        if "people-people" in list(form.keys()) and form["people-people"] == "None":
-                form["people-people"] = ""
+        if (
+            "people-people" in list(form.keys())
+            and form["people-people"] == "None"
+        ):
+            form["people-people"] = ""
 
         world.response = world.browser.post(
             reverse("upload_step", kwargs={"step": form_name}),

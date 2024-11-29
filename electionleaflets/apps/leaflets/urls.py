@@ -2,18 +2,18 @@ from django.contrib.auth.decorators import login_required
 from django.urls import re_path
 from django.views.decorators.cache import never_cache
 from leaflets.views import (
-                            AllImageView,
-                            ImageCropView,
-                            ImageRotateView,
-                            ImageView,
-                            LatestLeaflets,
-                            LeafletModeration,
-                            LeafletUpdatePublisherView,
-                            LeafletUploadWizzard,
-                            LeafletView,
-                            LegacyImageView,
-                            should_show_date_form,
-                            should_show_person_form,
+    AllImageView,
+    ImageCropView,
+    ImageRotateView,
+    ImageView,
+    LatestLeaflets,
+    LeafletModeration,
+    LeafletUpdatePublisherView,
+    LeafletUploadWizzard,
+    LeafletView,
+    LegacyImageView,
+    should_show_date_form,
+    should_show_person_form,
 )
 
 from .forms import DateForm, ImagesForm, PartyForm, PeopleForm, PostcodeForm
@@ -49,7 +49,9 @@ urlpatterns = [
         LegacyImageView.as_view(),
         name="full_image_legacy",
     ),
-    re_path(r"^(?P<pk>\d+)/images/$", AllImageView.as_view(), name="all_images"),
+    re_path(
+        r"^(?P<pk>\d+)/images/$", AllImageView.as_view(), name="all_images"
+    ),
     re_path(r"^crop/(?P<pk>.+)/$", ImageCropView.as_view(), name="crop"),
     re_path(r"^rotate/(?P<pk>.+)/$", ImageRotateView.as_view(), name="rotate"),
     re_path(r"^(?P<pk>\d+)/$", LeafletView.as_view(), name="leaflet"),
@@ -59,5 +61,9 @@ urlpatterns = [
         name="leaflet_update_publisher_details",
     ),
     re_path(r"^$", LatestLeaflets.as_view(), name="leaflets"),
-    re_path(r"^moderate$", login_required(LeafletModeration.as_view()), name="moderate"),
+    re_path(
+        r"^moderate$",
+        login_required(LeafletModeration.as_view()),
+        name="moderate",
+    ),
 ]

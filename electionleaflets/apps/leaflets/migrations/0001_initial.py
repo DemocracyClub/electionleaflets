@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("elections", "0001_initial"),
         ("people", "0001_initial"),
@@ -109,7 +108,9 @@ class Migration(migrations.Migration):
                     models.CharField(blank=True, max_length=255, null=True),
                 ),
             ],
-            options={"ordering": ("-date_uploaded",),},
+            options={
+                "ordering": ("-date_uploaded",),
+            },
         ),
         migrations.CreateModel(
             name="LeafletImage",
@@ -179,6 +180,8 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"ordering": ["image_type"],},
+            options={
+                "ordering": ["image_type"],
+            },
         ),
     ]

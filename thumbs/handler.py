@@ -13,7 +13,9 @@ import boto3
 import django
 from django.conf import settings
 
-settings.configure(THUMBNAIL_KVSTORE="thumbs.PassthruKVStore",)
+settings.configure(
+    THUMBNAIL_KVSTORE="thumbs.PassthruKVStore",
+)
 with open("LEAFLET_IMAGES_BUCKET_NAME") as f:
     BUCKET_NAME = f.read().strip()
 django.setup()

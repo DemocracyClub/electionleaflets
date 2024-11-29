@@ -64,7 +64,6 @@ class LeafletImageOptions(AdminImageMixin, admin.ModelAdmin):
         thumb = get_thumbnail(obj.image, "100x100", crop="center")
         return "<img src='%s'>" % thumb.url
 
-
     thumbnail.allow_tags = True
 
 

@@ -21,7 +21,6 @@ class HomeView(CacheControlMixin, TemplateView):
     cache_timeout = 60 * 5
 
     def get_context_data(self, **kwargs):
-
         leaflet_count = Leaflet.objects.all().count()
         context = super(HomeView, self).get_context_data(**kwargs)
 
@@ -52,7 +51,10 @@ class ReportView(DetailView, FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         self.object = self.get_object()
-        context = self.get_context_data(form=form, object=self.object,)
+        context = self.get_context_data(
+            form=form,
+            object=self.object,
+        )
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
@@ -63,7 +65,10 @@ class ReportView(DetailView, FormView):
         domain = Site.objects.get_current().domain
         ctx = {
             "link": "http://%s%s"
-            % (domain, reverse("leaflet", kwargs={"pk": self.object.id}),),
+            % (
+                domain,
+                reverse("leaflet", kwargs={"pk": self.object.id}),
+            ),
             "name": form.cleaned_data["name"],
             "email": form.cleaned_data["email"],
             "details": form.cleaned_data["details"],

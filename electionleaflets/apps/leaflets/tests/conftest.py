@@ -9,7 +9,6 @@ from moto import mock_aws
 TEST_IMAGE_LOCATION = Path(__file__).parent / "test_images/front_test.jpg"
 
 
-
 @pytest.fixture()
 def uploaded_temp_file():
     """
@@ -23,19 +22,20 @@ def uploaded_temp_file():
     """
 
     path = "test-leaflet.jpeg"
-    with default_storage.open(path, 'wb') as f:
+    with default_storage.open(path, "wb") as f:
         f.write(TEST_IMAGE_LOCATION.read_bytes())
     return path
+
 
 @pytest.fixture
 def mock_get_ballot_data_from_ynr():
     def _mock_ynr_value(return_value):
         return patch(
             "leaflets.forms.PartyForm.get_ballot_data_from_ynr",
-            return_value=return_value
+            return_value=return_value,
         )
-    return _mock_ynr_value
 
+    return _mock_ynr_value
 
 
 @pytest.fixture
@@ -45,6 +45,7 @@ def s3_client():
     with mock_aws():
         client = boto3.client("s3")
         yield client
+
 
 @pytest.fixture
 def s3_bucket(s3_client, settings):
