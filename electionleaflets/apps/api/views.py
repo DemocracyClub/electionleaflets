@@ -2,10 +2,10 @@ import re
 
 from django.db.models import Q
 from django_filters import rest_framework as filters
+from leaflets.models import Leaflet
 from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 
-from leaflets.models import Leaflet
 from .serializers import LeafletSerializer
 
 

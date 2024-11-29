@@ -1,12 +1,20 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import re_path
 from django.views.decorators.cache import never_cache
-from leaflets.views import (AllImageView, ImageCropView, ImageRotateView,
-                            ImageView, LatestLeaflets, LeafletModeration,
-                            LeafletUpdatePublisherView, LeafletUploadWizzard,
-                            LeafletView, LegacyImageView,
-                            should_show_date_form, should_show_party_form,
-                            should_show_person_form)
+from leaflets.views import (
+                            AllImageView,
+                            ImageCropView,
+                            ImageRotateView,
+                            ImageView,
+                            LatestLeaflets,
+                            LeafletModeration,
+                            LeafletUpdatePublisherView,
+                            LeafletUploadWizzard,
+                            LeafletView,
+                            LegacyImageView,
+                            should_show_date_form,
+                            should_show_person_form,
+)
 
 from .forms import DateForm, ImagesForm, PartyForm, PeopleForm, PostcodeForm
 

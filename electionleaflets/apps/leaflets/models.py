@@ -4,24 +4,21 @@ from io import BytesIO
 from pathlib import Path
 
 import piexif
-from django.core.files import File
-from django.core.files.storage import default_storage
-from slugify import slugify
-
 from constituencies.models import Constituency
-from core.helpers import geocode
 from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 from django.db import models
 from django.db.models import JSONField
 from django.forms.models import model_to_dict
 from django.urls import reverse
-
-from electionleaflets.storages import TempUploadBaseMixin
 from elections.models import Election
 from people.models import Person
 from PIL import Image
+from slugify import slugify
 from sorl.thumbnail import ImageField, delete
 from uk_political_parties.models import Party
+
+from electionleaflets.storages import TempUploadBaseMixin
 
 from . import constants
 
@@ -104,10 +101,9 @@ class Leaflet(models.Model):
     def get_title(self):
         if self.title and len(self.title):
             return self.title
-        elif self.publisher_party:
+        if self.publisher_party:
             return "%s leaflet" % self.publisher_party.party_name
-        else:
-            "Untitled leaflet"
+        return None
 
     def get_person(self):
         if (
@@ -121,7 +117,7 @@ class Leaflet(models.Model):
                 ),
                 "name": self.ynr_person_name,
             }
-        elif self.publisher_person:
+        if self.publisher_person:
             return {
                 "link": reverse(
                     "person",
@@ -129,6 +125,7 @@ class Leaflet(models.Model):
                 ),
                 "name": self.publisher_person.name,
             }
+        return None
 
     def get_party(self):
         if self.ynr_party_id and self.ynr_party_name:
@@ -137,13 +134,14 @@ class Leaflet(models.Model):
                 "link": reverse("party-view", kwargs={"pk": pp_id}),
                 "name": self.ynr_party_name,
             }
-        elif self.publisher_party:
+        if self.publisher_party:
             return {
                 "link": reverse(
                     "party-view", kwargs={"pk": self.publisher_party.pk}
                 ),
                 "name": self.publisher_party.party_name,
             }
+        return None
 
 
 class LeafletImage(models.Model):
@@ -205,9 +203,9 @@ class LeafletImage(models.Model):
     def _correctly_orient_image(self, image):
         if self.orientation == 3:
             return image.transpose(Image.ROTATE_180)
-        elif self.orientation == 6:
+        if self.orientation == 6:
             return image.transpose(Image.ROTATE_270)
-        elif self.orientation == 8:
+        if self.orientation == 8:
             return image.transpose(Image.ROTATE_90)
         return image
 

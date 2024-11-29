@@ -1,31 +1,28 @@
 import base64
-import os
-from io import BytesIO
-from os.path import basename, dirname, splitext, sep
-from os import makedirs
 import re
 import sys
+from io import BytesIO
+from os import makedirs
+from os.path import dirname, sep
 
 sys.path.append("")
 from typing import Tuple
 from urllib.parse import unquote
 
 import boto3
-
 import django
 from django.conf import settings
 
 settings.configure(THUMBNAIL_KVSTORE="thumbs.PassthruKVStore",)
-BUCKET_NAME = open("LEAFLET_IMAGES_BUCKET_NAME").read().strip()
+with open("LEAFLET_IMAGES_BUCKET_NAME") as f:
+    BUCKET_NAME = f.read().strip()
 django.setup()
 
-from PIL import Image, ImageOps
-from sorl.thumbnail import get_thumbnail
-from sorl.thumbnail import conf as sorl_conf
-from sorl.thumbnail.base import ThumbnailBackend
-from sorl.thumbnail.engines import pil_engine
-from sorl.thumbnail.parsers import parse_crop, parse_geometry
-
+# These need to be imported after Django has bootstrapped
+from PIL import Image  # noqa: E402
+from sorl.thumbnail.base import ThumbnailBackend  # noqa: E402
+from sorl.thumbnail.engines import pil_engine  # noqa: E402
+from sorl.thumbnail.parsers import parse_geometry  # noqa: E402
 
 client = boto3.client("s3")
 engine = pil_engine.Engine()
@@ -34,8 +31,9 @@ engine = pil_engine.Engine()
 def handle(event, context):
     if "s3" in event["Records"][0]:
         return handle_s3(event, context)
-    elif "cf" in event["Records"][0]:
+    if "cf" in event["Records"][0]:
         return handle_cf(event, context)
+    return None
 
 
 def handle_cf(event, context):

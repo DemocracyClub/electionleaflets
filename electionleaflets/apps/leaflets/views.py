@@ -1,30 +1,29 @@
-import json
 import datetime
+import json
 import random
 from urllib.parse import urljoin
 
-from django.core.files.storage import default_storage
-from django.db import transaction
-from django.shortcuts import redirect
-from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.contrib import messages
-from django.urls import reverse
-from formtools.wizard.views import NamedUrlSessionWizardView
-from django.core.signing import Signer
-from django.conf import settings
-from django.views.generic import DetailView, ListView, UpdateView, RedirectView
-from django.views.generic.detail import SingleObjectMixin
-from braces.views import StaffuserRequiredMixin, LoginRequiredMixin
-
+from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 from core.helpers import CacheControlMixin
-from .models import Leaflet, LeafletImage
+from django.conf import settings
+from django.contrib import messages
+from django.core.signing import Signer
+from django.db import transaction
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
+from django.urls import reverse
+from django.views.generic import DetailView, ListView, RedirectView, UpdateView
+from django.views.generic.detail import SingleObjectMixin
+from formtools.wizard.views import NamedUrlSessionWizardView
+from people.models import Person
+from storages.backends.s3boto3 import S3Boto3Storage
+
 from .forms import (
     LeafletDetailsFrom,
     SingleLeafletImageForm,
     UpdatePublisherDetails,
 )
-from people.models import Person
-from storages.backends.s3boto3 import S3Boto3Storage
+from .models import Leaflet, LeafletImage
 
 
 class ImageView(CacheControlMixin, UpdateView):
@@ -104,10 +103,7 @@ def should_show_party_form(wizard):
     if not postcode_dict:
         return False
     postcode = postcode_dict.get("postcode")
-    ballot_data = party_form.get_ballot_data_from_ynr(postcode)
-    if not ballot_data:
-        return False
-    return True
+    return party_form.get_ballot_data_from_ynr(postcode)
 
 
 def should_show_person_form(wizard):
@@ -118,15 +114,14 @@ def should_show_person_form(wizard):
         signer = Signer()
         selected_party = json.loads(signer.unsign(cleaned_data["party"]))
         return selected_party.get("has_candidates", False)
+    return None
 
 
 def should_show_date_form(wizard):
     cleaned_data = wizard.get_cleaned_data_for_step("postcode") or {}
     if not cleaned_data:
         return False
-    if cleaned_data.get("delivered") == "before":
-        return True
-
+    return cleaned_data.get("delivered") == "before"
 
 class LeafletUploadWizzard(NamedUrlSessionWizardView):
     extra_added = False
@@ -150,7 +145,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         if step in ["party", "people"]:
             postcode = self.get_cleaned_data_for_step("postcode")
             if not postcode:
-                return
+                return None
             ret = {"postcode": postcode.get("postcode")}
             try:
                 date = self.get_cleaned_data_for_step("date")["date"]
@@ -167,6 +162,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     "party-party"
                 ]
             return ret
+        return None
 
     def get_context_data(self, **kwargs):
         context = super(LeafletUploadWizzard, self).get_context_data(**kwargs)
@@ -222,8 +218,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     leaflet.ynr_party_id = party_data["party_id"]
                     leaflet.ynr_party_name = party_data["party_name"]
 
-            if form_prefix == "people":
-                if (
+            if (form_prefix == "people" and
                     "people" in form.cleaned_data
                     and isinstance(form.cleaned_data["people"], list)
                     and form.cleaned_data["people"] != ""

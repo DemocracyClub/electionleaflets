@@ -1,8 +1,7 @@
-from django.db import models
-
 from constituencies.models import Constituency
-from uk_political_parties.models import Party
+from django.db import models
 from elections.models import Election
+from uk_political_parties.models import Party
 
 
 class Person(models.Model):
@@ -24,6 +23,7 @@ class Person(models.Model):
         parties = self.partymemberships_set.filter(membership_end=None)
         if parties:
             return parties[0]
+        return None
 
     @property
     def current_election(self):

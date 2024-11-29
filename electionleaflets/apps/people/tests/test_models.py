@@ -1,8 +1,9 @@
 import pytest
-from people.models import Person, PartyMemberships, PersonConstituencies
 from constituencies.models import Constituency
-from uk_political_parties.models import Party
 from elections.models import Election
+from people.models import PartyMemberships, Person, PersonConstituencies
+from uk_political_parties.models import Party
+
 
 @pytest.fixture
 def person():

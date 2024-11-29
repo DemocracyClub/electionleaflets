@@ -2,6 +2,7 @@ import os
 from tempfile import mkdtemp
 
 from .base import *  # noqa: F403
+
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
 DEFAULT_FILE_STORAGE = "electionleaflets.storages.TempUploadLocalMediaStorage"

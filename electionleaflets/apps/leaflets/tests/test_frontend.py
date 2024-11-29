@@ -1,9 +1,10 @@
-import pytest
 from pathlib import Path
-from electionleaflets import settings
+
+import pytest
+from leaflets.tests.data import LOCAL_BALLOT_WITH_CANDIDATES
 from playwright.sync_api import Page, expect
 
-from leaflets.tests.data import LOCAL_BALLOT_WITH_CANDIDATES
+from electionleaflets import settings
 
 
 def console_handler(message):

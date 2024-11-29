@@ -7,5 +7,4 @@ class SourceTagMiddleware(object):
         if request.method == "GET" and "source" in request.GET:
             request.session["source"] = request.GET.get("source")
 
-        response = self.get_response(request)
-        return response
+        return self.get_response(request)

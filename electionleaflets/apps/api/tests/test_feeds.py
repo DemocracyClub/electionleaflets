@@ -1,9 +1,8 @@
 import pytest
-from django.contrib.auth.models import User
-
 from api.feeds import ConstituencyFeed, LatestLeafletsFeed
 from constituencies.models import Constituency
 from leaflets.tests.model_factory import LeafletFactory
+
 
 @pytest.fixture(autouse=True)
 def create_leaflets():

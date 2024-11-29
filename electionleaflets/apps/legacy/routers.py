@@ -35,6 +35,6 @@ class LegacyRouter(object):
         """
         if db == "auth_db":
             return model._meta.app_label == "legacy"
-        elif model._meta.app_label == "legacy":
+        if model._meta.app_label == "legacy":
             return False
         return None

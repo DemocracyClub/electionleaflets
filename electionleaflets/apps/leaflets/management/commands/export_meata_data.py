@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 import csv
 
-
 from django.core.management.base import BaseCommand
 from django.utils.encoding import force_text
-
 from leaflets.models import LeafletImage
 
 
@@ -34,10 +32,10 @@ class Command(BaseCommand):
             "status",
             "reviewed",
         ]
-
-        out = csv.DictWriter(
-            open("/tmp/meta_data.csv", "wb"), fieldnames=fieldnames
-        )
+        with open("/tmp/meta_data.csv", "wb") as f:
+            out = csv.DictWriter(
+                f, fieldnames=fieldnames
+            )
         out.writeheader()
         for image in LeafletImage.objects.all():
             data = {

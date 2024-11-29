@@ -1,9 +1,11 @@
 import os
 import shutil
+
 import pytest
+from leaflets.models import LeafletImage
 
 from electionleaflets import settings
-from leaflets.models import Leaflet, LeafletImage
+
 from .helpers import create_dummy_leaflets
 
 

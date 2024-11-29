@@ -1,9 +1,12 @@
+import os
 import sys
 from os import environ
-import os
 
 # PATH vars
-from os.path import join, abspath, dirname
+from os.path import abspath, dirname, join
+
+import dc_design_system
+
 
 def here(x):
     return join(abspath(dirname(__file__)), x)
@@ -89,7 +92,6 @@ PIPELINE = {
 PIPELINE["CSS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
 PIPELINE["JS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
 
-import dc_design_system
 
 PIPELINE["SASS_ARGUMENTS"] = (
     " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
@@ -244,7 +246,7 @@ DEVS_DC_AUTH_TOKEN = environ.get("DEVS_DC_AUTH_TOKEN", None)
 YNR_API_KEY = None
 YNR_BASE_URL = "https://candidates.democracyclub.org.uk"
 
-if not "testing" in environ.get("DJANGO_SETTINGS_MODULE", ""):
+if "testing" not in environ.get("DJANGO_SETTINGS_MODULE", ""):
     # .local.py overrides all the common settings.
     try:
         from .local import *  # noqa: F401,F403

@@ -1,8 +1,10 @@
 import pytest
-from electionleaflets.apps.api.views import LeafletFilter
-from leaflets.models import Leaflet
 from django.utils import timezone
+from leaflets.models import Leaflet
 from uk_political_parties.models import Party
+
+from electionleaflets.apps.api.views import LeafletFilter
+
 
 @pytest.fixture
 def all_leaflets():

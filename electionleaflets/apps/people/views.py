@@ -1,11 +1,9 @@
 from datetime import datetime
 
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.views.generic import DetailView
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-
-from people.models import Person
 from leaflets.models import Leaflet
+from people.models import Person
 
 
 class PersonView(DetailView):
@@ -21,11 +19,10 @@ class PersonView(DetailView):
         paginator = Paginator(qs, 60)
         page = self.request.GET.get("page")
 
-        if not page or page == 1:
-            if qs:
-                context["last_leaflet_days"] = (
-                    datetime.now() - qs[0].date_uploaded
-                ).days
+        if not page or page == 1 and qs:
+            context["last_leaflet_days"] = (
+                datetime.now() - qs[0].date_uploaded
+            ).days
 
         try:
             context["person_leaflets"] = paginator.page(page)

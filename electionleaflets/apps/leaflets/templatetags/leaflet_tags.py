@@ -1,7 +1,8 @@
+import os
+
 from django import template
 from django.conf import settings
 from leaflets.models import Leaflet
-import os
 
 register = template.Library()
 
@@ -15,8 +16,7 @@ def leaflet_carousel():
 @register.simple_tag
 def get_medium_image_from_upload(file_path):
     path = os.path.join(settings.MEDIA_URL, file_path.name)
-    path = path.replace("uploads/", "uploads/medium/")
-    return path
+    return path.replace("uploads/", "uploads/medium/")
 
 
 @register.filter

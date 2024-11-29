@@ -4,7 +4,6 @@ from unittest.mock import patch
 import boto3
 import pytest
 from django.core.files.storage import default_storage
-
 from moto import mock_aws
 
 TEST_IMAGE_LOCATION = Path(__file__).parent / "test_images/front_test.jpg"
@@ -49,5 +48,4 @@ def s3_client():
 
 @pytest.fixture
 def s3_bucket(s3_client, settings):
-    bucket = s3_client.create_bucket(Bucket=settings.AWS_STORAGE_BUCKET_NAME)
-    return bucket
+    return s3_client.create_bucket(Bucket=settings.AWS_STORAGE_BUCKET_NAME)

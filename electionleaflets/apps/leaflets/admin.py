@@ -1,8 +1,8 @@
 from django.contrib import admin
 from leaflets.models import Leaflet, LeafletImage
+from sorl.thumbnail import get_thumbnail
 
 from .admin_widgets import AdminImageMixin
-from sorl.thumbnail import get_thumbnail
 
 
 class LeafletImageInline(AdminImageMixin, admin.TabularInline):
@@ -59,9 +59,11 @@ class LeafletImageOptions(AdminImageMixin, admin.ModelAdmin):
     get_leaflet_title.short_description = "Leaflet title"
 
     def thumbnail(self, obj):
-        if obj.image:
-            thumb = get_thumbnail(obj.image, "100x100", crop="center")
-            return "<img src='%s'>" % thumb.url
+        if not obj.image:
+            return None
+        thumb = get_thumbnail(obj.image, "100x100", crop="center")
+        return "<img src='%s'>" % thumb.url
+
 
     thumbnail.allow_tags = True
 

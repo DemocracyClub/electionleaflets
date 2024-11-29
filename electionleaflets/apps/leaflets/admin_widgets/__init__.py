@@ -1,10 +1,10 @@
+import contextlib
 import logging
 
 from django import forms
 from django.utils.safestring import mark_safe
 from sorl.thumbnail.fields import ImageField
 from sorl.thumbnail.shortcuts import get_thumbnail
-
 
 logger = logging.getLogger(__name__)
 
@@ -39,15 +39,13 @@ class AdminImageWidget(forms.ClearableFileInput):
             except Exception as e:
                 logger.warning("Unable to get the thumbnail", exc_info=e)
             else:
-                try:
+                with contextlib.suppress(AttributeError, TypeError):
                     output = (
                         '<div style="float:left">'
                         '<a style="display:block;margin:0 0 10px" class="thumbnail" '
                         'target="_blank" href="%s">'
                         '<img src="%s"></a>%s</div>'
                     ) % (value.url, mini.url, output)
-                except (AttributeError, TypeError):
-                    pass
         return mark_safe(output)
 
 

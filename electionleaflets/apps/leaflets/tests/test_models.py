@@ -2,9 +2,8 @@ from pathlib import Path
 
 import pytest
 from leaflets.models import Leaflet, LeafletImage
-from uk_political_parties.models import Party
-
 from leaflets.tests.conftest import TEST_IMAGE_LOCATION
+from uk_political_parties.models import Party
 
 
 @pytest.fixture
@@ -40,9 +39,9 @@ def test_leaflet_detail(client, party):
 
 @pytest.mark.django_db
 def test_raw_image_field():
-    l = Leaflet()
-    l.save()
-    li = LeafletImage(leaflet=l)
+    leaflet = Leaflet()
+    leaflet.save()
+    li = LeafletImage(leaflet=leaflet)
     assert li.raw_image.name == ""
     with TEST_IMAGE_LOCATION.open("rb") as img_file:
         li.image.save("front_test.jpg", img_file)

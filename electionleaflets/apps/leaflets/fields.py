@@ -3,7 +3,7 @@ import re
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.forms.widgets import MultiWidget, NumberInput
+from django.forms.widgets import MultiWidget
 
 __all__ = ("DayMonthYearWidget",)
 
@@ -51,7 +51,7 @@ class DCDateField(forms.MultiValueField):
 
     def compress(self, data_list):
         if not data_list:
-            return
+            return None
         data_list = list(data_list)
         data_list.reverse()
         return datetime.datetime(*map(int, data_list))
