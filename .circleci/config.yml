@@ -3,6 +3,11 @@ version: 2.1
 orbs:
   python: circleci/python@2.1.1
 
+commands:
+  install_uv:
+    steps:
+      - run: pip install --upgrade uv">=0.4.27,<0.5.0"
+
 jobs:
   install_and_update_dependencies:
     docker:
@@ -13,36 +18,36 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v8-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
-            - v8-dependencies-default
-      # Ensure pip and pipenv are installed
-      - run:
-          name: Install pipenv
-          command: |
-            pip install --upgrade pipenv==2024.0.1 pip --quiet --no-input
+            - v9-dependencies-{{ checksum "uv.lock" }}
+            - v9-dependencies-default
+      - install_uv
       - run:
           name: Set up virtual environment
           command: |
-            pipenv sync --dev
+            uv sync --dev --no-python-downloads
 
-      - run: pipenv run ruff check .
       - run: ./scripts/lint.sh
       - run: ./scripts/format.sh
       - run: make lambda-layers/DependenciesLayer/requirements.txt
       - run: npm install
       - run: npm run build
-      - run: pipenv run collectstatic --settings electionleaflets.settings.testing
+      - run: uv run python manage.py collectstatic --settings electionleaflets.settings.testing
       - persist_to_workspace:
           root: ~/repo/
           paths:
             - lambda-layers/DependenciesLayer/requirements.txt
             - electionleaflets/static/
             - electionleaflets/assets/
+      - run:
+          name: Prune UV cache
+          command: uv cache prune --ci
       - save_cache:
           when: on_success
           paths:
-            - ~/.local/share/virtualenvs/
-          key: v8-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
+            - ./.venv
+            - ./node_modules
+            - $HOME/.cache/uv
+          key: v9-dependencies-{{ checksum "uv.lock" }}
   run-tests:
     docker:
       - image: cimg/python:3.12-browsers
@@ -62,20 +67,20 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v8-dependencies-{{ checksum "Pipfile.lock" }}
-      - run: pipenv run pipenv verify
-
-      - run: pipenv run python manage.py check
+            - v9-dependencies-{{ checksum "uv.lock" }}
+      - install_uv
+      - run: uv sync --no-python-downloads
+      - run: uv run python manage.py check
 
       # TODO: enable this once we drop uk_political_parties package
-      #- run: pipenv run python manage.py makemigrations --check
+      #- run: uv run python manage.py makemigrations --check
 
       # Run tests
-      - run: pipenv run playwright install --with-deps chromium
+      - run: uv run playwright install --with-deps chromium
       - run:
           name: Run tests
           command: |
-            pipenv run pytest
+            uv run pytest
       - store_artifacts:
           path: test-results
           destination: test-results
@@ -84,16 +89,16 @@ jobs:
 
   sam_build:
     docker:
-      - image: public.ecr.aws/sam/build-python3.12
+      - image: public.ecr.aws/sam/build-python3.12:latest
     working_directory: ~/repo
     steps:
       - checkout
       - attach_workspace:
           at: ~/repo/
-      - run: pip install --upgrade pip
-      - run: pip install -r deploy-requirements.txt
-      - run: pip install -r lambda-layers/DependenciesLayer/requirements.txt
-      - run: sam build ${DASH_DASH_DEBUG}
+      - install_uv
+      - run: uv sync --only-group deploy  --no-python-downloads
+      - run: make lambda-layers/DependenciesLayer/requirements.txt
+      - run: sam build
 
       - persist_to_workspace:
           root: ~/repo/
@@ -104,7 +109,7 @@ jobs:
             - electionleaflets/static/
   sam_deploy:
     docker:
-      - image: cimg/python:3.12
+      - image: public.ecr.aws/sam/build-python3.12:latest
     working_directory: ~/repo/
     parameters:
       dc-environment:
@@ -128,22 +133,20 @@ jobs:
           at: ~/repo/
       - restore_cache:
           keys:
-            - v8-dependencies-{{ checksum "Pipfile.lock" }}
-            - v8-dependencies-default
+            - v9-dependencies-{{ checksum "uv.lock" }}
+            - v9-dependencies-default
       - run:
-          name: Install pipenv
+          name: Install UV
           command: |
-            pip install --upgrade pipenv==2024.0.1 pip --quiet --no-input
-      - run: pip install -r deploy-requirements.txt
+            pip install --upgrade uv">=0.4.27,<0.5.0" --quiet --no-input
+      - run: uv sync --only-group deploy  --no-python-downloads
       - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE DC_ENVIRONMENT SAM_PUBLIC_CONFIG_ENV
       - run: printenv SECRET_KEY | md5sum
       - run: printenv AWS_ACCESS_KEY_ID | md5sum
-      - run: sudo apt update && sudo apt install postgresql-client
-      - run: PGPASSWORD=$DATABASE_PASS createdb --host $DATABASE_HOST --username $DATABASE_USER $POSTGRES_DATABASE_NAME || true
       - run:
-          name: "pipenv run sam deploy # App: Lambda + API Gateway"
+          name: "sam deploy # App: Lambda + API Gateway"
           command: |
-            sam deploy ${DASH_DASH_DEBUG} \
+            uv run sam deploy ${DASH_DASH_DEBUG} \
               --config-file ~/repo/${SAM_CONFIG_FILE} \
               --config-env $DC_ENVIRONMENT \
               --template-file ~/repo/.aws-sam/build/template.yaml \
@@ -161,18 +164,20 @@ jobs:
                  AppDomain='$PUBLIC_FQDN' \
                  AppLeafletImagesBucketName='$LEAFLET_IMAGES_BUCKET_NAME' \
                 "
-      - run: pipenv run migratedb
-      - run: pipenv run createcachetable
+      - run: uv run python manage.py migrate
+      - run: uv run python manage.py createcachetable
       - run: printenv LEAFLET_IMAGES_BUCKET_NAME
       - run: echo $LEAFLET_IMAGES_BUCKET_NAME > thumbs/LEAFLET_IMAGES_BUCKET_NAME
       - run: make thumbs/requirements.txt
-      - run: pipenv run thumbs_sam_build
-      - run: pipenv run sam validate --region eu-west-2
+      - run: |
+          cd thumbs
+          uv run sam build
+      - run: uv run sam validate --region eu-west-2
 
       - run:
           name: "Deploy thumbs function"
           command: |
-            pipenv run sam deploy ${DASH_DASH_DEBUG} \
+            uv run sam deploy ${DASH_DASH_DEBUG} \
               --config-file ~/repo/thumbs/${SAM_CONFIG_FILE} \
               --config-env $DC_ENVIRONMENT \
               --template-file ~/repo/thumbs/.aws-sam/build/ThumbsFunction/template.yml \
@@ -182,7 +187,7 @@ jobs:
       - run:
           name: "Deploy thumbs function to eu-west-1 for lambda@edge"
           command: |
-            pipenv run sam deploy ${DASH_DASH_DEBUG} \
+            uv run sam deploy ${DASH_DASH_DEBUG} \
               --config-file ~/repo/thumbs/${SAM_CONFIG_FILE} \
               --config-env $DC_ENVIRONMENT \
               --template-file ~/repo/thumbs/.aws-sam/build/ThumbsFunction/template.yml \
@@ -190,10 +195,10 @@ jobs:
 
 
       - run:
-          name: "pipenv run sam deploy # Public access: CDN + DNS"
+          name: "uv run sam deploy # Public access: CDN + DNS"
           no_output_timeout: 20m # CloudFront can take longer than CircleCI's 10m default
           command: |
-            pipenv run sam deploy ${DASH_DASH_DEBUG} \
+            uv run sam deploy ${DASH_DASH_DEBUG} \
               --config-file ~/repo/${SAM_CONFIG_FILE} \
               --config-env $SAM_PUBLIC_CONFIG_ENV \
               --template-file ~/repo/public-access-template.yaml \
@@ -203,8 +208,7 @@ jobs:
                  PublicFqdn=$PUBLIC_FQDN \
                  LeafletsBucketName=$LEAFLET_IMAGES_BUCKET_NAME
               "
-      - run: pip install -U boto3 pipenv==2024.0.1 --quiet --no-input
-      - run: python thumbs/attach_lambda_triggers.py
+      - run: uv run python thumbs/attach_lambda_triggers.py
       - run:
           name: "Publish a new Sentry Release"
           command: |

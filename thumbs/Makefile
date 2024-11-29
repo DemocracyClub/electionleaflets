@@ -1,6 +1,3 @@
-requirements.txt: pyproject.toml
-	uv pip freeze > requirements.txt
-
 .package: requirements.txt
 	rm -rf .package
 	pip install --requirement requirements.txt --target .package

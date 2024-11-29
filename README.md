@@ -70,3 +70,7 @@ Framework](https://serverless.com/). This manages resources in AWS Lambda and
 AWS API Gateway.
 
 The app is deployed through CircleCI. The staging deployment is triggered by temporarily adding the current branch to context in the sam-deploy job. The production deployment is triggered by merging to master.
+
+If you want to build or deploy locally then you should install AWS SAM on 
+your system, the package is not included in the dev dependencies due to 
+problems with dependency resolution inside a single virtual environment.  
