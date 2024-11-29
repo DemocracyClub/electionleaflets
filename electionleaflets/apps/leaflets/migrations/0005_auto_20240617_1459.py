@@ -4,24 +4,33 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('leaflets', '0004_auto_20210502_1255'),
+        ("leaflets", "0004_auto_20210502_1255"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='leafletimage',
-            options={'ordering': ['pk', 'image_type']},
+            name="leafletimage",
+            options={"ordering": ["pk", "image_type"]},
         ),
         migrations.AddField(
-            model_name='leaflet',
-            name='modified',
+            model_name="leaflet",
+            name="modified",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AlterField(
-            model_name='leaflet',
-            name='status',
-            field=models.CharField(blank=True, choices=[('live', 'Live'), ('draft', 'Draft'), ('removed', 'Removed')], default='draft', max_length=255, null=True),
+            model_name="leaflet",
+            name="status",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("live", "Live"),
+                    ("draft", "Draft"),
+                    ("removed", "Removed"),
+                ],
+                default="draft",
+                max_length=255,
+                null=True,
+            ),
         ),
     ]

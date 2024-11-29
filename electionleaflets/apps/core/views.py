@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
-import datetime
-
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from django.views.decorators.cache import cache_control
-from django.views.generic import FormView, TemplateView, DetailView
-from django.conf import settings
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-from django.contrib.sites.models import Site
 
 from constituencies.models import Constituency
+from django.conf import settings
+from django.contrib.sites.models import Site
+from django.core.mail import EmailMultiAlternatives
+from django.http import HttpResponseRedirect
+from django.template.loader import render_to_string
+from django.urls import reverse
+from django.views.generic import DetailView, FormView, TemplateView
 from leaflets.models import Leaflet, LeafletImage
 from people.models import Person
 from uk_political_parties.models import Party
@@ -24,7 +21,6 @@ class HomeView(CacheControlMixin, TemplateView):
     cache_timeout = 60 * 5
 
     def get_context_data(self, **kwargs):
-
         leaflet_count = Leaflet.objects.all().count()
         context = super(HomeView, self).get_context_data(**kwargs)
 
@@ -55,7 +51,10 @@ class ReportView(DetailView, FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         self.object = self.get_object()
-        context = self.get_context_data(form=form, object=self.object,)
+        context = self.get_context_data(
+            form=form,
+            object=self.object,
+        )
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
@@ -66,7 +65,10 @@ class ReportView(DetailView, FormView):
         domain = Site.objects.get_current().domain
         ctx = {
             "link": "http://%s%s"
-            % (domain, reverse("leaflet", kwargs={"pk": self.object.id}),),
+            % (
+                domain,
+                reverse("leaflet", kwargs={"pk": self.object.id}),
+            ),
             "name": form.cleaned_data["name"],
             "email": form.cleaned_data["email"],
             "details": form.cleaned_data["details"],

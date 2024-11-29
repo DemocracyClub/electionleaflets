@@ -1,15 +1,19 @@
 import debug_toolbar
 from django.conf import settings
-from django.contrib import admin
 from django.conf.urls.static import static
-from django.urls import path, re_path, include
-from django.views.generic import TemplateView, RedirectView
+from django.contrib import admin
+from django.urls import include, path, re_path
+from django.views.generic import RedirectView, TemplateView
 
 from electionleaflets.apps.api.feeds import ConstituencyFeed, LatestLeafletsFeed
-from electionleaflets.apps.core.views import HomeView, MaintenanceView, ReportThanksView, ReportView
+from electionleaflets.apps.core.views import (
+    HomeView,
+    MaintenanceView,
+    ReportThanksView,
+    ReportView,
+)
 
 admin.autodiscover()
-
 
 
 MAINTENANCE_MODE = getattr(settings, "MAINTENANCE_MODE", False)
@@ -26,9 +30,7 @@ else:
         re_path(r"^person/", include("people.urls")),
         re_path(r"^api/", include("api.urls")),
         # Feeds
-        re_path(
-            r"^feeds/latest/$", LatestLeafletsFeed(), name="latest_feed"
-        ),
+        re_path(r"^feeds/latest/$", LatestLeafletsFeed(), name="latest_feed"),
         re_path(
             r"^feeds/constituency/(?P<cons_slug>[\w_\-\.]+)/$",
             ConstituencyFeed(),
@@ -60,16 +62,18 @@ else:
         ),
         # Administration URLS
         path("admin/", admin.site.urls),
-        path('__debug__/', include(debug_toolbar.urls)),
+        path("__debug__/", include(debug_toolbar.urls)),
     ]
 
 
 # Old redirects
 
+
 class HomePageRedirectView(RedirectView):
     """
     Just redirect to the home page.
     """
+
     permanent = True
     query_string = True
     pattern_name = "home"
@@ -77,9 +81,7 @@ class HomePageRedirectView(RedirectView):
 
 redirect_urls = (
     re_path(r"^analysis", HomePageRedirectView.as_view(), name="analysis"),
-    re_path(
-        r"^start/$", HomePageRedirectView.as_view(), name="analysis_start"
-    ),
+    re_path(r"^start/$", HomePageRedirectView.as_view(), name="analysis_start"),
     re_path(
         r"^tag_candidates/$",
         HomePageRedirectView.as_view(),

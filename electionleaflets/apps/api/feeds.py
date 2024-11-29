@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-import mimetypes
-
-from django.contrib.syndication.views import Feed
-from django.shortcuts import get_object_or_404
-from leaflets.models import Leaflet
 
 # from parties.models import Party
 from constituencies.models import Constituency
+from django.contrib.syndication.views import Feed
+from django.shortcuts import get_object_or_404
+from leaflets.models import Leaflet
 
 
 class LatestLeafletsFeed(Feed):
@@ -27,6 +25,7 @@ class LatestLeafletsFeed(Feed):
         if item.images.all():
             d = "{0} – {1}".format(d, item.images.all()[0].image.url)
         return d
+
 
 class ConstituencyFeed(Feed):
     def get_object(self, request, cons_slug):

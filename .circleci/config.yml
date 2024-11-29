@@ -24,7 +24,10 @@ jobs:
           name: Set up virtual environment
           command: |
             pipenv sync --dev
-      - run: pipenv run playwright install --with-deps chromium
+
+      - run: pipenv run ruff check .
+      - run: ./scripts/lint.sh
+      - run: ./scripts/format.sh
       - run: make lambda-layers/DependenciesLayer/requirements.txt
       - run: npm install
       - run: npm run build

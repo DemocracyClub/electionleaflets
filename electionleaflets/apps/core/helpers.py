@@ -1,10 +1,8 @@
 import requests
-
+from constituencies.models import Constituency
 from django.conf import settings
 from django.core.cache import cache
 from django.utils.cache import patch_response_headers
-
-from constituencies.models import Constituency
 
 
 def geocode(postcode):
@@ -24,12 +22,11 @@ def geocode(postcode):
         res_json = res.json()
         if "code" in res_json and res_json["code"] == 404:
             return None
-        else:
-            constituency = Constituency.objects.get(
-                constituency_id=str(res_json["shortcuts"]["WMC"])
-            )
-            lat = res_json["wgs84_lat"]
-            lon = res_json["wgs84_lon"]
+        constituency = Constituency.objects.get(
+            constituency_id=str(res_json["shortcuts"]["WMC"])
+        )
+        lat = res_json["wgs84_lat"]
+        lon = res_json["wgs84_lon"]
 
         result = {
             "wgs84_lon": lon,

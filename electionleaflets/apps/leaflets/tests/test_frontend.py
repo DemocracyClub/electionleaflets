@@ -1,9 +1,10 @@
-import pytest
 from pathlib import Path
-from electionleaflets import settings
+
+import pytest
+from leaflets.tests.data import LOCAL_BALLOT_WITH_CANDIDATES
 from playwright.sync_api import Page, expect
 
-from leaflets.tests.data import LOCAL_BALLOT_WITH_CANDIDATES
+from electionleaflets import settings
 
 
 def console_handler(message):
@@ -21,12 +22,16 @@ def console_handler(message):
         return
     if "net::ERR_INTERNET_DISCONNECTED" in message.text:
         return
-    assert not message.text, f"Found browser console output: {message.text}: {message.location}"
+    assert (
+        not message.text
+    ), f"Found browser console output: {message.text}: {message.location}"
 
 
-class TestLeafletUpload():
+class TestLeafletUpload:
     @pytest.fixture(autouse=True)
-    def setup_method(self, page: Page, live_server, mock_get_ballot_data_from_ynr):
+    def setup_method(
+        self, page: Page, live_server, mock_get_ballot_data_from_ynr
+    ):
         self.page = page
         # Raise if the console contains errors
         self.page.on("console", console_handler)
@@ -34,18 +39,21 @@ class TestLeafletUpload():
         self.mock_get_ballot_data_from_ynr = mock_get_ballot_data_from_ynr
 
     def navigate_to_home_page(self):
-        
         self.page.goto(self.live_server.url)
 
-    def get_test_image(self, leaflet_file_path="apps/leaflets/tests/test_images/front_test.jpg"):
+    def get_test_image(
+        self, leaflet_file_path="apps/leaflets/tests/test_images/front_test.jpg"
+    ):
         project_root = Path(settings.PROJECT_ROOT).resolve()
         return [str(project_root / leaflet_file_path)]
 
     def navigate_to_upload_page(self):
-        upload_link = self.page.get_by_role('link', name='Upload a leaflet')
+        upload_link = self.page.get_by_role("link", name="Upload a leaflet")
         upload_link.click()
-        expect(self.page).to_have_url(f'{self.live_server.url}/leaflets/add/images/')
-        take_photo_link = self.page.get_by_label('Take a photo of a leaflet')
+        expect(self.page).to_have_url(
+            f"{self.live_server.url}/leaflets/add/images/"
+        )
+        take_photo_link = self.page.get_by_label("Take a photo of a leaflet")
         take_photo_link.click()
 
     def upload_leaflet(self):
@@ -53,45 +61,45 @@ class TestLeafletUpload():
         self.navigate_to_upload_page()
         files = self.get_test_image()
         self.page.set_input_files(selector='input[type="file"]', files=files)
-        submit_button = self.page.get_by_role('button', name='Continue')
+        submit_button = self.page.get_by_role("button", name="Continue")
         submit_button.click()
 
     def upload_multiple_files_for_one_leaflet(self):
         self.navigate_to_home_page()
         self.navigate_to_upload_page()
         files = self.get_test_image()
-        self.page.set_input_files(selector='input[type="file"]', files=files)    
-        add_another_image = self.page.get_by_text('Add another image')
+        self.page.set_input_files(selector='input[type="file"]', files=files)
+        add_another_image = self.page.get_by_text("Add another image")
         add_another_image.click()
         self.page.set_input_files(selector='input[type="file"]', files=files)
-        submit_button = self.page.get_by_role('button', name='Continue')
+        submit_button = self.page.get_by_role("button", name="Continue")
         submit_button.click()
 
-    def fill_postcode(self, postcode='SW1A 1AA'):
-        postcode_input = self.page.get_by_label('What postcode was this')
+    def fill_postcode(self, postcode="SW1A 1AA"):
+        postcode_input = self.page.get_by_label("What postcode was this")
         postcode_input.click()
         postcode_input.fill(postcode)
 
     def select_time_and_submit(self):
-        time_input = self.page.get_by_text('In the last couple of weeks')
+        time_input = self.page.get_by_text("In the last couple of weeks")
         time_input.check()
-        submit_button = self.page.get_by_role('button', name='Submit')
+        submit_button = self.page.get_by_role("button", name="Submit")
         submit_button.click()
 
-    def select_party_and_submit(self, party='Green Party'):
+    def select_party_and_submit(self, party="Green Party"):
         party_option = self.page.get_by_text(party)
         party_option.click()
-        submit_button = self.page.get_by_role('button', name='Submit')
+        submit_button = self.page.get_by_role("button", name="Submit")
         submit_button.click()
 
     def enter_dates_and_submit(self):
-        day_input = self.page.get_by_label('day')
-        day_input.fill('01')
-        month_input = self.page.get_by_label('month')
-        month_input.fill('01')
-        year_input = self.page.get_by_label('year')
-        year_input.fill('2021')
-        submit_button = self.page.get_by_role('button', name='Submit')
+        day_input = self.page.get_by_label("day")
+        day_input.fill("01")
+        month_input = self.page.get_by_label("month")
+        month_input.fill("01")
+        year_input = self.page.get_by_label("year")
+        year_input.fill("2021")
+        submit_button = self.page.get_by_role("button", name="Submit")
         submit_button.click()
 
     def test_basic_upload(self):
@@ -101,20 +109,19 @@ class TestLeafletUpload():
         with self.mock_get_ballot_data_from_ynr([LOCAL_BALLOT_WITH_CANDIDATES]):
             self.select_time_and_submit()
             self.select_party_and_submit()
-        id = self.page.url.split('/')[-2]
-        expect(self.page).to_have_url(f'{self.live_server.url}/leaflets/{id}/')
-        expect(self.page.locator('h1')).to_have_text(f'Leaflet #{id}')
-        expect(self.page.locator('h2')).to_have_text('Leaflet details')
+        id = self.page.url.split("/")[-2]
+        expect(self.page).to_have_url(f"{self.live_server.url}/leaflets/{id}/")
+        expect(self.page.locator("h1")).to_have_text(f"Leaflet #{id}")
+        expect(self.page.locator("h2")).to_have_text("Leaflet details")
 
     def test_upload_leaflet_with_invalid_postcode(self):
         self.upload_leaflet()
-        self.fill_postcode(postcode='INVALID')
+        self.fill_postcode(postcode="INVALID")
         self.select_time_and_submit()
-        submit_button = self.page.get_by_role('button', name='Submit')
+        submit_button = self.page.get_by_role("button", name="Submit")
         submit_button.click()
-        error_message = self.page.get_by_text('Please enter a full UK postcode')
+        error_message = self.page.get_by_text("Please enter a full UK postcode")
         assert error_message is not None
-
 
     def test_party_page_content(self):
         self.upload_leaflet()
@@ -122,8 +129,10 @@ class TestLeafletUpload():
         with self.mock_get_ballot_data_from_ynr([LOCAL_BALLOT_WITH_CANDIDATES]):
             self.select_time_and_submit()
             self.select_party_and_submit()
-        id = self.page.url.split('/')[-2]
-        expect(self.page).to_have_url(f'{self.live_server.url}/leaflets/{id}/')
-        labour_party_link = self.page.get_by_role('link', name='Green Party')
+        id = self.page.url.split("/")[-2]
+        expect(self.page).to_have_url(f"{self.live_server.url}/leaflets/{id}/")
+        labour_party_link = self.page.get_by_role("link", name="Green Party")
         labour_party_link.click()
-        expect(self.page.locator('h1')).to_have_text('Election leaflets from Green Party')
+        expect(self.page.locator("h1")).to_have_text(
+            "Election leaflets from Green Party"
+        )

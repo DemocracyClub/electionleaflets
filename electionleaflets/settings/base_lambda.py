@@ -1,9 +1,10 @@
 import os
 
 from django.urls import set_urlconf
+
 from .base import *  # noqa: F401,F403
 
-ALLOWED_HOSTS = [os.environ.get('APP_DOMAIN')]
+ALLOWED_HOSTS = [os.environ.get("APP_DOMAIN")]
 
 DATABASES = {
     "default": {
@@ -30,11 +31,13 @@ WHITENOISE_STATIC_PREFIX = "/static/"
 
 STATIC_URL = WHITENOISE_STATIC_PREFIX
 STATICFILES_STORAGE = "electionleaflets.storages.StaticStorage"
-STATICFILES_DIRS = (root("assets"),)
-STATIC_ROOT = root("static")
-MEDIA_ROOT = root("media",)
+STATICFILES_DIRS = (root("assets"),)  # noqa: F405
+STATIC_ROOT = root("static")  # noqa: F405
+MEDIA_ROOT = root(  # noqa: F405
+    "media",
+)
 MEDIA_URL = "/media/"
-set_urlconf(ROOT_URLCONF)
+set_urlconf(ROOT_URLCONF)  # noqa: F405
 
 AWS_DEFAULT_ACL = "public-read"
 
@@ -63,4 +66,4 @@ THUMBNAIL_BACKEND = "core.s3_thumbnail_store.S3Backend"
 CSRF_TRUSTED_ORIGINS = ["https://electionleaflets.org"]
 USE_X_FORWARDED_HOST = True
 
-setup_sentry()
+setup_sentry()  # noqa: F405

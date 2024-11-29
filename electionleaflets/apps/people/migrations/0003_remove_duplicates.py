@@ -26,13 +26,12 @@ def remove_dupes(apps, schema_editor):
             collector.collect([person])
             collected = collector.nested()
             assert len(collected) < 2 or not any(
-                [isinstance(x, Leaflet) for x in collected[1]]
+                isinstance(x, Leaflet) for x in collected[1]
             )
             person.delete()
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("people", "0001_initial"),
     ]

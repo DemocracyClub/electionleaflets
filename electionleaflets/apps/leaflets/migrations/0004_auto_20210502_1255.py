@@ -22,7 +22,6 @@ def change_ballot_data_structure(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("leaflets", "0003_auto_20210501_1655"),
     ]

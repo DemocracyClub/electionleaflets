@@ -37,7 +37,7 @@ class EmailQueFactory(DjangoModelFactory):
     name = factory.Sequence(lambda n: "Name %d" % n)
     email = factory.Sequence(lambda n: "user%d@example.com" % n)
     postcode = factory.Sequence(lambda n: "Postcode %d" % n)
-    delivery_date = factory.Faker('date_time')
+    delivery_date = factory.Faker("date_time")
 
 
 class ImageQueFactory(DjangoModelFactory):
@@ -49,7 +49,7 @@ class ImageQueFactory(DjangoModelFactory):
     name = factory.Sequence(lambda n: "Name %d" % n)
     email = factory.Sequence(lambda n: "user%d@example.com" % n)
     image_key = factory.Sequence(lambda n: "ImageKey%d" % n)
-    uploaded_date = factory.Faker('date_time')
+    uploaded_date = factory.Faker("date_time")
 
 
 class ImageQueSeqFactory(DjangoModelFactory):
@@ -57,6 +57,7 @@ class ImageQueSeqFactory(DjangoModelFactory):
         model = ImageQueSeq
 
     sequence = factory.Sequence(lambda n: n)
+
 
 @pytest.mark.django_db
 def test_country_creation():

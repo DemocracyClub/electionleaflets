@@ -2,14 +2,12 @@
 import os
 import re
 
-from django.urls import reverse
-from lxml import html
-
-from django.test.client import Client
 from aloe import before, step, world
 from aloe_django import django_url
-
 from constituencies.models import Constituency
+from django.test.client import Client
+from django.urls import reverse
+from lxml import html
 
 
 @before.all
@@ -22,7 +20,10 @@ def add_constituency(step, name):
     Constituency.objects.get_or_create(
         slug="camberwell_and_peckham",
         pk="65913",
-        defaults={"name": "Camberwell and Peckham", "country_name": "England",},
+        defaults={
+            "name": "Camberwell and Peckham",
+            "country_name": "England",
+        },
     )
 
 
@@ -48,7 +49,8 @@ def set_file(step, name):
         os.path.join(os.path.dirname(__file__), "../tests/test_images/", name)
     )
     if os.path.exists(file_path):
-        world.data = {"image": open(file_path, "rb")}
+        with open(file_path, "rb") as f:
+            world.data = {"image": f}
         assert True
         return
     assert False
@@ -89,9 +91,11 @@ def fill_journey(step):
         form["leaflet_upload_wizzard-current_step"] = form_name
         if "action" in list(form.keys()) and form["action"]:
             form[form["action"]] = True
-        if "people-people" in list(form.keys()):
-            if form["people-people"] == "None":
-                form["people-people"] = ""
+        if (
+            "people-people" in list(form.keys())
+            and form["people-people"] == "None"
+        ):
+            form["people-people"] = ""
 
         world.response = world.browser.post(
             reverse("upload_step", kwargs={"step": form_name}),

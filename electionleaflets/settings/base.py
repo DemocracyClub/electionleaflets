@@ -1,9 +1,12 @@
+import os
 import sys
 from os import environ
-import os
 
 # PATH vars
-from os.path import join, abspath, dirname
+from os.path import abspath, dirname, join
+
+import dc_design_system
+
 
 def here(x):
     return join(abspath(dirname(__file__)), x)
@@ -23,7 +26,7 @@ DEBUG = False
 template_DEBUG = DEBUG
 TEMPLATE_DEBUG = DEBUG
 
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # DATABASES define in environment specific settings file
 DATABASES = {
@@ -39,7 +42,9 @@ LANGUAGE_CODE = "en-GB"
 
 ALLOWED_HOSTS = ["*"]
 
-MEDIA_ROOT = root("media",)
+MEDIA_ROOT = root(
+    "media",
+)
 MEDIA_URL = "/media/"
 STATIC_ROOT = root("static")
 STATIC_URL = "/static/"
@@ -67,7 +72,9 @@ PIPELINE = {
                 "scss/vendor/filepond-plugin-image-preview.css",
             ],
             "output_filename": "scss/styles.css",
-            "extra_context": {"media": "screen,projection",},
+            "extra_context": {
+                "media": "screen,projection",
+            },
         },
     },
     "JAVASCRIPT": {
@@ -89,7 +96,6 @@ PIPELINE = {
 PIPELINE["CSS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
 PIPELINE["JS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
 
-import dc_design_system
 
 PIPELINE["SASS_ARGUMENTS"] = (
     " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
@@ -200,7 +206,9 @@ THUMBNAIL_KVSTORE = "sorl.thumbnail.kvstores.cached_db_kvstore.KVStore"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [root("templates"),],
+        "DIRS": [
+            root("templates"),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -244,7 +252,7 @@ DEVS_DC_AUTH_TOKEN = environ.get("DEVS_DC_AUTH_TOKEN", None)
 YNR_API_KEY = None
 YNR_BASE_URL = "https://candidates.democracyclub.org.uk"
 
-if not "testing" in environ.get("DJANGO_SETTINGS_MODULE", ""):
+if "testing" not in environ.get("DJANGO_SETTINGS_MODULE", ""):
     # .local.py overrides all the common settings.
     try:
         from .local import *  # noqa: F401,F403

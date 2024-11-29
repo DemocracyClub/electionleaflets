@@ -1,6 +1,6 @@
 import abc
 from pathlib import Path
-from urllib.parse import urlsplit, unquote, urlunsplit
+from urllib.parse import unquote, urlsplit, urlunsplit
 
 from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
 from django.core.files.storage import FileSystemStorage, default_storage
@@ -53,8 +53,7 @@ class TempUploadBaseMixin(abc.ABC):
     """
 
     @abc.abstractmethod
-    def save_from_temp_upload(self, source_path, target_file_path):
-        ...
+    def save_from_temp_upload(self, source_path, target_file_path): ...
 
 
 class TempUploadS3MediaStorage(TempUploadBaseMixin, S3Boto3Storage):
@@ -70,10 +69,13 @@ class TempUploadS3MediaStorage(TempUploadBaseMixin, S3Boto3Storage):
         moved_file.copy(copy_source)
         return moved_file
 
+
 class TempUploadLocalMediaStorage(TempUploadBaseMixin, FileSystemStorage):
     def save_from_temp_upload(self, source_path, target_file_path: Path):
         target_file_path = Path(default_storage.path(target_file_path))
         target_file_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(default_storage.path(source_path), "rb") as source_file:
-            with target_file_path.open("wb") as dest_file:
-                dest_file.write(source_file.read())
+        with (
+            open(default_storage.path(source_path), "rb") as source_file,
+            target_file_path.open("wb") as dest_file,
+        ):
+            dest_file.write(source_file.read())

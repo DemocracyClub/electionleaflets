@@ -27,5 +27,10 @@ class Constituency(models.Model):
 
     def get_absolute_url(self):
         return reverse(
-            "constituency-view", (), {"pk": self.pk, "ignored_slug": self.slug,}
+            "constituency-view",
+            (),
+            {
+                "pk": self.pk,
+                "ignored_slug": self.slug,
+            },
         )

@@ -2,13 +2,11 @@ import csv
 import datetime
 
 import requests
-
-from django.core.management.base import BaseCommand
-
-from elections.models import Election
 from constituencies.models import Constituency
+from django.core.management.base import BaseCommand
+from elections.models import Election
+from people.models import PartyMemberships, Person, PersonConstituencies
 from uk_political_parties.models import Party
-from people.models import Person, PartyMemberships, PersonConstituencies
 
 SOURCE = "YNR2017"
 

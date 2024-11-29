@@ -1,28 +1,24 @@
-from datetime import datetime
 import re
+from datetime import datetime
 
-from django.http import Http404
-from django.views.generic import DetailView, ListView, TemplateView
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Count, Q
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-from uk_political_parties.models import Party
+from django.http import Http404
+from django.views.generic import ListView, TemplateView
 from leaflets.models import Leaflet
+from uk_political_parties.models import Party
 
 
 class PartyList(ListView):
     def get_queryset(self):
-
-        queryset = Party.objects.annotate(
-            num_leaflets=Count("leaflet")
-        ).order_by("-num_leaflets", "party_name")
-        return queryset
+        return Party.objects.annotate(num_leaflets=Count("leaflet")).order_by(
+            "-num_leaflets", "party_name"
+        )
 
     template_name = "parties/party_list.html"
 
 
 class PartyView(TemplateView):
-
     def get_context_data(self, **kwargs):
         context = super(PartyView, self).get_context_data(**kwargs)
         id = re.sub(r"[^0-9]", "", self.kwargs["pk"])
@@ -39,11 +35,10 @@ class PartyView(TemplateView):
         paginator = Paginator(qs, 60)
         page = self.request.GET.get("page")
 
-        if not page or page == 1:
-            if qs:
-                context["last_leaflet_days"] = (
-                    datetime.now() - qs[0].date_uploaded
-                ).days
+        if not page or page == 1 and qs:
+            context["last_leaflet_days"] = (
+                datetime.now() - qs[0].date_uploaded
+            ).days
 
         try:
             context["party_leaflets"] = paginator.page(page)
