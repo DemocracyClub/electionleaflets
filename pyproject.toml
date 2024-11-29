@@ -1,11 +1,38 @@
-[build-system]
+[project]
 name = "ElectionLeaflets"
-version = "3.0-alpha"
-requires = [
-    "setuptools >= 35.0.2",
-    "setuptools_scm >= 2.0.0, <3"
+version = "0.0.0"
+description = "An online archive of political leaflets"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aws-wsgi @ git+https://github.com/DemocracyClub/awsgi.git@b286f129c5580547577f942c75be74cdca707386",
+    "dc-design-system @ https://github.com/DemocracyClub/design-system/archive/refs/tags/0.6.0.zip",
+    "dc-django-utils @ git+https://github.com/DemocracyClub/dc_django_utils.git@7.0.1",
+    "dj-pagination==2.4.0",
+    "django-braces==1.16.0",
+    "django-extensions==3.1.5",
+    "django-filter==24.3",
+    "django-formtools==2.2",
+    "django-localflavor==4.0",
+    "django-pipeline==3.1.0",
+    "django-s3file==5.5.7",
+    "django-ses==4.3.0",
+    "django-static-jquery==2.1.4",
+    "django-storages==1.13.2",
+    "django-uk-political-parties @ git+https://github.com/DemocracyClub/django-uk-political-parties.git@86ffa51f8306858c379c9de5be2f4bdb24b3a910",
+    "django==4.2.15",
+    "djangorestframework==3.15.2",
+    "factory-boy==3.3.1",
+    "markdown==3.7",
+    "piexif==1.0.12",
+    "pillow==10.4.0",
+    "psycopg2-binary==2.9.10",
+    "sorl-thumbnail===12.11.0",
+    "sentry-sdk==2.19.0",
 ]
-build-backend = "setuptools.build_meta"
+
+[tool.uv]
+package = false
 
 [tool.uv.workspace]
 members = ["thumbs"]
@@ -25,4 +52,21 @@ lint.extend-select = [
     "SIM",
     "Q003",
     "RET",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==8.3.3",
+    "pytest-cov==6.0.0",
+    "pytest-django==4.9.0",
+    "pytest-playwright==0.3.0",
+    "aloe-django==0.2.0",
+    "moto==5.0.21",
+    "django-debug-toolbar==5.0.0a0",
+    "ruff>=0.8.1",
+]
+
+deploy = [
+    "aws-sam-cli==1.115.0",
+    "urllib3==2.2.3",
 ]
