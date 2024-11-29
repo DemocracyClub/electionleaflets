@@ -12,3 +12,14 @@ DJANGO_SETTINGS_MODULE = "electionleaflets.settings.testing"
 python_files = ["test_*.py", "*_test.py"]
 addopts = "--reuse-db --tb=short -p no:warnings"
 django_debug_mode = true
+
+[tool.ruff]
+line-length = 80
+lint.ignore = ["E501"]
+lint.extend-select = [
+    "I",
+    "C4",
+    "SIM",
+    "Q003",
+    "RET",
+]

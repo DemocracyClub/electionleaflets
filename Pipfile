@@ -85,6 +85,7 @@ pytest = "*"
 pytest-playwright = "*"
 pytest-cov = "*"
 moto = "*"
+ruff = "*"
 
 [requires]
 python_version = "3.12"
