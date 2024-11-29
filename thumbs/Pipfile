@@ -9,8 +9,6 @@ verify_ssl = true
 Pillow = "==10.4.0"
 boto3 = "*"
 sorl-thumbnail = "*"
-six = "*"
-django = "==4.2.15"
 
 [requires]
 python_version = "3.12"

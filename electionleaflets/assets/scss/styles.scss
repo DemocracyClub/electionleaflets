@@ -28,6 +28,7 @@
 @import 'partials/_page.scss';
 @import 'partials/_utilities.scss';
 @import 'partials/_logo.scss';
+@import 'partials/_switcher.scss';
 
 @import 'select-list.scss';
 
@@ -61,6 +62,7 @@ $scope: false;
   @include status;
   @include codeblock;
   @include select-list;
+  @include switcher
 }
 
 @if $scope {

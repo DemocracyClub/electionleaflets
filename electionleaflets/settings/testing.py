@@ -1,11 +1,17 @@
 import os
+from tempfile import mkdtemp
 
 from .base import *  # noqa: F403
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
-DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-STATICFILES_STORAGE = "django.core.files.storage.FileSystemStorage"
-TEST_RUNNER = "django.test.runner.DiscoverRunner"
+DEFAULT_FILE_STORAGE = "electionleaflets.storages.TempUploadLocalMediaStorage"
+STATICFILES_STORAGE = "electionleaflets.storages.StaticStorage"
 
-MEDIA_ROOT = root("test_media",)  # noqa: F405
+# This is cleaned up in core/conftest.py
+MEDIA_ROOT = mkdtemp()
 
 INSTALLED_APPS.append("aloe_django")  # noqa: F405
+YNR_API_KEY = "testing"
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_AUTOREFRESH = True
+DEBUG = False

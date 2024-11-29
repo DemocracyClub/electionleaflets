@@ -2,7 +2,7 @@ from datetime import datetime
 import re
 
 from django.http import Http404
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 from django.db.models import Count, Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -21,28 +21,7 @@ class PartyList(ListView):
     template_name = "parties/party_list.html"
 
 
-class PartyView(DetailView):
-    model = Party
-
-    def get_object(self, queryset=None):
-        if queryset is None:
-            queryset = self.get_queryset()
-        if self.kwargs["pk"].startswith("ynmp"):
-            fixed_id = self.kwargs["pk"]
-        else:
-            fixed_id = "PP" + re.sub(r"[^0-9]", "", self.kwargs["pk"])
-        queryset = queryset.filter(
-            Q(party_id=self.kwargs["pk"]) | Q(party_id=fixed_id)
-        )
-        try:
-            # Get the single item from the filtered queryset
-            obj = queryset.get()
-        except queryset.model.DoesNotExist:
-            raise Http404(
-                "No %(verbose_name)s found matching the query"
-                % {"verbose_name": queryset.model._meta.verbose_name}
-            )
-        return obj
+class PartyView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(PartyView, self).get_context_data(**kwargs)
@@ -52,6 +31,10 @@ class PartyView(DetailView):
             | Q(ynr_party_id=self.kwargs["pk"])
             | Q(ynr_party_id=f"party:{id}")
         )
+        if not qs.exists():
+            raise Http404()
+
+        context["party_name"] = qs.first().ynr_party_name
 
         paginator = Paginator(qs, 60)
         page = self.request.GET.get("page")

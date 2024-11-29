@@ -13,8 +13,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v7-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
-            - v7-dependencies-default
+            - v8-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
+            - v8-dependencies-default
       # Ensure pip and pipenv are installed
       - run:
           name: Install pipenv
@@ -24,43 +24,42 @@ jobs:
           name: Set up virtual environment
           command: |
             pipenv sync --dev
+      - run: pipenv run playwright install --with-deps chromium
       - run: make lambda-layers/DependenciesLayer/requirements.txt
-      - run: pipenv run collectstatic
       - run: npm install
       - run: npm run build
-      - run: DJANGO_SETTINGS_MODULE=electionleaflets.settings.base_lambda pipenv run collectstatic
+      - run: pipenv run collectstatic --settings electionleaflets.settings.testing
       - persist_to_workspace:
           root: ~/repo/
           paths:
-            - .aws-sam/build/
-            - thumbs/.aws-sam/build/
             - lambda-layers/DependenciesLayer/requirements.txt
             - electionleaflets/static/
+            - electionleaflets/assets/
       - save_cache:
           when: on_success
           paths:
             - ~/.local/share/virtualenvs/
-          key: v7-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
+          key: v8-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "thumbs/Pipfile.lock" }}
   run-tests:
     docker:
-      - image: cimg/python:3.12
+      - image: cimg/python:3.12-browsers
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
       - image: cimg/postgres:16.3
         environment:
-          POSTGRES_USER: electionleaflets
+          POSTGRES_USER: circleci
           POSTGRES_DB: electionleaflets
     working_directory: ~/repo
 
     steps:
       - checkout
-
+      - attach_workspace:
+            at: ~/repo/
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v7-dependencies-{{ checksum "Pipfile.lock" }}
-      
+            - v8-dependencies-{{ checksum "Pipfile.lock" }}
       - run: pipenv run pipenv verify
 
       - run: pipenv run python manage.py check
@@ -69,10 +68,11 @@ jobs:
       #- run: pipenv run python manage.py makemigrations --check
 
       # Run tests
+      - run: pipenv run playwright install --with-deps chromium
       - run:
           name: Run tests
           command: |
-            pipenv run test
+            pipenv run pytest
       - store_artifacts:
           path: test-results
           destination: test-results
@@ -125,8 +125,8 @@ jobs:
           at: ~/repo/
       - restore_cache:
           keys:
-            - v7-dependencies-{{ checksum "Pipfile.lock" }}
-            - v7-dependencies-default
+            - v8-dependencies-{{ checksum "Pipfile.lock" }}
+            - v8-dependencies-default
       - run:
           name: Install pipenv
           command: |

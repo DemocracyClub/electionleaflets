@@ -1,7 +1,9 @@
 import json
 import datetime
 import random
+from urllib.parse import urljoin
 
+from django.core.files.storage import default_storage
 from django.db import transaction
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect, HttpResponseForbidden
@@ -14,7 +16,6 @@ from django.views.generic import DetailView, ListView, UpdateView, RedirectView
 from django.views.generic.detail import SingleObjectMixin
 from braces.views import StaffuserRequiredMixin, LoginRequiredMixin
 
-from analysis.forms import QuestionSetForm
 from core.helpers import CacheControlMixin
 from .models import Leaflet, LeafletImage
 from .forms import (
@@ -96,38 +97,6 @@ class LeafletView(CacheControlMixin, DetailView):
     template_name = "leaflets/leaflet.html"
     model = Leaflet
 
-    def get_context_data(self, **kwargs):
-        context = super(LeafletView, self).get_context_data(**kwargs)
-        context["analysis_form"] = QuestionSetForm(
-            self.object, self.request.user
-        )
-
-        return context
-
-    def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated():
-            return HttpResponseForbidden()
-
-        self.object = self.get_object()
-        form = QuestionSetForm(self.object, self.request.user, request.POST,)
-
-        if form.is_valid():
-            form.save()
-            if "save_and_next" in request.POST:
-                start_date = datetime.date(2015, 1, 1)
-                next_leaflet = (
-                    Leaflet.objects.filter(leafletproperties=None)
-                    .filter(date_uploaded__gt=start_date)
-                    .order_by("?")
-                )
-                if next_leaflet:
-                    url = next_leaflet[0].get_absolute_url()
-                    return HttpResponseRedirect(url)
-            return HttpResponseRedirect(self.object.get_absolute_url())
-        else:
-            return self.render_to_response(self.get_context_data(form=form))
-
-
 def should_show_party_form(wizard):
     party_form = wizard.get_form("party")
     postcode_dict = wizard.get_cleaned_data_for_step("postcode")
@@ -183,9 +152,12 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             if not postcode:
                 return
             ret = {"postcode": postcode.get("postcode")}
-            if self.get_cleaned_data_for_step("date"):
-                ret["for_date"] = self.get_cleaned_data_for_step("date")["date"]
-
+            try:
+                date = self.get_cleaned_data_for_step("date")["date"]
+            except (KeyError, TypeError):
+                date = datetime.datetime.now()
+            ret["for_date"] = date
+            
             party_data = self.storage.get_step_data("party")
             if not party_data:
                 return ret
@@ -208,14 +180,7 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         return super(LeafletUploadWizzard, self).get(*args, **kwargs)
 
     
-    def copy_file(self, bucket, file_path, new_file_name):
-        copy_source = {
-            "Bucket": bucket.name,
-            "Key": file_path,
-        }
-        moved_file = bucket.Object(new_file_name)
-        moved_file.copy(copy_source)
-        return moved_file
+
                     
     @transaction.atomic
     def done(self, form_list, **kwargs):
@@ -242,24 +207,8 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     return redirect(reverse("upload_leaflet"))
 
                 for file_path in uploaded_images:
-                    file_name = file_path.split("/")[-1]
-                    file_name = file_name.replace(" ", "-")
-                    
-                    storage_backend = getattr(settings, 'DEFAULT_FILE_STORAGE')
-
-                    new_file_name = f"leaflets/{leaflet.pk}/{file_name}"
-
-                    if storage_backend == "storages.backends.s3boto3.S3Boto3Storage":
-                        bucket = self.storage.file_storage.bucket
-                        moved_file = self.copy_file(bucket, file_path, new_file_name)
-                        new_file_name_raw = f"raw_{new_file_name}"
-                        moved_file_raw = self.copy_file(bucket, file_path, new_file_name_raw) 
-                    else:
-                        new_file_name_raw = f"raw_{new_file_name}"
-                        
                     image = LeafletImage(leaflet=leaflet)
-                    image.image.name = new_file_name
-                    image.raw_image.name = new_file_name_raw
+                    image.set_image_from_temp_file(file_path)
                     image.save()
 
             if form_prefix == "postcode":
@@ -292,8 +241,9 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                             remote_id=person_data["person"]["id"],
                             defaults={
                                 "name": person_data["person"]["name"],
-                                "source_url": "https://candidates.democracyclub.org.uk/person/{}".format(
-                                    person_data["person"]["id"]
+                                "source_url": urljoin(
+                                    settings.YNR_BASE_URL,
+                                    f"/person/{person_data['person']['id']}"
                                 ),
                                 "source_name": "YNR2017",
                             },
@@ -335,8 +285,9 @@ class LeafletUpdatePublisherView(LoginRequiredMixin, UpdateView):
                 remote_id=person_data["person"]["id"],
                 defaults={
                     "name": person_data["person"]["name"],
-                    "source_url": "https://candidates.democracyclub.org.uk/person/{}".format(
-                        person_data["person"]["id"]
+                    "source_url": urljoin(
+                        settings.YNR_BASE_URL,
+                        f"/person/{person_data['person']['id']}"
                     ),
                     "source_name": "YNR2017",
                 },

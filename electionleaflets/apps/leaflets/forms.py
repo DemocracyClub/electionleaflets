@@ -2,11 +2,13 @@
 import datetime
 import json
 from datetime import timedelta
+from urllib.parse import urljoin
 
 import requests
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.signing import Signer
+from django.conf import settings
 from django.utils import timezone
 
 from localflavor.gb.forms import GBPostcodeField
@@ -131,8 +133,9 @@ class YNRBallotDataMixin:
 
         :type instance: Leaflet
         """
-        url = f"https://candidates.democracyclub.org.uk/api/next/ballots/"
-        params = {"for_postcode": postcode}
+        url = urljoin(settings.YNR_BASE_URL, "/api/next/ballots/")
+        auth_token = getattr(settings, 'YNR_API_KEY')
+        params = {"for_postcode": postcode, "auth_token": auth_token}
         start, end = self.get_date_range()
         params["election_date_range_after"] = start
         params["election_date_range_before"] = end
