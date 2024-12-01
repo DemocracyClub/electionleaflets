@@ -8,40 +8,6 @@ members = [
 ]
 
 [[package]]
-name = "aloe"
-version = "0.2.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "ansicolors" },
-    { name = "colorama" },
-    { name = "gherkin-official" },
-    { name = "nose" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/d6/43/f64222832386b8dc31078086aa157ba67581275630974a204f3df52da56e/aloe-0.2.0.tar.gz", hash = "sha256:d73f69d933600f3ba20c6773df485cc42b5b2e8c274fa3f6798750aedbaf5aa2", size = 97193 }
-
-[[package]]
-name = "aloe-django"
-version = "0.2.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "aloe" },
-    { name = "cssselect" },
-    { name = "django" },
-    { name = "django-nose" },
-    { name = "pyyaml" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/7f/d5/e28852bfb63e12478a488e165750cc33fb526dea6b14f8cd1a12f1577078/aloe_django-0.2.0.tar.gz", hash = "sha256:004e752cca48155ed249433a8af9cface938c62d903579e5a722f3bce62ba410", size = 44066 }
-
-[[package]]
-name = "ansicolors"
-version = "1.1.8"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/76/31/7faed52088732704523c259e24c26ce6f2f33fbeff2ff59274560c27628e/ansicolors-1.1.8.zip", hash = "sha256:99f94f5e3348a0bcd43c82e5fc4414013ccc19d70bd939ad71e0133ce9c372e0", size = 23027 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/53/18/a56e2fe47b259bb52201093a3a9d4a32014f9d85071ad07e9d60600890ca/ansicolors-1.1.8-py2.py3-none-any.whl", hash = "sha256:00d2dde5a675579325902536738dd27e4fac1fd68f773fe36c21044eb559e187", size = 13847 },
-]
-
-[[package]]
 name = "asgiref"
 version = "3.8.1"
 source = { registry = "https://pypi.org/simple" }
@@ -245,15 +211,6 @@ wheels = [
 ]
 
 [[package]]
-name = "cssselect"
-version = "1.2.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/d1/91/d51202cc41fbfca7fa332f43a5adac4b253962588c7cc5a54824b019081c/cssselect-1.2.0.tar.gz", hash = "sha256:666b19839cfaddb9ce9d36bfe4c969132c647b92fc9088c4e23f786b30f1b3dc", size = 41423 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/06/a9/2da08717a6862c48f1d61ef957a7bba171e7eefa6c0aa0ceb96a140c2a6b/cssselect-1.2.0-py2.py3-none-any.whl", hash = "sha256:da1885f0c10b60c03ed5eccbb6b68d6eff248d91976fcde348f395d54c9fd35e", size = 18687 },
-]
-
-[[package]]
 name = "dc-design-system"
 version = "0.6.0"
 source = { url = "https://github.com/DemocracyClub/design-system/archive/refs/tags/0.6.0.zip" }
@@ -373,18 +330,6 @@ wheels = [
 ]
 
 [[package]]
-name = "django-nose"
-version = "1.4.7"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "nose" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/4c/d6/a340da9854cf0a2b54e23cf9147911b1e15a831911428983dd0158572ce9/django-nose-1.4.7.tar.gz", hash = "sha256:a4885cd002d65fd2de96e2bb2563ef477c3fbe207009360c015fca5c3b5561b7", size = 45041 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/a5/5e/804eda7b128162d215de14c0572717f16508cbdb899d4e839f51cef5481e/django_nose-1.4.7-py2.py3-none-any.whl", hash = "sha256:304adc447ee35b889b733d7106004f98aa401d8387ddcada5d4f2239d86790a9", size = 26470 },
-]
-
-[[package]]
 name = "django-pipeline"
 version = "3.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -492,7 +437,6 @@ deploy = [
     { name = "urllib3" },
 ]
 dev = [
-    { name = "aloe-django" },
     { name = "django-debug-toolbar" },
     { name = "moto" },
     { name = "pytest" },
@@ -536,7 +480,6 @@ deploy = [
     { name = "urllib3", specifier = "==2.2.3" },
 ]
 dev = [
-    { name = "aloe-django", specifier = "==0.2.0" },
     { name = "django-debug-toolbar", specifier = "==5.0.0a0" },
     { name = "moto", specifier = "==5.0.21" },
     { name = "pytest", specifier = "==8.3.3" },
@@ -570,12 +513,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/1e/9f/012fd6049fc860299
 wheels = [
     { url = "https://files.pythonhosted.org/packages/08/9c/2bba87fbfa42503ddd9653e3546ffc4ed18b14ecab7a07ee86491b886486/Faker-33.1.0-py3-none-any.whl", hash = "sha256:d30c5f0e2796b8970de68978365247657486eb0311c5abe88d0b895b68dff05d", size = 1889127 },
 ]
-
-[[package]]
-name = "gherkin-official"
-version = "4.1.3"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/ba/f7/9e298a945b3982b9482c0a200d765772dcb4678e43c7257d2edfe1f6524e/gherkin-official-4.1.3.tar.gz", hash = "sha256:7f6fa7a3ceffda8bba0f56b42140cc6bae001d010fef336b5b2602252242395d", size = 24097 }
 
 [[package]]
 name = "greenlet"
@@ -733,15 +670,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/72/ba/00bda1f06b85dc579583d68ef87497215d4ce5b8ec116e68beaff9fc37ce/moto-5.0.21.tar.gz", hash = "sha256:52f63291daeff9444ef5eb14fbf69b24264567b79f184ae6aee4945d09845f06", size = 6212667 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/5f/6e/5f57cadb57a9663e7d92f05078c7e61ad83131f569ed07dc166a58f08500/moto-5.0.21-py3-none-any.whl", hash = "sha256:1235b2ae3666459c9cc44504a5e73d35f4959b45e5876b2f6df2e5f4889dfb4f", size = 4365142 },
-]
-
-[[package]]
-name = "nose"
-version = "1.3.7"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/58/a5/0dc93c3ec33f4e281849523a5a913fa1eea9a3068acfa754d44d88107a44/nose-1.3.7.tar.gz", hash = "sha256:f1bffef9cbc82628f6e7d7b40d7e255aefaa1adb6a1b1d26c69a8b79e6208a98", size = 280488 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/15/d8/dd071918c040f50fa1cf80da16423af51ff8ce4a0f2399b7bf8de45ac3d9/nose-1.3.7-py3-none-any.whl", hash = "sha256:9ff7c6cc443f8c51994b34a667bbcf45afd6d945be7477b52e97516fd17c53ac", size = 154731 },
 ]
 
 [[package]]
