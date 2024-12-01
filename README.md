@@ -16,20 +16,15 @@ You'll need some basic requirements installed on your machine, probably through 
 - Python 3.12.x
 - Node.js 18+
 - PostgreSQL
-- PostGIS
-- Redis
-- Yarn
+- [`uv>=0.4.27,<0.5.0`](https://github.com/astral-sh/uv) installed globally.
 
-This should do the trick on macOS or Linux with Homebrew:
+1. For Python virtual env management package installation, use `uv`:
 
 ```shell
-brew install python node postgresql postgis redis yarn pipenv
+uv sync --dev
 ```
 
-1. Launch a shell with pipenv
-```shell
-pipenv shell
-```
+You will need to run `playwright install` to run tests locally.
 
 2. Settings and database
 ```shell
@@ -46,17 +41,15 @@ python manage.py createsuperuser # Create a user to login to /admin with
 
 3. Install frontend dependencies
 ```
-yarn install && bower install
-```
-
-4. Run gulp in another tab for development. This will watch for changes and recompile assets automatically. You'll need [gulp-cli](https://www.npmjs.com/package/gulp-cli) 
-```
-gulp
+npm install && npm run build
 ```
 
 5. Run django
-```
-python manage.py runserver
+Either activate the virtual environment using `source .venv/bin/activate` or 
+   use `uv`:
+
+```shell
+uv run python manage.py runserver
 ```
 
 6. Visit the site at http://127.0.0.1:8000/

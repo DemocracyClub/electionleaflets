@@ -12,10 +12,8 @@ At [Democracy Club](https://democracyclub.org.uk/) we value contributions to our
 * Create a topic branch on your fork of the repository.
 * Make commits of logical units.
 * Use descriptive commit messages.
-* Check your work against our test suite. You can run tests locally using:
-    * `python manage.py test` (unit tests) and
-    * `python manage.py harvest` (acceptance tests)
-    or enable [Travis CI](https://travis-ci.org/) for your fork, so the tests will be executed after a `push`.
+* Check your work against our test suite. You can run tests locally using 
+  `pytest`.
 * Push your changes to a topic branch in your fork of the repository.
 * Submit a pull request to the repository.
 * Reference the #issue number in your pull request.
