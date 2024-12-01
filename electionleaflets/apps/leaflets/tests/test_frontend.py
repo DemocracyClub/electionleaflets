@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pytest
+from leaflets.models import LeafletImage
 from leaflets.tests.data import LOCAL_BALLOT_WITH_CANDIDATES
 from playwright.sync_api import Page, expect
 
@@ -41,11 +42,15 @@ class TestLeafletUpload:
     def navigate_to_home_page(self):
         self.page.goto(self.live_server.url)
 
-    def get_test_image(
-        self, leaflet_file_path="apps/leaflets/tests/test_images/front_test.jpg"
-    ):
+    def get_test_image(self, leaflet_file_path="front_test.jpg"):
         project_root = Path(settings.PROJECT_ROOT).resolve()
-        return [str(project_root / leaflet_file_path)]
+        return [
+            str(
+                project_root
+                / "apps/leaflets/tests/test_images"
+                / leaflet_file_path
+            )
+        ]
 
     def navigate_to_upload_page(self):
         upload_link = self.page.get_by_role("link", name="Upload a leaflet")
@@ -56,10 +61,12 @@ class TestLeafletUpload:
         take_photo_link = self.page.get_by_label("Take a photo of a leaflet")
         take_photo_link.click()
 
-    def upload_leaflet(self):
+    def upload_leaflet(self, files=None):
+        if not files:
+            files = self.get_test_image()
         self.navigate_to_home_page()
         self.navigate_to_upload_page()
-        files = self.get_test_image()
+
         self.page.set_input_files(selector='input[type="file"]', files=files)
         submit_button = self.page.get_by_role("button", name="Continue")
         submit_button.click()
@@ -67,13 +74,19 @@ class TestLeafletUpload:
     def upload_multiple_files_for_one_leaflet(self):
         self.navigate_to_home_page()
         self.navigate_to_upload_page()
-        files = self.get_test_image()
-        self.page.set_input_files(selector='input[type="file"]', files=files)
-        add_another_image = self.page.get_by_text("Add another image")
-        add_another_image.click()
-        self.page.set_input_files(selector='input[type="file"]', files=files)
-        submit_button = self.page.get_by_role("button", name="Continue")
-        submit_button.click()
+        with self.page.expect_file_chooser() as fc_info:
+            self.page.get_by_text("Take a photo of a leaflet").click()
+        file_chooser = fc_info.value
+        file_chooser.set_files(self.get_test_image())
+
+        with self.page.expect_file_chooser() as fc_info:
+            self.page.get_by_text("Add another image of this").click()
+        file_chooser = fc_info.value
+        file_chooser.set_files(self.get_test_image("back_test.jpg"))
+
+        # Ensure the JS has finished processing before continuing
+        self.page.wait_for_timeout(500)
+        self.page.get_by_role("button", name="Continue").click()
 
     def fill_postcode(self, postcode="SW1A 1AA"):
         postcode_input = self.page.get_by_label("What postcode was this")
@@ -113,6 +126,19 @@ class TestLeafletUpload:
         expect(self.page).to_have_url(f"{self.live_server.url}/leaflets/{id}/")
         expect(self.page.locator("h1")).to_have_text(f"Leaflet #{id}")
         expect(self.page.locator("h2")).to_have_text("Leaflet details")
+
+    def test_basic_upload_more_than_one_leaflet(self):
+        self.navigate_to_home_page()
+        self.upload_multiple_files_for_one_leaflet()
+        self.fill_postcode()
+        with self.mock_get_ballot_data_from_ynr([LOCAL_BALLOT_WITH_CANDIDATES]):
+            self.select_time_and_submit()
+            self.select_party_and_submit()
+        id = self.page.url.split("/")[-2]
+        expect(self.page).to_have_url(f"{self.live_server.url}/leaflets/{id}/")
+        expect(self.page.locator("h1")).to_have_text(f"Leaflet #{id}")
+        expect(self.page.locator("h2")).to_have_text("Leaflet details")
+        assert LeafletImage.objects.count() == 2
 
     def test_upload_leaflet_with_invalid_postcode(self):
         self.upload_leaflet()
