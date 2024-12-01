@@ -139,7 +139,10 @@ class YNRBallotDataMixin:
         start, end = self.get_date_range()
         params["election_date_range_after"] = start
         params["election_date_range_before"] = end
-        req = requests.get(url, params=params)
+        try:
+            req = requests.get(url, params=params)
+        except requests.RequestException:
+            return []
         req.raise_for_status()
         return req.json()["results"]
 
