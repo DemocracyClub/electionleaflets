@@ -20,7 +20,7 @@ dependencies = [
     "django-static-jquery==2.1.4",
     "django-storages==1.13.2",
     "django-uk-political-parties @ git+https://github.com/DemocracyClub/django-uk-political-parties.git@86ffa51f8306858c379c9de5be2f4bdb24b3a910",
-    "django==4.2.15",
+    "django==4.2.16",
     "djangorestframework==3.15.2",
     "factory-boy==3.3.1",
     "markdown==3.7",
