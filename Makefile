@@ -14,16 +14,16 @@ clean: ## Delete any generated static asset or req.txt files and git-restore the
 
 .PHONY: collectstatic
 collectstatic: ## Rebuild the static assets
-	python manage.py collectstatic --noinput --clear
+	uv run python manage.py collectstatic --noinput --clear
 
 lambda-layers/DependenciesLayer:
 	mkdir -p $@
 
-lambda-layers/DependenciesLayer/requirements.txt: Pipfile Pipfile.lock lambda-layers/DependenciesLayer lambda-layers/DependenciesLayer ## Update the requirements.txt file used to build this Lambda function's DependenciesLayer
-	pipenv requirements | sed "s/^-e //" >lambda-layers/DependenciesLayer/requirements.txt
+lambda-layers/DependenciesLayer/requirements.txt: pyproject.toml uv.lock lambda-layers/DependenciesLayer lambda-layers/DependenciesLayer ## Update the requirements.txt file used to build this Lambda function's DependenciesLayer
+	uv export --no-hashes --no-dev > lambda-layers/DependenciesLayer/requirements.txt
 
-thumbs/requirements.txt: thumbs/Pipfile thumbs/Pipfile.lock ## Update the requirements.txt file used to build this Lambda function's DependenciesLayer
-	cd thumbs && pipenv requirements | sed "s/^-e //" >requirements.txt
+thumbs/requirements.txt: thumbs/pyproject.toml uv.lock ## Update the requirements.txt file used to build this Lambda function's DependenciesLayer
+	uv export --no-hashes --project thumbs  > thumbs/requirements.txt
 
 .PHONY: help
 # gratuitously adapted from https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html

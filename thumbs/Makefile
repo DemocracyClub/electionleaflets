@@ -1,7 +1,3 @@
-requirements.txt: Pipfile.lock
-	pipenv run pip freeze > requirements.txt
-	touch -r Pipfile.lock requirements.txt
-
 .package: requirements.txt
 	rm -rf .package
 	pip install --requirement requirements.txt --target .package

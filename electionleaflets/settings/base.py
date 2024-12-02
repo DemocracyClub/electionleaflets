@@ -127,7 +127,6 @@ SECRET_KEY = "elyfryi8on!dmw&8b3j-g0yve4u&%4_6%(tf3*)@#&mq*$yzhf^6"
 
 MIDDLEWARE = (
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "s3file.middleware.S3FileMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -171,7 +170,6 @@ INSTALLED_APPS = [
     "dc_design_system",
     "django_static_jquery",
     "s3file",
-    "debug_toolbar",
     "django_filters",
     "dc_utils",
 ] + LEAFLET_APPS
