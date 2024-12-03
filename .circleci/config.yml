@@ -27,7 +27,6 @@ jobs:
             uv sync --dev --no-python-downloads
 
       - run: ./scripts/lint.sh
-      - run: ./scripts/format.sh
       - run: make lambda-layers/DependenciesLayer/requirements.txt
       - run: npm install
       - run: npm run build
