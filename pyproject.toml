@@ -60,7 +60,6 @@ dev = [
     "pytest-cov==6.0.0",
     "pytest-django==4.9.0",
     "pytest-playwright==0.3.0",
-    "aloe-django==0.2.0",
     "moto==5.0.21",
     "django-debug-toolbar==5.0.0a0",
     "ruff>=0.8.1",

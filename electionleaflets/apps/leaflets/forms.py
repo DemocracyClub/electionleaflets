@@ -139,9 +139,12 @@ class YNRBallotDataMixin:
         start, end = self.get_date_range()
         params["election_date_range_after"] = start
         params["election_date_range_before"] = end
-        req = requests.get(url, params=params)
-        req.raise_for_status()
-        return req.json()["results"]
+        try:
+            resp = requests.get(url, params=params)
+            resp.raise_for_status()
+        except requests.RequestException:
+            return []
+        return resp.json()["results"]
 
     def get_parties_from_ballot_data(self, ballot_data):
         parties = {
