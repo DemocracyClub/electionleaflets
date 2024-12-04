@@ -36,7 +36,7 @@ Parameters:
     # guidance!
     Description: "The DJANGO_SETTINGS_MODULE environment variable passed to the app."
     Type: String
-    Default: "democracy_club.settings.base_lambda"
+    Default: "electionleaflets.settings.base_lambda"
 
   AppIsBehindCloudFront:
     Description: "The APP_IS_BEHIND_CLOUDFRONT environment variable passed to the app, which modifies various path- and host-related settings."
