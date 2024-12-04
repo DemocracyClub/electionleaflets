@@ -428,6 +428,7 @@ dependencies = [
     { name = "pillow" },
     { name = "psycopg2-binary" },
     { name = "python-slugify" },
+    { name = "requests" },
     { name = "sentry-sdk" },
     { name = "sorl-thumbnail" },
 ]
@@ -472,6 +473,7 @@ requires-dist = [
     { name = "pillow", specifier = "==10.4.0" },
     { name = "psycopg2-binary", specifier = "==2.9.10" },
     { name = "python-slugify", specifier = "==1.2.4" },
+    { name = "requests", specifier = ">=2.32.3" },
     { name = "sentry-sdk", specifier = "==2.19.0" },
     { name = "sorl-thumbnail", specifier = "===12.11.0" },
 ]
