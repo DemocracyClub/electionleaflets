@@ -29,6 +29,7 @@ dependencies = [
     "psycopg2-binary==2.9.10",
     "sorl-thumbnail===12.11.0",
     "sentry-sdk==2.19.0",
+    "python-slugify==1.2.4",
 ]
 
 [tool.uv]
