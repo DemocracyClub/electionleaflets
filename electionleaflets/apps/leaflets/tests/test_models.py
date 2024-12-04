@@ -23,7 +23,6 @@ def test_model_initial():
         "id": None,
         "title": "",
         "description": None,
-        "publisher_party": None,
         "ynr_party_id": None,
         "ynr_party_name": None,
         "publisher_person": None,
@@ -59,7 +58,6 @@ def test_leaflet_detail(client, party):
         description=None,
         ynr_party_id="party:1",
         ynr_party_name="Labour Party",
-        publisher_party=party,
     )
     response = client.get(leaflet.get_absolute_url())
     assert response.status_code == 200

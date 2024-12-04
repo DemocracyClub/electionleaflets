@@ -23,9 +23,7 @@ class PartyView(TemplateView):
         context = super(PartyView, self).get_context_data(**kwargs)
         id = re.sub(r"[^0-9]", "", self.kwargs["pk"])
         qs = Leaflet.objects.filter(
-            Q(publisher_party=self.kwargs["pk"])
-            | Q(ynr_party_id=self.kwargs["pk"])
-            | Q(ynr_party_id=f"party:{id}")
+            Q(ynr_party_id=self.kwargs["pk"]) | Q(ynr_party_id=f"party:{id}")
         )
         if not qs.exists():
             raise Http404()
