@@ -16,7 +16,6 @@ from people.models import Person
 from PIL import Image
 from slugify import slugify
 from sorl.thumbnail import ImageField, delete
-from uk_political_parties.models import Party
 
 from electionleaflets.storages import TempUploadBaseMixin
 
@@ -32,9 +31,6 @@ class Leaflet(models.Model):
 
     title = models.CharField(blank=True, max_length=765)
     description = models.TextField(blank=True, null=True)
-    publisher_party = models.ForeignKey(
-        Party, blank=True, null=True, on_delete=models.CASCADE
-    )
     ynr_party_id = models.CharField(
         blank=True, null=True, max_length=255, db_index=True
     )
@@ -101,8 +97,8 @@ class Leaflet(models.Model):
     def get_title(self):
         if self.title and len(self.title):
             return self.title
-        if self.publisher_party:
-            return "%s leaflet" % self.publisher_party.party_name
+        if self.ynr_party_name:
+            return f"{self.ynr_party_name} leaflet"
         return None
 
     def get_person(self):
@@ -134,13 +130,7 @@ class Leaflet(models.Model):
                 "link": reverse("party-view", kwargs={"pk": pp_id}),
                 "name": self.ynr_party_name,
             }
-        if self.publisher_party:
-            return {
-                "link": reverse(
-                    "party-view", kwargs={"pk": self.publisher_party.pk}
-                ),
-                "name": self.publisher_party.party_name,
-            }
+
         return None
 
 
