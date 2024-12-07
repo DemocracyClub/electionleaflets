@@ -12,7 +12,6 @@ from django.db.models import JSONField
 from django.forms.models import model_to_dict
 from django.urls import reverse
 from elections.models import Election
-from people.models import Person
 from PIL import Image
 from slugify import slugify
 from sorl.thumbnail import ImageField, delete

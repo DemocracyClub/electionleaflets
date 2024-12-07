@@ -9,7 +9,6 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.generic import DetailView, FormView, TemplateView
 from leaflets.models import Leaflet, LeafletImage
-from people.models import Person
 from uk_political_parties.models import Party
 
 from .forms import ReportAbuseForm
@@ -198,11 +197,11 @@ class TestView(TemplateView):
             }
         )
 
-        person = Person.objects.order_by("?").first()
+        leaflet = Leaflet.objects.exclude(people=[]).order_by("?").first()
         links.append(
             {
                 "text": "Person view",
-                "url": reverse("person", kwargs={"remote_id": person.pk}),
+                "url": reverse("person", kwargs={"person_id": leaflet.people[0]}),
             }
         )
 

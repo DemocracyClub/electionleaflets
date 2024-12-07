@@ -1,5 +1,4 @@
 from leaflets.models import Leaflet, LeafletImage
-from people.models import Person
 from rest_framework import serializers
 from sorl.thumbnail import get_thumbnail
 from uk_political_parties.models import Party
@@ -14,19 +13,6 @@ class PartySerializer(serializers.HyperlinkedModelSerializer):
             "party_type",
             "status",
         )
-
-
-class PersonSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Person
-        fields = (
-            "pk",
-            "name",
-            "remote_id",
-            "source_name",
-            "source_url",
-        )
-
 
 class LeafletImageSerializer(serializers.ModelSerializer):
     class Meta:

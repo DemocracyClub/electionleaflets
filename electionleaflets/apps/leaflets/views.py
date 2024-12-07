@@ -15,7 +15,6 @@ from django.urls import reverse
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 from formtools.wizard.views import NamedUrlSessionWizardView
-from people.models import Person
 from storages.backends.s3boto3 import S3Boto3Storage
 
 from .forms import (
@@ -229,18 +228,6 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     if not person_data:
                         continue
                     leaflet_people[person_data["person"]["id"]] = person_data
-                    person, _ = Person.objects.get_or_create(
-                        remote_id=person_data["person"]["id"],
-                        defaults={
-                            "name": person_data["person"]["name"],
-                            "source_url": urljoin(
-                                settings.YNR_BASE_URL,
-                                f"/person/{person_data['person']['id']}",
-                            ),
-                            "source_name": "YNR2017",
-                        },
-                    )
-
                 leaflet.people = leaflet_people
                 leaflet.person_ids = list(leaflet_people.keys())
                 leaflet.ballots = [
@@ -272,17 +259,6 @@ class LeafletUpdatePublisherView(LoginRequiredMixin, UpdateView):
             if not person_data:
                 continue
             leaflet_people[person_data["person"]["id"]] = person_data
-            person, _ = Person.objects.get_or_create(
-                remote_id=person_data["person"]["id"],
-                defaults={
-                    "name": person_data["person"]["name"],
-                    "source_url": urljoin(
-                        settings.YNR_BASE_URL,
-                        f"/person/{person_data['person']['id']}",
-                    ),
-                    "source_name": "YNR2017",
-                },
-            )
 
         self.object.people = leaflet_people
         self.object.person_ids = list(leaflet_people.keys())
