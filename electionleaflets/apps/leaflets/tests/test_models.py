@@ -25,7 +25,6 @@ def test_model_initial():
         "description": None,
         "ynr_party_id": None,
         "ynr_party_name": None,
-        "publisher_person": None,
         "ynr_person_id": None,
         "ynr_person_name": None,
         "ballot_id": None,
