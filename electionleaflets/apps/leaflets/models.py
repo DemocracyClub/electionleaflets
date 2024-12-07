@@ -35,9 +35,6 @@ class Leaflet(models.Model):
         blank=True, null=True, max_length=255, db_index=True
     )
     ynr_party_name = models.CharField(blank=True, null=True, max_length=255)
-    publisher_person = models.ForeignKey(
-        Person, blank=True, null=True, on_delete=models.CASCADE
-    )
     ynr_person_id = models.IntegerField(blank=True, null=True, db_index=True)
     ynr_person_name = models.CharField(blank=True, null=True, max_length=255)
     ballot_id = models.CharField(
