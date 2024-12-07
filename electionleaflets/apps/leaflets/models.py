@@ -12,7 +12,6 @@ from django.db.models import JSONField
 from django.forms.models import model_to_dict
 from django.urls import reverse
 from elections.models import Election
-from people.models import Person
 from PIL import Image
 from slugify import slugify
 from sorl.thumbnail import ImageField, delete
@@ -35,9 +34,6 @@ class Leaflet(models.Model):
         blank=True, null=True, max_length=255, db_index=True
     )
     ynr_party_name = models.CharField(blank=True, null=True, max_length=255)
-    publisher_person = models.ForeignKey(
-        Person, blank=True, null=True, on_delete=models.CASCADE
-    )
     ynr_person_id = models.IntegerField(blank=True, null=True, db_index=True)
     ynr_person_name = models.CharField(blank=True, null=True, max_length=255)
     ballot_id = models.CharField(
@@ -102,24 +98,12 @@ class Leaflet(models.Model):
         return None
 
     def get_person(self):
-        if (
-            self.ynr_person_id
-            and self.ynr_person_name
-            and not self.publisher_person
-        ):
+        if self.ynr_person_id and self.ynr_person_name:
             return {
                 "link": reverse(
                     "person", kwargs={"remote_id": self.ynr_person_id}
                 ),
                 "name": self.ynr_person_name,
-            }
-        if self.publisher_person:
-            return {
-                "link": reverse(
-                    "person",
-                    kwargs={"remote_id": self.publisher_person.remote_id},
-                ),
-                "name": self.publisher_person.name,
             }
         return None
 

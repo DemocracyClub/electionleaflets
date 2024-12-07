@@ -3,7 +3,7 @@
 from django.db import migrations
 
 
-def move_party_model_to_ynr_party(apps, schema_editor):
+def move_publisher_person_data_to_ynr_id(apps, schema_editor):
     Leaflet = apps.get_model("leaflets", "Leaflet")
     qs = (
         Leaflet.objects.exclude(publisher_person=None)
@@ -13,12 +13,11 @@ def move_party_model_to_ynr_party(apps, schema_editor):
 
     for leaflet in qs:
         # The old model only knew about one sender, the new one deal with a list
-        # of senders. Assign the old remote ID to a list
-        person_id = leaflet.publisher_person.remote_id
-
+        # of senders. Assign the old remote ID to a list.
         # This is the most important thing to set, everything else
         # is a nice to have that we may as well do while we're here.
         # We can recover all other data from YNR later.
+        person_id = leaflet.publisher_person.remote_id
         leaflet.person_ids = [person_id]
 
         # Try to make a "ynr like" structure from the existing data
@@ -83,6 +82,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(
-            move_party_model_to_ynr_party, migrations.RunPython.noop
+            move_publisher_person_data_to_ynr_id, migrations.RunPython.noop
         ),
     ]

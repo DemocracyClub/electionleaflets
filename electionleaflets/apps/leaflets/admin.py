@@ -25,7 +25,6 @@ class LeafletAdmin(admin.ModelAdmin):
     ]
     exclude = (
         "election",
-        "publisher_person",
         "ynr_party_name",
         "constituency",
         "ynr_person_id",
