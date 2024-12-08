@@ -1,7 +1,7 @@
-from django.urls import re_path
+from django.urls import path
 
 from .views import PersonView
 
 urlpatterns = [
-    re_path(r"^(?P<remote_id>\d+)/$", PersonView.as_view(), name="person"),
+    path("<int:person_id>/", PersonView.as_view(), name="person"),
 ]
