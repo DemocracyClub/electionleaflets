@@ -1,20 +1,24 @@
 from datetime import datetime
 
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.views.generic import DetailView
+from django.http import Http404
+from django.views.generic import TemplateView
 from leaflets.models import Leaflet
 from people.models import Person
 
 
-class PersonView(DetailView):
-    model = Person
+class PersonView(TemplateView):
     template_name = "people/person.html"
-    slug_field = "remote_id"
-    slug_url_kwarg = "remote_id"
 
     def get_context_data(self, **kwargs):
         context = super(PersonView, self).get_context_data(**kwargs)
-        qs = Leaflet.objects.filter(publisher_person_id=self.object.pk)
+        qs = Leaflet.objects.filter(
+            person_ids__contains=self.kwargs["person_id"]
+        )
+        if not qs:
+            raise Http404(
+                f"No leaflets found for person {self.kwargs["person_id"]}"
+            )
 
         paginator = Paginator(qs, 60)
         page = self.request.GET.get("page")
