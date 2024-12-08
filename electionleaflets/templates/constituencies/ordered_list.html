@@ -1,5 +1,0 @@
-<ol>
-	{% for constituency in constituencies %}
-		<li><a href="{% url "constituency" constituency.slug %}">{{ constituency.name }}</a> {{constituency.count}} leaflets</li>
-    {% endfor %}
-</ol>
