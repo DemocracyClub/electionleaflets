@@ -200,7 +200,9 @@ class TestView(TemplateView):
         links.append(
             {
                 "text": "Person view",
-                "url": reverse("person", kwargs={"person_id": leaflet.people[0]}),
+                "url": reverse(
+                    "person", kwargs={"person_id": leaflet.people[0]}
+                ),
             }
         )
 

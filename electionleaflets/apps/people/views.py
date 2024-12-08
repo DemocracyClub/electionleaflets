@@ -1,7 +1,8 @@
 from datetime import datetime
 
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.views.generic import DetailView, TemplateView
+from django.http import Http404
+from django.views.generic import TemplateView
 from leaflets.models import Leaflet
 
 
@@ -10,7 +11,11 @@ class PersonView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(PersonView, self).get_context_data(**kwargs)
-        qs = Leaflet.objects.filter(people__in=self.kwargs["person_id"])
+        qs = Leaflet.objects.filter(
+            person_ids__contains=self.kwargs["person_id"]
+        )
+        if not qs:
+            raise Http404("Person not found")
 
         paginator = Paginator(qs, 60)
         page = self.request.GET.get("page")
