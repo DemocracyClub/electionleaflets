@@ -4,16 +4,13 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic import RedirectView, TemplateView
 
-from electionleaflets.apps.api.feeds import ConstituencyFeed, LatestLeafletsFeed
+from electionleaflets.apps.api.feeds import LatestLeafletsFeed
 from electionleaflets.apps.core.views import (
     HomeView,
     MaintenanceView,
-    ReportThanksView,
-    ReportView,
 )
 
 admin.autodiscover()
-
 
 MAINTENANCE_MODE = getattr(settings, "MAINTENANCE_MODE", False)
 if MAINTENANCE_MODE:
@@ -30,11 +27,6 @@ else:
         re_path(r"^api/", include("api.urls")),
         # Feeds
         re_path(r"^feeds/latest/$", LatestLeafletsFeed(), name="latest_feed"),
-        re_path(
-            r"^feeds/constituency/(?P<cons_slug>[\w_\-\.]+)/$",
-            ConstituencyFeed(),
-            name="constituency_feed",
-        ),
         # Individual urls
         re_path(
             r"^about/$",
@@ -50,14 +42,6 @@ else:
             r"^press/$",
             TemplateView.as_view(template_name="core/press.html"),
             name="press",
-        ),
-        re_path(
-            r"^report/(?P<pk>\d+)/sent/$",
-            ReportThanksView.as_view(),
-            name="report_abuse_sent",
-        ),
-        re_path(
-            r"^report/(?P<pk>\d+)/$", ReportView.as_view(), name="report_abuse"
         ),
         # Administration URLS
         path("admin/", admin.site.urls),
