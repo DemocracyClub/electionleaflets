@@ -8,12 +8,9 @@ from electionleaflets.apps.api.feeds import ConstituencyFeed, LatestLeafletsFeed
 from electionleaflets.apps.core.views import (
     HomeView,
     MaintenanceView,
-    ReportThanksView,
-    ReportView,
 )
 
 admin.autodiscover()
-
 
 MAINTENANCE_MODE = getattr(settings, "MAINTENANCE_MODE", False)
 if MAINTENANCE_MODE:
@@ -50,14 +47,6 @@ else:
             r"^press/$",
             TemplateView.as_view(template_name="core/press.html"),
             name="press",
-        ),
-        re_path(
-            r"^report/(?P<pk>\d+)/sent/$",
-            ReportThanksView.as_view(),
-            name="report_abuse_sent",
-        ),
-        re_path(
-            r"^report/(?P<pk>\d+)/$", ReportView.as_view(), name="report_abuse"
         ),
         # Administration URLS
         path("admin/", admin.site.urls),
