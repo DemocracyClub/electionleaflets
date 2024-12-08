@@ -4,7 +4,6 @@ from io import BytesIO
 from pathlib import Path
 
 import piexif
-from constituencies.models import Constituency
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db import models
@@ -45,9 +44,6 @@ class Leaflet(models.Model):
     person_ids = JSONField(default=list)
 
     election = models.ForeignKey(Election, null=True, on_delete=models.CASCADE)
-    constituency = models.ForeignKey(
-        Constituency, blank=True, null=True, on_delete=models.CASCADE
-    )
     imprint = models.TextField(blank=True, null=True)
     postcode = models.CharField(max_length=150, blank=True)
     name = models.CharField(blank=True, max_length=300)

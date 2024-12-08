@@ -32,7 +32,6 @@ def test_model_initial():
         "people": {},
         "person_ids": [],
         "election": None,
-        "constituency": None,
         "imprint": None,
         "postcode": "",
         "name": "",
