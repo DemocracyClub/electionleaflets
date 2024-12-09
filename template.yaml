@@ -79,6 +79,11 @@ Parameters:
     Description: "The S3 bucket to store uploaded leaflets in."
     Type: String
 
+Conditions:
+  UseBasicAuth: !Or
+  - !Equals [ !Ref DCEnvironment, development ]
+  - !Equals [ !Ref DCEnvironment, staging ]
+
 Resources:
 
   DependenciesLayer:
@@ -138,6 +143,34 @@ Resources:
         AllowMethods: "'GET'"
         AllowOrigin: "'*'"
         MaxAge: "'600'"
+      Auth:
+        DefaultAuthorizer: !If [ UseBasicAuth, "BasicAuthFunction", !Ref AWS::NoValue]
+        Authorizers:
+          BasicAuthFunction:
+            FunctionArn: !GetAtt BasicAuthFunction.Arn
+            FunctionPayloadType: REQUEST
+            Identity:
+              Headers:
+                - Authorization
+              ReauthorizeEvery: 3600
+
+  BasicAuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ElectionLeafletsLambdaExecutionRole"
+      CodeUri: ./electionleaflets/
+      Handler: lambda_basic_auth.lambda_handler
+      Runtime: python3.12
+
+  BasicAuthGatewayResponse:
+    Condition: UseBasicAuth
+    Type: AWS::ApiGateway::GatewayResponse
+    Properties:
+      ResponseParameters:
+        gatewayresponse.header.www-authenticate: "'Basic realm=\"Restricted\"'"
+      ResponseType: UNAUTHORIZED
+      RestApiId: !Ref ElectionLeafletsAPIGateway
+      StatusCode: '401'
 
   ElectionLeafletsFunctionLogGroup:
     Type: AWS::Logs::LogGroup
