@@ -1,7 +1,6 @@
 import pytest
 from django.utils import timezone
 from leaflets.models import Leaflet
-from uk_political_parties.models import Party
 
 from electionleaflets.apps.api.views import LeafletFilter
 
@@ -49,8 +48,6 @@ class TestLeafletFilter:
             data={"party": "PP1"}, queryset=Leaflet.objects.all()
         )
         assert (
-            filter.party_filter(
-                Leaflet.objects.all(), "party", "PP1"
-            ).count()
+            filter.party_filter(Leaflet.objects.all(), "party", "PP1").count()
             == 1
         )

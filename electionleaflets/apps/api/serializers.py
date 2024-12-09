@@ -2,18 +2,6 @@ from leaflets.models import Leaflet, LeafletImage
 from people.models import Person
 from rest_framework import serializers
 from sorl.thumbnail import get_thumbnail
-from uk_political_parties.models import Party
-
-
-class PartySerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Party
-        fields = (
-            "pk",
-            "party_name",
-            "party_type",
-            "status",
-        )
 
 
 class PersonSerializer(serializers.HyperlinkedModelSerializer):
@@ -41,9 +29,15 @@ class LeafletImageSerializer(serializers.ModelSerializer):
 
 class LeafletSerializer(serializers.HyperlinkedModelSerializer):
     images = LeafletImageSerializer(many=True, required=False)
-    party = PartySerializer(required=False)
+    party = serializers.SerializerMethodField()
     people = serializers.SerializerMethodField()
     first_page_thumb = serializers.SerializerMethodField()
+
+    def get_party(self, obj: Leaflet):
+        return {
+            "party_id": obj.ynr_party_id,
+            "party_name": obj.ynr_party_name,
+        }
 
     def get_people(self, obj):
         people = []

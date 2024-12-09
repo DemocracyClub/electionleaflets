@@ -5,7 +5,6 @@ from django.urls import reverse
 from django.views.generic import TemplateView
 from leaflets.models import Leaflet, LeafletImage
 from people.models import Person
-from uk_political_parties.models import Party
 
 from .helpers import CacheControlMixin
 
@@ -116,12 +115,12 @@ class TestView(TemplateView):
         )
         links.append({"text": "Add leaflet", "url": reverse("upload_leaflet")})
 
-        party = Party.objects.order_by("?").first()
+        leaflet = Leaflet.objects.order_by("?").first()
         links.append({"text": "Parties", "url": reverse("parties")})
         links.append(
             {
                 "text": "Party view",
-                "url": reverse("party-view", kwargs={"pk": party.pk}),
+                "url": reverse("party-view", kwargs={"pk": leaflet.ynr_party_id}),
             }
         )
 
