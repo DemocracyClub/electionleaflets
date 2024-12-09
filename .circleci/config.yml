@@ -241,7 +241,7 @@ workflows:
             - run-tests                            # staging should only deploy if tests pass
             - sam_build                       # deploy needs .aws-sam/build/
           context: [ deployment-staging-election-leaflets ]
-          filters: { branches: { only: [ master ] } }
+          filters: { branches: { only: [ master, feat/basic-auth-lambda-on-dev-and-stage ] } }
 
       - sam_deploy:
           name: sam_deploy_production
