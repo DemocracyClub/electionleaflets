@@ -1,18 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from constituencies.models import Constituency
-from django.conf import settings
-from django.contrib.sites.models import Site
-from django.core.mail import EmailMultiAlternatives
-from django.http import HttpResponseRedirect
-from django.template.loader import render_to_string
 from django.urls import reverse
-from django.views.generic import DetailView, FormView, TemplateView
+from django.views.generic import TemplateView
 from leaflets.models import Leaflet, LeafletImage
-from people.models import Person
-from uk_political_parties.models import Party
 
-from .forms import ReportAbuseForm
 from .helpers import CacheControlMixin
 
 
@@ -40,61 +31,6 @@ class HomeView(CacheControlMixin, TemplateView):
 
 class MaintenanceView(TemplateView):
     template_name = "core/maintenance.html"
-
-
-class ReportView(DetailView, FormView):
-    model = Leaflet
-    form_class = ReportAbuseForm
-    template_name = "core/report_abuse.html"
-
-    def get(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        self.object = self.get_object()
-        context = self.get_context_data(
-            form=form,
-            object=self.object,
-        )
-        return self.render_to_response(context)
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super(ReportView, self).post(request, *args, **kwargs)
-
-    def form_valid(self, form):
-        domain = Site.objects.get_current().domain
-        ctx = {
-            "link": "http://%s%s"
-            % (
-                domain,
-                reverse("leaflet", kwargs={"pk": self.object.id}),
-            ),
-            "name": form.cleaned_data["name"],
-            "email": form.cleaned_data["email"],
-            "details": form.cleaned_data["details"],
-        }
-
-        subject = "{0} – {1}".format(
-            settings.REPORT_EMAIL_SUBJECT, self.object.id
-        )
-        from_email = settings.DEFAULT_FROM_EMAIL
-        to = settings.EMAIL_RECIPIENT
-
-        text_content = render_to_string("email/abuse_report.txt", ctx)
-        html_content = render_to_string("email/abuse_report.html", ctx)
-
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
-
-        return HttpResponseRedirect(
-            reverse("report_abuse_sent", kwargs={"pk": self.object.pk})
-        )
-
-
-class ReportThanksView(DetailView):
-    model = Leaflet
-    template_name = "core/report_sent.html"
 
 
 class TestView(TemplateView):
@@ -136,15 +72,6 @@ class TestView(TemplateView):
         links.append(
             {"text": "Constituencies", "url": reverse("constituencies_report")}
         )
-        constituency = Constituency.objects.order_by("?").first()
-        links.append(
-            {
-                "text": "Constituency view",
-                "url": reverse(
-                    "constituency-view", kwargs={"pk": constituency.pk}
-                ),
-            }
-        )
 
         links.append(
             {
@@ -176,33 +103,24 @@ class TestView(TemplateView):
             }
         )
         links.append({"text": "Add leaflet", "url": reverse("upload_leaflet")})
-        links.append(
-            {
-                "text": "Report a leaflet",
-                "url": reverse("report_abuse", kwargs={"pk": leaflet.pk}),
-            }
-        )
-        links.append(
-            {
-                "text": "Report a leaflet - thanks",
-                "url": reverse("report_abuse_sent", kwargs={"pk": leaflet.pk}),
-            }
-        )
 
-        party = Party.objects.order_by("?").first()
+        leaflet = Leaflet.objects.order_by("?").first()
         links.append({"text": "Parties", "url": reverse("parties")})
         links.append(
             {
                 "text": "Party view",
-                "url": reverse("party-view", kwargs={"pk": party.pk}),
+                "url": reverse(
+                    "party-view", kwargs={"pk": leaflet.ynr_party_id}
+                ),
             }
         )
 
-        person = Person.objects.order_by("?").first()
         links.append(
             {
                 "text": "Person view",
-                "url": reverse("person", kwargs={"remote_id": person.pk}),
+                "url": reverse(
+                    "person", kwargs={"remote_id": leaflet.ynr_person_id}
+                ),
             }
         )
 

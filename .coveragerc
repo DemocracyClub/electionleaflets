@@ -1,2 +1,5 @@
 [run]
-omit = ../*migrations*,electionleaflets/third_party/*,test_*
+omit =
+    */migrations/*
+    test_*
+    */conftest.py

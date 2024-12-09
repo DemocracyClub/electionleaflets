@@ -3,17 +3,11 @@ from pathlib import Path
 import pytest
 from leaflets.models import Leaflet, LeafletImage
 from leaflets.tests.conftest import TEST_IMAGE_LOCATION
-from uk_political_parties.models import Party
 
 
 @pytest.fixture
 def leaflet():
     return Leaflet.objects.create(title="Test Leaflet", description=None)
-
-
-@pytest.fixture
-def party():
-    return Party.objects.create(party_name="Labour Party")
 
 
 @pytest.mark.django_db
@@ -23,18 +17,14 @@ def test_model_initial():
         "id": None,
         "title": "",
         "description": None,
-        "publisher_party": None,
         "ynr_party_id": None,
         "ynr_party_name": None,
-        "publisher_person": None,
         "ynr_person_id": None,
         "ynr_person_name": None,
         "ballot_id": None,
         "ballots": [],
         "people": {},
         "person_ids": [],
-        "election": None,
-        "constituency": None,
         "imprint": None,
         "postcode": "",
         "name": "",
@@ -53,13 +43,12 @@ def test_markdown_error(client, leaflet):
 
 
 @pytest.mark.django_db
-def test_leaflet_detail(client, party):
+def test_leaflet_detail(client):
     leaflet = Leaflet.objects.create(
         title="Test Leaflet",
         description=None,
         ynr_party_id="party:1",
         ynr_party_name="Labour Party",
-        publisher_party=party,
     )
     response = client.get(leaflet.get_absolute_url())
     assert response.status_code == 200
