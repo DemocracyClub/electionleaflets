@@ -10,7 +10,6 @@ from django.db import models
 from django.db.models import JSONField
 from django.forms.models import model_to_dict
 from django.urls import reverse
-from elections.models import Election
 from PIL import Image
 from slugify import slugify
 from sorl.thumbnail import ImageField, delete
@@ -43,7 +42,6 @@ class Leaflet(models.Model):
     people = JSONField(default=dict)
     person_ids = JSONField(default=list)
 
-    election = models.ForeignKey(Election, null=True, on_delete=models.CASCADE)
     imprint = models.TextField(blank=True, null=True)
     postcode = models.CharField(max_length=150, blank=True)
     name = models.CharField(blank=True, max_length=300)
