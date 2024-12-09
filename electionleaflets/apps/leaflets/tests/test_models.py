@@ -10,7 +10,6 @@ def leaflet():
     return Leaflet.objects.create(title="Test Leaflet", description=None)
 
 
-
 @pytest.mark.django_db
 def test_model_initial():
     leaflet = Leaflet()
@@ -26,7 +25,6 @@ def test_model_initial():
         "ballots": [],
         "people": {},
         "person_ids": [],
-        "election": None,
         "imprint": None,
         "postcode": "",
         "name": "",
