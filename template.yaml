@@ -117,6 +117,7 @@ Resources:
         HTTPRequests:
           Type: Api
           Properties:
+            RestApiId: !Ref ElectionLeafletsAPIGateway
             Path: /{proxy+}
             Method: ANY
         HTTPRequestRoots:
@@ -146,7 +147,7 @@ Resources:
 Outputs:
   ElectionLeafletsFqdn:
     Description: "API Gateway endpoint FQDN for EC API function"
-    Value: !Sub "${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com"
+    Value: !Sub "${ElectionLeafletsAPIGateway}.execute-api.${AWS::Region}.amazonaws.com"
     Export:
       Name: !Join [ ":", [ !Ref "AWS::StackName", "ElectionLeafletsFqdn" ] ]
 
