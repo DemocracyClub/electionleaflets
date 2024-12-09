@@ -4,7 +4,6 @@ from constituencies.models import Constituency
 from django.urls import reverse
 from django.views.generic import TemplateView
 from leaflets.models import Leaflet, LeafletImage
-from people.models import Person
 
 from .helpers import CacheControlMixin
 
@@ -124,11 +123,10 @@ class TestView(TemplateView):
             }
         )
 
-        person = Person.objects.order_by("?").first()
         links.append(
             {
                 "text": "Person view",
-                "url": reverse("person", kwargs={"remote_id": person.pk}),
+                "url": reverse("person", kwargs={"remote_id": leaflet.ynr_person_id}),
             }
         )
 

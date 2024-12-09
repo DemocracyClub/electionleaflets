@@ -1,19 +1,6 @@
 from leaflets.models import Leaflet, LeafletImage
-from people.models import Person
 from rest_framework import serializers
 from sorl.thumbnail import get_thumbnail
-
-
-class PersonSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Person
-        fields = (
-            "pk",
-            "name",
-            "remote_id",
-            "source_name",
-            "source_url",
-        )
 
 
 class LeafletImageSerializer(serializers.ModelSerializer):
