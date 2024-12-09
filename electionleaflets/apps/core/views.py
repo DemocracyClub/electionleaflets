@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from constituencies.models import Constituency
 from django.urls import reverse
 from django.views.generic import TemplateView
 from leaflets.models import Leaflet, LeafletImage
@@ -73,15 +72,6 @@ class TestView(TemplateView):
         links.append(
             {"text": "Constituencies", "url": reverse("constituencies_report")}
         )
-        constituency = Constituency.objects.order_by("?").first()
-        links.append(
-            {
-                "text": "Constituency view",
-                "url": reverse(
-                    "constituency-view", kwargs={"pk": constituency.pk}
-                ),
-            }
-        )
 
         links.append(
             {
@@ -119,14 +109,18 @@ class TestView(TemplateView):
         links.append(
             {
                 "text": "Party view",
-                "url": reverse("party-view", kwargs={"pk": leaflet.ynr_party_id}),
+                "url": reverse(
+                    "party-view", kwargs={"pk": leaflet.ynr_party_id}
+                ),
             }
         )
 
         links.append(
             {
                 "text": "Person view",
-                "url": reverse("person", kwargs={"remote_id": leaflet.ynr_person_id}),
+                "url": reverse(
+                    "person", kwargs={"remote_id": leaflet.ynr_person_id}
+                ),
             }
         )
 

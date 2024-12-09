@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic import RedirectView, TemplateView
 
-from electionleaflets.apps.api.feeds import ConstituencyFeed, LatestLeafletsFeed
+from electionleaflets.apps.api.feeds import LatestLeafletsFeed
 from electionleaflets.apps.core.views import (
     HomeView,
     MaintenanceView,
@@ -27,11 +27,6 @@ else:
         re_path(r"^api/", include("api.urls")),
         # Feeds
         re_path(r"^feeds/latest/$", LatestLeafletsFeed(), name="latest_feed"),
-        re_path(
-            r"^feeds/constituency/(?P<cons_slug>[\w_\-\.]+)/$",
-            ConstituencyFeed(),
-            name="constituency_feed",
-        ),
         # Individual urls
         re_path(
             r"^about/$",
