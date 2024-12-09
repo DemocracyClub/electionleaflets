@@ -64,7 +64,7 @@ Parameters:
     Description: "The password for the postgres user"
     Type: String
 
-  AppDCEnvironment:
+  DCEnvironment:
     Default: DC_ENVIRONMENT
     Description: "The DC_ENVIRONMENT environment variable passed to the app."
     Type: AWS::SSM::Parameter::Value<String>
@@ -110,7 +110,7 @@ Resources:
           DATABASE_HOST: !Ref AppPostgresHost
           POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
           DATABASE_PASS: !Ref AppPostgresPassword
-          DC_ENVIRONMENT: !Ref AppDCEnvironment
+          DC_ENVIRONMENT: !Ref DCEnvironment
           APP_DOMAIN: !Ref AppDomain
           LEAFLET_IMAGES_BUCKET_NAME: !Ref AppLeafletImagesBucketName
       Events:
