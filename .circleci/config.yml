@@ -170,7 +170,6 @@ jobs:
       - run: |
           cd thumbs
           uv run sam build
-      - run: uv run sam validate --region eu-west-2
 
       - run:
           name: "Deploy thumbs function"
