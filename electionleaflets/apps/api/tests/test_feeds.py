@@ -1,6 +1,5 @@
 import pytest
-from api.feeds import ConstituencyFeed, LatestLeafletsFeed
-from constituencies.models import Constituency
+from api.feeds import LatestLeafletsFeed
 from leaflets.tests.model_factory import LeafletFactory
 
 
@@ -8,11 +7,6 @@ from leaflets.tests.model_factory import LeafletFactory
 def create_leaflets():
     for _ in range(10):
         LeafletFactory()
-
-
-@pytest.fixture
-def create_constituency():
-    return Constituency.objects.create(name="test_name", slug="test_slug")
 
 
 @pytest.mark.django_db
@@ -40,32 +34,3 @@ class TestLatestLeafletsFeed:
             assert (
                 LatestLeafletsFeed.item_description(self, item) == description
             )
-
-
-@pytest.mark.django_db
-class TestConstituencyFeed:
-    def test_get_object(self, create_constituency):
-        feed = ConstituencyFeed()
-        obj = feed.get_object(None, create_constituency.slug)
-        assert obj.slug == create_constituency.slug
-        assert feed.link == "/constituencies/%s/" % obj.slug
-        assert (
-            feed.description
-            == "The most recently uploaded leaflets for %s" % obj.name
-        )
-
-    def test_items(self, create_leaflets, create_constituency):
-        LeafletFactory(constituency=create_constituency)
-        feed = ConstituencyFeed()
-        items = feed.items(create_constituency)
-        assert items.count() == 1
-
-    def test_item_title(self, create_constituency):
-        feed = ConstituencyFeed()
-        item = LeafletFactory()
-        assert feed.item_title(item) == item.title
-
-    def test_item_description(self, create_constituency):
-        feed = ConstituencyFeed()
-        item = LeafletFactory()
-        assert feed.item_description(item) == item.description
