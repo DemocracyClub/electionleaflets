@@ -122,10 +122,19 @@ Resources:
         HTTPRequestRoots:
           Type: Api
           Properties:
+            RestApiId: !Ref ElectionLeafletsAPIGateway
             Path: /
             Method: ANY
 
-
+  ElectionLeafletsAPIGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      AlwaysDeploy: True
+      StageName: Prod
+      Cors:
+        AllowMethods: "'GET'"
+        AllowOrigin: "'*'"
+        MaxAge: "'600'"
 
   ElectionLeafletsFunctionLogGroup:
     Type: AWS::Logs::LogGroup
@@ -140,3 +149,9 @@ Outputs:
     Value: !Sub "${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com"
     Export:
       Name: !Join [ ":", [ !Ref "AWS::StackName", "ElectionLeafletsFqdn" ] ]
+
+  ElectionLeafletsFqdnTempValue:
+    Description: "API Gateway endpoint FQDN for EC API function"
+    Value: !Sub "${ElectionLeafletsAPIGateway}.execute-api.${AWS::Region}.amazonaws.com"
+    Export:
+      Name: !Join [ ":", [ !Ref "AWS::StackName", "ElectionLeafletsFqdnTempValue" ] ]
