@@ -1,7 +1,6 @@
 from constituencies.models import Constituency
 from django.db import models
 from elections.models import Election
-from uk_political_parties.models import Party
 
 
 class Person(models.Model):
@@ -13,17 +12,9 @@ class Person(models.Model):
     source_name = models.CharField(blank=True, max_length=100)
     image_url = models.URLField(blank=True, null=True)
     elections = models.ManyToManyField(Election)
-    parties = models.ManyToManyField(Party, through="PartyMemberships")
     constituencies = models.ManyToManyField(
         Constituency, through="PersonConstituencies"
     )
-
-    @property
-    def current_party(self):
-        parties = self.partymemberships_set.filter(membership_end=None)
-        if parties:
-            return parties[0]
-        return None
 
     @property
     def current_election(self):
@@ -37,13 +28,6 @@ class Person(models.Model):
 
     def __unicode__(self):
         return "%s (%s)" % (self.name, self.remote_id)
-
-
-class PartyMemberships(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE)
-    party = models.ForeignKey(Party, on_delete=models.CASCADE)
-    membership_start = models.DateField()
-    membership_end = models.DateField(null=True)
 
 
 class PersonConstituencies(models.Model):

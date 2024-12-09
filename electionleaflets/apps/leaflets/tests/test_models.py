@@ -3,17 +3,12 @@ from pathlib import Path
 import pytest
 from leaflets.models import Leaflet, LeafletImage
 from leaflets.tests.conftest import TEST_IMAGE_LOCATION
-from uk_political_parties.models import Party
 
 
 @pytest.fixture
 def leaflet():
     return Leaflet.objects.create(title="Test Leaflet", description=None)
 
-
-@pytest.fixture
-def party():
-    return Party.objects.create(party_name="Labour Party")
 
 
 @pytest.mark.django_db
@@ -51,7 +46,7 @@ def test_markdown_error(client, leaflet):
 
 
 @pytest.mark.django_db
-def test_leaflet_detail(client, party):
+def test_leaflet_detail(client):
     leaflet = Leaflet.objects.create(
         title="Test Leaflet",
         description=None,
