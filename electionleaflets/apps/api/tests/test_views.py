@@ -1,7 +1,6 @@
 import pytest
 from django.utils import timezone
 from leaflets.models import Leaflet
-from uk_political_parties.models import Party
 
 from electionleaflets.apps.api.views import LeafletFilter
 
@@ -20,14 +19,10 @@ def all_leaflets():
 
 
 @pytest.fixture
-def party():
-    return Party.objects.create(party_name="Test Party", party_id="party:1")
-
-
-@pytest.fixture
-def leaflet_with_party(all_leaflets, party):
+def leaflet_with_party(all_leaflets):
     leaflet = all_leaflets[0]
-    leaflet.publisher_party = party
+    leaflet.ynr_party_id = "party:1"
+    leaflet.ynr_party_name = "Vote for Froglet"
     leaflet.save()
     return leaflet
 
@@ -49,13 +44,10 @@ class TestLeafletFilter:
         )
 
     def test_party_filter(self, leaflet_with_party):
-        party = Party.objects.get(party_id="party:1")
         filter = LeafletFilter(
-            data={"party": party}, queryset=Leaflet.objects.all()
+            data={"party": "PP1"}, queryset=Leaflet.objects.all()
         )
         assert (
-            filter.party_filter(
-                Leaflet.objects.all(), party, party.party_id
-            ).count()
+            filter.party_filter(Leaflet.objects.all(), "party", "PP1").count()
             == 1
         )

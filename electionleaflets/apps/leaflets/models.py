@@ -4,19 +4,15 @@ from io import BytesIO
 from pathlib import Path
 
 import piexif
-from constituencies.models import Constituency
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db import models
 from django.db.models import JSONField
 from django.forms.models import model_to_dict
 from django.urls import reverse
-from elections.models import Election
-from people.models import Person
 from PIL import Image
 from slugify import slugify
 from sorl.thumbnail import ImageField, delete
-from uk_political_parties.models import Party
 
 from electionleaflets.storages import TempUploadBaseMixin
 
@@ -32,16 +28,10 @@ class Leaflet(models.Model):
 
     title = models.CharField(blank=True, max_length=765)
     description = models.TextField(blank=True, null=True)
-    publisher_party = models.ForeignKey(
-        Party, blank=True, null=True, on_delete=models.CASCADE
-    )
     ynr_party_id = models.CharField(
         blank=True, null=True, max_length=255, db_index=True
     )
     ynr_party_name = models.CharField(blank=True, null=True, max_length=255)
-    publisher_person = models.ForeignKey(
-        Person, blank=True, null=True, on_delete=models.CASCADE
-    )
     ynr_person_id = models.IntegerField(blank=True, null=True, db_index=True)
     ynr_person_name = models.CharField(blank=True, null=True, max_length=255)
     ballot_id = models.CharField(
@@ -52,10 +42,6 @@ class Leaflet(models.Model):
     people = JSONField(default=dict)
     person_ids = JSONField(default=list)
 
-    election = models.ForeignKey(Election, null=True, on_delete=models.CASCADE)
-    constituency = models.ForeignKey(
-        Constituency, blank=True, null=True, on_delete=models.CASCADE
-    )
     imprint = models.TextField(blank=True, null=True)
     postcode = models.CharField(max_length=150, blank=True)
     name = models.CharField(blank=True, max_length=300)
@@ -101,29 +87,17 @@ class Leaflet(models.Model):
     def get_title(self):
         if self.title and len(self.title):
             return self.title
-        if self.publisher_party:
-            return "%s leaflet" % self.publisher_party.party_name
+        if self.ynr_party_name:
+            return f"{self.ynr_party_name} leaflet"
         return None
 
     def get_person(self):
-        if (
-            self.ynr_person_id
-            and self.ynr_person_name
-            and not self.publisher_person
-        ):
+        if self.ynr_person_id and self.ynr_person_name:
             return {
                 "link": reverse(
                     "person", kwargs={"remote_id": self.ynr_person_id}
                 ),
                 "name": self.ynr_person_name,
-            }
-        if self.publisher_person:
-            return {
-                "link": reverse(
-                    "person",
-                    kwargs={"remote_id": self.publisher_person.remote_id},
-                ),
-                "name": self.publisher_person.name,
             }
         return None
 
@@ -134,13 +108,7 @@ class Leaflet(models.Model):
                 "link": reverse("party-view", kwargs={"pk": pp_id}),
                 "name": self.ynr_party_name,
             }
-        if self.publisher_party:
-            return {
-                "link": reverse(
-                    "party-view", kwargs={"pk": self.publisher_party.pk}
-                ),
-                "name": self.publisher_party.party_name,
-            }
+
         return None
 
 

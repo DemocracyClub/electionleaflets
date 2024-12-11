@@ -13,7 +13,7 @@ class LeafletAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "title",
-        "publisher_party",
+        "ynr_party_name",
         "postcode",
         "name",
         "email",
@@ -25,8 +25,7 @@ class LeafletAdmin(admin.ModelAdmin):
     ]
     exclude = (
         "election",
-        "publisher_person",
-        "publisher_party",
+        "ynr_party_name",
         "constituency",
         "ynr_person_id",
     )

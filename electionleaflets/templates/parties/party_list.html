@@ -5,10 +5,10 @@
   <div class="columns large-12">
     <h1>Parties</h1>
     <ul class="side-nav">
-      {% for party in object_list %}
+      {% for object in object_list %}
         <li>
-          <a href="{% url "party-view"  party.pk party.slug %}">
-          {{ party.party_name }} ({{ party.num_leaflets }} leaflets in total)
+          <a href="{% url "party-view"  object.ynr_party_id object.ynr_party_name|slugify %}">
+          {{ object.ynr_party_name }} ({{ object.count }} leaflets in total)
           </a>
         </li>
       {% endfor %}

@@ -6,13 +6,15 @@ from django.db.models import Count, Q
 from django.http import Http404
 from django.views.generic import ListView, TemplateView
 from leaflets.models import Leaflet
-from uk_political_parties.models import Party
 
 
 class PartyList(ListView):
     def get_queryset(self):
-        return Party.objects.annotate(num_leaflets=Count("leaflet")).order_by(
-            "-num_leaflets", "party_name"
+        return (
+            Leaflet.objects.exclude(ynr_party_id__in=[None, ""])
+            .values("ynr_party_id", "ynr_party_name")
+            .annotate(count=Count("ynr_party_id"))
+            .order_by("-count")
         )
 
     template_name = "parties/party_list.html"
@@ -23,9 +25,7 @@ class PartyView(TemplateView):
         context = super(PartyView, self).get_context_data(**kwargs)
         id = re.sub(r"[^0-9]", "", self.kwargs["pk"])
         qs = Leaflet.objects.filter(
-            Q(publisher_party=self.kwargs["pk"])
-            | Q(ynr_party_id=self.kwargs["pk"])
-            | Q(ynr_party_id=f"party:{id}")
+            Q(ynr_party_id=self.kwargs["pk"]) | Q(ynr_party_id=f"party:{id}")
         )
         if not qs.exists():
             raise Http404()

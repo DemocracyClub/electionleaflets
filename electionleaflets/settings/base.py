@@ -242,7 +242,6 @@ THANKYOU_MESSAGES = [
     "Thanks for the leaflet, the election is a tiny bit more transparent!",
 ]
 
-REPORT_EMAIL_SUBJECT = "Leaflet Report"
 
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
 

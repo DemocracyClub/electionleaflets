@@ -26,9 +26,7 @@ class LeafletFilter(filters.FilterSet):
         id = re.sub(r"[^0-9]", "", value)
 
         return queryset.filter(
-            Q(publisher_party=value)
-            | Q(ynr_party_id=value)
-            | Q(ynr_party_id=f"party:{id}")
+            Q(ynr_party_id=value) | Q(ynr_party_id=f"party:{id}")
         )
 
     ballot = filters.CharFilter(

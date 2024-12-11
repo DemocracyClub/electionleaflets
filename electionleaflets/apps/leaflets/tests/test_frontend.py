@@ -124,7 +124,7 @@ class TestLeafletUpload:
             self.select_party_and_submit()
         id = self.page.url.split("/")[-2]
         expect(self.page).to_have_url(f"{self.live_server.url}/leaflets/{id}/")
-        expect(self.page.locator("h1")).to_have_text(f"Leaflet #{id}")
+        expect(self.page.locator("h1")).to_have_text("Green Party leaflet")
         expect(self.page.locator("h2")).to_have_text("Leaflet details")
 
     def test_basic_upload_more_than_one_leaflet(self):
@@ -136,7 +136,7 @@ class TestLeafletUpload:
             self.select_party_and_submit()
         id = self.page.url.split("/")[-2]
         expect(self.page).to_have_url(f"{self.live_server.url}/leaflets/{id}/")
-        expect(self.page.locator("h1")).to_have_text(f"Leaflet #{id}")
+        expect(self.page.locator("h1")).to_have_text("Green Party leaflet")
         expect(self.page.locator("h2")).to_have_text("Leaflet details")
         assert LeafletImage.objects.count() == 2
 
