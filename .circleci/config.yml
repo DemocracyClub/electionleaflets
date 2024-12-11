@@ -183,7 +183,8 @@ jobs:
               --s3-bucket=$THUMBS_DEPLOY_BUCKET_NAME
               --parameter-overrides " \
                    AppSentryDSN='$SENTRY_DSN' \
-                   AppSentryLayer='arn:aws:lambda:eu-west-2:943013980633:layer:SentryPythonServerlessSDK:137'
+                   AppSentryLayer='arn:aws:lambda:eu-west-2:943013980633:layer:SentryPythonServerlessSDK:137' \
+            "
 
 
       - run:
@@ -196,7 +197,8 @@ jobs:
               --region us-east-1
               --parameter-overrides " \
                   AppSentryDSN='$SENTRY_DSN' \
-                  AppSentryLayer='arn:aws:lambda:us-east-1:943013980633:layer:SentryPythonServerlessSDK:137'
+                  AppSentryLayer='arn:aws:lambda:us-east-1:943013980633:layer:SentryPythonServerlessSDK:137' \
+            "
 
 
       - run:
