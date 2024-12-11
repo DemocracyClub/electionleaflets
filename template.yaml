@@ -64,7 +64,7 @@ Parameters:
     Description: "The password for the postgres user"
     Type: String
 
-  AppDCEnvironment:
+  DCEnvironment:
     Default: DC_ENVIRONMENT
     Description: "The DC_ENVIRONMENT environment variable passed to the app."
     Type: AWS::SSM::Parameter::Value<String>
@@ -110,7 +110,7 @@ Resources:
           DATABASE_HOST: !Ref AppPostgresHost
           POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
           DATABASE_PASS: !Ref AppPostgresPassword
-          DC_ENVIRONMENT: !Ref AppDCEnvironment
+          DC_ENVIRONMENT: !Ref DCEnvironment
           APP_DOMAIN: !Ref AppDomain
           LEAFLET_IMAGES_BUCKET_NAME: !Ref AppLeafletImagesBucketName
       Events:
@@ -122,10 +122,19 @@ Resources:
         HTTPRequestRoots:
           Type: Api
           Properties:
+            RestApiId: !Ref ElectionLeafletsAPIGateway
             Path: /
             Method: ANY
 
-
+  ElectionLeafletsAPIGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      AlwaysDeploy: True
+      StageName: Prod
+      Cors:
+        AllowMethods: "'GET'"
+        AllowOrigin: "'*'"
+        MaxAge: "'600'"
 
   ElectionLeafletsFunctionLogGroup:
     Type: AWS::Logs::LogGroup
@@ -140,3 +149,9 @@ Outputs:
     Value: !Sub "${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com"
     Export:
       Name: !Join [ ":", [ !Ref "AWS::StackName", "ElectionLeafletsFqdn" ] ]
+
+  ElectionLeafletsFqdnTempValue:
+    Description: "API Gateway endpoint FQDN for EC API function"
+    Value: !Sub "${ElectionLeafletsAPIGateway}.execute-api.${AWS::Region}.amazonaws.com"
+    Export:
+      Name: !Join [ ":", [ !Ref "AWS::StackName", "ElectionLeafletsFqdnTempValue" ] ]
