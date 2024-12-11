@@ -8,13 +8,28 @@ Globals:
   Api:
     BinaryMediaTypes:
       - "*/*"
-Resources:
 
+Parameters:
+  AppSentryDSN:
+    Description: "The SENTRY_DSN environment variable passed to the app."
+    Type: String
+  AppSentryLayer:
+    Description: "The layer as per https://docs.sentry.io/platforms/python/integrations/aws-lambda/manual-layer/"
+    Type: String
+
+Resources:
   ThumbsFunction:
     Type: AWS::Serverless::Function
     Properties:
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ElectionLeafletsLambdaExecutionRole"
       CodeUri: .
-      Handler: handler.handle
+      Handler: sentry_sdk.integrations.init_serverless_sdk.sentry_lambda_handler
       Runtime: python3.12
-      MemorySize: 192
+      MemorySize: 256
+      Environment:
+        Variables:
+          SENTRY_DSN: !Ref AppSentryDSN
+          SENTRY_INITIAL_HANDLER: handler.handle
+          SENTRY_TRACES_SAMPLE_RATE: 0
+      Layers:
+        - !Ref AppSentryLayer
