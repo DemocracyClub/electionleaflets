@@ -180,11 +180,11 @@ jobs:
               --config-env $DC_ENVIRONMENT \
               --template-file ~/repo/thumbs/.aws-sam/build/ThumbsFunction/template.yml \
               --region eu-west-2 \
-              --s3-bucket=$THUMBS_DEPLOY_BUCKET_NAME
+              --s3-bucket=$THUMBS_DEPLOY_BUCKET_NAME \
               --parameter-overrides " \
-                   AppSentryDSN='$SENTRY_DSN' \
-                   AppSentryLayer='arn:aws:lambda:eu-west-2:943013980633:layer:SentryPythonServerlessSDK:137' \
-            "
+                  AppSentryDSN='$SENTRY_DSN' \
+                  AppSentryLayer='arn:aws:lambda:eu-west-2:943013980633:layer:SentryPythonServerlessSDK:137' \
+                  "
 
 
       - run:
@@ -194,11 +194,11 @@ jobs:
               --config-file ~/repo/thumbs/${SAM_CONFIG_FILE} \
               --config-env $DC_ENVIRONMENT \
               --template-file ~/repo/thumbs/.aws-sam/build/ThumbsFunction/template.yml \
-              --region us-east-1
+              --region us-east-1 \
               --parameter-overrides " \
                   AppSentryDSN='$SENTRY_DSN' \
                   AppSentryLayer='arn:aws:lambda:us-east-1:943013980633:layer:SentryPythonServerlessSDK:137' \
-            "
+                  "
 
 
       - run:
