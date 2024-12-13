@@ -166,6 +166,8 @@ jobs:
       - run: uv run python manage.py createcachetable
       - run: printenv LEAFLET_IMAGES_BUCKET_NAME
       - run: echo $LEAFLET_IMAGES_BUCKET_NAME > thumbs/LEAFLET_IMAGES_BUCKET_NAME
+      - run: printenv SENTRY_DSN
+      - run: echo $SENTRY_DSN > thumbs/SENTRY_DSN
       - run: make thumbs/requirements.txt
       - run: |
           cd thumbs
