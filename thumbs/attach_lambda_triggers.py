@@ -80,7 +80,7 @@ version = lambda_client_us.publish_version(
 )
 version_arn = version["FunctionArn"]
 config = cf_client.get_distribution_config(Id=dist["Id"])
-config["DistributionConfig"]["CacheBehaviors"]["Items"][0][
+config["DistributionConfig"]["CacheBehaviors"]["Items"][-1][
     "LambdaFunctionAssociations"
 ] = {
     "Quantity": 1,

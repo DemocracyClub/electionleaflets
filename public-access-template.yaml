@@ -97,12 +97,34 @@ Resources:
         Comment: 'Cloudfront Distribution serving leaflet images'
         Origins:
           - Id: "ImagesBucket"
-            DomainName: !Join ['', [!Ref LeafletsBucketName, '.s3.amazonaws.com']]
+            DomainName: !Join [ '', [ !Ref LeafletsBucketName, '.s3.amazonaws.com' ] ]
             CustomOriginConfig:
               OriginProtocolPolicy: "https-only"
 
             OriginShield:
               Enabled: false
+
+          - Id: "ImagesBucketNoLambda"
+            DomainName: !Join [ '', [ !Ref LeafletsBucketName, '.s3.amazonaws.com' ] ]
+            CustomOriginConfig:
+              OriginProtocolPolicy: "https-only"
+
+            OriginShield:
+              Enabled: false
+
+        OriginGroups:
+          Quantity: 1
+          Items:
+            - Id: "ImagesOriginGroup"
+              FailoverCriteria:
+                StatusCodes:
+                  Quantity: 1
+                  Items: [404]
+              Members:
+                Quantity: 2
+                Items:
+                  - OriginId: "ImagesBucketNoLambda"
+                  - OriginId: "ImagesBucket"
 
         Enabled: true
         HttpVersion: 'http2'
