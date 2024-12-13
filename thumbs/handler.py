@@ -11,13 +11,32 @@ from urllib.parse import unquote
 
 import boto3
 import django
+import sentry_sdk
 from django.conf import settings
+from sentry_sdk.integrations.aws_lambda import AwsLambdaIntegration
 
 settings.configure(
     THUMBNAIL_KVSTORE="thumbs.PassthruKVStore",
 )
 with open("LEAFLET_IMAGES_BUCKET_NAME") as f:
     BUCKET_NAME = f.read().strip()
+with open("SENTRY_DSN") as f:
+    SENTRY_DSN = f.read().strip()
+
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for tracing.
+    traces_sample_rate=0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=0,
+    integrations=[
+        AwsLambdaIntegration(),
+    ],
+)
+
 django.setup()
 
 # These need to be imported after Django has bootstrapped
