@@ -41,7 +41,7 @@ set_urlconf(ROOT_URLCONF)  # noqa: F405
 
 AWS_DEFAULT_ACL = "public-read"
 
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+DEFAULT_FILE_STORAGE = "electionleaflets.storages.TempUploadS3MediaStorage"
 
 AWS_STORAGE_BUCKET_NAME = os.environ.get("LEAFLET_IMAGES_BUCKET_NAME")
 AWS_S3_SECURE_URLS = True
