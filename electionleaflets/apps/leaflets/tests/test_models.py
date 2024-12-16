@@ -32,6 +32,7 @@ def test_model_initial():
         "date_delivered": None,
         "status": "draft",
         "reviewed": False,
+        "nuts1": "",
     }
     assert leaflet._initial["status"] == "draft"
 

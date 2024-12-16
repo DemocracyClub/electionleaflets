@@ -44,6 +44,7 @@ class Leaflet(models.Model):
 
     imprint = models.TextField(blank=True, null=True)
     postcode = models.CharField(max_length=150, blank=True)
+    nuts1 = models.CharField(max_length=3, blank=True)
     name = models.CharField(blank=True, max_length=300)
     email = models.CharField(blank=True, max_length=300)
     date_uploaded = models.DateTimeField(auto_now_add=True)
