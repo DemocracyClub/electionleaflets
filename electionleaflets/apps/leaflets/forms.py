@@ -122,7 +122,6 @@ class YNRBallotDataMixin:
         for_date = self.FOR_DATE
         if not for_date:
             for_date = timezone.now()
-        print(for_date, self.FOR_DATE)
         start = (for_date - timedelta(days=60)).date().isoformat()
         end = (for_date + timedelta(days=60)).date().isoformat()
         return (start, end)
