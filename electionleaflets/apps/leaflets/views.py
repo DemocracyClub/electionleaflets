@@ -234,6 +234,8 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
                     c["ballot"] for ynr_id, c in leaflet_people.items()
                 ]
 
+        leaflet.attach_nuts_code()
+
         leaflet.save()
         messages.success(
             self.request, random.sample(settings.THANKYOU_MESSAGES, 1)[0]

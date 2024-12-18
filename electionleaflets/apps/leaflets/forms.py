@@ -1,11 +1,10 @@
 # coding=utf-8
 import json
 from datetime import timedelta
-from urllib.parse import urljoin
 
 import requests
+from core.helpers import YNRAPIHelper
 from django import forms
-from django.conf import settings
 from django.core.signing import Signer
 from django.utils import timezone
 from leaflets.fields import DCDateField
@@ -123,7 +122,6 @@ class YNRBallotDataMixin:
         for_date = self.FOR_DATE
         if not for_date:
             for_date = timezone.now()
-        print(for_date, self.FOR_DATE)
         start = (for_date - timedelta(days=60)).date().isoformat()
         end = (for_date + timedelta(days=60)).date().isoformat()
         return (start, end)
@@ -133,18 +131,20 @@ class YNRBallotDataMixin:
 
         :type instance: Leaflet
         """
-        url = urljoin(settings.YNR_BASE_URL, "/api/next/ballots/")
-        auth_token = getattr(settings, "YNR_API_KEY")
-        params = {"for_postcode": postcode, "auth_token": auth_token}
+        params = {"for_postcode": postcode}
         start, end = self.get_date_range()
         params["election_date_range_after"] = start
         params["election_date_range_before"] = end
+        ynr_helper = YNRAPIHelper()
         try:
-            resp = requests.get(url, params=params)
-            resp.raise_for_status()
+            resp = ynr_helper.get(
+                "ballots",
+                params=params,
+                json=True,
+            )
         except requests.RequestException:
             return []
-        return resp.json()["results"]
+        return resp["results"]
 
     def get_parties_from_ballot_data(self, ballot_data):
         parties = {
@@ -188,7 +188,6 @@ class YNRBallotDataMixin:
         signer = Signer()
 
         people = set()
-
         for ballot in ballot_data:
             for candidacy in ballot["candidacies"]:
                 if party and candidacy["party"]["legacy_slug"] not in party:

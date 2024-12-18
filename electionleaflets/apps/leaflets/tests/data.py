@@ -258,4 +258,5 @@ LOCAL_BALLOT_WITH_CANDIDATES = {
         "total_electorate": 6943,
     },
     "voting_system": "FPTP",
+    "tags": {"NUTS1": {"key": "UKF", "value": "East Midlands (England)"}},
 }

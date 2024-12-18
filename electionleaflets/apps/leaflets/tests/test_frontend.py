@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from leaflets.models import LeafletImage
+from leaflets.models import Leaflet, LeafletImage
 from leaflets.tests.data import LOCAL_BALLOT_WITH_CANDIDATES
 from playwright.sync_api import Page, expect
 
@@ -126,6 +126,20 @@ class TestLeafletUpload:
         expect(self.page).to_have_url(f"{self.live_server.url}/leaflets/{id}/")
         expect(self.page.locator("h1")).to_have_text("Green Party leaflet")
         expect(self.page.locator("h2")).to_have_text("Leaflet details")
+        assert Leaflet.objects.get().nuts1 == "UKF"
+
+    def test_basic_upload_ynr_down(self):
+        self.navigate_to_home_page()
+        self.upload_leaflet()
+        self.fill_postcode()
+        with self.mock_get_ballot_data_from_ynr([]):
+            self.select_time_and_submit()
+            self.select_party_and_submit()
+        id = self.page.url.split("/")[-2]
+        expect(self.page).to_have_url(f"{self.live_server.url}/leaflets/{id}/")
+        expect(self.page.locator("h1")).to_have_text("Green Party leaflet")
+        expect(self.page.locator("h2")).to_have_text("Leaflet details")
+        assert Leaflet.objects.get().nuts1 == ""
 
     def test_basic_upload_more_than_one_leaflet(self):
         self.navigate_to_home_page()
