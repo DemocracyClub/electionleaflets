@@ -4,6 +4,7 @@ from io import BytesIO
 from pathlib import Path
 
 import piexif
+import sentry_sdk
 from core.helpers import YNRAPIHelper
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
@@ -134,9 +135,13 @@ class Leaflet(models.Model):
             "election_date": "2024-07-04",
         }
         ynr_helper = YNRAPIHelper()
+        try:
+            resp = ynr_helper.get("ballots", params=params)
+            self.nuts1 = resp["results"][0]["tags"].get("NUTS1", {}).get("key")
+        except Exception as e:
+            # Log the exception to Sentry
+            sentry_sdk.capture_exception(e)
 
-        resp = ynr_helper.get("ballots", params=params)
-        self.nuts1 = resp["results"][0]["tags"].get("NUTS1", {}).get("key")
         self.save()
 
 
