@@ -13,9 +13,11 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
+from django_filters.views import FilterView
 from formtools.wizard.views import NamedUrlSessionWizardView
 from storages.backends.s3boto3 import S3Boto3Storage
 
+from .filters import LeafletFilter
 from .forms import (
     LeafletDetailsFrom,
     SingleLeafletImageForm,
@@ -82,11 +84,12 @@ class ImageCropView(StaffuserRequiredMixin, DetailView):
         return HttpResponseRedirect(image_model.get_absolute_url())
 
 
-class LatestLeaflets(CacheControlMixin, ListView):
+class LatestLeaflets(CacheControlMixin, FilterView):
     cache_timeout = 60 * 60
     model = Leaflet
     template_name = "leaflets/index.html"
     paginate_by = 60
+    filterset_class = LeafletFilter
 
 
 class LeafletView(CacheControlMixin, DetailView):
