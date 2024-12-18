@@ -29,9 +29,12 @@ def uploaded_temp_file():
 
 @pytest.fixture
 def mock_get_ballot_data_from_ynr():
-    def _mock_ynr_value(return_value):
+    def _mock_ynr_value(return_value, result_list: bool = True):
+        if result_list:
+            return_value = {"results": return_value}
+
         return patch(
-            "leaflets.forms.PartyForm.get_ballot_data_from_ynr",
+            "core.helpers.YNRAPIHelper.get",
             return_value=return_value,
         )
 
