@@ -4,6 +4,7 @@ from io import BytesIO
 from pathlib import Path
 
 import piexif
+from core.helpers import YNRAPIHelper
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db import models
@@ -111,6 +112,32 @@ class Leaflet(models.Model):
             }
 
         return None
+
+    def attach_nuts_code(self) -> None:
+        """
+        Gets a NUTS1 code from YNR.
+
+        This is a little hacky: we might not have a ballot for a postcode at the
+        point we look up that postcode. But we want a NUTS1 code for every
+        uploaded leaflet.
+
+        Because of this, we pick a known UK-wide election date and look up
+        what the NUTS1 code of that ballot ID was. This in imperfect for
+        most geographies, but NUTS1 are big enough that we don't care about
+        (literal) edge cases.
+
+        """
+
+        params = {
+            "for_postcode": self.postcode,
+            "election_type": "parl",
+            "election_date": "2024-07-04",
+        }
+        ynr_helper = YNRAPIHelper()
+
+        resp = ynr_helper.get("ballots", params=params)
+        self.nuts1 = resp["results"][0]["tags"].get("NUTS1", {}).get("key")
+        self.save()
 
 
 class LeafletImage(models.Model):
