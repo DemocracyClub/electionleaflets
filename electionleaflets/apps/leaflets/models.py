@@ -137,7 +137,9 @@ class Leaflet(models.Model):
         ynr_helper = YNRAPIHelper()
         try:
             resp = ynr_helper.get("ballots", params=params)
-            self.nuts1 = resp["results"][0]["tags"].get("NUTS1", {}).get("key")
+            self.nuts1 = (
+                resp["results"][0]["tags"].get("NUTS1", {}).get("key", "")
+            )
         except Exception as e:
             # Log the exception to Sentry
             sentry_sdk.capture_exception(e)
