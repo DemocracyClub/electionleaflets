@@ -21,6 +21,21 @@ from electionleaflets.storages import TempUploadBaseMixin
 from . import constants
 
 
+class RegionChoices(models.TextChoices):
+    NORTH_EAST = "UKC", "North East"
+    NORTH_WEST = "UKD", "North West"
+    YORKSHIRE_AND_HUMBER = "UKE", "Yorkshire and the Humber"
+    EAST_MIDLANDS = "UKF", "East Midlands"
+    WEST_MIDLANDS = "UKG", "West Midlands"
+    EAST_OF_ENGLAND = "UKH", "East of England"
+    LONDON = "UKI", "London"
+    SOUTH_EAST = "UKJ", "South East"
+    SOUTH_WEST = "UKK", "South West"
+    WALES = "UKL", "Wales"
+    SCOTLAND = "UKM", "Scotland"
+    NORTHERN_IRELAND = "UKN", "Northern Ireland"
+
+
 class Leaflet(models.Model):
     def __init__(self, *args, **kwargs):
         super(Leaflet, self).__init__(*args, **kwargs)
@@ -46,7 +61,9 @@ class Leaflet(models.Model):
 
     imprint = models.TextField(blank=True, null=True)
     postcode = models.CharField(max_length=150, blank=True)
-    nuts1 = models.CharField(max_length=3, blank=True)
+    nuts1 = models.CharField(
+        max_length=3, blank=True, choices=RegionChoices.choices
+    )
     name = models.CharField(blank=True, max_length=300)
     email = models.CharField(blank=True, max_length=300)
     date_uploaded = models.DateTimeField(auto_now_add=True)
