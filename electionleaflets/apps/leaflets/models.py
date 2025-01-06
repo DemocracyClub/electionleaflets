@@ -177,6 +177,9 @@ class Leaflet(models.Model):
 
         self.save()
 
+    def nuts1_name(self):
+        return RegionChoices(self.nuts1).label
+
 
 class LeafletImage(models.Model):
     ORIENTATION_CHOICES = (
