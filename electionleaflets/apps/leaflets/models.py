@@ -35,6 +35,20 @@ class RegionChoices(models.TextChoices):
     SCOTLAND = "UKM", "Scotland"
     NORTHERN_IRELAND = "UKN", "Northern Ireland"
 
+    @classmethod
+    def english_regions(cls):
+        return [
+            cls.NORTH_EAST,
+            cls.NORTH_WEST,
+            cls.YORKSHIRE_AND_HUMBER,
+            cls.EAST_MIDLANDS,
+            cls.WEST_MIDLANDS,
+            cls.EAST_OF_ENGLAND,
+            cls.LONDON,
+            cls.SOUTH_EAST,
+            cls.SOUTH_WEST,
+        ]
+
 
 class Leaflet(models.Model):
     def __init__(self, *args, **kwargs):
