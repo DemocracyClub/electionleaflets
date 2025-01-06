@@ -91,6 +91,9 @@ class LatestLeaflets(CacheControlMixin, FilterView):
     paginate_by = 60
     filterset_class = LeafletFilter
 
+    def get_queryset(self):
+        return Leaflet.objects.prefetch_related("images")
+
 
 class LeafletView(CacheControlMixin, DetailView):
     cache_timeout = 60 * 60
