@@ -16,7 +16,7 @@ You'll need some basic requirements installed on your machine, probably through 
 - Python 3.12.x
 - Node.js 18+
 - PostgreSQL
-- [`uv>=0.4.27,<0.5.0`](https://github.com/astral-sh/uv) installed globally.
+- [`uv>=0.5.12,<0.6.0`](https://github.com/astral-sh/uv) installed globally.
 
 1. For Python virtual env management package installation, use `uv`:
 
