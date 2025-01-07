@@ -8,11 +8,12 @@ class LeafletFilter(django_filters.FilterSet):
         """
         Filter queryset by region using the NUTS1 code
         """
-        return queryset.filter(nuts1=value)
+        value = RegionChoices.english_regions() if value == "ENG" else [value]
+        return queryset.filter(nuts1__in=value)
 
     filter_by_region = django_filters.ChoiceFilter(
         widget=DSLinkWidget(),
         method="region_filter",
         label="Filter by region",
-        choices=RegionChoices.choices,
+        choices=RegionChoices.choices + [("ENG", "England")],
     )

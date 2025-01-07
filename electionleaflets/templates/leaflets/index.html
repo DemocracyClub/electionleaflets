@@ -3,6 +3,7 @@
 {% load static %}
 {% load pagination_tags %}
 {% load thumbnail %}
+{% load humanize %}
 
 {% block title %}Latest leaflets{% endblock %}
 
@@ -26,12 +27,13 @@
   </aside>
 
 <h1>Latest leaflets</h1>
+<p>{{ paginator.count|intcomma }} leaflets</p>
 {% include "leaflets/includes/leaflet_list.html" %}
 
 {% if is_paginated %}
-  <span class="page-current">
+  <p class="page-current">
       Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-  </span>
+  </p>
   <nav class="pagination" role="menu" aria-label="Pagination">
      <ul>
       {% if page_obj.has_previous %}
