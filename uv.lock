@@ -211,13 +211,12 @@ wheels = [
 [[package]]
 name = "dc-design-system"
 version = "0.6.0"
-source = { url = "https://github.com/DemocracyClub/design-system/archive/refs/tags/0.6.0.zip" }
-sdist = { url = "https://github.com/DemocracyClub/design-system/archive/refs/tags/0.6.0.zip", hash = "sha256:3f26c7265c16757565557bc56d765df2d9f52600a64eb249d5f1b625a4771677" }
+source = { git = "https://github.com/DemocracyClub/design-system.git?tag=0.6.0#7b1e8171a7567f75d4eb5bd27db7f994f7cf1a5d" }
 
 [[package]]
 name = "dc-django-utils"
 version = "7.0.1"
-source = { git = "https://github.com/DemocracyClub/dc_django_utils.git?rev=7.0.1#78b20cf5e955c2994f49fd3d5db3fdad8ee5beba" }
+source = { git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=7.0.1#78b20cf5e955c2994f49fd3d5db3fdad8ee5beba" }
 dependencies = [
     { name = "django" },
     { name = "django-localflavor" },
@@ -448,9 +447,9 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aws-wsgi", git = "https://github.com/DemocracyClub/awsgi.git?rev=b286f129c5580547577f942c75be74cdca707386#b286f129c5580547577f942c75be74cdca707386" },
-    { name = "dc-design-system", url = "https://github.com/DemocracyClub/design-system/archive/refs/tags/0.6.0.zip" },
-    { name = "dc-django-utils", git = "https://github.com/DemocracyClub/dc_django_utils.git?rev=7.0.1" },
+    { name = "aws-wsgi", git = "https://github.com/DemocracyClub/awsgi.git?rev=b286f129c5580547577f942c75be74cdca707386" },
+    { name = "dc-design-system", git = "https://github.com/DemocracyClub/design-system.git?tag=0.6.0" },
+    { name = "dc-django-utils", git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=7.0.1" },
     { name = "dj-pagination", specifier = "==2.4.0" },
     { name = "django", specifier = "==4.2.17" },
     { name = "django-braces", specifier = "==1.16.0" },
@@ -463,7 +462,7 @@ requires-dist = [
     { name = "django-ses", specifier = "==4.3.0" },
     { name = "django-static-jquery", specifier = "==2.1.4" },
     { name = "django-storages", specifier = "==1.13.2" },
-    { name = "django-uk-political-parties", git = "https://github.com/DemocracyClub/django-uk-political-parties.git?rev=86ffa51f8306858c379c9de5be2f4bdb24b3a910#86ffa51f8306858c379c9de5be2f4bdb24b3a910" },
+    { name = "django-uk-political-parties", git = "https://github.com/DemocracyClub/django-uk-political-parties.git?rev=86ffa51f8306858c379c9de5be2f4bdb24b3a910" },
     { name = "djangorestframework", specifier = "==3.15.2" },
     { name = "factory-boy", specifier = "==3.3.1" },
     { name = "markdown", specifier = "==3.7" },
@@ -777,6 +776,7 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/ce/ac/5b1ea50fc08a9df82de7e1771537557f07c2632231bbab652c7e22597908/psycopg2_binary-2.9.10-cp313-cp313-musllinux_1_2_i686.whl", hash = "sha256:bb89f0a835bcfc1d42ccd5f41f04870c1b936d8507c6df12b7737febc40f0909", size = 2822712 },
     { url = "https://files.pythonhosted.org/packages/c4/fc/504d4503b2abc4570fac3ca56eb8fed5e437bf9c9ef13f36b6621db8ef00/psycopg2_binary-2.9.10-cp313-cp313-musllinux_1_2_ppc64le.whl", hash = "sha256:f0c2d907a1e102526dd2986df638343388b94c33860ff3bbe1384130828714b1", size = 2920155 },
     { url = "https://files.pythonhosted.org/packages/b2/d1/323581e9273ad2c0dbd1902f3fb50c441da86e894b6e25a73c3fda32c57e/psycopg2_binary-2.9.10-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:f8157bed2f51db683f31306aa497311b560f2265998122abe1dce6428bd86567", size = 2959356 },
+    { url = "https://files.pythonhosted.org/packages/08/50/d13ea0a054189ae1bc21af1d85b6f8bb9bbc5572991055d70ad9006fe2d6/psycopg2_binary-2.9.10-cp313-cp313-win_amd64.whl", hash = "sha256:27422aa5f11fbcd9b18da48373eb67081243662f9b46e6fd07c3eb46e4535142", size = 2569224 },
 ]
 
 [[package]]
@@ -1027,11 +1027,11 @@ wheels = [
 
 [[package]]
 name = "setuptools"
-version = "75.6.0"
+version = "75.8.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/43/54/292f26c208734e9a7f067aea4a7e282c080750c4546559b58e2e45413ca0/setuptools-75.6.0.tar.gz", hash = "sha256:8199222558df7c86216af4f84c30e9b34a61d8ba19366cc914424cdbd28252f6", size = 1337429 }
+sdist = { url = "https://files.pythonhosted.org/packages/92/ec/089608b791d210aec4e7f97488e67ab0d33add3efccb83a056cbafe3a2a6/setuptools-75.8.0.tar.gz", hash = "sha256:c5afc8f407c626b8313a86e10311dd3f661c6cd9c09d4bf8c15c0e11f9f2b0e6", size = 1343222 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/55/21/47d163f615df1d30c094f6c8bbb353619274edccf0327b185cc2493c2c33/setuptools-75.6.0-py3-none-any.whl", hash = "sha256:ce74b49e8f7110f9bf04883b730f4765b774ef3ef28f722cce7c273d253aaf7d", size = 1224032 },
+    { url = "https://files.pythonhosted.org/packages/69/8a/b9dc7678803429e4a3bc9ba462fa3dd9066824d3c607490235c6a796be5a/setuptools-75.8.0-py3-none-any.whl", hash = "sha256:e3982f444617239225d675215d51f6ba05f845d4eec313da4418fdbb56fb27e3", size = 1228782 },
 ]
 
 [[package]]
