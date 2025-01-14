@@ -5,9 +5,6 @@ description = "An online archive of political leaflets"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "aws-wsgi @ git+https://github.com/DemocracyClub/awsgi.git@b286f129c5580547577f942c75be74cdca707386",
-    "dc-design-system @ https://github.com/DemocracyClub/design-system/archive/refs/tags/0.6.0.zip",
-    "dc-django-utils @ git+https://github.com/DemocracyClub/dc_django_utils.git@7.0.1",
     "dj-pagination==2.4.0",
     "django-braces==1.16.0",
     "django-extensions==3.2.3",
@@ -19,7 +16,6 @@ dependencies = [
     "django-ses==4.3.0",
     "django-static-jquery==2.1.4",
     "django-storages==1.13.2",
-    "django-uk-political-parties @ git+https://github.com/DemocracyClub/django-uk-political-parties.git@86ffa51f8306858c379c9de5be2f4bdb24b3a910",
     "django==4.2.17",
     "djangorestframework==3.15.2",
     "factory-boy==3.3.1",
@@ -31,6 +27,10 @@ dependencies = [
     "sentry-sdk==2.19.0",
     "python-slugify==1.2.4",
     "requests>=2.32.3",
+    "aws-wsgi",
+    "dc-design-system",
+    "dc-django-utils",
+    "django-uk-political-parties",
 ]
 
 [tool.uv]
@@ -38,6 +38,12 @@ package = false
 
 [tool.uv.workspace]
 members = ["thumbs"]
+
+[tool.uv.sources]
+aws-wsgi = { git = "https://github.com/DemocracyClub/awsgi.git", rev = "b286f129c5580547577f942c75be74cdca707386" }
+dc-design-system = { git = "https://github.com/DemocracyClub/design-system.git", tag = "0.6.0" }
+dc-django-utils = { git = "https://github.com/DemocracyClub/dc_django_utils.git", tag = "7.0.1" }
+django-uk-political-parties = { git = "https://github.com/DemocracyClub/django-uk-political-parties.git", rev = "86ffa51f8306858c379c9de5be2f4bdb24b3a910" }
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "electionleaflets.settings.testing"
