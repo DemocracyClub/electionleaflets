@@ -69,9 +69,9 @@ class Leaflet(models.Model):
         blank=True, null=True, max_length=255, db_index=True
     )
 
-    ballots = JSONField(default=list)
-    people = JSONField(default=dict)
-    person_ids = JSONField(default=list)
+    ballots = JSONField(default=list, blank=True)
+    people = JSONField(default=dict, blank=True)
+    person_ids = JSONField(default=list, blank=True)
 
     imprint = models.TextField(blank=True, null=True)
     postcode = models.CharField(max_length=150, blank=True)
