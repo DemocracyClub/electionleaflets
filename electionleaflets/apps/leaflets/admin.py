@@ -24,11 +24,38 @@ class LeafletAdmin(admin.ModelAdmin):
         "status",
     ]
     exclude = (
-        "election",
         "ynr_party_name",
-        "constituency",
         "ynr_person_id",
     )
+
+    fieldsets = (
+        (
+            "Basic Information",
+            {
+                "fields": (
+                    "postcode",
+                    "title",
+                    "description",
+                    "date_delivered",
+                    "status",
+                    "reviewed",
+                )
+            },
+        ),
+        (
+            "Internal data",
+            {
+                "classes": ("collapse",),
+                "fields": (
+                    "nuts1",
+                    "ballots",
+                    "people",
+                    "person_ids",
+                ),
+            },
+        ),
+    )
+
     search_fields = ["title", "postcode"]
     ordering = ["title"]
     inlines = [
