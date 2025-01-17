@@ -1,7 +1,9 @@
+import json
 from urllib.parse import urljoin
 
 import requests
 from django.conf import settings
+from django.forms import Textarea
 from django.utils.cache import patch_response_headers
 
 
@@ -32,3 +34,14 @@ class YNRAPIHelper:
         if json:
             return resp.json()
         return resp
+
+
+class JSONEditor(Textarea):
+    def render(self, name, value, attrs=None, renderer=None):
+        # if its valid json, pretty print it
+        # if not (e.g: on init, validation error)
+        # just use the input string
+        try:
+            value = json.dumps(json.loads(value), sort_keys=True, indent=4)
+        finally:
+            return super().render(name, value, attrs)

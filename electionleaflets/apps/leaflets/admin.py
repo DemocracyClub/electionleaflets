@@ -1,3 +1,6 @@
+from copy import deepcopy
+
+from core.helpers import JSONEditor
 from django.contrib import admin
 from leaflets.models import Leaflet, LeafletImage
 from sorl.thumbnail import get_thumbnail
@@ -24,11 +27,38 @@ class LeafletAdmin(admin.ModelAdmin):
         "status",
     ]
     exclude = (
-        "election",
         "ynr_party_name",
-        "constituency",
         "ynr_person_id",
     )
+
+    fieldsets = (
+        (
+            "Basic Information",
+            {
+                "fields": (
+                    "postcode",
+                    "title",
+                    "description",
+                    "date_delivered",
+                    "status",
+                    "reviewed",
+                )
+            },
+        ),
+        (
+            "Internal data",
+            {
+                "classes": ("collapse",),
+                "fields": (
+                    "nuts1",
+                    "ballots",
+                    "people",
+                    "person_ids",
+                ),
+            },
+        ),
+    )
+
     search_fields = ["title", "postcode"]
     ordering = ["title"]
     inlines = [
@@ -41,6 +71,22 @@ class LeafletAdmin(admin.ModelAdmin):
         return ""
 
     get_description.short_description = "Description"
+
+    def get_form(self, *args, **kwargs):
+        self.form = deepcopy(self.form)
+        form = super().get_form(*args, **kwargs)
+
+        json_fields = [
+            "ballots",
+            "people",
+            "person_ids",
+        ]
+        for fieldname in json_fields:
+            form.base_fields[
+                fieldname
+            ].help_text = "This field should only edited in exceptional circumstances and if you know exactly what you're doing"
+            form.base_fields[fieldname].widget = JSONEditor()
+        return form
 
 
 class LeafletImageOptions(AdminImageMixin, admin.ModelAdmin):
