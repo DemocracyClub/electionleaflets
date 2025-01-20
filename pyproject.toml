@@ -23,10 +23,10 @@ dependencies = [
     "piexif==1.0.12",
     "pillow==10.4.0",
     "psycopg2-binary==2.9.10",
-    "sorl-thumbnail===12.11.0",
+    "sorl-thumbnail==12.11.0",
     "sentry-sdk==2.19.0",
     "python-slugify==1.2.4",
-    "requests>=2.32.3",
+    "requests==2.32.3",
     "aws-wsgi",
     "dc-design-system",
     "dc-django-utils",
@@ -70,7 +70,7 @@ dev = [
     "pytest-playwright==0.3.0",
     "moto==5.0.21",
     "django-debug-toolbar==5.0.0a0",
-    "ruff>=0.8.1",
+    "ruff==0.8.1",
 ]
 
 deploy = [
