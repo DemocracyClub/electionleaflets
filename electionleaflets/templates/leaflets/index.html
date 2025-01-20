@@ -9,7 +9,6 @@
 
 {% block content %}
     <aside class="ds-filter" aria-labelledby="filter-label">
-
     <details {% if filter.data %}open=""{% endif %}>
       <summary>Filters</summary>
       <div class="ds-advanced-filters">
@@ -20,7 +19,6 @@
               {{ field }}
               </ul>
             {% endfor %}
-
         </div>
       </div>
     </details>
