@@ -1,18 +1,31 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block content %}
-<div class="row">
-  <div class="columns large-12">
     <h1>Parties</h1>
-    <ul class="side-nav">
-      {% for object in object_list %}
-        <li>
-          <a href="{% url "party-view"  object.ynr_party_id object.ynr_party_name|slugify %}">
-          {{ object.ynr_party_name }} ({{ object.count }} leaflets in total)
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
-<div>
+    <div class="ds-table">
+        <table>
+            <thead>
+            <tr>
+                <th>Party name</th>
+                <th>Leaflets</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                <tr>
+                    <td>
+                        <a href="{% url "party-view" object.ynr_party_id object.ynr_party_name|slugify %}">
+                            {{ object.ynr_party_name }}
+                        </a>
+                    </td>
+                    <td>
+                        {{ object.count|intcomma }}
+                    </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

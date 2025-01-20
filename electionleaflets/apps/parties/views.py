@@ -1,10 +1,10 @@
 import re
-from datetime import datetime
 
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Count, Q
 from django.http import Http404
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView
+from django_filters.views import FilterView
+from leaflets.filters import LeafletFilter
 from leaflets.models import Leaflet
 
 
@@ -14,40 +14,31 @@ class PartyList(ListView):
             Leaflet.objects.exclude(ynr_party_id__in=[None, ""])
             .values("ynr_party_id", "ynr_party_name")
             .annotate(count=Count("ynr_party_id"))
+            .exclude(count=0)
             .order_by("-count")
         )
 
     template_name = "parties/party_list.html"
 
 
-class PartyView(TemplateView):
-    def get_context_data(self, **kwargs):
-        context = super(PartyView, self).get_context_data(**kwargs)
+class PartyView(FilterView):
+    filterset_class = LeafletFilter
+    model = Leaflet
+    paginate_by = 60
+
+    def get_queryset(self):
         id = re.sub(r"[^0-9]", "", self.kwargs["pk"])
-        qs = Leaflet.objects.filter(
+        return Leaflet.objects.prefetch_related("images").filter(
             Q(ynr_party_id=self.kwargs["pk"]) | Q(ynr_party_id=f"party:{id}")
         )
-        if not qs.exists():
+
+    def get_context_data(self, **kwargs):
+        context = super(PartyView, self).get_context_data(**kwargs)
+
+        if not self.get_queryset().exists():
             raise Http404()
 
-        context["party_name"] = qs.first().ynr_party_name
-
-        paginator = Paginator(qs, 60)
-        page = self.request.GET.get("page")
-
-        if not page or page == 1 and qs:
-            context["last_leaflet_days"] = (
-                datetime.now() - qs[0].date_uploaded
-            ).days
-
-        try:
-            context["party_leaflets"] = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            context["party_leaflets"] = paginator.page(1)
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
-            context["party_leaflets"] = paginator.page(paginator.num_pages)
+        context["party_name"] = self.get_queryset().first().ynr_party_name
 
         return context
 
