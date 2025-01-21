@@ -7,7 +7,7 @@ from leaflets.models import Leaflet, RegionChoices
 
 
 def year_facets(queryset=None):
-    if not queryset:
+    if queryset is None:
         queryset = Leaflet.objects.all()
     return [
         (year, f"{year} ({intcomma(count)})")
@@ -22,7 +22,7 @@ def year_facets(queryset=None):
 
 
 def region_facets(queryset=None):
-    if not queryset:
+    if queryset is None:
         queryset = Leaflet.objects.all()
     choices = []
 
