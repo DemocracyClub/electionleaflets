@@ -8,6 +8,13 @@
 {% block title %}Latest leaflets{% endblock %}
 
 {% block content %}
+    <h1>
+        {% if filter.data %}
+            Filtered leaflets
+        {% else %}
+            All leaflets
+        {% endif %}
+    </h1>
     <form class="ds-filter" aria-labelledby="filter-label">
         <details {% if filter.data %}open=""{% endif %} class="ds-stack-smaller">
             <summary>Filters</summary>
@@ -28,7 +35,7 @@
 
     </form>
 
-    <h1>Latest leaflets</h1>
+
     <p>{{ paginator.count|intcomma }} leaflets</p>
     {% include "leaflets/includes/leaflet_list.html" %}
 
@@ -48,11 +55,12 @@
             </ul>
         </nav>
     {% endif %}
-
-    <p>
-        <a href="{% url "latest_feed" %}">
-            This page is available as an RSS feed.
-        </a>
-    </p>
+    {% if not filter.data %}
+        <p>
+            <a href="{% url "latest_feed" %}">
+                This page is available as an RSS feed.
+            </a>
+        </p>
+    {% endif %}
 
 {% endblock %}
