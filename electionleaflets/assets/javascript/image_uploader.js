@@ -1,6 +1,6 @@
 (function () {
   // Disable all buttons on submit
-  document.querySelectorAll('form').forEach(function(form) {
+  document.querySelectorAll('form.leaflet-upload-form').forEach(function(form) {
     form.addEventListener('submit', function (e) {
       form.querySelectorAll('button').forEach(
         function(button){
