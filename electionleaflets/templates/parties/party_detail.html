@@ -13,7 +13,6 @@
         </div>
     {% endif %}
     {% if page_obj %}
-
         <p>{{ paginator.count|intcomma }} leaflets</p>
         {% with page_obj as leaflet_list %}
             {% include "leaflets/includes/leaflet_list.html" %}

@@ -3,6 +3,7 @@ from dc_utils.filter_widgets import DSLinkWidget
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.db.models import Count
 from django.db.models.functions import ExtractYear
+from leaflets.managers import LeafletQuerySet
 from leaflets.models import Leaflet, RegionChoices
 
 
@@ -74,6 +75,9 @@ class LeafletFilter(django_filters.FilterSet):
         """
         return queryset.filter(date_uploaded__year=str(value))
 
+    def name_search(self, queryset: LeafletQuerySet, name, value):
+        return queryset.search_person_by_name(value)
+
     filter_by_region = django_filters.ChoiceFilter(
         widget=DSLinkWidget(),
         method="region_filter",
@@ -89,4 +93,9 @@ class LeafletFilter(django_filters.FilterSet):
         method="year_filter",
         choices=year_facets,
         empty_label="All years",
+    )
+
+    filter_by_name_search = django_filters.CharFilter(
+        label="Name search",
+        method="name_search",
     )
