@@ -210,8 +210,8 @@ wheels = [
 
 [[package]]
 name = "dc-design-system"
-version = "0.6.0"
-source = { git = "https://github.com/DemocracyClub/design-system.git?tag=0.6.0#7b1e8171a7567f75d4eb5bd27db7f994f7cf1a5d" }
+version = "0.7.0"
+source = { git = "https://github.com/DemocracyClub/design-system.git?tag=0.7.0#9bc27773cd5a91c9f10966fe6c4871a4d3277a1a" }
 
 [[package]]
 name = "dc-django-utils"
@@ -448,7 +448,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "aws-wsgi", git = "https://github.com/DemocracyClub/awsgi.git?rev=b286f129c5580547577f942c75be74cdca707386" },
-    { name = "dc-design-system", git = "https://github.com/DemocracyClub/design-system.git?tag=0.6.0" },
+    { name = "dc-design-system", git = "https://github.com/DemocracyClub/design-system.git?tag=0.7.0" },
     { name = "dc-django-utils", git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=7.0.1" },
     { name = "dj-pagination", specifier = "==2.4.0" },
     { name = "django", specifier = "==4.2.18" },
