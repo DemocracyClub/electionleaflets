@@ -14,6 +14,7 @@
     {% endif %}
     {% if page_obj %}
         <p>{{ paginator.count|intcomma }} leaflets</p>
+
         {% with page_obj as leaflet_list %}
             {% include "leaflets/includes/leaflet_list.html" %}
         {% endwith %}
@@ -35,31 +36,10 @@
                 </ul>
             </nav>
         {% endif %}
-
-
     {% else %}
-        <p>
-            We don't have <em>any</em> leaflets for {{ party_name }}. That won't do.
-            They must have some right?
-        </p>
-        <p>
-            Your mission, if you choose to accept it, is to find us one and photograph it for
-            posterity.
-        </p>
-        <ol>
-            <li>
-                <a href="https://twitter.com/intent/tweet?url={{ request.get_host }}/{% url "party-view" party.pk party.slug %}&text=Can anyone help find an election leaflet by {{ party_name }}&hashtags=electionleaflet&via=electionspotter">
-                    Put a call out on Twitter or tweet the party directly
-                </a>
-            </li>
-            <li>
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.get_host }}/{% url "party-view" party.pk party.slug %}&ref=responsive">
-                    Ask friends on Facebook
-                </a>
-            </li>
-            <li>
-                Go rummaging through the bin
-            </li>
-        </ol>
+        <p>No leaflets found</p>
+        {% if filter.data %}
+            <p><a href="{{ request.path }}" class="ds-cta">Reset filters</a></p>
+        {% endif %}
     {% endif %}
 {% endblock %}
