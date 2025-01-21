@@ -33,6 +33,7 @@ def test_model_initial():
         "status": "draft",
         "reviewed": False,
         "nuts1": "",
+        "name_search_vector": "",
     }
     assert leaflet._initial["status"] == "draft"
 
