@@ -98,4 +98,5 @@ class LeafletFilter(django_filters.FilterSet):
     filter_by_name_search = django_filters.CharFilter(
         label="Name search",
         method="name_search",
+        help_text="Note: we can't currently search names in all leaflets. This is coming soon.",
     )

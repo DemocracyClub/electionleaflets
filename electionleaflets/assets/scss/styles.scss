@@ -163,3 +163,17 @@ input[type="number"] {
   box-shadow: inset $ss2 $ss2 0 $blackOpacity;
   box-sizing: border-box;
 }
+
+
+.ds-filter form {
+  // Remove this when https://github.com/DemocracyClub/design-system/issues/148 is fixed
+  // Disable padding for forms inside a ds-filter
+  padding:0;
+}
+
+.ds-filter form small {
+  // Remove this when https://github.com/DemocracyClub/design-system/issues/149 is fixed
+  // Reset `small` for field help_text
+  text-transform: initial;
+  font-size: $ss7;
+}
