@@ -15,26 +15,8 @@
             All leaflets
         {% endif %}
     </h1>
-    <form class="ds-filter" aria-labelledby="filter-label">
-        <details {% if filter.data %}open=""{% endif %} class="ds-stack-smaller">
-            <summary>Filters</summary>
-            <div class="ds-advanced-filters">
-                <div class="ds-filter-cluster">
-                    {% for field in filter.form %}
-                        <ul aria-labelledby="adv-filter-label-{{ forloop.counter }}">
-                            <li id="adv-filter-label-{{ forloop.counter }}" class="ds-filter-label"
-                                aria-hidden="true">{{ field.label }}:
-                            </li>
-                            {{ field }}
-                        </ul>
-                    {% endfor %}
-                </div>
-            </div>
-            <button type="submit" class="ds-button">Search</button>
-        </details>
 
-    </form>
-
+    {% include "leaflets/includes/leaflet_filter.html" %}
 
     <p>{{ paginator.count|intcomma }} leaflets</p>
     {% include "leaflets/includes/leaflet_list.html" %}

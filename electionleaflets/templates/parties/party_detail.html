@@ -12,6 +12,9 @@
                 Please help by tracking some down and photographing them.</p>
         </div>
     {% endif %}
+
+    {% include "leaflets/includes/leaflet_filter.html" %}
+
     {% if page_obj %}
         <p>{{ paginator.count|intcomma }} leaflets</p>
 
