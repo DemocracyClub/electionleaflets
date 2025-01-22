@@ -118,7 +118,7 @@ Resources:
           DATABASE_NAME: !Ref AppPostgresDatabaseName
           DATABASE_PASS: !Ref AppPostgresPassword
           DC_ENVIRONMENT: !Ref DCEnvironment
-          POSTGRES_USER: postgres
+          DATABASE_USER: postgres
           APP_DOMAIN: !Ref AppDomain
           LEAFLET_IMAGES_BUCKET_NAME: !Ref AppLeafletImagesBucketName
       Events:
