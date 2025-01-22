@@ -33,6 +33,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "electionleaflets",
+        "USER": os.environ.get("DATABASE_USER", None),
     }
 }
 
