@@ -55,10 +55,10 @@ jobs:
           PGHOST: 127.0.0.1
       - image: cimg/postgres:16.3
         environment:
+          # Var names needed to set up the DB in CI correctly
           POSTGRES_USER: circleci
           POSTGRES_DB: electionleaflets
     working_directory: ~/repo
-
     steps:
       - checkout
       - attach_workspace:

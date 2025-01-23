@@ -9,11 +9,11 @@ ALLOWED_HOSTS = [os.environ.get("APP_DOMAIN")]
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "HOST": os.environ.get("DATABASE_HOST"),
-        "USER": os.environ.get("POSTGRES_USER", "postgres"),
+        "HOST": os.environ["DATABASE_HOST"],
+        "USER": os.environ["DATABASE_USER"],
         "PORT": "5432",
-        "NAME": os.environ.get("POSTGRES_DATABASE_NAME"),
-        "PASSWORD": os.environ.get("DATABASE_PASS"),
+        "NAME": os.environ["DATABASE_NAME"],
+        "PASSWORD": os.environ["DATABASE_PASS"],
     }
 }
 SECRET_KEY = os.environ.get("SECRET_KEY")
