@@ -469,7 +469,7 @@ requires-dist = [
     { name = "piexif", specifier = "==1.0.12" },
     { name = "pillow", specifier = "==10.4.0" },
     { name = "psycopg2-binary", specifier = "==2.9.10" },
-    { name = "python-slugify", specifier = "==1.2.4" },
+    { name = "python-slugify", specifier = "==1.2.6" },
     { name = "requests", specifier = "==2.32.3" },
     { name = "sentry-sdk", specifier = "==2.19.0" },
     { name = "sorl-thumbnail", specifier = "==12.11.0" },
@@ -895,15 +895,12 @@ wheels = [
 
 [[package]]
 name = "python-slugify"
-version = "1.2.4"
+version = "1.2.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "unidecode" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9f/b0/2723356c20fb01b0e09f6ee03c0c629f4e30811e7d92ebd15453d648e5f0/python-slugify-1.2.4.tar.gz", hash = "sha256:57a385df7a1c6dbd15f7666eaff0ff29d3f60363b228b1197c5308ed3ba5f824", size = 4596 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/9f/77/ab7134b731d0e831cf82861c1ab0bb318e80c41155fa9da18958f9d96057/python_slugify-1.2.4-py2.py3-none-any.whl", hash = "sha256:c3733135d3b184196fdb8844f6a74bbfb9cf6720d1dcce3254bdc434353f938f", size = 4681 },
-]
+sdist = { url = "https://files.pythonhosted.org/packages/00/ad/c778a6df614b6217c30fe80045b365bfa08b5dd3cb02e8b37a6d25126781/python-slugify-1.2.6.tar.gz", hash = "sha256:7723daf30996db26573176bddcdf5fcb98f66dc70df05c9cb29f2c79b8193245", size = 6777 }
 
 [[package]]
 name = "python-stdnum"
