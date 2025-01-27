@@ -114,6 +114,7 @@ WHITENOISE_STATIC_PREFIX = "/static/"
 
 SITE_ID = 1
 SITE_LOGO = "images/logo.png"
+SITE_TITLE = "Election Leaflets"
 USE_I18N = False
 USE_L10N = True
 LOGIN_URL = "/"

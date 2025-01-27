@@ -73,4 +73,40 @@
 {% block content %}
 {% endblock %}
 
-
+{% block footer-links %}
+<div class="ds-footer-links">
+  <nav>
+    <h2 class="ds-h6">Election Leaflets</h2>
+    <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'upload_leaflet' %}">Upload a leaflet</a></li>
+        <li><a href="{% url 'leaflets' %}">Latest leaflets</a></li>
+        <li><a href="{% url 'about_view' %}">About {{ SITE_TITLE }}</a></li>
+        <li><a href="https://democracyclub.org.uk/privacy/">Privacy</a></li>
+    </ul>
+  </nav>
+    <h2 class="ds-h6">About Democracy Club</h2>
+    <ul>
+        <li><a href="https://democracyclub.org.uk/about/">About</a></li>
+        <li><a href="https://democracyclub.org.uk/donate/">Donate</a></li>
+        <li><a href="https://democracyclub.org.uk/jobs/">Jobs</a></li>
+        <li><a href="https://democracyclub.org.uk/blog/">Blog</a></li>
+        <li><a href="https://democracyclub.org.uk/blog/feed">Blog RSS/Atom feed</a></li>
+        <li><a href="https://democracyclub.org.uk/privacy/">Privacy &amp; Terms</a></li>
+        <li><a href="https://democracyclub.org.uk/code-of-conduct/">Code of Conduct</a></li>
+    </ul>
+  </nav>
+  <nav>
+      <h2 class="ds-h6">Connect with us</h2>
+      <ul>
+          <li><a href="https://democracyclub.org.uk/contact/">Contact Us</a></li>
+          <li><a rel="me" href="https://mastodon.me.uk/@DemocracyClub">Mastodon</a></li>
+          <li><a href="https://twitter.com/democlub">X</a></li>
+          <li><a href="https://github.com/DemocracyClub">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/company/democracy-club-cic">LinkedIn</a></li>
+          <li><a href="https://mailinglist.democracyclub.org.uk/subscription/form">Join our Mailing List</a></li>
+          <li><a href="https://mailinglist.democracyclub.org.uk/archive">Newsletter Archive</a></li>
+      </ul>
+  </nav>
+</div>
+{% endblock footer-links %}
