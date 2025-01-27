@@ -5,7 +5,7 @@ description = "An online archive of political leaflets"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "dj-pagination==2.4.0",
+    "dj-pagination==2.5.0",
     "django-braces==1.16.0",
     "django-extensions==3.2.3",
     "django-filter==24.3",

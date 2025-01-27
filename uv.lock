@@ -231,11 +231,11 @@ dependencies = [
 
 [[package]]
 name = "dj-pagination"
-version = "2.4.0"
+version = "2.5.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/13/d4/388e7601edabdb53b9565de46f9f607a8a5b4216b4ae6ef51c6e4ec9a478/dj-pagination-2.4.0.tar.gz", hash = "sha256:fd89e97fa49a4ec7712926477d255e646213cdb0349a29b73b67510ceae4d44d", size = 17583 }
+sdist = { url = "https://files.pythonhosted.org/packages/85/a3/74312334efdc0665ea40acaf1f0fa8d8a6a5acbc67ebf07e38a55be93ad7/dj-pagination-2.5.0.tar.gz", hash = "sha256:860301cdc79edc0712008921037b2341271d3a55586bc34fad072e74c8e800c4", size = 20519 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6e/16/d67c9c33f81e4a6c7d7e528e00b44d7527acfaee25cc33c833f8e2580e7b/dj_pagination-2.4.0-py3-none-any.whl", hash = "sha256:1de28af33acafe1898e2d9c80a0669b492f582ec711c13864eff00e9b16479b8", size = 35186 },
+    { url = "https://files.pythonhosted.org/packages/ad/6b/c72883158eaf032911aac77e879392be7402419e03b99054bf26094fe681/dj_pagination-2.5.0-py3-none-any.whl", hash = "sha256:2d65aac791abe7b5a5cd09cd0735c76dcd3a932ac1a56e1dffea441937f886b7", size = 36499 },
 ]
 
 [[package]]
@@ -450,7 +450,7 @@ requires-dist = [
     { name = "aws-wsgi", git = "https://github.com/DemocracyClub/awsgi.git?rev=b286f129c5580547577f942c75be74cdca707386" },
     { name = "dc-design-system", git = "https://github.com/DemocracyClub/design-system.git?tag=0.6.0" },
     { name = "dc-django-utils", git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=7.0.1" },
-    { name = "dj-pagination", specifier = "==2.4.0" },
+    { name = "dj-pagination", specifier = "==2.5.0" },
     { name = "django", specifier = "==4.2.18" },
     { name = "django-braces", specifier = "==1.16.0" },
     { name = "django-extensions", specifier = "==3.2.3" },
