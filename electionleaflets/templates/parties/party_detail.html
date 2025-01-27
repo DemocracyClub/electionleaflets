@@ -1,56 +1,48 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load humanize %}
+
 
 {% block content %}
-      <h1>Election leaflets from {{ party_name }}</h1>
-      {% if last_leaflet_days >= 45 %}
+    <h1>Election leaflets from {{ party_name }}</h1>
+    {% if last_leaflet_days >= 45 %}
         <div class="panel">
-          <p>
-          We haven't seen any leaflets from {{party_name}} for {{last_leaflet_days}} days!
-          Please help by tracking some down and photographing them.</p>
+            <p>
+                We haven't seen any leaflets from {{ party_name }} for {{ last_leaflet_days }} days!
+                Please help by tracking some down and photographing them.</p>
         </div>
-      {% endif %}
-      {% if party_leaflets %}
-          {% with party_leaflets as leaflet_list %}
-          {% include "leaflets/includes/leaflet_list.html" %}
-          {% endwith %}
+    {% endif %}
 
-          <span class="page-current">
-              Page {{ party_leaflets.number }} of {{ party_leaflets.paginator.num_pages }}.
-          </span>
-          <nav role="menu" aria-label="Pagination">
-             <ul class="pagination">
-              {% if party_leaflets.has_previous %}
-                  <li><a href="?page={{ party_leaflets.previous_page_number }}">previous</a></li>
-              {% endif %}
-              {% if party_leaflets.has_next %}
-                  <li><a href="?page={{ party_leaflets.next_page_number }}">next</a></li>
-              {% endif %}
-             </ul>
-          </nav>
-        {% else %}
-          <p>
-            We don't have <em>any</em> leaflets for {{ party_name }}. That won't do.
-            They must have some right?
-          </p>
-          <p>
-            Your mission, if you choose to accept it, is to find us one and photograph it for
-            posterity.
-          </p>
-          <ol>
-            <li>
-              <a href="https://twitter.com/intent/tweet?url={{ request.get_host }}/{% url "party-view"  party.pk party.slug %}&text=Can anyone help find an election leaflet by {{party_name}}&hashtags=electionleaflet&via=electionspotter">
-                Put a call out on Twitter or tweet the party directly
-              </a>
-            </li>
-            <li>
-              <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.get_host }}/{% url "party-view"  party.pk party.slug %}&ref=responsive">
-                Ask friends on Facebook
-              </a>
-            </li>
-            <li>
-              Go rummaging through the bin
-            </li>
-          </ol>
+    {% include "leaflets/includes/leaflet_filter.html" %}
+
+    {% if page_obj %}
+        <p>{{ paginator.count|intcomma }} leaflets</p>
+
+        {% with page_obj as leaflet_list %}
+            {% include "leaflets/includes/leaflet_list.html" %}
+        {% endwith %}
+
+        {% if is_paginated %}
+            <p class="page-current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </p>
+            <nav class="pagination" role="menu" aria-label="Pagination">
+                <ul>
+                    {% if page_obj.has_previous %}
+                        <li><a href="{% url "leaflets" %}?page={{ page_obj.previous_page_number }}">&laquo; Previous
+                            page</a></li>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                        <li><a href="{% url "leaflets" %}?page={{ page_obj.next_page_number }}">Next page &raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
         {% endif %}
+    {% else %}
+        <p>No leaflets found</p>
+        {% if filter.data %}
+            <p><a href="{{ request.path }}" class="ds-cta">Reset filters</a></p>
+        {% endif %}
+    {% endif %}
 {% endblock %}

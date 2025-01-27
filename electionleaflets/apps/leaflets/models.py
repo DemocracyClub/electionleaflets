@@ -6,6 +6,8 @@ from pathlib import Path
 import piexif
 import sentry_sdk
 from core.helpers import YNRAPIHelper
+from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.search import SearchVectorField
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db import models
@@ -19,6 +21,7 @@ from sorl.thumbnail import ImageField, delete
 from electionleaflets.storages import TempUploadBaseMixin
 
 from . import constants
+from .managers import LeafletQuerySet
 
 
 class RegionChoices(models.TextChoices):
@@ -92,13 +95,20 @@ class Leaflet(models.Model):
     modified = models.DateTimeField(auto_now=True)
     reviewed = models.BooleanField(default=False)
 
-    objects = models.Manager()
+    name_search_vector = SearchVectorField()
+
+    objects = LeafletQuerySet.as_manager()
 
     def __unicode__(self):
         return self.title
 
     class Meta:
         ordering = ("-date_uploaded",)
+        indexes = (
+            GinIndex(
+                fields=["name_search_vector"], name="name_vector_search_index"
+            ),
+        )
 
     def get_full_url(self):
         from django.contrib.sites.models import Site

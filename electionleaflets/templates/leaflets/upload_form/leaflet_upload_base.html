@@ -4,7 +4,7 @@
 
 {% block content %}
   {% block heading %}{% endblock heading %}
-  <form action="" method="post">
+  <form action="" method="post" class="leaflet-upload-form">
     {% csrf_token %}
     {{ wizard.management_form }}
     {% block form %}

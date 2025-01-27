@@ -8,48 +8,41 @@
 {% block title %}Latest leaflets{% endblock %}
 
 {% block content %}
-    <aside class="ds-filter" aria-labelledby="filter-label">
+    <h1>
+        {% if filter.data %}
+            Filtered leaflets
+        {% else %}
+            All leaflets
+        {% endif %}
+    </h1>
 
-    <details {% if filter.data %}open=""{% endif %}>
-      <summary>Filters</summary>
-      <div class="ds-advanced-filters">
-        <div class="ds-filter-cluster">
-            {% for field in filter.form %}
-              <ul aria-labelledby="adv-filter-label-{{ forloop.counter }}">
-              <li id="adv-filter-label-{{ forloop.counter }}" class="ds-filter-label" aria-hidden="true">{{ field.label }}:</li>
-              {{ field }}
-              </ul>
-            {% endfor %}
+    {% include "leaflets/includes/leaflet_filter.html" %}
 
-        </div>
-      </div>
-    </details>
-  </aside>
+    <p>{{ paginator.count|intcomma }} leaflets</p>
+    {% include "leaflets/includes/leaflet_list.html" %}
 
-<h1>Latest leaflets</h1>
-<p>{{ paginator.count|intcomma }} leaflets</p>
-{% include "leaflets/includes/leaflet_list.html" %}
-
-{% if is_paginated %}
-  <p class="page-current">
-      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-  </p>
-  <nav class="pagination" role="menu" aria-label="Pagination">
-     <ul>
-      {% if page_obj.has_previous %}
-          <li><a href="{% url "leaflets" %}?page={{page_obj.previous_page_number }}">&laquo; Previous page</a></li>
-      {% endif %}
-      {% if page_obj.has_next %}
-          <li><a href="{% url "leaflets" %}?page={{page_obj.next_page_number }}">Next page &raquo;</a></li>
-      {% endif %}
-     </ul>
-  </nav>
-{% endif %}
-
-<p>
-  <a href="{% url "latest_feed"  %}">
-    This page is available as an RSS feed.
-  </a>
-</p>
+    {% if is_paginated %}
+        <p class="page-current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </p>
+        <nav class="pagination" role="menu" aria-label="Pagination">
+            <ul>
+                {% if page_obj.has_previous %}
+                    <li><a href="{% url "leaflets" %}?page={{ page_obj.previous_page_number }}">&laquo; Previous
+                        page</a></li>
+                {% endif %}
+                {% if page_obj.has_next %}
+                    <li><a href="{% url "leaflets" %}?page={{ page_obj.next_page_number }}">Next page &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+    {% if not filter.data %}
+        <p>
+            <a href="{% url "latest_feed" %}">
+                This page is available as an RSS feed.
+            </a>
+        </p>
+    {% endif %}
 
 {% endblock %}
