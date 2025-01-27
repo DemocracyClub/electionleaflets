@@ -24,7 +24,7 @@ dependencies = [
     "pillow==11.1.0",
     "psycopg2-binary==2.9.10",
     "sorl-thumbnail==12.11.0",
-    "sentry-sdk==2.19.0",
+    "sentry-sdk==2.20.0",
     "python-slugify==8.0.4",
     "requests==2.32.3",
     "aws-wsgi",
