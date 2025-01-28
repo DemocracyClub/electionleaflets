@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path, re_path
+from django.urls import include, path, re_path, reverse
 from django.views.generic import RedirectView, TemplateView
 
 from electionleaflets.apps.api.feeds import LatestLeafletsFeed
@@ -58,7 +58,9 @@ class HomePageRedirectView(RedirectView):
 
     permanent = True
     query_string = True
-    pattern_name = "home"
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse("home")
 
 
 redirect_urls = (
