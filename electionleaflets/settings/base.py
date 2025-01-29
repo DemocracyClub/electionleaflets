@@ -248,7 +248,7 @@ TEST_RUNNER = "django.test.runner.DiscoverRunner"
 
 DEVS_DC_AUTH_TOKEN = environ.get("DEVS_DC_AUTH_TOKEN", None)
 YNR_API_KEY = None
-YNR_BASE_URL = "https://candidates.democracyclub.org.uk"
+YNR_BASE_URL = "https://candidates.democracyclub.org.uk/"
 
 if "testing" not in environ.get("DJANGO_SETTINGS_MODULE", ""):
     # .local.py overrides all the common settings.
