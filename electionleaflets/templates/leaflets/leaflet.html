@@ -114,31 +114,23 @@
         </dd>
       </div>
     {% endif %}
-  </dl>
+
 
 
   {% if object.people %}
-    <h3>Sent by</h3>
-    <ul class="ds-grid">
-      {% for ynr_id, person in object.people.items %}
-        <li class="ds-candidate">
-          <div class="ds-candidate-body ds-stack-smallest">
-            <h3 class="ds-candidate-name ds-h5">
-              <a href="https://whocanivotefor.co.uk/person/{{ ynr_id }}">{{ person.person.name }}</a>
-            </h3>
-          </div>
-          {% if person.person.photo_url %}
-            <div class="ds-candidate-image">
-              <img src="{{ person.person.photo_url }}" alt="">
-            </div>
-          {% endif %}
-        </li>
-      {% endfor %}
-    </ul>
+      <div>
+      <dt>Sent by</dt>
+      <dd>
+          <ul style="list-style-type: none; padding-left:0 ">
+              {% for id, person in object.people.items %}
+              <li><a href="{% url "person" person.person.id %}">{{ person.person.name }}</a></li>
+              {% endfor %}
+          </ul>
+        </dd>
+      </div>
+
   {% endif %}
-
-
-
+  </dl>
 
   <p>
     The data on this page is available in <a href="{% url "api:leaflet-detail" object.pk %}?format=json">JSON format</a>.
