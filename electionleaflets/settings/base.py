@@ -220,6 +220,7 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 "django.contrib.auth.context_processors.auth",
+                "dc_utils.context_processors.dc_django_utils",
             ]
         },
     }
