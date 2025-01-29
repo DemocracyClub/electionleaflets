@@ -336,6 +336,18 @@ wheels = [
 ]
 
 [[package]]
+name = "django-querystring-tag"
+version = "1.0.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f7/11/3f472e269fcccd7c63dd025e838016ea014d3fa5cb0895371c2f61c6e2aa/django-querystring-tag-1.0.3.tar.gz", hash = "sha256:86414606d6b59b9e9f65f0bc9e523318cbf71e75efa19074d1553b942c6a8f1e", size = 14837 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ae/72/80a8c95a568d9f5d75f5a11490d2bbb66738a5990e7c316d48d332182c51/django_querystring_tag-1.0.3-py2.py3-none-any.whl", hash = "sha256:fef92f0279e683d8ce3c9bb996f8d978fe898545e796d6941256e5eddc565226", size = 16136 },
+]
+
+[[package]]
 name = "django-s3file"
 version = "5.5.7"
 source = { registry = "https://pypi.org/simple" }
@@ -413,6 +425,7 @@ dependencies = [
     { name = "django-formtools" },
     { name = "django-localflavor" },
     { name = "django-pipeline" },
+    { name = "django-querystring-tag" },
     { name = "django-s3file" },
     { name = "django-ses" },
     { name = "django-static-jquery" },
@@ -458,6 +471,7 @@ requires-dist = [
     { name = "django-formtools", specifier = "==2.2" },
     { name = "django-localflavor", specifier = "==4.0" },
     { name = "django-pipeline", specifier = "==3.1.0" },
+    { name = "django-querystring-tag", specifier = "==1.0.3" },
     { name = "django-s3file", specifier = "==5.5.7" },
     { name = "django-ses", specifier = "==4.3.2" },
     { name = "django-static-jquery", specifier = "==2.1.4" },
