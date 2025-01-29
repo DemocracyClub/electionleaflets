@@ -17,4 +17,4 @@ Resources:
       CodeUri: .
       Handler: handler.handle
       Runtime: python3.12
-      MemorySize: 256
+      MemorySize: 1024
