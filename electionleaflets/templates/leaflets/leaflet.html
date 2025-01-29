@@ -46,7 +46,7 @@
   {% for image in object.images.all %}
     <figure class="ds-card">
       <div class="ds-card-image">
-        {% thumbnail image.image "600" crop="center" as im %}
+        {% thumbnail image.image "1000" crop="center" as im %}
           <img src="{{ im.url }}" aria-labelledby="page-{{ image.id }}" data-full_image_url="{{ image.image.url }}">
         {% endthumbnail %}
       </div>
