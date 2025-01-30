@@ -210,13 +210,13 @@ wheels = [
 
 [[package]]
 name = "dc-design-system"
-version = "0.6.0"
-source = { git = "https://github.com/DemocracyClub/design-system.git?tag=0.6.0#7b1e8171a7567f75d4eb5bd27db7f994f7cf1a5d" }
+version = "0.7.0"
+source = { git = "https://github.com/DemocracyClub/design-system.git?tag=0.7.0#9bc27773cd5a91c9f10966fe6c4871a4d3277a1a" }
 
 [[package]]
 name = "dc-django-utils"
-version = "7.0.1"
-source = { git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=7.0.1#78b20cf5e955c2994f49fd3d5db3fdad8ee5beba" }
+version = "8.0.2"
+source = { git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=8.0.2#6a565d3a9e1dfc97b7c7a264fa354e9d4939ca47" }
 dependencies = [
     { name = "django" },
     { name = "django-localflavor" },
@@ -336,6 +336,18 @@ wheels = [
 ]
 
 [[package]]
+name = "django-querystring-tag"
+version = "1.0.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f7/11/3f472e269fcccd7c63dd025e838016ea014d3fa5cb0895371c2f61c6e2aa/django-querystring-tag-1.0.3.tar.gz", hash = "sha256:86414606d6b59b9e9f65f0bc9e523318cbf71e75efa19074d1553b942c6a8f1e", size = 14837 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ae/72/80a8c95a568d9f5d75f5a11490d2bbb66738a5990e7c316d48d332182c51/django_querystring_tag-1.0.3-py2.py3-none-any.whl", hash = "sha256:fef92f0279e683d8ce3c9bb996f8d978fe898545e796d6941256e5eddc565226", size = 16136 },
+]
+
+[[package]]
 name = "django-s3file"
 version = "5.5.7"
 source = { registry = "https://pypi.org/simple" }
@@ -413,6 +425,7 @@ dependencies = [
     { name = "django-formtools" },
     { name = "django-localflavor" },
     { name = "django-pipeline" },
+    { name = "django-querystring-tag" },
     { name = "django-s3file" },
     { name = "django-ses" },
     { name = "django-static-jquery" },
@@ -448,8 +461,8 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "aws-wsgi", git = "https://github.com/DemocracyClub/awsgi.git?rev=b286f129c5580547577f942c75be74cdca707386" },
-    { name = "dc-design-system", git = "https://github.com/DemocracyClub/design-system.git?tag=0.6.0" },
-    { name = "dc-django-utils", git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=7.0.1" },
+    { name = "dc-design-system", git = "https://github.com/DemocracyClub/design-system.git?tag=0.7.0" },
+    { name = "dc-django-utils", git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=8.0.2" },
     { name = "dj-pagination", specifier = "==2.5.0" },
     { name = "django", specifier = "==4.2.18" },
     { name = "django-braces", specifier = "==1.16.0" },
@@ -458,6 +471,7 @@ requires-dist = [
     { name = "django-formtools", specifier = "==2.2" },
     { name = "django-localflavor", specifier = "==4.0" },
     { name = "django-pipeline", specifier = "==3.1.0" },
+    { name = "django-querystring-tag", specifier = "==1.0.3" },
     { name = "django-s3file", specifier = "==5.5.7" },
     { name = "django-ses", specifier = "==4.3.2" },
     { name = "django-static-jquery", specifier = "==2.1.4" },

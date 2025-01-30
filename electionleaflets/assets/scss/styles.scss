@@ -177,3 +177,37 @@ input[type="number"] {
   text-transform: initial;
   font-size: $ss7;
 }
+
+
+// TODO: add this to the design system
+.ds-pagination {
+  line-height: $s3;
+  @include fontBody;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(40px, auto));
+  width: 100%;
+
+  a[disabled=disabled] {
+        color: $black;
+    text-decoration: none;
+      }
+
+  [rel=next] {
+    text-align:right;
+  }
+
+  > ul {
+    list-style-type: none;
+    padding: 0;
+    > li {
+      display:inline;
+      padding:0 $s1;
+
+      &[aria-current=true] {
+        background-color: $pinkForWhite;
+        color:$white;
+      }
+    }
+  }
+}

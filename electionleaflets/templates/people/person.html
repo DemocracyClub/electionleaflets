@@ -1,17 +1,13 @@
 {% extends "base.html" %}
-{% block title %}{{ object.name }}{% endblock title %}
+{% block page_title %}{{ person.name }}{% endblock page_title %}
 {% block content %}
-  <div class="row">
-    <div class="columns large-8">
-      <h1>{{ object.name }}</h1>
-      <a href="https://whocanivotefor.co.uk/person/{{object.remote_id}}">
-        Find out more about {{ object.name }} on Who Can I Vote For?
-      </a>
-      <h2>Leaflets sent by {{ object.name }}</h2>
-      {% with person_leaflets as leaflet_list %}
-      {% include "leaflets/includes/leaflet_list.html" %}
-      {% endwith %}
-    </div>
-  </div>
+    <h1>Leaflets sent by {{ person.name }}</h1>
+    <a href="https://whocanivotefor.co.uk/person/{{ person.id }}">
+        Find out more about {{ person.name }} on Who Can I Vote For?
+    </a>
+    {% include "leaflets/includes/leaflet_list.html" with leaflet_list=object_list %}
 
+    {% if is_paginated %}
+        {% include "core/pager.html" %}
+    {% endif %}
 {% endblock content %}
