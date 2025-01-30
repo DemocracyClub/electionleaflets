@@ -122,7 +122,7 @@ class YNRBallotDataMixin:
         for_date = self.FOR_DATE
         if not for_date:
             for_date = timezone.now()
-        start = (for_date - timedelta(days=60)).date().isoformat()
+        start = (for_date - timedelta(days=900)).date().isoformat()
         end = (for_date + timedelta(days=60)).date().isoformat()
         return (start, end)
 
@@ -280,7 +280,7 @@ class UpdatePublisherDetails(YNRBallotDataMixin, forms.ModelForm):
 
     def get_date_range(self):
         start = (
-            (self.instance.date_uploaded - timedelta(days=60))
+            (self.instance.date_uploaded - timedelta(days=900))
             .date()
             .isoformat()
         )

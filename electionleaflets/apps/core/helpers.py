@@ -25,12 +25,13 @@ class YNRAPIHelper:
         self.API_KEY = api_key or settings.YNR_API_KEY  # handy for mocking URLs
 
     def get(self, endpoint, params=None, version="next", json=True):
-        path = urljoin(version, endpoint)
+        path = f"api/{version}/{endpoint}"
         url = urljoin(self.YNR_BASE, path)
         params = params or {}
         params["auth_token"] = self.API_KEY
         resp = requests.get(url, params=params)
         resp.raise_for_status()
+
         if json:
             return resp.json()
         return resp
