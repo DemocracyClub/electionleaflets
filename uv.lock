@@ -266,15 +266,15 @@ wheels = [
 
 [[package]]
 name = "django-debug-toolbar"
-version = "5.0.0a0"
+version = "5.0.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
     { name = "sqlparse" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/81/73/f086750697f6d5a4bb1499ab03951bffc802f7fdde73c33e129d40e9b5ac/django_debug_toolbar-5.0.0a0.tar.gz", hash = "sha256:f3668d5e494338cfddf6fe8102466f484f2097a48f6a8c3befe3e91d5c06c414", size = 289675 }
+sdist = { url = "https://files.pythonhosted.org/packages/93/f6/022cffde1ec6daf3d1418d03a69ddc4f760151f75664dcc9fd2167b2997f/django_debug_toolbar-5.0.1.tar.gz", hash = "sha256:296f6f18a80710e84fbb8361538ae5ec522a75ebe9ab67db34bcf1026cbeb420", size = 295982 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/42/40/4e78ceed4cac11b77bfa216ca4c2abd21f2cd88d4ef6808be371028b2298/django_debug_toolbar-5.0.0a0-py3-none-any.whl", hash = "sha256:8500b737aab9deb6b6c21cc4c95f91a08cd556bc40df58363cdc0b9b4e055677", size = 258653 },
+    { url = "https://files.pythonhosted.org/packages/36/f7/3b406dc871d88c938d2bd967e65acf725b46c4e7c9add6a1f1bbaff9bdcf/django_debug_toolbar-5.0.1-py3-none-any.whl", hash = "sha256:7456cc2e951db37dab335686db7803c4a0ecb6736d120705f6668db9548bf49f", size = 260038 },
 ]
 
 [[package]]
@@ -495,7 +495,7 @@ deploy = [
     { name = "urllib3", specifier = "==2.2.3" },
 ]
 dev = [
-    { name = "django-debug-toolbar", specifier = "==5.0.0a0" },
+    { name = "django-debug-toolbar", specifier = "==5.0.1" },
     { name = "moto", specifier = "==5.0.28" },
     { name = "pytest", specifier = "==8.3.4" },
     { name = "pytest-cov", specifier = "==6.0.0" },

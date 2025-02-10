@@ -72,7 +72,7 @@ dev = [
     "pytest-django==4.9.0",
     "pytest-playwright==0.7.0",
     "moto==5.0.28",
-    "django-debug-toolbar==5.0.0a0",
+    "django-debug-toolbar==5.0.1",
     "ruff==0.8.1",
 ]
 
