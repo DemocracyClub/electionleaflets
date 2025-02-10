@@ -5,7 +5,7 @@ description = "Lambda function that produces thumbnails from raw leaflets"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "django==4.2.18",
+    "django==4.2.19",
     "pillow==11.1.0",
     "sentry-sdk==2.20.0",
     "sorl-thumbnail==12.11.0",
