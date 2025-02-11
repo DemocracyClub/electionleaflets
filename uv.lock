@@ -363,15 +363,15 @@ wheels = [
 
 [[package]]
 name = "django-ses"
-version = "4.3.2"
+version = "4.4.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boto3" },
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c5/96/47158db64b944733b6de8c0f1de07bcc04fab8686595e3cdf3a19a00c272/django_ses-4.3.2.tar.gz", hash = "sha256:4440847259b3a5a1d33c02467dacbe23d12b8105e04a4c17dba38110f4bfae77", size = 66865 }
+sdist = { url = "https://files.pythonhosted.org/packages/45/ab/ec149480af4ed1bb6f1e66cf3ee37d51f528509599ec84fff3895efabb6c/django_ses-4.4.0.tar.gz", hash = "sha256:8cf9213f84de0315dd03b0ddc0e126d39c79847af5ba27000adcac3314f4bfae", size = 67303 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/95/0b/fb4f40d1aaaf7e9b085e1b571f90224fc02146ea6f76f3bcd19181921e99/django_ses-4.3.2-py3-none-any.whl", hash = "sha256:eed713751a95f0204954a3d9532651fcde835fa48179556ddbac75a671fd8de4", size = 36012 },
+    { url = "https://files.pythonhosted.org/packages/c4/fd/f8ccaa712f4353f08cc44c00e9a1cabe50b38afda31e9569c480d97c0b33/django_ses-4.4.0-py3-none-any.whl", hash = "sha256:1d310c34b307a380f3c9a2091e6e7fc2cf19650f229d1df044b19e140fb77b63", size = 36214 },
 ]
 
 [[package]]
@@ -473,7 +473,7 @@ requires-dist = [
     { name = "django-pipeline", specifier = "==3.1.0" },
     { name = "django-querystring-tag", specifier = "==1.0.3" },
     { name = "django-s3file", specifier = "==5.5.7" },
-    { name = "django-ses", specifier = "==4.3.2" },
+    { name = "django-ses", specifier = "==4.4.0" },
     { name = "django-static-jquery", specifier = "==2.1.4" },
     { name = "django-storages", specifier = "==1.13.2" },
     { name = "django-uk-political-parties", git = "https://github.com/DemocracyClub/django-uk-political-parties.git?rev=86ffa51f8306858c379c9de5be2f4bdb24b3a910" },
