@@ -77,6 +77,6 @@ dev = [
 ]
 
 deploy = [
-    "urllib3==2.2.3",
+    "urllib3==2.3.0",
     "boto3==1.36.16",
 ]
