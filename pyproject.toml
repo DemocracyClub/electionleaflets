@@ -11,7 +11,7 @@ dependencies = [
     "django-filter==24.3",
     "django-formtools==2.2",
     "django-localflavor==4.0",
-    "django-pipeline==3.1.0",
+    "django-pipeline==4.0.0",
     "django-s3file==5.5.7",
     "django-ses==4.4.0",
     "django-static-jquery==2.1.4",
