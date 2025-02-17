@@ -1,4 +1,5 @@
 version = 1
+revision = 1
 requires-python = ">=3.12"
 
 [manifest]
@@ -386,14 +387,14 @@ sdist = { url = "https://files.pythonhosted.org/packages/45/61/5ca1505b967e987f6
 
 [[package]]
 name = "django-storages"
-version = "1.13.2"
+version = "1.14.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/cb/8a/3872af7e3d61a8eb7616872549cd74f7f1090de41792a059adb7ce6854dc/django-storages-1.13.2.tar.gz", hash = "sha256:cbadd15c909ceb7247d4ffc503f12a9bec36999df8d0bef7c31e57177d512688", size = 107522 }
+sdist = { url = "https://files.pythonhosted.org/packages/d7/eb/4ec2b551a6769cb8112497c9fe5c773717622cec0862a8225bda2dfedb66/django_storages-1.14.5.tar.gz", hash = "sha256:ace80dbee311258453e30cd5cfd91096b834180ccf09bc1f4d2cb6d38d68571a", size = 85867 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/06/ed/6eef8d009138d4c58c63026bf24e946a7e09caac77aca33ab46a5e5bc51f/django_storages-1.13.2-py3-none-any.whl", hash = "sha256:31dc5a992520be571908c4c40d55d292660ece3a55b8141462b4e719aa38eab3", size = 46715 },
+    { url = "https://files.pythonhosted.org/packages/a3/61/00e4bcbf55337c2633c6cddc77a15d4ea16cbe74c01c1f745ecde8feff47/django_storages-1.14.5-py3-none-any.whl", hash = "sha256:5ce9c69426f24f379821fd688442314e4aa03de87ae43183c4e16915f4c165d4", size = 32636 },
 ]
 
 [[package]]
@@ -479,7 +480,7 @@ requires-dist = [
     { name = "django-s3file", specifier = "==5.5.7" },
     { name = "django-ses", specifier = "==4.4.0" },
     { name = "django-static-jquery", specifier = "==2.1.4" },
-    { name = "django-storages", specifier = "==1.13.2" },
+    { name = "django-storages", specifier = "==1.14.5" },
     { name = "django-uk-political-parties", git = "https://github.com/DemocracyClub/django-uk-political-parties.git?rev=86ffa51f8306858c379c9de5be2f4bdb24b3a910" },
     { name = "djangorestframework", specifier = "==3.15.2" },
     { name = "factory-boy", specifier = "==3.3.3" },
