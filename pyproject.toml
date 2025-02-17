@@ -8,7 +8,7 @@ dependencies = [
     "dj-pagination==2.5.0",
     "django-braces==1.16.0",
     "django-extensions==3.2.3",
-    "django-filter==24.3",
+    "django-filter==25.1",
     "django-formtools==2.2",
     "django-localflavor==4.0",
     "django-pipeline==4.0.0",
