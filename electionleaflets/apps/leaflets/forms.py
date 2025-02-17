@@ -65,12 +65,6 @@ class PostcodeForm(forms.Form):
     )
 
 
-class LeafletDetailsFrom(forms.ModelForm):
-    class Meta:
-        model = Leaflet
-        fields = "__all__"
-
-
 class Base64EncodedFileWidget(forms.ClearableFileInput):
     """
     https://github.com/codingjoe/django-s3file/issues/134

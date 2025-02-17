@@ -2,7 +2,6 @@ from django.contrib.auth.decorators import login_required
 from django.urls import re_path
 from django.views.decorators.cache import never_cache
 from leaflets.views import (
-    AllImageView,
     ImageCropView,
     ImageRotateView,
     ImageView,
@@ -48,9 +47,6 @@ urlpatterns = [
         r"^full/(?P<pk>.+)/$",
         LegacyImageView.as_view(),
         name="full_image_legacy",
-    ),
-    re_path(
-        r"^(?P<pk>\d+)/images/$", AllImageView.as_view(), name="all_images"
     ),
     re_path(r"^crop/(?P<pk>.+)/$", ImageCropView.as_view(), name="crop"),
     re_path(r"^rotate/(?P<pk>.+)/$", ImageRotateView.as_view(), name="rotate"),

@@ -63,6 +63,19 @@ class HomePageRedirectView(RedirectView):
         return reverse("home")
 
 
+class RedirectToLeafletView(RedirectView):
+    """
+    Redirect a URL with a leaflet PK to the canonical URL
+
+    """
+
+    permanent = True
+    query_string = False
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse("leaflet", kwargs={"pk": kwargs["pk"]})
+
+
 redirect_urls = (
     re_path(r"^analysis", HomePageRedirectView.as_view(), name="analysis"),
     re_path(r"^start/$", HomePageRedirectView.as_view(), name="analysis_start"),
@@ -105,6 +118,11 @@ redirect_urls = (
         r"^constituencies/(?P<pk>[^/]+)(?:/(?P<ignored_slug>.*))?$",
         HomePageRedirectView.as_view(),
         name="constituency-view",
+    ),
+    re_path(
+        r"^leaflets/(?P<pk>\d+)/images/$",
+        RedirectToLeafletView.as_view(),
+        name="all_images",
     ),
 )
 

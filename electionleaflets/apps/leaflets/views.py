@@ -19,7 +19,6 @@ from storages.backends.s3boto3 import S3Boto3Storage
 
 from .filters import LeafletFilter
 from .forms import (
-    LeafletDetailsFrom,
     SingleLeafletImageForm,
     UpdatePublisherDetails,
 )
@@ -49,12 +48,6 @@ class LegacyImageView(SingleObjectMixin, RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         return self.get_object().get_absolute_url()
-
-
-class AllImageView(UpdateView):
-    model = Leaflet
-    form_class = LeafletDetailsFrom
-    template_name = "leaflets/full_all.html"
 
 
 class ImageRotateView(StaffuserRequiredMixin, DetailView):
