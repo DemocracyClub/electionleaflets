@@ -188,7 +188,7 @@ class YNRBallotDataMixin:
                     continue
                 candidacy["ballot"] = {
                     "ballot_paper_id": ballot["ballot_paper_id"],
-                    "ballot_title": f'{ballot["election"]["name"]}: {ballot["post"]["label"]}',
+                    "ballot_title": f"{ballot['election']['name']}: {ballot['post']['label']}",
                 }
                 data = (
                     signer.sign(json.dumps(candidacy)),

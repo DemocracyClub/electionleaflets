@@ -16,7 +16,7 @@ class AdminImageWidget(forms.ClearableFileInput):
     """
 
     template_with_initial = (
-        "%(clear_template)s <br>" "<label>%(input_text)s: %(input)s</label>"
+        "%(clear_template)s <br><label>%(input_text)s: %(input)s</label>"
     )
     template_with_clear = "<label>%(clear_checkbox_label)s: %(clear)s</label>"
 
