@@ -23,9 +23,9 @@ def console_handler(message):
         return
     if "net::ERR_INTERNET_DISCONNECTED" in message.text:
         return
-    assert (
-        not message.text
-    ), f"Found browser console output: {message.text}: {message.location}"
+    assert not message.text, (
+        f"Found browser console output: {message.text}: {message.location}"
+    )
 
 
 class TestLeafletUpload:

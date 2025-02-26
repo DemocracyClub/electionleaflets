@@ -16,7 +16,7 @@ class PersonView(ListView):
         context = super(PersonView, self).get_context_data(**kwargs)
         if not context["object_list"].exists():
             raise Http404(
-                f"No leaflets found for person {self.kwargs["person_id"]}"
+                f"No leaflets found for person {self.kwargs['person_id']}"
             )
         person_id = str(self.kwargs["person_id"])
         leaflet_people = context["object_list"].first().people
