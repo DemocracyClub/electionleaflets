@@ -1,6 +1,8 @@
 from unittest.mock import patch
 
-from core.helpers import YNRAPIHelper
+from core.helpers import CacheControlMixin, YNRAPIHelper
+from django.http import HttpResponse
+from django.views import View
 
 
 def test_ynr_get(settings):
@@ -21,3 +23,24 @@ def test_ynr_get(settings):
 
         mock_get.assert_called_once_with(expected_url, params=expected_params)
         assert result == {"results": []}
+
+
+def test_cache_control_mixin(settings, rf):
+    class TestView(CacheControlMixin, View):
+        cache_timeout = 123
+
+        def get(self, request):
+            return HttpResponse("")
+
+    test_view = TestView.as_view()
+
+    settings.DEBUG = False
+    request = rf.get("/")
+    assert test_view(request).headers["Cache-Control"] == "max-age=123"
+
+    settings.DEBUG = True
+    request = rf.get("/")
+    assert (
+        test_view(request).headers["Cache-Control"]
+        == "max-age=0, no-cache, no-store, must-revalidate, private"
+    )
