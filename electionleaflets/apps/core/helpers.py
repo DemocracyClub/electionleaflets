@@ -4,7 +4,7 @@ from urllib.parse import urljoin
 import requests
 from django.conf import settings
 from django.forms import Textarea
-from django.utils.cache import patch_response_headers
+from django.utils.cache import add_never_cache_headers, patch_response_headers
 
 
 class CacheControlMixin(object):
@@ -15,6 +15,10 @@ class CacheControlMixin(object):
 
     def dispatch(self, *args, **kwargs):
         response = super(CacheControlMixin, self).dispatch(*args, **kwargs)
+        if settings.DEBUG:
+            add_never_cache_headers(response)
+            return response
+
         patch_response_headers(response, self.get_cache_timeout())
         return response
 
