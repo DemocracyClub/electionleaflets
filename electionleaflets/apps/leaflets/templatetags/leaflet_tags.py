@@ -1,8 +1,10 @@
 import os
+from urllib.parse import urljoin
 
 from django import template
 from django.conf import settings
 from leaflets.models import Leaflet
+from sorl.thumbnail import get_thumbnail
 
 register = template.Library()
 
@@ -41,3 +43,19 @@ def truncatesmart(value, limit=80):
     value = value[:limit]
     words = value.split(" ")[:-1]
     return " ".join(words) + "..."
+
+
+@register.simple_tag(takes_context=True)
+def leaflet_og_image_url(context, leaflet):
+    if not leaflet.images.exists():
+        return None
+    leaflet_image = leaflet.images.first()
+    return single_image_og_image_url(context, leaflet_image)
+
+
+@register.simple_tag(takes_context=True)
+def single_image_og_image_url(context, leaflet_image):
+    request = context["request"]
+    full_image_url = request.build_absolute_uri(leaflet_image.image.url)
+    thumb_url = get_thumbnail(leaflet_image.image, "600", crop="center").url
+    return urljoin(full_image_url, thumb_url)
