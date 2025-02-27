@@ -24,7 +24,7 @@ jobs:
       - run:
           name: Set up virtual environment
           command: |
-            uv sync --dev --no-python-downloads
+            uv sync --dev --no-python-downloads --all-packages
 
       - run: ./scripts/code-check.sh
       - run: make lambda-layers/DependenciesLayer/requirements.txt
@@ -68,7 +68,7 @@ jobs:
           keys:
             - v9-dependencies-{{ checksum "uv.lock" }}
       - install_uv
-      - run: uv sync --no-python-downloads
+      - run: uv sync --no-python-downloads --all-packages
       - run: uv run python manage.py check
 
       # TODO: enable this once we drop uk_political_parties package
