@@ -3,8 +3,7 @@ import os
 import re
 import sys
 from io import BytesIO
-from os import makedirs
-from os.path import dirname, sep
+from os.path import sep
 from pathlib import Path
 
 sys.path.append("")
@@ -107,13 +106,13 @@ def handle_cf(event, context):
     image = fetch_image(BUCKET_NAME, path)
     processed = process_image(image, (size, options))
     key = new_key((size, options), path)
-    upload_image(processed, image.format, BUCKET_NAME, key)
+    upload_image(processed, BUCKET_NAME, key)
 
     io = BytesIO()
-    processed.save(io, image.format)
+    processed.save(io, "png")
 
     response["headers"]["content-type"] = [
-        {"key": "Content-Type", "value": Image.MIME[image.format]}
+        {"key": "Content-Type", "value": Image.MIME["PNG"]}
     ]
     response["body"] = re.sub(
         r"\n", "", base64.encodebytes(io.getvalue()).decode("ascii")
@@ -143,15 +142,18 @@ def handle_s3(event, context, local=False):
         for spec in SPECS:
             processed = process_image(image, spec)
             key = new_key(spec, r["s3"]["object"]["key"])
-            upload_image(
-                processed, image.format, r["s3"]["bucket"]["name"], key, local
-            )
+            upload_image(processed, r["s3"]["bucket"]["name"], key)
 
 
 def fetch_image(bucket: str, key: str):
     print(key)
-    response = client.get_object(Bucket=bucket, Key=key)
-    return Image.open(response["Body"])
+    prefix = key.rsplit(".", 1)
+    response = client.list_objects_v2(Bucket=bucket, Prefix=prefix[0])
+    if "Contents" in response:
+        object_key = response["Contents"][0]["Key"]
+        s3_object = client.get_object(Bucket=bucket, Key=object_key)
+        return Image.open(s3_object["Body"])
+    raise ValueError(f"Image not found in {response}")
 
 
 def new_key(spec: tuple, key: str) -> str:
@@ -176,20 +178,20 @@ def process_image(image: Image, spec: Tuple[str, dict]) -> Image:
     return engine.create(image, geometry, options)
 
 
-def upload_image(
-    image: Image, format: str, bucket: str, key: str, local: bool = False
-):
+def upload_image(image: Image, bucket: str, key: str):
     io = BytesIO()
-    image.save(io, format)
-    if local:
-        makedirs(dirname(key), exist_ok=True)
-        image.save(key, format)
+    image.save(io, "PNG")
+    key_parts = key.rsplit(".", 1)
+    if len(key_parts) == 1:
+        key_parts.append("png")
+    else:
+        key_parts[-1] = "png"
     client.put_object(
         ACL="public-read",
         Body=io.getvalue(),
         Bucket=bucket,
-        Key=key,
-        ContentType=Image.MIME[format],
+        Key=".".join(key_parts),
+        ContentType=Image.MIME["PNG"],
     )
 
 

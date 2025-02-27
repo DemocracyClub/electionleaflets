@@ -41,11 +41,12 @@ class S3Backend(ThumbnailBackend):
             ["{}={}".format(k, v) for k, v in list(opts.items())]
         )
 
-        return (
-            "{base_url}/{geometry_string}/{url_kwargs}/{original_path}".format(
-                base_url=base_url,
-                geometry_string=geometry_string,
-                url_kwargs=url_kwargs,
-                original_path=source.name,
-            )
+        file_path_parts = source.name.rsplit(".", 1)
+        file_name = file_path_parts[0]
+
+        return "{base_url}/{geometry_string}/{url_kwargs}/{original_path}.png".format(
+            base_url=base_url,
+            geometry_string=geometry_string,
+            url_kwargs=url_kwargs,
+            original_path=file_name,
         )

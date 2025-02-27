@@ -63,14 +63,14 @@ def test_handle_s3_creates_thumbnails(
 
     all_objects = mock_s3_bucket.list_objects_v2(Bucket=TEST_BUCKET)
     keys = [obj["Key"] for obj in all_objects.get("Contents", [])]
-    print(keys)
+    expected_filename = image_filename.with_suffix(".png").name
     expected_starts = [
-        f"thumbs/350/crop=top/leaflets/{image_filename.name}",
-        f"thumbs/150/crop=noop/leaflets/{image_filename.name}",
-        f"thumbs/1000/crop=noop/leaflets/{image_filename.name}",
-        f"thumbs/600/crop=center/leaflets/{image_filename.name}",
-        f"thumbs/350/leaflets/{image_filename.name}",
-        f"thumbs/600/leaflets/{image_filename.name}",
+        f"thumbs/350/crop=top/leaflets/{expected_filename}",
+        f"thumbs/150/crop=noop/leaflets/{expected_filename}",
+        f"thumbs/1000/crop=noop/leaflets/{expected_filename}",
+        f"thumbs/600/crop=center/leaflets/{expected_filename}",
+        f"thumbs/350/leaflets/{expected_filename}",
+        f"thumbs/600/leaflets/{expected_filename}",
     ]
 
     for expected_key in expected_starts:
@@ -90,8 +90,8 @@ def test_handle_cf_creates_thumbnails(
     from thumbs.handler import handle
 
     paths = (
-        f"thumbs/350/leaflets/{image_filename.name}",
-        f"thumbs/350/crop=top/leaflets/{image_filename.name}",
+        f"thumbs/350/leaflets/{image_filename.with_suffix('.png').name}",
+        f"thumbs/350/crop=top/leaflets/{image_filename.with_suffix('.png').name}",
     )
 
     for path in paths:
