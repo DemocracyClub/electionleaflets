@@ -1,8 +1,10 @@
 from pathlib import Path
+from urllib.parse import urljoin
 
 import pytest
 from leaflets.models import Leaflet, LeafletImage
 from leaflets.tests.data import LOCAL_BALLOT_WITH_CANDIDATES
+from leaflets.tests.model_factory import LeafletFactory
 from playwright.sync_api import Page, expect
 
 from electionleaflets import settings
@@ -179,3 +181,25 @@ class TestLeafletUpload:
         expect(self.page.locator("h1")).to_have_text(
             "Election leaflets from Green Party"
         )
+
+    def test_ballot_and_election_pages(self):
+        leaflet = LeafletFactory()
+        self.page.goto(
+            urljoin(self.live_server.url, leaflet.get_absolute_url())
+        )
+        election_link = self.page.locator(
+            "a[href='/leaflets/election/parl.2024-07-04/']"
+        )
+        expect(election_link).to_be_visible()
+        election_link.click()
+        h1 = self.page.locator("h1")
+        expect(h1).to_have_text("UK Parliamentary general election")
+        self.page.go_back()
+
+        ballot_link = self.page.locator(
+            "a[href='/leaflets/election/parl.newbury.2024-07-04/']"
+        )
+        expect(ballot_link).to_be_visible()
+        ballot_link.click()
+        h1 = self.page.locator("h1")
+        expect(h1).to_have_text("UK Parliamentary general election: Newbury")

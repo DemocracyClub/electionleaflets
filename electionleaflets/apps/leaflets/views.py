@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.signing import Signer
 from django.db import transaction
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -229,8 +230,12 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
 
                 leaflet.people = leaflet_people
                 leaflet.person_ids = list(leaflet_people.keys())
-                leaflet.ballots = [
+                all_ballots = [
                     c["ballot"] for ynr_id, c in leaflet_people.items()
+                ]
+                # Deduplicate ballots
+                leaflet.ballots = [
+                    dict(t) for t in {tuple(d.items()) for d in all_ballots}
                 ]
 
         leaflet.attach_nuts_code()
@@ -286,3 +291,32 @@ class LeafletModeration(ListView):
         leaflet.status = "live"
         leaflet.save()
         return HttpResponseRedirect(reverse("moderate"))
+
+
+class ElectionIDView(FilterView):
+    template_name = "leaflets/by_election_id.html"
+    paginate_by = 60
+    filterset_class = LeafletFilter
+
+    def get_queryset(self):
+        return Leaflet.objects.filter(
+            Q(ballots__contains=[{"election_id": self.kwargs["election_id"]}])
+            | Q(
+                ballots__contains=[
+                    {"ballot_paper_id": self.kwargs["election_id"]}
+                ]
+            )
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.object_list.exists():
+            first_leaflet = self.object_list.first()
+            for ballot in first_leaflet.ballots:
+                if ballot["election_id"] == self.kwargs["election_id"]:
+                    context["page_title"] = ballot["election_name"]
+                    context["election_id"] = ballot["election_id"]
+                if ballot["ballot_paper_id"] == self.kwargs["election_id"]:
+                    context["page_title"] = ballot["ballot_title"]
+                    context["election_id"] = ballot["ballot_paper_id"]
+        return context
