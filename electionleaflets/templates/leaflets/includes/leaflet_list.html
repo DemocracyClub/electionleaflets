@@ -13,6 +13,9 @@
           <p class="upload_date">
             <a href="{% url "leaflet" leaflet.id %}" class="ds-card-link">Uploaded {{ leaflet.date_uploaded|naturalday }}</a>
           </p>
+            {% if request.user.is_staff %}
+            	<a href="{% url "leaflet_update_publisher_details" pk=leaflet.pk %}">Tag</a>
+            {% endif %}
           {% if leaflet.publisher_party %}
             <p>{{ leaflet.publisher_party.party_name }}</p>
           {% endif %}

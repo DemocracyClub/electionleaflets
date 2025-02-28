@@ -6,9 +6,11 @@
     <div>
       <div class="ds-sidebar">
         {% if request.user.is_staff %}
-          <a class='button' href='/admin/leaflets/leaflet/{{ object.id }}/'>Admin</a>
+
         {% endif %}
         <form method="POST">
+        <a class='ds-cta' href='/admin/leaflets/leaflet/{{ object.id }}/'>Edit in admin</a>
+        <h2>Tag</h2>
         {{ form.errors }}
           {% for field in form.hidden_fields %}
             {{ field }}
@@ -69,25 +71,41 @@
   }
   </style>
 <script>
-function filterPeople(selected) {
-  console.log(selected.target.value)
-  var party_json = JSON.parse(selected.target.value.split("}:")[0] + "}")
-  var selected_party_id = party_json.party_id;
-  var people = document.querySelector("#people");
-  people.querySelectorAll("input[name='people']").forEach((input) => {
-    if (input.value.includes(selected_party_id)) {
-      input.parentNode.style.display = 'block';
-    } else {
-      input.parentNode.style.display = 'none';
-      input.checked = false;
+    function filterPeople(selected) {
+        var party_json = JSON.parse(selected.target.value.split("}:")[0] + "}")
+        var selected_party_id = party_json.party_id;
+        var people = document.querySelector("#people");
+        people.querySelectorAll("input[name='people']").forEach((input) => {
+            if (input.value.includes(selected_party_id)) {
+                input.parentNode.style.display = 'block';
+            } else {
+                input.parentNode.style.display = 'none';
+                input.checked = false;
+            }
+        });
     }
-  });
-}
 
-  var parties_radios = document.querySelector("#parties");
-  console.log(parties_radios)
-  parties_radios.querySelectorAll("input[name='parties']").forEach((input) => {
-    input.addEventListener('change', filterPeople);
-  });
+    var parties_radios = document.querySelector("#parties");
+    parties_radios.querySelectorAll("input[name='parties']").forEach((input) => {
+        input.addEventListener('change', filterPeople);
+        console.log(input)
+    });
+
+
+    const partyToSelect = "{{ leaflet.ynr_party_id }}";
+    console.log("{{ leaflet.ynr_party_id }}")
+    // Grab all radio inputs for 'parties'
+
+
+    parties_radios.querySelectorAll("input[name='parties']").forEach((input) => {
+        console.log(input)
+        if (input.value.includes(partyToSelect)) {
+            input.checked = true;
+            const changeEvent = new Event('change', {bubbles: true});
+            input.dispatchEvent(changeEvent);
+
+        }
+    });
+
 </script>
 {% endblock %}
