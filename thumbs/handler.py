@@ -101,7 +101,7 @@ def handle_cf(event, context):
         k, v = part.split("=")
         options[k] = v
 
-    path = sep.join(parts)
+    path = Path(sep.join(parts))
 
     image = fetch_image(BUCKET_NAME, path)
     processed = process_image(image, (size, options))
@@ -136,8 +136,8 @@ def handle_s3(event, context, local=False):
     for r in event["Records"]:
         if not r["s3"]["object"]["key"].startswith("leaflets/"):
             continue
-
-        image = fetch_image(r["s3"]["bucket"]["name"], r["s3"]["object"]["key"])
+        path = Path(r["s3"]["object"]["key"])
+        image = fetch_image(BUCKET_NAME, path)
 
         for spec in SPECS:
             processed = process_image(image, spec)
@@ -145,10 +145,11 @@ def handle_s3(event, context, local=False):
             upload_image(processed, r["s3"]["bucket"]["name"], key)
 
 
-def fetch_image(bucket: str, key: str):
+def fetch_image(bucket: str, key: Path):
     print(key)
-    prefix = key.rsplit(".", 1)
-    response = client.list_objects_v2(Bucket=bucket, Prefix=prefix[0])
+    response = client.list_objects_v2(
+        Bucket=bucket, Prefix=str(key.with_suffix(""))
+    )
     if "Contents" in response:
         object_key = response["Contents"][0]["Key"]
         s3_object = client.get_object(Bucket=bucket, Key=object_key)
@@ -156,14 +157,14 @@ def fetch_image(bucket: str, key: str):
     raise ValueError(f"Image not found in {response}")
 
 
-def new_key(spec: tuple, key: str) -> str:
+def new_key(spec: tuple, key: Path) -> Path:
     size = spec[0]
     options = spec[1]
 
     option_parts = [str(size)]
     option_parts.extend(sorted(["=".join(o) for o in list(options.items())]))
 
-    return "thumbs/{}/{}".format("/".join(option_parts), key)
+    return Path("thumbs/{}/{}".format("/".join(option_parts), key))
 
 
 def process_image(image: Image, spec: Tuple[str, dict]) -> Image:
@@ -178,21 +179,22 @@ def process_image(image: Image, spec: Tuple[str, dict]) -> Image:
     return engine.create(image, geometry, options)
 
 
-def upload_image(image: Image, bucket: str, key: str):
+def upload_image(image: Image, bucket: str, key: Path):
     io = BytesIO()
     image.save(io, "PNG")
-    key_parts = key.rsplit(".", 1)
-    if len(key_parts) == 1:
-        key_parts.append("png")
-    else:
-        key_parts[-1] = "png"
-    client.put_object(
+    key = key.with_suffix(".png")
+    resp = client.put_object(
         ACL="public-read",
         Body=io.getvalue(),
         Bucket=bucket,
-        Key=".".join(key_parts),
+        Key=str(key),
         ContentType=Image.MIME["PNG"],
     )
+    status_code = resp.get("ResponseMetadata", {}).get("HTTPStatusCode")
+    if status_code != 200:
+        raise ValueError(
+            f"Failed to upload {key} to S3. Status code: {status_code}, Response: {resp}"
+        )
 
 
 if __name__ == "__main__":

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from sorl.thumbnail import default
 from sorl.thumbnail.base import ThumbnailBackend
 from sorl.thumbnail.images import ImageFile
@@ -41,8 +43,8 @@ class S3Backend(ThumbnailBackend):
             ["{}={}".format(k, v) for k, v in list(opts.items())]
         )
 
-        file_path_parts = source.name.rsplit(".", 1)
-        file_name = file_path_parts[0]
+        file_path = Path(source.name)
+        file_name = file_path.stem
 
         return "{base_url}/{geometry_string}/{url_kwargs}/{original_path}.png".format(
             base_url=base_url,
