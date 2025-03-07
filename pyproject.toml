@@ -73,7 +73,7 @@ dev = [
     "pytest-playwright==0.7.0",
     "moto==5.0.28",
     "django-debug-toolbar==5.0.1",
-    "ruff==0.9.7",
+    "ruff==0.9.10",
 ]
 
 deploy = [
