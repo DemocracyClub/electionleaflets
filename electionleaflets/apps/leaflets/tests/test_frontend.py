@@ -125,7 +125,8 @@ class TestLeafletUpload:
         id = self.page.url.split("/")[-2]
         expect(self.page).to_have_url(f"{self.live_server.url}/leaflets/{id}/")
         expect(self.page.locator("h1")).to_have_text("Green Party leaflet")
-        expect(self.page.locator("h2")).to_have_text("Leaflet details")
+        heading = self.page.locator("h2", has_text="Leaflet details")
+        expect(heading).to_be_visible()
         assert Leaflet.objects.get().nuts1 == "UKF"
 
     def test_basic_upload_ynr_down(self):
@@ -138,7 +139,8 @@ class TestLeafletUpload:
         id = self.page.url.split("/")[-2]
         expect(self.page).to_have_url(f"{self.live_server.url}/leaflets/{id}/")
         expect(self.page.locator("h1")).to_have_text("Green Party leaflet")
-        expect(self.page.locator("h2")).to_have_text("Leaflet details")
+        heading = self.page.locator("h2", has_text="Leaflet details")
+        expect(heading).to_be_visible()
         assert Leaflet.objects.get().nuts1 == ""
 
     def test_basic_upload_more_than_one_leaflet(self):
@@ -151,7 +153,8 @@ class TestLeafletUpload:
         id = self.page.url.split("/")[-2]
         expect(self.page).to_have_url(f"{self.live_server.url}/leaflets/{id}/")
         expect(self.page.locator("h1")).to_have_text("Green Party leaflet")
-        expect(self.page.locator("h2")).to_have_text("Leaflet details")
+        heading = self.page.locator("h2", has_text="Leaflet details")
+        expect(heading).to_be_visible()
         assert LeafletImage.objects.count() == 2
 
     def test_upload_leaflet_with_invalid_postcode(self):

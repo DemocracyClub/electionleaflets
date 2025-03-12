@@ -3,46 +3,56 @@
 {% load static %}
 {% load leaflet_tags %}
 {% load thumbnail %}
+{% load humanize %}
 
 {% block content %}
 
-  <p>
-    <strong>ElectionLeaflets.org</strong> is an online archive of political leaflets.
-    It is created by members of the public photographing and classifying what comes through their doors at election
-    time.
-  </p>
-  <p>
-    Since 2010 there have been {{ leaflet_count }} leaflets added to the archive, providing
-    a valuable resource for academics, journalists and campaigners.
-  </p>
-<p> ElectionsLeaflets.org is a project by Democracy Club, a not-for-profit Community Interest Company. If you've found this website useful, please consider contributing to our hosting costs via a <a href="https://democracyclub.org.uk/donate/">regular or one-off donation.</p>
-<div class="ds-text-centered">
-  <a href="{% url "upload_leaflet" %}" class="ds-cta">Upload a leaflet</a>
-</div>
+    <p>
+        <strong>ElectionLeaflets.org</strong> is an online archive of UK political leaflets. It is created by members of
+        the public photographing and classifying what comes through their doors at election time.
+    </p>
+    <p>
+        Since 2009 there have been {{ leaflet_count|intcomma }} leaflets added to the archive, providing a valuable
+        resource for academics, journalists and campaigners.
+    </p>
+
+    <p>
+        You can browse the database by <a href="{% url "leaflets" %}">UK nation or region, year</a>,
+        or <a href="{% url "parties" %}">political party</a>. You can also
+        <a href="{% url "leaflets" %}?filter_by_name_search=">search by candidate name</a>.
+    </p>
+
+    <p> ElectionsLeaflets.org is a project by Democracy Club, a not-for-profit Community Interest Company. If you've
+        found this website useful, please consider contributing to our hosting costs via a
+        <a href="https://democracyclub.org.uk/donate/">regular or one-off donation</a>.
+    </p>
+    <div class="ds-text-centered">
+        <a href="{% url "upload_leaflet" %}" class="ds-cta">Upload a leaflet</a>
+    </div>
 
 
-  <h2>Latest leaflets</h2>
-  <ul class="ds-grid" style="--gridCellMin: 15ch;">
-    {% for leaflet in latest_leaflets %}
-      <a href="{% url "leaflet" leaflet.id %}" class="feature-card">
-        {% thumbnail leaflet.get_first_image.image "350x350" crop="top" as im %}
-          <img src="{{ im.url }}" alt="Thumbnail of leaflet - {{ leaflet.get_title }}">
-        {% endthumbnail %}
-      </a>
-    {% endfor %}
-  </ul>
+    <h2>Latest leaflets</h2>
+    <ul class="ds-grid" style="--gridCellMin: 15ch;">
+        {% for leaflet in latest_leaflets %}
+            <a href="{% url "leaflet" leaflet.id %}" class="feature-card">
+                {% thumbnail leaflet.get_first_image.image "350x350" crop="top" as im %}
+                    <img src="{{ im.url }}" alt="Thumbnail of leaflet - {{ leaflet.get_title }}">
+                {% endthumbnail %}
+            </a>
+        {% endfor %}
+    </ul>
 
 
-  <h3>As featured by</h3>
-  <ul class="ds-grid" style="--gridCellMin: 10ch;">
-    <li><img alt="In Your Area logo" src="{% static "images/featured_iya.png" %}"/></li>
-    <li><img alt="Channel 4 Dispatches logo" src="{% static "images/featured_dispatches.png" %}"/></li>
-    <li><img alt="BBC News logo" src="{% static "images/featured_bbc.png" %}"/></li>
-    <li><img alt="Guardian logo" src="{% static "images/featured_guardian.png" %}"/></li>
-    <li><img alt="38 degrees logo" src="{% static "images/featured_38degrees.png" %}"/></li>
-    <li><img alt="Newsnight logo" src="{% static "images/featured_newsnight.png" %}"/></li>
-    <li><img alt="The Times logo" src="{% static "images/featured_times.png" %}"/></li>
-  </ul>
+    <h3>As featured by</h3>
+    <ul class="ds-grid" style="--gridCellMin: 10ch;">
+        <li><img alt="In Your Area logo" src="{% static "images/featured_iya.png" %}"/></li>
+        <li><img alt="Channel 4 Dispatches logo" src="{% static "images/featured_dispatches.png" %}"/></li>
+        <li><img alt="BBC News logo" src="{% static "images/featured_bbc.png" %}"/></li>
+        <li><img alt="Guardian logo" src="{% static "images/featured_guardian.png" %}"/></li>
+        <li><img alt="38 degrees logo" src="{% static "images/featured_38degrees.png" %}"/></li>
+        <li><img alt="Newsnight logo" src="{% static "images/featured_newsnight.png" %}"/></li>
+        <li><img alt="The Times logo" src="{% static "images/featured_times.png" %}"/></li>
+    </ul>
 
 
 {% endblock %}
