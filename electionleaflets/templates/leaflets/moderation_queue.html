@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 
+{% block page_title %}
+	Moderation Queue
+{% endblock %}
+
 {% block content %}
     {% for leaflet in object_list %}
         <div class="ds-card">

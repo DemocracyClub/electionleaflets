@@ -6,6 +6,7 @@ from pathlib import Path
 import piexif
 import sentry_sdk
 from core.helpers import YNRAPIHelper
+from core.templatetags.markdown import markdown_filter
 from django.contrib.postgres.indexes import GinIndex
 from django.contrib.postgres.search import SearchVectorField
 from django.core.files.base import ContentFile
@@ -13,6 +14,7 @@ from django.core.files.storage import default_storage
 from django.db import models
 from django.db.models import JSONField
 from django.forms.models import model_to_dict
+from django.template.defaultfilters import date, striptags, truncatechars
 from django.urls import reverse
 from PIL import Image
 from slugify import slugify
@@ -134,6 +136,13 @@ class Leaflet(models.Model):
         if self.ynr_party_name:
             return f"{self.ynr_party_name} leaflet"
         return None
+
+    def get_short_description(self):
+        if self.description:
+            return truncatechars(
+                markdown_filter(striptags(self.description)), 200
+            )
+        return f"Leaflet uploaded {date(self.date_uploaded)}"
 
     def get_person(self):
         if self.ynr_person_id and self.ynr_person_name:
