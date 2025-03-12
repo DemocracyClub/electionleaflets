@@ -13,18 +13,25 @@
     {% endif %}
 {% endblock %}
 
+{% block page_title %}
+    {% if filter.data %}
+        Filtered leaflets
+    {% else %}
+        All leaflets
+    {% endif %}
+{% endblock %}
+
 {% block base_og_tags %}
-    <meta property="og:title" content="{% if filter.data %}Filtered leaflets{% else %}All leaflets{% endif %}"/>
-    <meta name="og:description" content="ElectionLeaflets.org is an online archive of political leaflets">
-    <meta property="og:type" content="website"/>
-    <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
+    <meta property="og:title" content="{% if filter.data %}Filtered leaflets{% else %}All leaflets{% endif %}">
+    <meta property="og:description" content="ElectionLeaflets.org is an online archive of political leaflets">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    
+    <meta property="twitter:title" content="{{ object.get_title }}">
+    <meta property="twitter:description" content="{{ object.get_short_description }}">
+    <meta property="twitter:card" content="summary_large_image">
 
-
-    <meta name="twitter:title" content="{{ object.get_title }}">
-    <meta name="twitter:description" content="{{ object.get_short_description }}">
-    <meta name="twitter:card" content="summary_large_image">
-
-    <meta property="og:site_name" content="ElectionLeaflets.org"/>
+    <meta property="og:site_name" content="ElectionLeaflets.org">
 
 {% endblock base_og_tags %}
 

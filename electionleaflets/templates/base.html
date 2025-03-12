@@ -6,15 +6,16 @@
   {% stylesheet 'styles' %}
 {% endblock extra_site_css %}
 
-{% block base_title %}{% block page_title %}Real-time #ElectionLeaflet monitoring{% endblock page_title %} |ElectionLeaflets.org {% endblock base_title %}
+{% block base_title %}{% block page_title %}ElectionLeaflets.org{% endblock page_title %} | ElectionLeaflets.org {% endblock base_title %}
 {% block extra_site_js %}{% javascript "scripts" %}{% endblock %}
-
+{% block og_description_content %}ElectionLeaflets.org is an online archive of political leaflets. It is created by members of the public photographing and classifying what comes through their doors at election time.{% endblock og_description_content %}
 {% block page_meta%}
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <meta name="mobile-web-app-capable" content="yes" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
-  <meta name="keywords" lang="en" content="election leaflets" />
-  <meta name="description" lang="en" content="Real-time election leaflet monitoring" />
+  <meta name="keywords" lang="en" content="election leaflets">
+  <meta name="description" lang="en" content="{% block description_content %}ElectionLeaflets.org is an online archive of political leaflets. It is created by members of the public photographing and classifying what comes through their doors at election time.{% endblock description_content %}" />
+    
   {% block og_tags %}{% endblock og_tags %}
 {% endblock page_meta %}
 

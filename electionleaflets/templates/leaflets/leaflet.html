@@ -3,20 +3,23 @@
 {% load markdown %}
 {% load leaflet_tags %}
 
+{% block page_title %}{{ object.get_title }}{% endblock %}
+{% block description_content %}{{ object.get_short_description }}{% endblock %}
+
 {% block base_og_tags %}
-    <meta property="og:title" content="{{ object.get_title }}"/>
-    <meta name="og:description" content="{{ object.get_short_description }}">
-    <meta property="og:type" content="website"/>
-    <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
+    <meta property="og:title" content="{{ object.get_title }}">
+    <meta property="og:description" content="{{ object.get_short_description }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
 
-    <meta property="og:image" content="{% leaflet_og_image_url object %}"/>
+    <meta property="og:image" content="{% leaflet_og_image_url object %}">
 
-    <meta name="twitter:title" content="{{ object.get_title }}">
-    <meta name="twitter:description" content="{{ object.get_short_description }}">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="{% leaflet_og_image_url object %}">
+    <meta property="twitter:title" content="{{ object.get_title }}">
+    <meta property="twitter:description" content="{{ object.get_short_description }}">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:image" content="{% leaflet_og_image_url object %}">
 
-    <meta property="og:site_name" content="ElectionLeaflets.org"/>
+    <meta property="og:site_name" content="ElectionLeaflets.org">
 
 {% endblock base_og_tags %}
 
