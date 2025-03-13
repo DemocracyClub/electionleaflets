@@ -42,9 +42,8 @@ class S3Backend(ThumbnailBackend):
         url_kwargs = "/".join(
             ["{}={}".format(k, v) for k, v in list(opts.items())]
         )
-
         file_path = Path(source.name)
-        file_name = file_path.stem
+        file_name = file_path.parent / file_path.stem
 
         return "{base_url}/{geometry_string}/{url_kwargs}/{original_path}.png".format(
             base_url=base_url,
