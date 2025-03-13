@@ -1,9 +1,10 @@
 import base64
+import os
 import re
 import sys
 from io import BytesIO
-from os import makedirs
-from os.path import dirname, sep
+from os.path import sep
+from pathlib import Path
 
 sys.path.append("")
 from typing import Tuple
@@ -15,31 +16,48 @@ import sentry_sdk
 from django.conf import settings
 from sentry_sdk.integrations.aws_lambda import AwsLambdaIntegration
 
-settings.configure(
-    THUMBNAIL_KVSTORE="thumbs.PassthruKVStore",
-)
-with open("LEAFLET_IMAGES_BUCKET_NAME") as f:
-    BUCKET_NAME = f.read().strip()
-with open("SENTRY_DSN") as f:
-    SENTRY_DSN = f.read().strip()
+# Get the bucket name. Because this function is run using Lambda@Edge
+# we can't use environment variables there. We want to use these for testing
+# so we support getting the value from either.
+BUCKET_NAME = None
+if leaflet_images_bucket_name := os.environ.get("LEAFLET_IMAGES_BUCKET_NAME"):
+    BUCKET_NAME = leaflet_images_bucket_name
+else:
+    leaflets_bucket_image_path = Path("LEAFLET_IMAGES_BUCKET_NAME")
+    if leaflets_bucket_image_path.exists():
+        with open("LEAFLET_IMAGES_BUCKET_NAME") as f:
+            BUCKET_NAME = f.read().strip()
+if not BUCKET_NAME:
+    raise ValueError(
+        "LEAFLET_IMAGES_BUCKET_NAME needs to exist as an env var or file name"
+    )
 
-sentry_sdk.init(
-    dsn=SENTRY_DSN,
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for tracing.
-    traces_sample_rate=0,
-    # Set profiles_sample_rate to 1.0 to profile 100%
-    # of sampled transactions.
-    # We recommend adjusting this value in production.
-    profiles_sample_rate=0,
-    integrations=[
-        AwsLambdaIntegration(),
-    ],
-)
-
+sentry_dsn_path = Path("SENTRY_DSN")
+if sentry_dsn_path.exists():
+    with sentry_dsn_path.open() as f:
+        SENTRY_DSN = f.read().strip()
+        sentry_sdk.init(
+            dsn=SENTRY_DSN,
+            # Set traces_sample_rate to 1.0 to capture 100%
+            # of transactions for tracing.
+            traces_sample_rate=0,
+            # Set profiles_sample_rate to 1.0 to profile 100%
+            # of sampled transactions.
+            # We recommend adjusting this value in production.
+            profiles_sample_rate=0,
+            integrations=[
+                AwsLambdaIntegration(),
+            ],
+        )
+if not settings.configured:
+    # Pytest will have configured Django, Lambda will not
+    # Don't reconfigure settings if already configured,
+    # to allow tests to run
+    settings.configure()
 django.setup()
 
 # These need to be imported after Django has bootstrapped
+import pillow_heif  # noqa: E402
 from PIL import Image  # noqa: E402
 from sorl.thumbnail.base import ThumbnailBackend  # noqa: E402
 from sorl.thumbnail.engines import pil_engine  # noqa: E402
@@ -47,6 +65,7 @@ from sorl.thumbnail.parsers import parse_geometry  # noqa: E402
 
 client = boto3.client("s3")
 engine = pil_engine.Engine()
+pillow_heif.register_heif_opener()
 
 
 def handle(event, context):
@@ -82,18 +101,18 @@ def handle_cf(event, context):
         k, v = part.split("=")
         options[k] = v
 
-    path = sep.join(parts)
+    path = Path(sep.join(parts))
 
     image = fetch_image(BUCKET_NAME, path)
     processed = process_image(image, (size, options))
     key = new_key((size, options), path)
-    upload_image(processed, image.format, BUCKET_NAME, key)
+    upload_image(processed, BUCKET_NAME, key)
 
     io = BytesIO()
-    processed.save(io, image.format)
+    processed.save(io, "png")
 
     response["headers"]["content-type"] = [
-        {"key": "Content-Type", "value": Image.MIME[image.format]}
+        {"key": "Content-Type", "value": Image.MIME["PNG"]}
     ]
     response["body"] = re.sub(
         r"\n", "", base64.encodebytes(io.getvalue()).decode("ascii")
@@ -117,32 +136,35 @@ def handle_s3(event, context, local=False):
     for r in event["Records"]:
         if not r["s3"]["object"]["key"].startswith("leaflets/"):
             continue
-
-        image = fetch_image(r["s3"]["bucket"]["name"], r["s3"]["object"]["key"])
+        path = Path(r["s3"]["object"]["key"])
+        image = fetch_image(BUCKET_NAME, path)
 
         for spec in SPECS:
             processed = process_image(image, spec)
             key = new_key(spec, r["s3"]["object"]["key"])
-            upload_image(
-                processed, image.format, r["s3"]["bucket"]["name"], key, local
-            )
+            upload_image(processed, r["s3"]["bucket"]["name"], key)
 
 
-def fetch_image(bucket: str, key: str):
+def fetch_image(bucket: str, key: Path):
     print(key)
-    response = client.get_object(Bucket=bucket, Key=key)
+    response = client.list_objects_v2(
+        Bucket=bucket, Prefix=str(key.with_suffix(""))
+    )
+    if "Contents" in response:
+        object_key = response["Contents"][0]["Key"]
+        s3_object = client.get_object(Bucket=bucket, Key=object_key)
+        return Image.open(s3_object["Body"])
+    raise ValueError(f"Image not found in {response}")
 
-    return Image.open(response["Body"])
 
-
-def new_key(spec: tuple, key: str) -> str:
+def new_key(spec: tuple, key: Path) -> Path:
     size = spec[0]
     options = spec[1]
 
     option_parts = [str(size)]
     option_parts.extend(sorted(["=".join(o) for o in list(options.items())]))
 
-    return "thumbs/{}/{}".format("/".join(option_parts), key)
+    return Path("thumbs/{}/{}".format("/".join(option_parts), key))
 
 
 def process_image(image: Image, spec: Tuple[str, dict]) -> Image:
@@ -157,22 +179,22 @@ def process_image(image: Image, spec: Tuple[str, dict]) -> Image:
     return engine.create(image, geometry, options)
 
 
-def upload_image(
-    image: Image, format: str, bucket: str, key: str, local: bool = False
-):
+def upload_image(image: Image, bucket: str, key: Path):
     io = BytesIO()
-    image.save(io, format)
-    if local:
-        makedirs(dirname(key), exist_ok=True)
-        image.save(key, format)
-
-    client.put_object(
+    image.save(io, "PNG")
+    key = key.with_suffix(".png")
+    resp = client.put_object(
         ACL="public-read",
         Body=io.getvalue(),
         Bucket=bucket,
-        Key=key,
-        ContentType=Image.MIME[format],
+        Key=str(key),
+        ContentType=Image.MIME["PNG"],
     )
+    status_code = resp.get("ResponseMetadata", {}).get("HTTPStatusCode")
+    if status_code != 200:
+        raise ValueError(
+            f"Failed to upload {key} to S3. Status code: {status_code}, Response: {resp}"
+        )
 
 
 if __name__ == "__main__":

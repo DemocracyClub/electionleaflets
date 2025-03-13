@@ -71,11 +71,10 @@ dev = [
     "pytest-cov==6.0.0",
     "pytest-django==4.10.0",
     "pytest-playwright==0.7.0",
-    "moto==5.1.1",
+    "moto[s3]==5.1.1",
     "django-debug-toolbar==5.0.1",
     "ruff==0.9.10",
 ]
-
 deploy = [
     "urllib3==2.3.0",
     "boto3==1.37.11",

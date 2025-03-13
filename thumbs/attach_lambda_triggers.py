@@ -12,10 +12,15 @@ lambda_client = boto3.client("lambda", "eu-west-2")
 
 
 def get_thumbs_function(lambda_client):
-    for function in lambda_client.list_functions()["Functions"]:
+    for function in sorted(
+        lambda_client.list_functions()["Functions"],
+        key=lambda x: x["LastModified"],
+        reverse=True,
+    ):
         if function["FunctionName"].startswith(
             f"ElectionLeafletsThumbs-{ENVIRONMENT}"
         ):
+            ""
             return function
     return None
 
