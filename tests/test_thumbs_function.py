@@ -30,7 +30,7 @@ def mock_s3_bucket(monkeypatch):
 
 
 IMAGES_TO_TEST = (
-    TEST_IMAGES_PATH / "front_test.jpg",
+    TEST_IMAGES_PATH / "front.test.jpg",
     TEST_IMAGES_PATH / "heif_test.heif",
     TEST_IMAGES_PATH / "tiff_test.tiff",
 )
