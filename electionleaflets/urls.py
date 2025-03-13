@@ -25,6 +25,7 @@ else:
         re_path(r"^parties/", include("parties.urls")),
         re_path(r"^person/", include("people.urls")),
         re_path(r"^api/", include("api.urls")),
+        re_path(r"^analysis/", include("analysis.urls")),
         # Feeds
         re_path(r"^feeds/latest/$", LatestLeafletsFeed(), name="latest_feed"),
         # Individual urls
@@ -103,11 +104,6 @@ redirect_urls = (
         r"^reports/$",
         HomePageRedirectView.as_view(),
         name="report_view",
-    ),
-    re_path(
-        r"^leaflets_without_candidates/$",
-        HomePageRedirectView.as_view(),
-        name="leaflets_without_candidates",
     ),
     re_path(
         r"^constituencies/$",

@@ -140,7 +140,7 @@ class YNRBallotDataMixin:
             return []
         return resp["results"]
 
-    def get_parties_from_ballot_data(self, ballot_data):
+    def get_parties_from_ballot_data(self, ballot_data, include_none=False):
         parties = {
             "party:52": "Conservative and Unionist Party",
             "party:63": "Green Party",
@@ -152,6 +152,13 @@ class YNRBallotDataMixin:
         }
 
         current_parties = set()
+        if include_none:
+            current_parties.add(
+                (
+                    "",
+                    "Not listed",
+                )
+            )
         signer = Signer()
         parties_with_candidates = set()
         for ballot in ballot_data:
@@ -182,6 +189,7 @@ class YNRBallotDataMixin:
         signer = Signer()
 
         people = set()
+
         for ballot in ballot_data:
             for candidacy in ballot["candidacies"]:
                 if party and candidacy["party"]["legacy_slug"] not in party:
@@ -259,13 +267,17 @@ class UpdatePublisherDetails(YNRBallotDataMixin, forms.ModelForm):
             return
         ballot_data = self.get_ballot_data_from_ynr(self.instance.postcode)
         self.fields["parties"] = forms.ChoiceField(
-            choices=self.get_parties_from_ballot_data(ballot_data),
+            choices=sorted(
+                self.get_parties_from_ballot_data(
+                    ballot_data, include_none=True
+                )
+            ),
             widget=forms.RadioSelect,
             required=False,
         )
 
         self.fields["people"] = forms.MultipleChoiceField(
-            choices=self.get_people_from_ballot_data(ballot_data),
+            choices=sorted(self.get_people_from_ballot_data(ballot_data)),
             required=False,
             widget=forms.CheckboxSelectMultiple,
         )

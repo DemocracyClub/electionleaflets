@@ -266,12 +266,14 @@ class LeafletUpdatePublisherView(LoginRequiredMixin, UpdateView):
         self.object.ballots = [
             c["ballot"] for ynr_id, c in leaflet_people.items()
         ]
-
-        party_data = json.loads(signer.unsign(form.cleaned_data["parties"]))
-        if party_data["party_id"]:
-            self.object.ynr_party_id = party_data["party_id"]
-            self.object.ynr_party_name = party_data["party_name"]
-
+        if form.cleaned_data["parties"]:
+            party_data = json.loads(signer.unsign(form.cleaned_data["parties"]))
+            if party_data["party_id"]:
+                self.object.ynr_party_id = party_data["party_id"]
+                self.object.ynr_party_name = party_data["party_name"]
+        else:
+            self.object.ynr_party_id = None
+            self.object.ynr_party_name = None
         return super().form_valid(form)
 
 

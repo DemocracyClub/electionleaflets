@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load humanize %}
+{% block content %}
+
+    <nav class="ds-subnav" aria-label="About">
+        <ul>
+            <li>
+                {% url "tag_leaflets" as menu_link %}
+                <a href="{% url "tag_leaflets" %}"
+                   {% if request.path == menu_link %}aria-current="current"{% endif %}>
+                    Without people</a>
+            </li>
+            <li>
+                {% url "tag_leaflets_without_party" as menu_link %}
+                <a href="{% url "tag_leaflets_without_party" %}"
+                   {% if request.path == menu_link %}aria-current="current"{% endif %}>
+                    Without party</a>
+            </li>
+        </ul>
+    </nav>
+    
+    {% include "leaflets/includes/leaflet_filter.html" %}
+
+    <p>{{ paginator.count|intcomma }} leaflets</p>
+    {% include "leaflets/includes/leaflet_list.html" %}
+
+    {% if is_paginated %}
+        {% include "core/pager.html" %}
+    {% endif %}
+
+
+{% endblock %}
