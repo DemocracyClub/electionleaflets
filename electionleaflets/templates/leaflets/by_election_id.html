@@ -3,7 +3,7 @@
 
 {% block content %}
     <h1>{{ page_title }}</h1>
-    <a href="https://whocanivotefor.co.uk/elections/{{ election_id }}">View on WhoCanIVoteFor.co.uk</a>
+    <a href="https://whocanivotefor.co.uk/elections/{{ election_id }}">View this election on WhoCanIVoteFor.co.uk</a>
     {% include "leaflets/includes/leaflet_filter.html" %}
 
     <p>{{ paginator.count|intcomma }} leaflets</p>
