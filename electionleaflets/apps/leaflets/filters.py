@@ -58,7 +58,8 @@ class LeafletFilter(django_filters.FilterSet):
         super().__init__(*args, **kwargs)
 
         choices = year_facets(self.qs)
-        self.form.fields["filter_by_year"].choices = choices
+        if "filter_by_year" in self.form.fields:
+            self.form.fields["filter_by_year"].choices = choices
 
         self.form.fields["filter_by_region"].choices = region_facets(self.qs)
 
@@ -100,3 +101,7 @@ class LeafletFilter(django_filters.FilterSet):
         method="name_search",
         help_text="Note: we can't currently search names in all leaflets. This is coming soon.",
     )
+
+
+class NoYearLeafletFilter(LeafletFilter):
+    filter_by_year = None

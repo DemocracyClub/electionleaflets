@@ -18,7 +18,7 @@ from django_filters.views import FilterView
 from formtools.wizard.views import NamedUrlSessionWizardView
 from storages.backends.s3boto3 import S3Boto3Storage
 
-from .filters import LeafletFilter
+from .filters import LeafletFilter, NoYearLeafletFilter
 from .forms import (
     SingleLeafletImageForm,
     UpdatePublisherDetails,
@@ -296,7 +296,7 @@ class LeafletModeration(ListView):
 class ElectionIDView(FilterView):
     template_name = "leaflets/by_election_id.html"
     paginate_by = 60
-    filterset_class = LeafletFilter
+    filterset_class = NoYearLeafletFilter
 
     def get_queryset(self):
         return Leaflet.objects.filter(
