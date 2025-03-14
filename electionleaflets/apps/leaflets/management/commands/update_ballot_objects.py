@@ -29,11 +29,17 @@ class Command(BaseCommand):
 
             ballot["election_id"] = ballot_data["election"]["election_id"]
             ballot["election_name"] = ballot_data["election"]["name"]
+            ballot["ballot_title"] = (
+                f"{ballot['election']['name']}: {ballot['post']['label']}"
+            )
             new_ballot_data.append(ballot)
         leaflet.ballots = [
             dict(t) for t in {tuple(d.items()) for d in new_ballot_data}
         ]
         leaflet.save()
+        self.stdout.write(
+            f"Updated {leaflet} with {[leaflet['ballot_paper_id'] for leaflet in leaflet.ballots]}"
+        )
 
     def get_ballot_data(self, ballot_paper_id):
         if ballot_paper_id not in self.ballot_cache:
