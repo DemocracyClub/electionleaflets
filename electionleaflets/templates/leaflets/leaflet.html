@@ -69,23 +69,24 @@
             </div>
         {% endif %}
         {% if object.ballots %}
-
-
             <div>
                 <dt>Related elections</dt>
                 <dd>
                     <ul>
                         {% for ballot in object.ballots %}
                             <li>
-                                <a href="https://whocanivotefor.co.uk/elections/{{ ballot.ballot_paper_id }}">{{ ballot.ballot_title }}</a>
+                                <a href="{% url "leaflet_by_election_id" ballot.election_id %}">{{ ballot.election_name }}</a>
                             </li>
+                            {% if ballot.election_id != ballot.ballot_paper_id %}
+                                <li>
+                                    <a href="{% url "leaflet_by_election_id" ballot.ballot_paper_id %}">{{ ballot.ballot_title }}</a>
+                                </li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </dd>
             </div>
         {% endif %}
-
-
 
         {% if object.people %}
             <div>
@@ -111,6 +112,7 @@
             href="https://creativecommons.org/publicdomain/zero/1.0/">Public
         Domain Dedication</a>.
     </p>
+
 
     {% if request.user.is_authenticated %}
         <a href="{% url "leaflet_update_publisher_details" pk=object.pk %}" class="ds-cta">

@@ -1,4 +1,5 @@
 import json
+import time
 from urllib.parse import urljoin
 
 import requests
@@ -28,7 +29,14 @@ class YNRAPIHelper:
         self.YNR_BASE = settings.YNR_BASE_URL
         self.API_KEY = api_key or settings.YNR_API_KEY  # handy for mocking URLs
 
+        if not self.API_KEY:
+            print(
+                "WARNING: settings.YNR_API_KEY not set. Requests will be rate limited"
+            )
+
     def get(self, endpoint, params=None, version="next", json=True):
+        if not self.API_KEY:
+            time.sleep(6)
         path = f"api/{version}/{endpoint}"
         url = urljoin(self.YNR_BASE, path)
         params = params or {}

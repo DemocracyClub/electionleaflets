@@ -9,6 +9,14 @@ class LeafletFactory(DjangoModelFactory):
 
     title = factory.Sequence(lambda n: "Leaflet %d" % n)
     description = "test description"
+    ballots = [
+        {
+            "election_id": "parl.2024-07-04",
+            "ballot_title": "UK Parliamentary general election: Newbury",
+            "election_name": "UK Parliamentary general election",
+            "ballot_paper_id": "parl.newbury.2024-07-04",
+        }
+    ]
 
     @classmethod
     def _create(cls, model_class, *args, **kwargs):
