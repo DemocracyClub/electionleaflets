@@ -201,6 +201,7 @@ def setup_sentry(environment=None):
 
 THUMBNAIL_FORMAT = "PNG"
 THUMBNAIL_KVSTORE = "sorl.thumbnail.kvstores.cached_db_kvstore.KVStore"
+THUMBNAIL_BACKEND = "core.s3_thumbnail_store.LocalThumbnailBackend"
 
 
 TEMPLATES = [

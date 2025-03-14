@@ -5,25 +5,7 @@ from sorl.thumbnail.base import ThumbnailBackend
 from sorl.thumbnail.images import ImageFile
 
 
-class S3Backend(ThumbnailBackend):
-    def get_thumbnail(self, file_, geometry_string, **options):
-        """
-        Returns thumbnail as an ImageFile instance for file with geometry and
-        options given. All of the thumbnail generation logic is short-circuited
-        as we know that CloudFront will generate the thumbnail for us.
-        """
-
-        if file_:
-            source = ImageFile(file_)
-        else:
-            return None
-
-        for key, value in list(self.default_options.items()):
-            options.setdefault(key, value)
-
-        name = self._get_thumbnail_filename(source, geometry_string, options)
-        return ImageFile(name, default.storage)
-
+class BaseThumbsCustomUrlBackend(ThumbnailBackend):
     def _get_thumbnail_filename(self, source, geometry_string, options):
         """
         Returns URLs that match the format of the lambda@edge function
@@ -51,3 +33,25 @@ class S3Backend(ThumbnailBackend):
             url_kwargs=url_kwargs,
             original_path=file_name,
         )
+
+
+class S3Backend(BaseThumbsCustomUrlBackend):
+    def get_thumbnail(self, file_, geometry_string, **options):
+        """
+        Returns thumbnail as an ImageFile instance for file with geometry and
+        options given. All of the thumbnail generation logic is short-circuited
+        as we know that CloudFront will generate the thumbnail for us.
+        """
+        if file_:
+            source = ImageFile(file_)
+        else:
+            return None
+
+        for key, value in list(self.default_options.items()):
+            options.setdefault(key, value)
+
+        name = self._get_thumbnail_filename(source, geometry_string, options)
+        return ImageFile(name, default.storage)
+
+
+class LocalThumbnailBackend(BaseThumbsCustomUrlBackend): ...
