@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
-from django.urls import re_path
+from django.urls import path, re_path
 from django.views.decorators.cache import never_cache
 from leaflets.views import (
+    ElectionIDView,
     ImageCropView,
     ImageRotateView,
     ImageView,
@@ -57,6 +58,11 @@ urlpatterns = [
         name="leaflet_update_publisher_details",
     ),
     re_path(r"^$", LatestLeaflets.as_view(), name="leaflets"),
+    path(
+        r"election/<str:election_id>/",
+        ElectionIDView.as_view(),
+        name="leaflet_by_election_id",
+    ),
     re_path(
         r"^moderate$",
         login_required(LeafletModeration.as_view()),
