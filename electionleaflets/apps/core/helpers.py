@@ -1,11 +1,28 @@
 import json
 import time
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 import requests
 from django.conf import settings
 from django.forms import Textarea
 from django.utils.cache import add_never_cache_headers, patch_response_headers
+from requests.adapters import HTTPAdapter
+from urllib3 import Retry
+
+session = requests.Session()
+
+retries = Retry(
+    total=1,
+    connect=1,
+    backoff_factor=0.1,
+    status_forcelist=[502, 503, 504],
+    allowed_methods={"GET"},
+)
+
+session.mount(
+    f"{urlparse(settings.YNR_BASE_URL).scheme}://",
+    HTTPAdapter(max_retries=retries),
+)
 
 
 class CacheControlMixin(object):
@@ -41,7 +58,7 @@ class YNRAPIHelper:
         url = urljoin(self.YNR_BASE, path)
         params = params or {}
         params["auth_token"] = self.API_KEY
-        resp = requests.get(url, params=params)
+        resp = session.get(url, params=params)
         resp.raise_for_status()
 
         if json:
