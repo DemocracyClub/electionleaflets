@@ -146,7 +146,10 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
             postcode = self.get_cleaned_data_for_step("postcode")
             if not postcode:
                 return None
-            ret = {"postcode": postcode.get("postcode")}
+            ret = {
+                "postcode": postcode.get("postcode"),
+                "storage": self.storage,
+            }
             try:
                 date = self.get_cleaned_data_for_step("date")["date"]
             except (KeyError, TypeError):

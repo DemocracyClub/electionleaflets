@@ -112,6 +112,10 @@ class PeopleRadioWidget(forms.RadioSelect):
 class YNRBallotDataMixin:
     FOR_DATE = None
 
+    def __init__(self, *args, **kwargs):
+        self.storage = kwargs.get("initial", {}).get("storage", None)
+        super().__init__(*args, **kwargs)
+
     def get_date_range(self):
         for_date = self.FOR_DATE
         if not for_date:
@@ -125,20 +129,23 @@ class YNRBallotDataMixin:
 
         :type instance: Leaflet
         """
-        params = {"for_postcode": postcode}
-        start, end = self.get_date_range()
-        params["election_date_range_after"] = start
-        params["election_date_range_before"] = end
-        ynr_helper = YNRAPIHelper()
-        try:
-            resp = ynr_helper.get(
-                "ballots",
-                params=params,
-                json=True,
-            )
-        except requests.RequestException:
-            return []
-        return resp["results"]
+        if "ynr_data" not in self.storage.extra_data:
+            params = {"for_postcode": postcode}
+            start, end = self.get_date_range()
+            params["election_date_range_after"] = start
+            params["election_date_range_before"] = end
+            ynr_helper = YNRAPIHelper()
+            try:
+                resp = ynr_helper.get(
+                    "ballots",
+                    params=params,
+                    json=True,
+                )
+            except requests.RequestException:
+                return []
+
+            self.storage.extra_data["ynr_data"] = resp["results"]
+        return self.storage.extra_data["ynr_data"]
 
     def get_parties_from_ballot_data(self, ballot_data, include_none=False):
         parties = {
