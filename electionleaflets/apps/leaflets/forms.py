@@ -7,6 +7,7 @@ from core.helpers import YNRAPIHelper
 from django import forms
 from django.core.signing import Signer
 from django.utils import timezone
+from formtools.wizard.storage import BaseStorage
 from leaflets.fields import DCDateField
 from leaflets.models import Leaflet, LeafletImage
 from localflavor.gb.forms import GBPostcodeField
@@ -113,7 +114,7 @@ class YNRBallotDataMixin:
     FOR_DATE = None
 
     def __init__(self, *args, **kwargs):
-        self.storage = kwargs.get("initial", {}).get("storage", None)
+        self.storage: BaseStorage = kwargs.pop("storage")
         super().__init__(*args, **kwargs)
 
     def get_date_range(self):

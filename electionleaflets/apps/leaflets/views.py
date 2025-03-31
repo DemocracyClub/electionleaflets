@@ -134,6 +134,12 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         step_name = self.steps.current
         return [self.TEMPLATES[step_name]]
 
+    def get_form_kwargs(self, step=None):
+        kwargs = super().get_form_kwargs(step)
+        if step in ["party", "people"]:
+            kwargs["storage"] = self.storage
+        return kwargs
+
     def get_form_initial(self, step):
         if step in ["party", "people"]:
             postcode = self.get_cleaned_data_for_step("postcode")
