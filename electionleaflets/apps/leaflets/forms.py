@@ -3,6 +3,7 @@ import json
 from datetime import timedelta
 
 import requests
+import sentry_sdk
 from core.helpers import YNRAPIHelper
 from django import forms
 from django.core.signing import Signer
@@ -142,7 +143,8 @@ class YNRBallotDataMixin:
                     params=params,
                     json=True,
                 )
-            except requests.RequestException:
+            except requests.RequestException as e:
+                sentry_sdk.capture_exception(e)
                 return []
 
             self.storage.extra_data["ynr_data"] = resp["results"]
