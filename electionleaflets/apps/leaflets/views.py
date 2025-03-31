@@ -95,17 +95,10 @@ class LeafletView(CacheControlMixin, DetailView):
     model = Leaflet
 
 
-def should_show_party_form(wizard):
-    party_form = wizard.get_form("party")
-    postcode_dict = wizard.get_cleaned_data_for_step("postcode")
-
-    if not postcode_dict:
-        return False
-    postcode = postcode_dict.get("postcode")
-    return party_form.get_ballot_data_from_ynr(postcode)
-
-
 def should_show_person_form(wizard):
+    if "party" not in wizard.storage.data["step_data"]:
+        return False
+
     cleaned_data = wizard.get_cleaned_data_for_step("party") or {}
     if not cleaned_data:
         return False
@@ -141,12 +134,21 @@ class LeafletUploadWizzard(NamedUrlSessionWizardView):
         step_name = self.steps.current
         return [self.TEMPLATES[step_name]]
 
+    def get_form_kwargs(self, step=None):
+        kwargs = super().get_form_kwargs(step)
+        if step in ["party", "people"]:
+            kwargs["storage"] = self.storage
+        return kwargs
+
     def get_form_initial(self, step):
         if step in ["party", "people"]:
             postcode = self.get_cleaned_data_for_step("postcode")
             if not postcode:
                 return None
-            ret = {"postcode": postcode.get("postcode")}
+            ret = {
+                "postcode": postcode.get("postcode"),
+                "storage": self.storage,
+            }
             try:
                 date = self.get_cleaned_data_for_step("date")["date"]
             except (KeyError, TypeError):

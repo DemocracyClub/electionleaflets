@@ -14,14 +14,16 @@ def test_ynr_get(settings):
 
     api_helper = YNRAPIHelper(api_key=ynr_api_key)
 
-    with patch("requests.get") as mock_get:
+    with patch("core.helpers.session.get") as mock_get:
         mock_response = mock_get.return_value
         mock_response.raise_for_status.return_value = None
         mock_response.json.return_value = {"results": []}
 
         result = api_helper.get(endpoint)
 
-        mock_get.assert_called_once_with(expected_url, params=expected_params)
+        mock_get.assert_called_once_with(
+            expected_url, params=expected_params, timeout=10
+        )
         assert result == {"results": []}
 
 

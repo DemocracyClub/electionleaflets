@@ -71,6 +71,11 @@ Parameters:
     Description: "The DC_ENVIRONMENT environment variable passed to the app."
     Type: AWS::SSM::Parameter::Value<String>
 
+  AppYNRAPIKey:
+    Default: YNR_API_KEY
+    Description: "The YNR_API_KEY environment variable passed to the app."
+    Type: AWS::SSM::Parameter::Value<String>
+
   AppDomain:
     Description: "The domain the app is on."
     Type: String
@@ -121,6 +126,7 @@ Resources:
           DATABASE_USER: postgres
           APP_DOMAIN: !Ref AppDomain
           LEAFLET_IMAGES_BUCKET_NAME: !Ref AppLeafletImagesBucketName
+          YNR_API_KEY: !Ref AppYNRAPIKey
       Events:
         HTTPRequests:
           Type: Api

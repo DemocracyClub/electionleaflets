@@ -66,4 +66,6 @@ THUMBNAIL_BACKEND = "core.s3_thumbnail_store.S3Backend"
 CSRF_TRUSTED_ORIGINS = ["https://electionleaflets.org"]
 USE_X_FORWARDED_HOST = True
 
+YNR_API_KEY = os.environ["YNR_API_KEY"]  # Fail if not API key
+
 setup_sentry()  # noqa: F405
