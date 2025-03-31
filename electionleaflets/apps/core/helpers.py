@@ -58,7 +58,7 @@ class YNRAPIHelper:
         url = urljoin(self.YNR_BASE, path)
         params = params or {}
         params["auth_token"] = self.API_KEY
-        resp = session.get(url, params=params)
+        resp = session.get(url, params=params, timeout=10)
         resp.raise_for_status()
 
         if json:

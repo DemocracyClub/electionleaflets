@@ -21,7 +21,9 @@ def test_ynr_get(settings):
 
         result = api_helper.get(endpoint)
 
-        mock_get.assert_called_once_with(expected_url, params=expected_params)
+        mock_get.assert_called_once_with(
+            expected_url, params=expected_params, timeout=10
+        )
         assert result == {"results": []}
 
 
