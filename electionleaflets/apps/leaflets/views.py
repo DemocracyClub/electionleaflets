@@ -15,6 +15,7 @@ from django.urls import reverse
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 from django_filters.views import FilterView
+from formtools.wizard.storage.session import SessionStorage
 from formtools.wizard.views import NamedUrlSessionWizardView
 from storages.backends.s3boto3 import S3Boto3Storage
 
@@ -257,6 +258,13 @@ class LeafletUpdatePublisherView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        # Replicate the form wizard's kwargs by passing a session store to
+        # the base form. This cached requests to YNR
+        kwargs["storage"] = SessionStorage("ynr", self.request)
+        return kwargs
 
     @transaction.atomic
     def form_valid(self, form):

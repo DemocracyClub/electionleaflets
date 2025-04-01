@@ -2,6 +2,7 @@ from pathlib import Path
 from urllib.parse import urljoin
 
 import pytest
+from django.urls import reverse
 from leaflets.models import Leaflet, LeafletImage
 from leaflets.tests.data import LOCAL_BALLOT_WITH_CANDIDATES
 from leaflets.tests.model_factory import LeafletFactory
@@ -203,3 +204,34 @@ class TestLeafletUpload:
         ballot_link.click()
         h1 = self.page.locator("h1")
         expect(h1).to_have_text("UK Parliamentary general election: Newbury")
+
+
+def test_update_publisher_details_add_person(
+    db, live_server, page, admin_user, mock_get_ballot_data_from_ynr
+):
+    page.goto(urljoin(live_server.url, "/admin"))
+    page.locator("#id_username").fill(admin_user.username)
+    page.locator("#id_password").fill("password")
+    page.get_by_role("button", name="Log in").click()
+
+    with mock_get_ballot_data_from_ynr([LOCAL_BALLOT_WITH_CANDIDATES]):
+        leaflet = Leaflet.objects.create(title="Test Leaflet", description=None)
+        assert leaflet.ynr_party_id is None
+        assert leaflet.person_ids == []
+        url = urljoin(
+            live_server.url,
+            reverse(
+                "leaflet_update_publisher_details", kwargs={"pk": leaflet.pk}
+            ),
+        )
+        resp = page.goto(url)
+    assert resp.status == 200
+
+    page.locator("label[for=id_parties_2]").click()
+    page.locator("label[for=id_people_6]").click()
+    page.locator("label[for=id_people_7]").click()
+    page.get_by_role("button", name="Save").click()
+
+    leaflet.refresh_from_db()
+    assert leaflet.ynr_party_id == "party:52"
+    assert leaflet.person_ids == [41112, 41114]
