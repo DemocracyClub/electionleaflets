@@ -370,7 +370,7 @@ class LeafletImage(models.Model):
 
         if not isinstance(default_storage, TempUploadBaseMixin):
             raise ValueError("Storage class needs to use `TempUploadBaseMixin`")
-        file_name, ext = os.path.basename(temp_file).rsplit(".")
+        file_name, ext = os.path.basename(temp_file).rsplit(".", 1)
         target_file_path = Path(
             f"leaflets/{self.leaflet.pk}/{slugify(file_name)}.{ext}"
         )
