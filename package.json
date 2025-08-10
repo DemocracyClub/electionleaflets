@@ -13,7 +13,7 @@
     "filepond-plugin-image-preview": "4.6.6",
     "filerobot-image-editor": "3.12.17",
     "gulp": "4.0.2",
-    "gulp-cli": "2.3.0",
+    "gulp-cli": "3.1.0",
     "gulp-concat": "2.6.1"
   }
 }
