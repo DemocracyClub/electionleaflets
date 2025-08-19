@@ -6,7 +6,7 @@ orbs:
 commands:
   install_uv:
     steps:
-      - run: pip install --upgrade uv">=0.5.12,<0.6.0"
+      - run: pip install --upgrade uv"==0.8.*"
 
 jobs:
   install_and_update_dependencies:
@@ -136,7 +136,7 @@ jobs:
       - run:
           name: Install UV
           command: |
-            pip install --upgrade uv">=0.4.27,<0.5.0" --quiet --no-input
+            pip install --upgrade uv"==0.8.*" --quiet --no-input
       - run: uv sync --only-group deploy  --no-python-downloads
       - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE DC_ENVIRONMENT SAM_PUBLIC_CONFIG_ENV
       - run: printenv SECRET_KEY | md5sum
