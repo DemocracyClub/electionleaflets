@@ -43,7 +43,6 @@ jobs:
       - save_cache:
           when: on_success
           paths:
-            - ./.venv
             - ./node_modules
             - $HOME/.cache/uv
           key: v9-dependencies-{{ checksum "uv.lock" }}
