@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.12"
 
 [manifest]
@@ -216,8 +216,8 @@ source = { git = "https://github.com/DemocracyClub/design-system.git?tag=0.7.0#9
 
 [[package]]
 name = "dc-django-utils"
-version = "8.0.2"
-source = { git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=8.0.2#6a565d3a9e1dfc97b7c7a264fa354e9d4939ca47" }
+version = "8.0.3"
+source = { git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=8.0.3#a9319366d3351c639e5129d11452bab68824287f" }
 dependencies = [
     { name = "django" },
     { name = "django-localflavor" },
@@ -467,7 +467,7 @@ dev = [
 requires-dist = [
     { name = "aws-wsgi", git = "https://github.com/DemocracyClub/awsgi.git?rev=b286f129c5580547577f942c75be74cdca707386" },
     { name = "dc-design-system", git = "https://github.com/DemocracyClub/design-system.git?tag=0.7.0" },
-    { name = "dc-django-utils", git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=8.0.2" },
+    { name = "dc-django-utils", git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=8.0.3" },
     { name = "dj-pagination", specifier = "==2.5.0" },
     { name = "django", specifier = "==4.2.22" },
     { name = "django-braces", specifier = "==1.16.0" },
