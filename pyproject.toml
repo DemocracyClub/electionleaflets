@@ -46,7 +46,7 @@ members = ["thumbs"]
 [tool.uv.sources]
 aws-wsgi = { git = "https://github.com/DemocracyClub/awsgi.git", rev = "b286f129c5580547577f942c75be74cdca707386" }
 dc-design-system = { git = "https://github.com/DemocracyClub/design-system.git", tag = "0.7.0" }
-dc-django-utils = { git = "https://github.com/DemocracyClub/dc_django_utils.git", tag = "8.0.3" }
+dc-django-utils = { git = "https://github.com/DemocracyClub/dc_django_utils.git", tag = "8.0.4" }
 django-uk-political-parties = { git = "https://github.com/DemocracyClub/django-uk-political-parties.git", rev = "86ffa51f8306858c379c9de5be2f4bdb24b3a910" }
 
 [tool.pytest.ini_options]
