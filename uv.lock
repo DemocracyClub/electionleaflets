@@ -501,7 +501,7 @@ deploy = [
 ]
 dev = [
     { name = "django-debug-toolbar", specifier = "==5.0.1" },
-    { name = "moto", extras = ["s3"], specifier = "==5.1.1" },
+    { name = "moto", extras = ["s3"], specifier = "==5.1.13" },
     { name = "pytest", specifier = "==8.3.4" },
     { name = "pytest-cov", specifier = "==6.0.0" },
     { name = "pytest-django", specifier = "==4.10.0" },
@@ -674,7 +674,7 @@ wheels = [
 
 [[package]]
 name = "moto"
-version = "5.1.1"
+version = "5.1.13"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boto3" },
@@ -687,9 +687,9 @@ dependencies = [
     { name = "werkzeug" },
     { name = "xmltodict" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ee/ee/88b514190cb4ece02b377ea61ff26b596fa967609c82aa2f2856bfae2f3e/moto-5.1.1.tar.gz", hash = "sha256:5b25dbc62cccd9f36ef062c870db49d976b241129024fab049e2d3d1296e2a57", size = 6647375, upload-time = "2025-03-02T19:48:06.408Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6f/c1/f997b01c965edf49e00091c0bab7b77964d5a876cd460de2d366fde8fc63/moto-5.1.13.tar.gz", hash = "sha256:f707b4b8943d833cafafec2f16de10d038f6afdfcbf9987457e22ef5a6d8c697", size = 7194360, upload-time = "2025-09-21T11:04:29.291Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e9/36/e3d70d25064a03dfa13555bf26ca934bb2167df221065938278e1e1961eb/moto-5.1.1-py3-none-any.whl", hash = "sha256:615904d6210431950a59a2bdec365d60e791eacbe3dd07a3a5d742c88ef847dd", size = 4788429, upload-time = "2025-03-02T19:48:03.308Z" },
+    { url = "https://files.pythonhosted.org/packages/48/f9/4162f4190e13cd1f859de4854d4eb232bdcc2e53aaf19b79faa12d474a13/moto-5.1.13-py3-none-any.whl", hash = "sha256:2659d2ffbded101fb65d02f4271754550759c22440fe890fb72f37b339e9845f", size = 5322367, upload-time = "2025-09-21T11:04:26.626Z" },
 ]
 
 [package.optional-dependencies]
