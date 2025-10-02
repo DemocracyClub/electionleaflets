@@ -255,14 +255,14 @@ wheels = [
 
 [[package]]
 name = "django-braces"
-version = "1.16.0"
+version = "1.17.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9c/d8/e144ef48f0255442b5755d92d6be8705a2ec9b17ab05e11d99b8ddbb5460/django_braces-1.16.0.tar.gz", hash = "sha256:1de7c2ba92147fc265ec034880aa5f2a714a5d1f1c1280278ca1fdd6f2a08e03", size = 52334, upload-time = "2024-10-09T18:58:02.191Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/8a/c0/eb3e27e817eb4ba39d9c66fbd53139cb4db7073f5e6e71c28ce4d8b706da/django_braces-1.17.0.tar.gz", hash = "sha256:3a6fe630d3d91fef0711bfe1088d14af00c245559f79f6298040ed2b2f757337", size = 54227, upload-time = "2025-03-18T02:03:02.354Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d5/46/23f37291c78fae3fa90db29e5b1d3b111d8ce02a807a81a9b8c56e407733/django_braces-1.16.0-py3-none-any.whl", hash = "sha256:1c7a83877a2ea0478f051049594dcec215f873f1aecdc4b3ee73121932bf01b4", size = 15236, upload-time = "2024-10-09T18:57:38.193Z" },
+    { url = "https://files.pythonhosted.org/packages/83/34/966fd4a68cbe7a80e29868bcb9d43e6ba5d562120e272e27e61ab795eea9/django_braces-1.17.0-py3-none-any.whl", hash = "sha256:18c9fe889bc673bddee6110f23a8c57fefe99663c8c683a7c2ac4f8f8743674d", size = 15330, upload-time = "2025-03-18T02:03:01.217Z" },
 ]
 
 [[package]]
@@ -470,7 +470,7 @@ requires-dist = [
     { name = "dc-django-utils", git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=8.0.4" },
     { name = "dj-pagination", specifier = "==2.5.0" },
     { name = "django", specifier = "==4.2.25" },
-    { name = "django-braces", specifier = "==1.16.0" },
+    { name = "django-braces", specifier = "==1.17.0" },
     { name = "django-extensions", specifier = "==3.2.3" },
     { name = "django-filter", specifier = "==25.1" },
     { name = "django-formtools", specifier = "==2.2" },
