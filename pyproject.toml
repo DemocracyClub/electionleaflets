@@ -74,7 +74,7 @@ dev = [
     "pytest-playwright==0.7.0",
     "moto[s3]==5.1.1",
     "django-debug-toolbar==5.0.1",
-    "ruff==0.9.10",
+    "ruff==0.13.3",
 ]
 deploy = [
     "urllib3==2.3.0",
