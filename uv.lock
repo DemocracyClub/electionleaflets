@@ -170,8 +170,8 @@ source = { git = "https://github.com/DemocracyClub/design-system.git?tag=0.7.0#9
 
 [[package]]
 name = "dc-django-utils"
-version = "8.0.4"
-source = { git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=8.0.4#6d308a16f574ddbd1601a8cadd79e9b3f6ca56bf" }
+version = "8.0.5"
+source = { git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=8.0.5#7f3cbb59117284445c3cc29394078a787aa88b3b" }
 dependencies = [
     { name = "django" },
     { name = "django-localflavor" },
@@ -283,15 +283,15 @@ wheels = [
 
 [[package]]
 name = "django-pipeline"
-version = "4.0.0"
+version = "4.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "setuptools" },
     { name = "wheel" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/49/f5/12c83c33f0d6cd93a7b1498a1b3ae9bd86828f1f739998f59c5249d7504e/django_pipeline-4.0.0.tar.gz", hash = "sha256:0ab1190d9dc64e2f7b72be3f7b023c06aca7cc1cc61e7dc9f0343838e29bbc88", size = 71780, upload-time = "2024-12-06T12:11:11.795Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1c/7b/2f78ccdad9f45a3d4f709950160f9d7e5009b2b8bec8ef636025ec89b62e/django_pipeline-4.1.0.tar.gz", hash = "sha256:aa1d79df6f215b78396cdd50ed162f8741dc4993e9fba2c78483d9b6f1e722b4", size = 72180, upload-time = "2025-09-13T11:47:45.332Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2d/05/7258f4b27839d186dfc29f9416475d236c2a64f25ff64a22e77d700eb753/django_pipeline-4.0.0-py3-none-any.whl", hash = "sha256:90e50c15387a6e051ee1a6ce2aaca333823ccfb23695028790f74412bde7d7db", size = 75384, upload-time = "2024-12-06T12:10:08.162Z" },
+    { url = "https://files.pythonhosted.org/packages/9a/89/fd40adbf5cc16550007ad67bffd7493c9976f7e576bf431d1bc537cfa976/django_pipeline-4.1.0-py3-none-any.whl", hash = "sha256:bdb84feb8db73b9fe8298fd9d0f6e50f30d78eb28a8ed28f73ca5d154080c3d5", size = 75523, upload-time = "2025-09-13T11:42:55.754Z" },
 ]
 
 [[package]]
@@ -421,7 +421,7 @@ dev = [
 requires-dist = [
     { name = "aws-wsgi", git = "https://github.com/DemocracyClub/awsgi.git?rev=b286f129c5580547577f942c75be74cdca707386" },
     { name = "dc-design-system", git = "https://github.com/DemocracyClub/design-system.git?tag=0.7.0" },
-    { name = "dc-django-utils", git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=8.0.4" },
+    { name = "dc-django-utils", git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=8.0.5" },
     { name = "dj-pagination", specifier = "==2.5.0" },
     { name = "django", specifier = "==5.2.7" },
     { name = "django-braces", specifier = "==1.16.0" },
@@ -429,7 +429,7 @@ requires-dist = [
     { name = "django-filter", specifier = "==25.1" },
     { name = "django-formtools", specifier = "==2.2" },
     { name = "django-localflavor", specifier = "==4.0" },
-    { name = "django-pipeline", specifier = "==4.0.0" },
+    { name = "django-pipeline", specifier = "==4.1.0" },
     { name = "django-querystring-tag", specifier = "==1.0.3" },
     { name = "django-s3file", specifier = "==5.5.7" },
     { name = "django-ses", specifier = "==4.4.0" },
