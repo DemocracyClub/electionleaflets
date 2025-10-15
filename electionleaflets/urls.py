@@ -122,8 +122,19 @@ redirect_urls = (
     ),
 )
 
+
 urlpatterns += redirect_urls
 
 urlpatterns += static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    import debug_toolbar
+    from dc_utils.urls import dc_utils_testing_patterns
+
+    urlpatterns = (
+        [path("__debug__/", include(debug_toolbar.urls))]
+        + dc_utils_testing_patterns
+        + urlpatterns
+    )

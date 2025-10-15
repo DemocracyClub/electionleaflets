@@ -25,3 +25,8 @@ CACHES = {
 
 #THUMBNAIL_DEBUG = True
 THUMBNAIL_KVSTORE ='sorl.thumbnail.kvstores.cached_db_kvstore.KVStore'
+
+# Debug Toolbar Setup
+if DEBUG:
+    INSTALLED_APPS += ("debug_toolbar",)
+    MIDDLEWARE = ("debug_toolbar.middleware.DebugToolbarMiddleware",) + MIDDLEWARE  # noqa: F405
