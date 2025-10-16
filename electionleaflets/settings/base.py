@@ -151,7 +151,6 @@ INSTALLED_APPS = [
     "s3file",
     "django_filters",
     "dc_utils",
-    "querystring_tag",
 ] + LEAFLET_APPS
 
 

@@ -31,9 +31,6 @@ dependencies = [
     "dc-design-system",
     "dc-django-utils",
     "django-uk-political-parties",
-    # Remove this once we are on Django>=5.1
-    # https://docs.djangoproject.com/en/5.1/releases/5.1/#querystring-template-tag
-    "django-querystring-tag==1.0.3",
 ]
 
 [tool.uv]
