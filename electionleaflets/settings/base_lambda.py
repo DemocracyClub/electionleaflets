@@ -30,7 +30,7 @@ WHITENOISE_AUTOREFRESH = False
 WHITENOISE_STATIC_PREFIX = "/static/"
 
 STATIC_URL = WHITENOISE_STATIC_PREFIX
-STATICFILES_STORAGE = "electionleaflets.storages.StaticStorage"
+STORAGES["staticfiles"] = {"BACKEND": "electionleaflets.storages.StaticStorage"}  # noqa F405
 STATICFILES_DIRS = (root("assets"),)  # noqa: F405
 STATIC_ROOT = root("static")  # noqa: F405
 MEDIA_ROOT = root(  # noqa: F405
@@ -41,7 +41,9 @@ set_urlconf(ROOT_URLCONF)  # noqa: F405
 
 AWS_DEFAULT_ACL = "public-read"
 
-DEFAULT_FILE_STORAGE = "electionleaflets.storages.TempUploadS3MediaStorage"
+STORAGES["default"] = {  # noqa F405
+    "BACKEND": "electionleaflets.storages.TempUploadS3MediaStorage"
+}
 
 AWS_STORAGE_BUCKET_NAME = os.environ.get("LEAFLET_IMAGES_BUCKET_NAME")
 AWS_S3_SECURE_URLS = True
