@@ -1,3 +1,5 @@
+import os
+
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -129,7 +131,9 @@ urlpatterns += static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-if settings.DEBUG:
+if settings.DEBUG and "test" not in os.environ.get(
+    "DJANGO_SETTINGS_MODULE", ""
+):
     import debug_toolbar
     from dc_utils.urls import dc_utils_testing_patterns
 
