@@ -14,8 +14,11 @@ DATABASES = {
     }
 }
 
-DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+STORAGES = {
+    "default": { "BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": { "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+}
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
@@ -25,3 +28,8 @@ CACHES = {
 
 #THUMBNAIL_DEBUG = True
 THUMBNAIL_KVSTORE ='sorl.thumbnail.kvstores.cached_db_kvstore.KVStore'
+
+# Debug Toolbar Setup
+if DEBUG:
+    INSTALLED_APPS += ("debug_toolbar",)
+    MIDDLEWARE = ("debug_toolbar.middleware.DebugToolbarMiddleware",) + MIDDLEWARE  # noqa: F405
