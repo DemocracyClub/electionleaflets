@@ -6,18 +6,18 @@ readme = "README.md"
 requires-python = "==3.12.*"
 dependencies = [
     "dj-pagination==2.5.0",
-    "django-braces==1.16.0",
-    "django-extensions==3.2.3",
-    "django-filter==25.1",
-    "django-formtools==2.2",
-    "django-localflavor==4.0",
+    "django-braces==1.17.0",
+    "django-extensions== 4.1.0	",
+    "django-filter==25.2",
+    "django-formtools==2.5.1",
+    "django-localflavor==5.0",
     "django-pipeline==4.1.0",
     "django-s3file==5.5.7",
     "django-ses==4.4.0",
     "django-static-jquery==2.1.4",
-    "django-storages==1.14.5",
+    "django-storages==1.14.6",
     "django==5.2.7",
-    "djangorestframework==3.15.2",
+    "djangorestframework==3.16.1",
     "factory-boy==3.3.3",
     "markdown==3.7",
     "piexif==1.0.12",
@@ -45,7 +45,7 @@ members = ["thumbs"]
 
 [tool.uv.sources]
 aws-wsgi = { git = "https://github.com/DemocracyClub/awsgi.git", rev = "b286f129c5580547577f942c75be74cdca707386" }
-dc-design-system = { git = "https://github.com/DemocracyClub/design-system.git", tag = "0.7.0" }
+dc-design-system = { git = "https://github.com/DemocracyClub/design-system.git", tag = "0.9.0" }
 dc-django-utils = { git = "https://github.com/DemocracyClub/dc_django_utils.git", tag = "8.0.5" }
 django-uk-political-parties = { git = "https://github.com/DemocracyClub/django-uk-political-parties.git", rev = "86ffa51f8306858c379c9de5be2f4bdb24b3a910" }
 
@@ -70,10 +70,10 @@ lint.extend-select = [
 dev = [
     "pytest==8.3.4",
     "pytest-cov==6.0.0",
-    "pytest-django==4.10.0",
+    "pytest-django==4.11.0",
     "pytest-playwright==0.7.0",
     "moto[s3]==5.1.1",
-    "django-debug-toolbar==5.0.1",
+    "django-debug-toolbar==6.0.0",
     "ruff==0.9.10",
 ]
 deploy = [
