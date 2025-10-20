@@ -137,6 +137,7 @@ jobs:
           command: |
             pip install --upgrade uv"==0.8.*" --quiet --no-input
       - run: uv sync --only-group deploy  --no-python-downloads
+      - setup_remote_docker
       - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE DC_ENVIRONMENT SAM_PUBLIC_CONFIG_ENV
       - run: printenv SECRET_KEY | md5sum
       - run: printenv AWS_ACCESS_KEY_ID | md5sum
