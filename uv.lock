@@ -208,18 +208,6 @@ wheels = [
 ]
 
 [[package]]
-name = "django-braces"
-version = "1.17.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/8a/c0/eb3e27e817eb4ba39d9c66fbd53139cb4db7073f5e6e71c28ce4d8b706da/django_braces-1.17.0.tar.gz", hash = "sha256:3a6fe630d3d91fef0711bfe1088d14af00c245559f79f6298040ed2b2f757337", size = 54227, upload-time = "2025-03-18T02:03:02.354Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/83/34/966fd4a68cbe7a80e29868bcb9d43e6ba5d562120e272e27e61ab795eea9/django_braces-1.17.0-py3-none-any.whl", hash = "sha256:18c9fe889bc673bddee6110f23a8c57fefe99663c8c683a7c2ac4f8f8743674d", size = 15330, upload-time = "2025-03-18T02:03:01.217Z" },
-]
-
-[[package]]
 name = "django-debug-toolbar"
 version = "6.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -366,7 +354,6 @@ dependencies = [
     { name = "dc-django-utils" },
     { name = "dj-pagination" },
     { name = "django" },
-    { name = "django-braces" },
     { name = "django-extensions" },
     { name = "django-filter" },
     { name = "django-formtools" },
@@ -411,7 +398,6 @@ requires-dist = [
     { name = "dc-django-utils", git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=8.0.5" },
     { name = "dj-pagination", specifier = "==2.5.0" },
     { name = "django", specifier = "==5.2.7" },
-    { name = "django-braces", specifier = "==1.17.0" },
     { name = "django-extensions", specifier = "==4.1.0" },
     { name = "django-filter", specifier = "==25.2" },
     { name = "django-formtools", specifier = "==2.5.1" },

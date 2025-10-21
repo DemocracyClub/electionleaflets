@@ -6,7 +6,6 @@ readme = "README.md"
 requires-python = "==3.12.*"
 dependencies = [
     "dj-pagination==2.5.0",
-    "django-braces==1.17.0",
     "django-extensions== 4.1.0	",
     "django-filter==25.2",
     "django-formtools==2.5.1",
