@@ -304,14 +304,14 @@ wheels = [
 
 [[package]]
 name = "django-formtools"
-version = "2.2"
+version = "2.5.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ca/bb/7d8a1bff28bcb9031264dfc0e5cb288d369a6da5d7827e2f799025f41eb7/django-formtools-2.2.tar.gz", hash = "sha256:c5272c03c1cd51b2375abf7397a199a3148a9fbbf2f100e186467a84025d13b2", size = 75808, upload-time = "2019-12-05T17:01:47.635Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/73/f8/bb9b228fc33230186f3612a6fc96274a81bab3509817498f2632d7aa6367/django-formtools-2.5.1.tar.gz", hash = "sha256:47cb34552c6efca088863d693284d04fc36eaaf350eb21e1a1d935e0df523c93", size = 88637, upload-time = "2023-12-19T10:30:59.78Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/16/2b/f2dc15cf7fb830bf22ec87739786ca7633902474edd7cdb9c52a56434ed2/django_formtools-2.2-py2.py3-none-any.whl", hash = "sha256:304fa777b8ef9e0693ce7833f885cb89ba46b0e46fc23b01176900a93f46742f", size = 148704, upload-time = "2019-12-05T17:01:45.398Z" },
+    { url = "https://files.pythonhosted.org/packages/12/63/91a107e3aaaf3987bad036494dfd8cc2675f4a66d22e65ffd6711f84ba70/django_formtools-2.5.1-py3-none-any.whl", hash = "sha256:bce9b64eda52cc1eef6961cc649cf75aacd1a707c2fff08d6c3efcbc8e7e761a", size = 170651, upload-time = "2023-12-19T10:30:02.816Z" },
 ]
 
 [[package]]
@@ -473,7 +473,7 @@ requires-dist = [
     { name = "django-braces", specifier = "==1.16.0" },
     { name = "django-extensions", specifier = "==3.2.3" },
     { name = "django-filter", specifier = "==25.1" },
-    { name = "django-formtools", specifier = "==2.2" },
+    { name = "django-formtools", specifier = "==2.5.1" },
     { name = "django-localflavor", specifier = "==4.0" },
     { name = "django-pipeline", specifier = "==4.0.0" },
     { name = "django-querystring-tag", specifier = "==1.0.3" },
