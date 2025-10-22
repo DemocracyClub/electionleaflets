@@ -6,6 +6,8 @@ from os import environ
 from os.path import abspath, dirname, join
 
 import dc_design_system
+from dc_utils.settings.pipeline import *  # noqa
+from dc_utils.settings.pipeline import get_pipeline_settings
 
 
 def here(x):
@@ -51,7 +53,10 @@ STATIC_ROOT = root("static")
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (root("assets"),)
 
-DEFAULT_FILE_STORAGE = "electionleaflets.storages.TempUploadLocalMediaStorage"
+STORAGES["default"] = {  # noqa F405
+    "BACKEND": "electionleaflets.storages.TempUploadLocalMediaStorage"
+}
+
 AWS_S3_FILE_OVERWRITE = False
 STATICFILES_MANIFEST_NAME = environ.get(
     "STATICFILES_MANIFEST_NAME", "staticfiles.json"
@@ -61,53 +66,26 @@ AWS_S3_SECURE_URLS = True
 # AWS_S3_HOST = "s3-eu-west-1.amazonaws.com"
 # AWS_S3_CUSTOM_DOMAIN = "data.electionleaflets.org"
 
-PIPELINE = {
-    "COMPILERS": ("pipeline.compilers.sass.SASSCompiler",),
-    "SASS_BINARY": "pysassc",
-    "CSS_COMPRESSOR": "pipeline.compressors.NoopCompressor",
-    "STYLESHEETS": {
-        "styles": {
-            "source_filenames": [
-                "scss/styles.scss",
-                "scss/vendor/filepond.css",
-                "scss/vendor/filepond-plugin-image-preview.css",
-            ],
-            "output_filename": "scss/styles.css",
-            "extra_context": {
-                "media": "screen,projection",
-            },
-        },
-    },
-    "JAVASCRIPT": {
-        "scripts": {
-            "source_filenames": [
-                "javascript/app.js",
-                "javascript/vendor/filepond.js",
-                "javascript/vendor/filepond-plugin-image-exif-orientation.js",
-                "javascript/vendor/filepond-plugin-image-preview.js",
-                "javascript/image_uploader.js",
-                # "javascript/vendor/ImageEditor.js",
-            ],
-            "output_filename": "app.js",
-        }
-    },
-}
+PIPELINE = get_pipeline_settings(
+    extra_css=[
+        "scss/styles.scss",
+        "scss/vendor/filepond.css",
+        "scss/vendor/filepond-plugin-image-preview.css",
+    ],
+    extra_js=[
+        "javascript/app.js",
+        "javascript/vendor/filepond.js",
+        "javascript/vendor/filepond-plugin-image-exif-orientation.js",
+        "javascript/vendor/filepond-plugin-image-preview.js",
+        "javascript/image_uploader.js",
+        # "javascript/vendor/ImageEditor.js",
+    ],
+)
 
-
-PIPELINE["CSS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
 PIPELINE["JS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
-
 
 PIPELINE["SASS_ARGUMENTS"] = (
     " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
-)
-
-STATICFILES_FINDERS = (
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "pipeline.finders.CachedFileFinder",
-    "pipeline.finders.PipelineFinder",
-    "pipeline.finders.ManifestFinder",
 )
 
 WHITENOISE_STATIC_PREFIX = "/static/"
@@ -115,7 +93,6 @@ WHITENOISE_STATIC_PREFIX = "/static/"
 SITE_ID = 1
 SITE_LOGO = "images/logo.png"
 USE_I18N = False
-USE_L10N = True
 LOGIN_URL = "/"
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
@@ -173,7 +150,6 @@ INSTALLED_APPS = [
     "s3file",
     "django_filters",
     "dc_utils",
-    "querystring_tag",
 ] + LEAFLET_APPS
 
 

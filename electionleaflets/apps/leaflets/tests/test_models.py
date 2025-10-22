@@ -1,8 +1,16 @@
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
+from django.conf import settings
+from django.test import override_settings
 from leaflets.models import Leaflet, LeafletImage
 from leaflets.tests.conftest import TEST_IMAGE_LOCATION
+
+TEST_STORAGES = deepcopy(settings.STORAGES)
+TEST_STORAGES["default"]["BACKEND"] = (
+    "electionleaflets.storages.TempUploadS3MediaStorage"
+)
 
 
 @pytest.fixture
@@ -95,12 +103,8 @@ def test_image_moved_from_temp_upload(db, uploaded_temp_file):
     assert str(path) == leaflet_image.image.path
 
 
-def test_image_moved_from_temp_upload_s3_backend(
-    db, settings, s3_bucket, s3_client
-):
-    settings.DEFAULT_FILE_STORAGE = (
-        "electionleaflets.storages.TempUploadS3MediaStorage"
-    )
+@override_settings(STORAGES=TEST_STORAGES)
+def test_image_moved_from_temp_upload_s3_backend(db, s3_bucket, s3_client):
     leaflet = Leaflet()
     leaflet.save()
     leaflet.refresh_from_db()

@@ -2,10 +2,10 @@ import datetime
 import json
 import random
 
-from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 from core.helpers import CacheControlMixin
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.signing import Signer
 from django.db import transaction
 from django.db.models import Q
@@ -24,6 +24,7 @@ from .forms import (
     SingleLeafletImageForm,
     UpdatePublisherDetails,
 )
+from .mixins import StaffuserRequiredMixin
 from .models import Leaflet, LeafletImage
 
 

@@ -5,8 +5,12 @@ from .base import *  # noqa: F403
 
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
-DEFAULT_FILE_STORAGE = "electionleaflets.storages.TempUploadLocalMediaStorage"
-STATICFILES_STORAGE = "electionleaflets.storages.StaticStorage"
+STORAGES = {
+    "default": {
+        "BACKEND": "electionleaflets.storages.TempUploadLocalMediaStorage"
+    },
+    "staticfiles": {"BACKEND": "electionleaflets.storages.StaticStorage"},
+}
 
 # This is cleaned up in core/conftest.py
 MEDIA_ROOT = mkdtemp()
