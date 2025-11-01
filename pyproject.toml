@@ -66,7 +66,7 @@ lint.extend-select = [
 dev = [
     "pytest==8.3.4",
     "pytest-cov==6.0.0",
-    "pytest-django==4.11.0",
+    "pytest-django==4.11.1",
     "pytest-playwright==0.7.0",
     "moto[s3]==5.1.1",
     "django-debug-toolbar==6.0.0",
