@@ -15,7 +15,7 @@ dependencies = [
     "django-ses==4.4.0",
     "django-static-jquery==2.1.4",
     "django-storages==1.14.6",
-    "django==5.2.7",
+    "django==5.2.8",
     "djangorestframework==3.16.1",
     "factory-boy==3.3.3",
     "markdown==3.7",
@@ -73,6 +73,6 @@ dev = [
     "ruff==0.9.10",
 ]
 deploy = [
-    "urllib3==2.3.0",
+    "urllib3==2.5.0",
     "boto3==1.37.11",
 ]
