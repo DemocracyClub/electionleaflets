@@ -20,7 +20,7 @@ dependencies = [
     "factory-boy==3.3.3",
     "markdown==3.7",
     "piexif==1.0.12",
-    "pillow==11.1.0",
+    "pillow==12.0.0",
     "psycopg2-binary==2.9.10",
     "sorl-thumbnail==12.11.0",
     "sentry-sdk==2.20.0",
