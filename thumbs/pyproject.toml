@@ -7,7 +7,7 @@ requires-python = "==3.12.*"
 dependencies = [
     "django==5.2.8",
     "pillow-heif==0.22.0",
-    "pillow==11.1.0",
+    "pillow==11.3.0",
     "sentry-sdk==2.20.0",
     "sorl-thumbnail==12.11.0",
 ]
