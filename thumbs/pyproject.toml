@@ -3,7 +3,7 @@ name = "thumbs"
 version = "0.0.0"
 description = "Lambda function that produces thumbnails from raw leaflets"
 readme = "README.md"
-requires-python = "==3.12.*"
+requires-python = "==3.12.12"
 dependencies = [
     "django==5.2.8",
     "pillow-heif==0.22.0",

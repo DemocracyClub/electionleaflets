@@ -3,7 +3,7 @@ name = "ElectionLeaflets"
 version = "0.0.0"
 description = "An online archive of political leaflets"
 readme = "README.md"
-requires-python = "==3.12.*"
+requires-python = "==3.12.12"
 dependencies = [
     "dj-pagination==2.5.0",
     "django-extensions== 4.1.0	",
