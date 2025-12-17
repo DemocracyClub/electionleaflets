@@ -15,7 +15,7 @@ dependencies = [
     "django-ses==4.4.0",
     "django-static-jquery==2.1.4",
     "django-storages==1.14.6",
-    "django==5.2.8",
+    "django==5.2.9",
     "djangorestframework==3.16.1",
     "factory-boy==3.3.3",
     "markdown==3.7",
