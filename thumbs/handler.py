@@ -147,11 +147,16 @@ def handle_s3(event, context, local=False):
 
 def fetch_image(bucket: str, key: Path):
     print(key)
-    response = client.list_objects_v2(
-        Bucket=bucket, Prefix=str(key.with_suffix(""))
-    )
+    stem = str(key.with_suffix(""))
+    response = client.list_objects_v2(Bucket=bucket, Prefix=stem)
     if "Contents" in response:
-        object_key = response["Contents"][0]["Key"]
+        # Match exact stem match to avoid prefix collisions
+        exact = [
+            o
+            for o in response["Contents"]
+            if Path(o["Key"]).with_suffix("").as_posix() == stem
+        ]
+        object_key = (exact or response["Contents"])[0]["Key"]
         s3_object = client.get_object(Bucket=bucket, Key=object_key)
         return Image.open(s3_object["Body"])
     raise ValueError(f"Image not found in {response}")
