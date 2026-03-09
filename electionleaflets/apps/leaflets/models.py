@@ -203,6 +203,16 @@ class Leaflet(models.Model):
         next request.
         """
 
+        # IMPORTANT: These specs must be kept in sync with SPECS in thumbs/handler.py
+        SPECS = (
+            ("350", {"crop": "top"}),
+            ("150", {"crop": "noop"}),
+            ("1000", {"crop": "noop"}),
+            ("600", {"crop": "center"}),
+            ("350", {}),
+            ("600", {}),
+        )
+
         for leaflet_image in self.images.all():
             if not leaflet_image.image:
                 continue
@@ -213,10 +223,13 @@ class Leaflet(models.Model):
             if not hasattr(default_storage, "bucket"):
                 continue
 
-            stem = str(Path(leaflet_image.image.name).with_suffix(""))
-            for obj in default_storage.bucket.objects.filter(Prefix="thumbs/"):
-                if stem in obj.key:
-                    obj.delete()
+            stem = Path(leaflet_image.image.name).with_suffix("")
+            for size, options in SPECS:
+                option_parts = [size] + sorted(
+                    f"{k}={v}" for k, v in options.items()
+                )
+                key = "thumbs/{}/{}.png".format("/".join(option_parts), stem)
+                default_storage.bucket.Object(key).delete()
 
     def nuts1_name(self):
         return RegionChoices(self.nuts1).label

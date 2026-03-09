@@ -124,6 +124,8 @@ def handle_cf(event, context):
 
 
 def handle_s3(event, context, local=False):
+    # IMPORTANT: These specs must be kept in sync with SPECS in
+    # electionleaflets/apps/leaflets/models.py
     SPECS = (
         ("350", {"crop": "top"}),
         ("150", {"crop": "noop"}),
