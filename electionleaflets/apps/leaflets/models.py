@@ -196,6 +196,28 @@ class Leaflet(models.Model):
 
         self.save()
 
+    def clear_thumbs(self):
+        """
+        Clears sorl's KV cache and deletes S3 thumb files for all images on
+        this leaflet. The thumbs Lambda will regenerate thumbs on
+        next request.
+        """
+
+        for leaflet_image in self.images.all():
+            if not leaflet_image.image:
+                continue
+
+            # This is sorl's delete function, which clears the KV cache entry
+            delete(leaflet_image.image, delete_file=False)
+
+            if not hasattr(default_storage, "bucket"):
+                continue
+
+            stem = str(Path(leaflet_image.image.name).with_suffix(""))
+            for obj in default_storage.bucket.objects.filter(Prefix="thumbs/"):
+                if stem in obj.key:
+                    obj.delete()
+
     def nuts1_name(self):
         return RegionChoices(self.nuts1).label
 
