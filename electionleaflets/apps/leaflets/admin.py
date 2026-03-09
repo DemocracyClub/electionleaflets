@@ -1,7 +1,9 @@
 from copy import deepcopy
 
 from core.helpers import JSONEditor
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import path
 from leaflets.models import Leaflet, LeafletImage
 from sorl.thumbnail import get_thumbnail
 
@@ -71,6 +73,29 @@ class LeafletAdmin(admin.ModelAdmin):
         return ""
 
     get_description.short_description = "Description"
+
+    change_form_template = "admin/leaflets/leaflet/change_form.html"
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                "<int:leaflet_id>/rebuild-thumbnails/",
+                self.admin_site.admin_view(self.rebuild_thumbnails_view),
+                name="leaflets_leaflet_rebuild_thumbnails",
+            ),
+        ]
+        return custom_urls + urls
+
+    def rebuild_thumbnails_view(self, request, leaflet_id):
+        leaflet = get_object_or_404(Leaflet, pk=leaflet_id)
+        deleted_count = leaflet.clear_thumbs()
+        self.message_user(
+            request,
+            f"Deleted {deleted_count} thumb file(s), leaving the thumbs Lambda to re-make them",
+            messages.SUCCESS,
+        )
+        return redirect("admin:leaflets_leaflet_change", leaflet_id)
 
     def get_form(self, *args, **kwargs):
         self.form = deepcopy(self.form)
