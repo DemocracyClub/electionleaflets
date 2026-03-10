@@ -67,12 +67,24 @@ client = boto3.client("s3")
 engine = pil_engine.Engine()
 pillow_heif.register_heif_opener()
 
+SPECS = (
+    ("350", {"crop": "top"}),
+    ("150", {"crop": "noop"}),
+    ("1000", {"crop": "noop"}),
+    ("600", {"crop": "center"}),
+    ("350", {}),
+    ("600", {}),
+)
+
 
 def handle(event, context):
+    if event.get("action") == "delete_thumbs":
+        return handle_delete(event, context)
     if "s3" in event["Records"][0]:
         return handle_s3(event, context)
     if "cf" in event["Records"][0]:
         return handle_cf(event, context)
+
     return None
 
 
@@ -124,17 +136,6 @@ def handle_cf(event, context):
 
 
 def handle_s3(event, context, local=False):
-    # IMPORTANT: These specs must be kept in sync with SPECS in
-    # electionleaflets/apps/leaflets/models.py
-    SPECS = (
-        ("350", {"crop": "top"}),
-        ("150", {"crop": "noop"}),
-        ("1000", {"crop": "noop"}),
-        ("600", {"crop": "center"}),
-        ("350", {}),
-        ("600", {}),
-    )
-
     for r in event["Records"]:
         if not r["s3"]["object"]["key"].startswith("leaflets/"):
             continue
@@ -145,6 +146,14 @@ def handle_s3(event, context, local=False):
             processed = process_image(image, spec)
             key = new_key(spec, r["s3"]["object"]["key"])
             upload_image(processed, r["s3"]["bucket"]["name"], key)
+
+
+def handle_delete(event, context):
+    key = event["key"]  # e.g. "leaflets/foo.jpg"
+    path = Path(key)
+    for spec in SPECS:
+        thumb_key = new_key(spec, path).with_suffix(".png")
+        client.delete_object(Bucket=BUCKET_NAME, Key=str(thumb_key))
 
 
 def fetch_image(bucket: str, key: Path):
