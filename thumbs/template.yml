@@ -8,11 +8,17 @@ Globals:
   Api:
     BinaryMediaTypes:
       - "*/*"
+Parameters:
+  DCEnvironment:
+    Default: DC_ENVIRONMENT
+    Description: "The DC_ENVIRONMENT environment variable passed to the app."
+    Type: AWS::SSM::Parameter::Value<String>
 
 Resources:
   ThumbsFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Sub "ElectionLeafletsThumbs-${DCEnvironment}"
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ElectionLeafletsLambdaExecutionRole"
       CodeUri: .
       Handler: handler.handle

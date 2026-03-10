@@ -64,6 +64,9 @@ CACHES = {
 
 THUMBNAIL_KVSTORE = "sorl.thumbnail.kvstores.cached_db_kvstore.KVStore"
 THUMBNAIL_BACKEND = "core.s3_thumbnail_store.S3Backend"
+DC_ENVIRONMENT = os.environ["DC_ENVIRONMENT"]
+THUMBS_LAMBDA_FUNCTION_NAME = f"ElectionLeafletsThumbs-{DC_ENVIRONMENT}"
+
 
 CSRF_TRUSTED_ORIGINS = ["https://electionleaflets.org"]
 USE_X_FORWARDED_HOST = True

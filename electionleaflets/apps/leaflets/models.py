@@ -1,3 +1,4 @@
+import json
 import os.path
 import re
 from io import BytesIO
@@ -7,6 +8,7 @@ import piexif
 import sentry_sdk
 from core.helpers import YNRAPIHelper
 from core.templatetags.markdown import markdown_filter
+from django.conf import settings
 from django.contrib.postgres.indexes import GinIndex
 from django.contrib.postgres.search import SearchVectorField
 from django.core.files.base import ContentFile
@@ -198,10 +200,16 @@ class Leaflet(models.Model):
 
     def clear_thumbs(self):
         """
-        Clears sorl's KV cache and deletes S3 thumb files for all images on
-        this leaflet. The thumbs Lambda will regenerate thumbs on
-        next request.
+        Clears sorl's KV cache and invokes the thumbs lambda to delete the
+        actual files. Next time those files are requested, they will be
+        re-made using the Lambda@Edge function attached to CloudFront
         """
+
+        lambda_client = None
+        if hasattr(default_storage, "bucket"):
+            import boto3
+
+            lambda_client = boto3.client("lambda")
 
         for leaflet_image in self.images.all():
             if not leaflet_image.image:
@@ -210,13 +218,18 @@ class Leaflet(models.Model):
             # This is sorl's delete function, which clears the KV cache entry
             delete(leaflet_image.image, delete_file=False)
 
-            if not hasattr(default_storage, "bucket"):
-                continue
-
-            stem = str(Path(leaflet_image.image.name).with_suffix(""))
-            for obj in default_storage.bucket.objects.filter(Prefix="thumbs/"):
-                if stem in obj.key:
-                    obj.delete()
+            if lambda_client:
+                lambda_client.invoke(
+                    FunctionName=settings.THUMBS_LAMBDA_FUNCTION_NAME,
+                    # Event is non-blocking
+                    InvocationType="Event",
+                    Payload=json.dumps(
+                        {
+                            "action": "delete_thumbs",
+                            "key": leaflet_image.image.name,
+                        }
+                    ),
+                )
 
     def nuts1_name(self):
         return RegionChoices(self.nuts1).label
