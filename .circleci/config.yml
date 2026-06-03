@@ -94,6 +94,9 @@ jobs:
       - attach_workspace:
           at: ~/repo/
       - install_uv
+      - run:
+          name: Prioritise our UV over the UV pre-installed in the SAM image
+          command: echo 'export PATH=/var/lang/bin:$PATH' >> "$BASH_ENV"
       - run: uv sync --only-group deploy  --no-python-downloads
       - run: make lambda-layers/DependenciesLayer/requirements.txt
       - run: sam build
@@ -136,6 +139,9 @@ jobs:
           name: Install UV
           command: |
             pip install --upgrade uv"==0.9.*" --quiet --no-input
+      - run:
+          name: Prioritise our UV over the UV pre-installed in the SAM image
+          command: echo 'export PATH=/var/lang/bin:$PATH' >> "$BASH_ENV"
       - run: uv sync --only-group deploy  --no-python-downloads
       - setup_remote_docker
       - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE DC_ENVIRONMENT SAM_PUBLIC_CONFIG_ENV
