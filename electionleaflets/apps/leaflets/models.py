@@ -67,7 +67,7 @@ class Leaflet(models.Model):
     title = models.CharField(blank=True, max_length=765)
     description = models.TextField(blank=True, null=True)
     ynr_party_id = models.CharField(
-        blank=True, null=True, max_length=255, db_index=True
+        blank=True, null=False, max_length=255, db_index=True
     )
     ynr_party_name = models.CharField(blank=True, null=True, max_length=255)
     ynr_person_id = models.IntegerField(blank=True, null=True, db_index=True)
