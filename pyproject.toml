@@ -11,11 +11,11 @@ dependencies = [
     "django-formtools==2.5.1",
     "django-localflavor==5.0",
     "django-pipeline==4.1.0",
-    "django-s3file==5.5.7",
+    "django-s3file==7.0.2",
     "django-ses==4.4.0",
     "django-static-jquery==2.1.4",
     "django-storages==1.14.6",
-    "django==5.2.13",
+    "django==5.2.15",
     "djangorestframework==3.16.1",
     "factory-boy==3.3.3",
     "markdown==3.8.1",
@@ -73,6 +73,6 @@ dev = [
     "ruff==0.9.10",
 ]
 deploy = [
-    "urllib3==2.6.3",
+    "urllib3==2.7.0",
     "boto3==1.37.11",
 ]
