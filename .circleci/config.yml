@@ -6,7 +6,7 @@ orbs:
 commands:
   install_uv:
     steps:
-      - run: pip install --upgrade uv"==0.9.*"
+      - run: pip install --upgrade uv"==0.11.*"
 
 jobs:
   install_and_update_dependencies:
@@ -138,7 +138,7 @@ jobs:
       - run:
           name: Install UV
           command: |
-            pip install --upgrade uv"==0.9.*" --quiet --no-input
+            pip install --upgrade uv"==0.11.*" --quiet --no-input
       - run:
           name: Prioritise our UV over the UV pre-installed in the SAM image
           command: echo 'export PATH=/var/lang/bin:$PATH' >> "$BASH_ENV"
