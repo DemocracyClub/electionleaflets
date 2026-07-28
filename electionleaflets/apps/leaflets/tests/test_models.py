@@ -25,7 +25,7 @@ def test_model_initial():
         "id": None,
         "title": "",
         "description": None,
-        "ynr_party_id": None,
+        "ynr_party_id": "",
         "ynr_party_name": None,
         "ynr_person_id": None,
         "ynr_person_name": None,

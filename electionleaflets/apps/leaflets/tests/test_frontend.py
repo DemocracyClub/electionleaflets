@@ -216,7 +216,7 @@ def test_update_publisher_details_add_person(
 
     with mock_get_ballot_data_from_ynr([LOCAL_BALLOT_WITH_CANDIDATES]):
         leaflet = Leaflet.objects.create(title="Test Leaflet", description=None)
-        assert leaflet.ynr_party_id is None
+        assert leaflet.ynr_party_id == ""
         assert leaflet.person_ids == []
         url = urljoin(
             live_server.url,
