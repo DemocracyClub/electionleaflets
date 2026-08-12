@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 import pytest
 from django.utils import timezone
 from leaflets.models import Leaflet
@@ -51,3 +53,34 @@ class TestLeafletFilter:
             filter.party_filter(Leaflet.objects.all(), "party", "PP1").count()
             == 1
         )
+
+    def test_current_filter(self, all_leaflets):
+        today = timezone.localdate()
+        current_leaflet = all_leaflets[0]
+        current_leaflet.ballots = [
+            {"ballot_paper_id": f"test.{today + timedelta(days=1):%Y-%m-%d}"}
+        ]
+        current_leaflet.save()
+
+        recent_leaflet = all_leaflets[1]
+        recent_leaflet.ballots = [
+            {"ballot_paper_id": f"test.{today - timedelta(days=20):%Y-%m-%d}"}
+        ]
+        recent_leaflet.save()
+
+        stale_leaflet = all_leaflets[2]
+        stale_leaflet.ballots = [
+            {"ballot_paper_id": f"test.{today - timedelta(days=21):%Y-%m-%d}"}
+        ]
+        stale_leaflet.save()
+
+        assert set(
+            LeafletFilter(
+                data={"current": "true"}, queryset=Leaflet.objects.all()
+            ).qs
+        ) == {current_leaflet, recent_leaflet}
+        assert set(
+            LeafletFilter(
+                data={"current": "false"}, queryset=Leaflet.objects.all()
+            ).qs
+        ) == set(all_leaflets) - {current_leaflet, recent_leaflet}
