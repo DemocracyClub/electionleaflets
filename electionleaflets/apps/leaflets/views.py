@@ -5,7 +5,7 @@ import random
 from core.helpers import CacheControlMixin
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import AccessMixin, LoginRequiredMixin
 from django.core.signing import Signer
 from django.db import transaction
 from django.db.models import Q
@@ -28,11 +28,16 @@ from .mixins import StaffuserRequiredMixin
 from .models import Leaflet, LeafletImage
 
 
-class ImageView(CacheControlMixin, UpdateView):
+class ImageView(CacheControlMixin, AccessMixin, UpdateView):
     cache_timeout = 60 * 60
     model = LeafletImage
     template_name = "leaflets/full.html"
     form_class = SingleLeafletImageForm
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return self.handle_no_permission()
+        return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
