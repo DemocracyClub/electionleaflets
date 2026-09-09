@@ -40,7 +40,14 @@ class LeafletFilter(filters.FilterSet):
             (current_from,),
             output_field=BooleanField(),
         )
-        return queryset.annotate(is_current=is_current).filter(is_current=value)
+
+        return (
+            queryset.filter(
+                Q(date_uploaded__gte=timezone.now() - timedelta(days=180))
+            )
+            .annotate(is_current=is_current)
+            .filter(is_current=value)
+        )
 
     def party_filter(self, queryset, name, value):
         id = re.sub(r"[^0-9]", "", value)
