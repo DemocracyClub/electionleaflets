@@ -1,6 +1,9 @@
 import re
+from datetime import timedelta
 
-from django.db.models import Q
+from django.db.models import BooleanField, Q
+from django.db.models.expressions import RawSQL
+from django.utils import timezone
 from django_filters import rest_framework as filters
 from leaflets.models import Leaflet
 from rest_framework import viewsets
@@ -22,6 +25,30 @@ class LeafletFilter(filters.FilterSet):
     def ballot_filter(self, queryset, name, value):
         return queryset.filter(ballots__contains=[{"ballot_paper_id": value}])
 
+    def current_filter(self, queryset, name, value):
+        current_from = timezone.localdate() - timedelta(days=20)
+        is_current = RawSQL(
+            """
+            EXISTS (
+                SELECT 1
+                FROM jsonb_array_elements(ballots) AS ballot
+                WHERE substring(
+                    ballot->>'ballot_paper_id' from '\\d{4}-\\d{2}-\\d{2}$'
+                )::date >= %s
+            )
+            """,
+            (current_from,),
+            output_field=BooleanField(),
+        )
+
+        return (
+            queryset.filter(
+                Q(date_uploaded__gte=timezone.now() - timedelta(days=180))
+            )
+            .annotate(is_current=is_current)
+            .filter(is_current=value)
+        )
+
     def party_filter(self, queryset, name, value):
         id = re.sub(r"[^0-9]", "", value)
 
@@ -32,6 +59,7 @@ class LeafletFilter(filters.FilterSet):
     ballot = filters.CharFilter(
         field_name="ballots", method="ballot_filter", label="Ballot paper ID"
     )
+    current = filters.BooleanFilter(method="current_filter", label="Current")
     party = filters.CharFilter(
         field_name="party", method="party_filter", label="Party ID"
     )
